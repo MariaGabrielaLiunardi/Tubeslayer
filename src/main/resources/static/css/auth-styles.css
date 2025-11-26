@@ -9,20 +9,33 @@ html, body {
     height: 100vh;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* cegah scroll */
+    overflow: hidden;
 }
 
 body{
     background: linear-gradient(180deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%);
     display: flex; 
-    align-items: center;
-    justify-content: center;
+    flex-direction: column; 
+    align-items: center; 
+}
+
+header{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+header img{
+    width: 65px; 
+    height: 65px; 
+    margin: 20px; 
 }
 
 main{
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 150px;
 }
 
 #informasi-dasar{
@@ -51,8 +64,8 @@ p{
     padding: 10px; 
     color: white; 
     font-family: Sen;
-    border-radius: 25px; 
-    border: none; 
+    border: none;
+    border-radius: 25px;  
     cursor: pointer;
     text-decoration: none;
     padding-left: 30px; 

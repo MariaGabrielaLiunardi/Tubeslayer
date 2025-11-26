@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+html, body {
+    height: 100vh; 
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body{
+    background: linear-gradient(180deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%);
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+
+main{
+    background: linear-gradient(180deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%);
+    width: 800px; 
+    height: 450px;
+    border-radius: 25px; 
+    box-shadow: 2px 3px 1px grey;
+    display: grid; 
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+    "left right"; 
+}
+
+.left{
+    background-image: url(../img/login-image.jpg); 
+    grid-area: left;
+    background-size: cover;
+    border-radius: 25px 0px 0px 25px;
+    display: flex; 
+    flex-direction: column;
+}
+
+.white-logo{
+    width: 60px; 
+    height: 60px;
+    margin-left: 15px; 
+    margin-top: 20px;
+}
+
+.left p{
+    font-family: Sen;
+    font-weight: bold;
+    color:white;
+    font-size:45pt; 
+    margin-left: 35px; 
+    margin-top: 75px;  
+    text-shadow: 2px 3px 3px darkslategray;
+}
+
+.right{
+    grid-area: right;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#judul-log{
+    font-family: Sen;
+    font-weight: bold;
+    font-size: 22pt;
+    margin: 10px
+}
+
+#ket-log{
+    font-family: Sen;
+    font-size: 13pt; 
+    color: gray;
+    margin-top: 0;
+    margin-bottom: 35px; 
+    text-align: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; 
+}
+
+.custom-email{
+    position: relative; 
+    display: flex; 
+    align-items: center;
+    max-width: 100%;
+    margin-bottom: 5px;
+}
+
+.custom-password{
+    position: relative; 
+    display: flex; 
+    align-items: center;
+    max-width: 100%;
+    margin-bottom: 30px;
+}
+
+.icon{
+    position: absolute; 
+    left: 10px; 
+    width: 20px; 
+    height: 20px; 
+    pointer-events: none;
+    margin-left: 2px; 
+}
+
+.lock-icon{
+    margin-left: 1px; 
+}
+
+#email{
+    font-family: Sen;
+    font-size: 11pt; 
+    color: gray;
+    width: 320px; 
+    height: 40px;
+    border-radius: 10px;
+    border: none; 
+    padding-left: 45px; 
+    box-shadow: inset 1px 1px 1px gray;
+}
+
+#password{
+    font-family: Sen;
+    font-size: 11pt;
+    color: gray;
+    width: 320px; 
+    height: 40px;
+    border-radius: 10px;
+    border: none; 
+    padding-left: 45px; 
+    box-shadow: inset 1px 1px 1px gray;
+}
+
+#btn-masuk{
+    font-family: Sen;
+    font-weight: bold;
+    font-size: 11pt; 
+    color: white; 
+    background-color: black;
+    width: 320px; 
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 2px 4px 5px grey;
+}
