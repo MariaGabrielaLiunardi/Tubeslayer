@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tugas Besar Tahap 1</title>
     <link rel="stylesheet" href="../../static/css/hlmtubes-styles.css" />
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <script src="../../static/js/sidebar-hlmtubes.js" defer></script>
   </head>
   <body>
    <!-- Header -->
 <div class="header">
     <div class="header-left">
-        <div class="menu-icon">☰</div>
     </div>
     <div class="header-right">
         <div class="user-info">
@@ -28,20 +29,39 @@
     </div>
 
    <!-- Sidebar -->
-<div class="sidebar">
-    <div class="logo">
-        <div class="logo-ts">
-            <img src="../../static/logo/blue-logo.png" alt="logo">
+ <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="../../static/logo/blue-logo.png" alt="logo">
+                </span>
+
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link active">
+                        <a href="#">
+                            <img src="../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <img src="../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-    
-    <div class="sidebar-icon">
-        <img src="../../static/icon/dashboard.png" alt="dashbrdicon">
-    </div>
-    <div class="sidebar-icon">
-        <img src="../../static/icon/open-book.png" alt="bookicon">
-    </div>
-</div>
+    </nav>
 
     <!-- Main Content -->
     <div class="main-content">
