@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tubeslayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../../static/css/dash-user.css">
+    <link rel="stylesheet" href="../../static/css/matkul-detail.css">
+
+    <script src="../../static/js/dash-user.js" defer></script>
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="../../static/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bxr bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="dash-user.html">
+                            <img src="../../static/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a href="mata-kuliah.html">
+                            <img src="../../static/icon/open-book.png" class="icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= HOME ================= -->
+    <section class="home">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Mata Kuliah</span>
+            </div>
+            <div class="right-section">
+                <div class="info">
+                    <span class="name">Nama</span>
+                    <span class="role">Role</span>
+                </div>
+                <img src="../../static/icon/pfp.png" class="pfp" alt="pfp">
+                <button type="button" class="logout">
+                    <img src="../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB -->
+        <div class="mk-tab">
+            <button class="tab active">Kuliah</button>
+            <button class="tab">Daftar Peserta</button>
+            <button class="tab">Nilai</button>
+        </div>
+
+        <!-- ================= KONTEN DETAIL MK ================= -->
+        <div class="detail-wrapper">
+
+            <!-- BOX HEADER MK -->
+            <div class="mk-header">
+                <div class="mk-img"></div>
+                <div class="mk-info">
+                    <h1>Mata Kuliah</h1>
+                    <p><b>Koordinator:</b> X</p>
+                    <p><b>NIP:</b> 000</p>
+                </div>
+            </div>
+
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                Daftar Mata Kuliah > <b>Mata Kuliah</b>
+            </div>
+
+            <!-- KONTEN BAWAH -->
+            <div class="mk-content">
+
+                <!-- TUGAS MENDATANG -->
+                <div class="tugas-box">
+                    <h3>Tugas Mendatang</h3>
+                    <div class="tugas-kosong">
+                        Yuhuu! Tidak ada tugas yang harus dikerjakan~
+                    </div>
+                </div>
+
+                <!-- TUGAS BESAR -->
+                <div class="tugas-besar">
+                    <div class="tugas-header">
+                        <img src="../../static/icon/blue-folder.png" class="folder-icon">
+                        <h3>Tugas Besar</h3>
+
+                        <button class="btn-lihat">Lihat Tugas ></button>
+                    </div>
+
+                    <p>
+                        Pada tugas ini Anda diminta untuk membuat program yang dapat membantu mahasiswa untuk menghitung
+                        nilai IPK mereka.
+                    </p>
+                    <p>
+                        Tugas ini dilakukan berkelompok sebanyak 5 orang.
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
