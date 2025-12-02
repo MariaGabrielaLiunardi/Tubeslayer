@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tubeslayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/dash-user.css">
+    <link rel="stylesheet" href="/css/matkul-detail.css">
+
+    <script src="/js/dash-user.js" defer></script>
+    <script src="/js/matkul-detail.js" defer></script> 
+    
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bxr bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="dash-user.html">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a href="mata-kuliah.html">
+                            <img src="/icon/open-book.png" class="icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Mata Kuliah</span>
+            </div>
+
+            <div class="right-section">
+                <div class="info">
+                    <span class="name">Nama</span>
+                    <span class="role">Role</span>
+                </div>
+                <img src="/icon/pfp.png" class="pfp">
+                <button class="logout">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <div class="mk-tab">
+            <button class="tab active">Kuliah</button>
+            <button class="tab">Daftar Peserta</button>
+            <button class="tab">Nilai</button>
+        </div>
+
+        <div class="detail-wrapper">
+
+            <div class="mk-header">
+                <div class="mk-img"></div>
+                <div class="mk-info">
+                    <h1>Mata Kuliah</h1>
+                    <p><b>Koordinator:</b> X</p>
+                    <p><b>NIP:</b> 000000</p>
+                </div>
+            </div>
+
+            <div class="breadcrumb">
+                Daftar Mata Kuliah > <id="mk-title">Mata Kuliah</id>
+            </div>
+
+            <div id="list-tugas-view">
+                
+                <div class="mk-content">
+
+                    <div class="tugas-box">
+                        <h3>Tugas Mendatang</h3>
+                        <div class="tugas-mendatang-list">
+                            <div class="tugas-kosong" id="tugas-mendatang-kosong">
+                                Yuhuu! Tidak ada tugas yang harus dikerjakan~
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tugas-besar-list" id="tugas-besar-list">
+                        <div id="tugas-besar-kosong" class="tugas-kosong-besar">
+                            Tidak ada tugas besar yang tersedia.
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div> </div> </section>
+
+</body>
+
+</html>

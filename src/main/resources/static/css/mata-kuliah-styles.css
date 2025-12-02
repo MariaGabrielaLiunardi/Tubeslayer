@@ -1,0 +1,110 @@
+body {
+    overflow-y: hidden;
+}
+
+/* ================= MAIN ================= */
+.main-content {
+    padding: 30px;
+    padding-top: 0px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.home .header .right-section{
+    margin-left: auto;
+    gap: 15px;
+    display: flex;
+    align-items: center;
+}
+
+
+/* ================= COURSE GRID ================= */
+.course-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+/* ================= CARD ================= */
+.card {
+    background: white;
+    border-radius: 20px;
+    text-align: center;
+    padding-bottom: 80px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    position: relative;
+}
+
+.card-img {
+    height: 230px;
+    border-radius: 20px;
+    box-shadow: 2px 4px 3px rgba(0, 0, 0, 0.25);
+    background-size: cover;
+    background-position: center;
+}
+
+/* ================= BADGE ================= */
+.badge {
+    background: #8b9aa1;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 35px;
+    position: absolute;
+    top: 215px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.card h3{
+    margin-top: 35px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* ================= BACKGROUND CARD ================= */
+.gradient-1 {
+    background: linear-gradient(#31acef, white);
+}
+
+.gradient-2 {
+    background: url("/icon/matkul-2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.gradient-3 {
+    background: radial-gradient(circle at center,
+            #29ACEF 10%,
+            #9dd6f5 40%,
+            #eaf7ff 70%,
+            #ffffff 100%);
+}
+
+.gradient-4 {
+    background: url("/icon/matkul-4.png");
+    background-size: cover;
+    background-position: center;
+}
+
+/* ================= FOOTER ================= */
+.semester {
+    background: #fff1eb;
+    margin: 40px auto 0;
+    padding: 20px 50px;
+    width: fit-content;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: normal;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.home{
+    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%);
+}
+

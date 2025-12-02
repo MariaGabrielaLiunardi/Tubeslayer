@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.time.LocalDate; 
 
 @Entity
-@Table(name = "KomponenNilai")
+@Table(name = "komponen_nilai")
 @Data
 public class KomponenNilai {
 
@@ -15,7 +15,7 @@ public class KomponenNilai {
     private Integer idKomponen;
 
     @ManyToOne
-    @JoinColumn(name = "idRubrik")
+    @JoinColumn(name = "id_rubrik")
     private RubrikNilai rubrik;
 
     @Column(length = 50, nullable = false)
