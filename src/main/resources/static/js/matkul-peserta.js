@@ -8,10 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Pindah ke halaman detail (Kuliah)
             if (tabName === 'Kuliah') {
-                window.location.href = 'matkul-detail.html';
+                window.location.href = '/mahasiswa/matkul-detail';
             } else if (tabName === 'Daftar Peserta') {
                  // Refresh halaman peserta
-                window.location.href = 'matkul-peserta.html';
+                window.location.href = '/mahasiswa/matkul-peserta';
             }
         });
     });

@@ -73,7 +73,7 @@ body {
 }
 
 .gradient-2 {
-    background: url("../icon/matkul-2.png");
+    background: url("/icon/matkul-2.png");
     background-size: cover;
     background-position: center;
 }
@@ -87,7 +87,7 @@ body {
 }
 
 .gradient-4 {
-    background: url("../icon/matkul-4.png");
+    background: url("/icon/matkul-4.png");
     background-size: cover;
     background-position: center;
 }

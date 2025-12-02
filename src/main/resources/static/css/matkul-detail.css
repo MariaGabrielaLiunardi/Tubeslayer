@@ -5,21 +5,22 @@ html, body {
     padding: 0;
 }
 
-body {
-    overflow-y: auto; 
-    overflow-x: auto;
-}
-
 /* ================= PAKSA BACKGROUND SAMA DASHBOARD (DIPERBAIKI FINAL) ================= */
 .home {
     background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%) !important;
     padding-top: 18px;
     min-height: 100vh; 
+    height: auto; 
     /* Kunci: background-attachment: fixed agar background tetap saat scroll */
     background-attachment: fixed;
     /* Menjamin background mengisi seluruh area tanpa pengulangan */
     background-size: cover; 
     background-repeat: no-repeat;
+}
+
+body {
+    overflow-y: auto; 
+    overflow-x: auto;
 }
 
 

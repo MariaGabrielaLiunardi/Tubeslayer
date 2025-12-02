@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Pindah ke halaman detail (matkul-detail.html)
             // Menggunakan query parameter untuk membawa informasi mata kuliah
-            window.location.href = "matkul-detail.html?mk=" + encodeURIComponent(title);
+            window.location.href = "/mahasiswa/matkul-detail?mk=" + encodeURIComponent(title);
         });
     });
     

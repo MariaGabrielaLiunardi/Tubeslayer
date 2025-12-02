@@ -8,10 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Pindah ke halaman peserta jika tab diklik
             if (tabName === 'Daftar Peserta') {
-                window.location.href = 'matkul-peserta.html';
+                window.location.href = '/mahasiswa/matkul-peserta';
             } else if (tabName === 'Kuliah') {
                 // Refresh/Tetap di halaman detail
-                window.location.href = 'matkul-detail.html';
+                window.location.href ='/mahasiswa/matkul-detail';
             }
         });
     });
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 newTugasBesar.classList.add('tugas-besar');
                 newTugasBesar.innerHTML = `
                     <div class="tugas-header">
-                        <img src="../../static/icon/blue-folder.png" class="folder-icon">
+                        <img src="/icon/blue-folder.png" class="folder-icon">
                         <h3>${namaTugas}</h3>
                     </div>
                     <p>
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 newTugasMendatang.classList.add('tugas-mendatang-card');
                 newTugasMendatang.innerHTML = `
                     <div class="deadline-info">
-                        <img src="../../static/icon/kalender.png" class="kalender-icon" alt="kalender">
+                        <img src="/icon/kalender.png" class="kalender-icon" alt="kalender">
                         <span>${formattedDeadline}</span>
                     </div>
                     <span>${namaTugas}</span>
