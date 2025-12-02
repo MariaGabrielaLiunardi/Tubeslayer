@@ -18,9 +18,7 @@
 body {
     font-family: Sen;
     background-color: #f5f5f5;
-    /* Background gradient untuk seluruh halaman */
     background: linear-gradient(#fff1eb, #ACE0F9 );
-    
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -133,7 +131,7 @@ header .image-text .header-text {
 }
 
 .sidebar.close .toggle {
-    left: 73px;
+    left: 100px;
     transform: translateY(-50%) translateX(-50%);
 }
 
@@ -236,7 +234,7 @@ header .image-text .header-text {
     object-fit: cover;
 }
 
-.notification-icon {
+.logout-icon {
     background-color: #caf0f8;
     width: 40px;
     height: 40px;
@@ -248,7 +246,7 @@ header .image-text .header-text {
     padding: 8px;
 }
 
-.notification-icon img {
+.logout-icon img {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -275,7 +273,7 @@ header .image-text .header-text {
     background-color: #0277bd;
 }
 
-/* Card Container - Wrapper untuk semua bagian */
+/* Card Container */
 .card-container {
     border-radius: 15px;
     overflow: visible;
@@ -283,7 +281,7 @@ header .image-text .header-text {
     margin: 0 30px 30px 30px;
 }
 
-/* Title Section - Background biru muda, lebar penuh */
+/* Title Section */
 .title-section {
     background-color: #b3e5fc;
     padding: 25px 30px;
@@ -332,7 +330,7 @@ header .image-text .header-text {
     margin: 0 8px;
 }
 
-/* Content Card - Bagian putih di bawah title */
+/* Content Card */
 .content-card {
     background-color: white;
     padding: 30px;
@@ -411,243 +409,202 @@ header .image-text .header-text {
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
+    transition: var(--tran-03);
 }
 
 .manage-btn:hover {
     background-color: #333;
 }
 
-/* === VIEW MANAGEMENT === */
-.view-content {
-    display: none;
-}
-
-.view-content.active {
-    display: block;
-}
-
-/* === ANGGOTA KELOMPOK STYLES === */
-.member-list {
-    margin: 30px 0;
-}
-
-.member-item {
+/* Kelompok Header */
+.kelompok-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    background-color: #fff;
+    margin-bottom: 20px;
 }
 
-.member-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.kelompok-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
 }
 
-.member-name {
+.kelompok-counter {
     font-size: 15px;
     color: #333;
-    font-weight: 500;
-}
-
-.member-badge {
-    background-color: #0288d1;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
     font-weight: 600;
 }
-.btn-remove-member {
-    width: 30px;
-    height: 30px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-    transition: var(--tran-03);
-}
 
-.btn-remove-member:hover {
-    background-color: #d32f2f;
-    transform: scale(1.1);
-}
-
-.member-counter {
-    text-align: right;
+/* Table Styles */
+.kelompok-table {
+    width: 100%;
+    border-collapse: collapse;
     margin: 20px 0;
-    font-size: 14px;
-    color: #666;
-}
-
-.action-buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 25px;
-    gap: 10px;
-}
-
-.right-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-secondary {
-    background-color: #000;
-    color: white;
-    padding: 12px 30px;
-    border: none;
+    background-color: #fff;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
+    overflow: hidden;
 }
 
-.btn-secondary:hover {
-    background-color: #333;
-}
-
-.btn-primary {
-    background-color: #000;
-    color: white;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.btn-primary:hover {
-    background-color: #333;
-}
-
-.btn-primary:disabled {
-    background-color: #9e9e9e;
-    cursor: not-allowed;
-}
-
-.warning-text {
-    text-align: center;
-    color: #c62828;
-    font-size: 13px;
-    font-style: italic;
-    margin-top: 15px;
-}
-
-/* === SEARCH SECTION STYLES === */
-.search-section {
-    margin: 30px 0;
-    position: relative;
-}
-
-.search-section label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: #333;
-    font-size: 15px;
-}
-
-.search-input-wrapper {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-#search-mahasiswa {
-    flex: 1;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.3s;
-}
-
-#search-mahasiswa:focus {
-    border-color: #0288d1;
-}
-
-.btn-search {
-    width: 45px;
-    height: 45px;
-    background-color: #000;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-}
-
-.btn-search:hover {
-    background-color: #333;
-}
-
-.search-results {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 50px;
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-top: 5px;
-    max-height: 250px;
-    overflow-y: auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    display: none;
-}
-
-.search-results.active {
-    display: block;
-}
-
-.search-result-item {
-    padding: 12px 15px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background-color 0.2s;
-}
-
-.search-result-item:last-child {
-    border-bottom: none;
-}
-
-.search-result-item:hover {
+.kelompok-table thead {
     background-color: #f5f5f5;
 }
 
-.search-result-name {
-    font-size: 14px;
-    color: #333;
-    font-weight: 500;
-}
-
-.search-result-nim {
-    font-size: 12px;
-    color: #666;
-    margin-top: 2px;
-}
-
-.no-results {
+.kelompok-table th {
     padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.kelompok-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+}
+
+.kelompok-table tbody tr {
+    background-color: #e3f2fd;
+    transition: var(--tran-02);
+}
+
+.kelompok-table tbody tr:hover {
+    background-color: #bbdefb;
+}
+
+.delete-btn {
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: var(--tran-02);
+}
+
+.delete-btn:hover {
+    background-color: #333;
+}
+
+.empty-state {
     text-align: center;
+    padding: 40px 20px;
     color: #666;
+    font-size: 15px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #000;
+    padding: 12px 30px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    cursor: pointer;
     font-size: 14px;
+    font-weight: 600;
+    transition: var(--tran-03);
+}
+
+.btn-secondary:hover {
+    background-color: #000;
+    color: white;
+}
+
+/* Form Styles */
+.form-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #000;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group input[type="number"],
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Sen;
+    transition: var(--tran-02);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #0288d1;
+    box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.1);
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    gap: 10px;
+}
+
+.input-with-icon input {
+    flex: 1;
+}
+
+.search-btn {
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--tran-02);
+}
+
+.search-btn:hover {
+    background-color: #333;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-card {
+    animation: fadeIn 0.3s ease;
 }

@@ -322,6 +322,46 @@ document.addEventListener('DOMContentLoaded', () => {
         showView(viewAnggota);
         console.log('Member added successfully');
     }
+
+        function removeMember(index, nim) {
+        // Konfirmasi sebelum hapus
+        const member = kelompokAnggota[index];
+        const confirmDelete = confirm(`Apakah Anda yakin ingin menghapus ${member.nama} dari kelompok?`);
+        
+        if (!confirmDelete) {
+            return;
+        }
+        
+        // CARA INTEGRASI DENGAN DATABASE:
+        // const kelompokId = 1; // Ambil dari currentUser atau state
+        // fetch(`/api/kelompok/${kelompokId}/anggota/${nim}`, {
+        //     method: 'DELETE',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     }
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     if (!data.success) {
+        //         alert(data.message || 'Gagal menghapus anggota');
+        //         return;
+        //     }
+        //     
+        //     // Reload data dari database setelah berhasil
+        //     loadKelompokAnggota();
+        //     
+        //     console.log('Member removed successfully');
+        // })
+        // .catch(error => {
+        //     console.error('Error removing member:', error);
+        //     alert('Gagal menghapus anggota. Silakan coba lagi.');
+        // });
+        
+        // TEMPORARY: Remove from local array (HAPUS SAAT INTEGRASI)
+        kelompokAnggota.splice(index, 1);
+        renderMemberList();
+        console.log('Member removed successfully');
+    }
     
     // ========== EVENT LISTENERS ==========
     
