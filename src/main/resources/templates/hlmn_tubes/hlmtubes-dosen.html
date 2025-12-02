@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../static/css/hlmtubes-Dosen-styles.css" />
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
     <script src="../../static/js/sidebar-hlmtubes.js" defer></script>
+    <script src="../../static/js/management-kelompok.js" defer></script>
   </head>
   <body>
    <!-- Header -->
@@ -26,7 +27,6 @@
         </div>
     </div>
 </div>
-    </div>
 
    <!-- Sidebar -->
  <nav class="sidebar close">
@@ -82,19 +82,15 @@
           <h1>Tugas Besar Tahap 1</h1>
         </div>
 
-        <!-- Content Card -->
-        <div class="content-card">
-          <!-- Breadcrumb -->
-          <div class="breadcrumb"> <!-- breadcrumb masih bisa berubah agar bisa linked ke hlman lain-->
+        <!-- Content Card - Default View -->
+        <div class="content-card" id="defaultView">
+          <div class="breadcrumb">
             Daftar Mata Kuliah <span>></span> Artificial Intelligence
             <span>></span> Tugas Besar Tahap 1
           </div>
           <div class="content-header">
             <div class="folder-icon">
-              <img
-                src="../../static/icon/blue-folder.png"
-                alt="foldericon"
-              />
+              <img src="../../static/icon/blue-folder.png" alt="foldericon" />
             </div>
             <h2>Tugas Besar Tahap 1</h2>
           </div>
@@ -110,13 +106,69 @@
           </p>
 
           <div class="group-info">
-            <strong>Penentu Anggota Kelompok:</strong> Kelompok 1
+            <strong>Penentu Anggota Kelompok:</strong> Mahasiswa
           </div>
 
           <div class="deadline-section">
             <div class="deadline">Deadline : Senin, 27 November 2025</div>
-            <button class="manage-btn">Daftar Kelompok</button>
+            <button class="manage-btn" id="daftarKelompokBtn">Daftar Kelompok</button>
           </div>
+        </div>
+
+        <!-- Content Card - Daftar Kelompok View -->
+        <div class="content-card" id="daftarKelompokView" style="display: none;">
+          <div class="breadcrumb">
+            Tugas Besar Tahap 1 <span>></span> Daftar Kelompok
+          </div>
+          
+          <div class="kelompok-header">
+            <h3>Daftar Kelompok</h3>
+            <div class="kelompok-counter">Jumlah Kelompok: <span id="jumlahKelompok">0</span></div>
+          </div>
+
+          <div id="kelompokTableContainer">
+            <!-- Table akan diisi oleh JavaScript -->
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn-secondary" id="backToDefaultBtn">Kembali</button>
+            <button class="manage-btn" id="buatKelompokBtn">Buat Kelompok</button>
+            <button class="manage-btn" id="finalisasiKelompokBtn">Finalisasi Kelompok</button>
+          </div>
+        </div>
+
+        <!-- Content Card - Form Pembentukan Kelompok -->
+        <div class="content-card" id="formKelompokView" style="display: none;">
+          <div class="breadcrumb">
+            Tugas Besar Tahap 1 <span>></span> Pembentukan Kelompok
+          </div>
+          
+          <h3 class="form-title">Pembentukan Kelompok</h3>
+
+          <form id="formKelompok">
+            <div class="form-group">
+              <label for="maxAnggota">Jumlah Max Anggota:</label>
+              <input type="number" id="maxAnggota" min="1" max="10" value="4" required>
+            </div>
+
+            <div class="form-group">
+              <label for="minAnggota">Jumlah Min Anggota:</label>
+              <input type="number" id="minAnggota" min="1" max="10" value="4" required>
+            </div>
+
+            <div class="form-group">
+              <label for="namaKetua">Nama Ketua Kelompok:</label>
+              <div class="input-with-icon">
+                <input type="text" id="namaKetua" placeholder="Rafael Cleon Adam - 6182301017" required>
+                <button type="button" class="search-btn">🔍</button>
+              </div>
+            </div>
+
+            <div class="form-buttons">
+              <button type="button" class="btn-secondary" id="kembaliFromFormBtn">Kembali</button>
+              <button type="submit" class="manage-btn">Buat Kelompok</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

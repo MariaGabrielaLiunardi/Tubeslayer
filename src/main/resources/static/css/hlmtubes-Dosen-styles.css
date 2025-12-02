@@ -16,12 +16,9 @@
 }
 
 body {
-    
     font-family: Sen;
     background-color: #f5f5f5;
-    /* Background gradient untuk seluruh halaman */
     background: linear-gradient(#fff1eb, #ACE0F9 );
-    
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -276,7 +273,7 @@ header .image-text .header-text {
     background-color: #0277bd;
 }
 
-/* Card Container - Wrapper untuk semua bagian */
+/* Card Container */
 .card-container {
     border-radius: 15px;
     overflow: visible;
@@ -284,7 +281,7 @@ header .image-text .header-text {
     margin: 0 30px 30px 30px;
 }
 
-/* Title Section - Background biru muda, lebar penuh */
+/* Title Section */
 .title-section {
     background-color: #b3e5fc;
     padding: 25px 30px;
@@ -333,7 +330,7 @@ header .image-text .header-text {
     margin: 0 8px;
 }
 
-/* Content Card - Bagian putih di bawah title */
+/* Content Card */
 .content-card {
     background-color: white;
     padding: 30px;
@@ -412,8 +409,202 @@ header .image-text .header-text {
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
+    transition: var(--tran-03);
 }
 
 .manage-btn:hover {
     background-color: #333;
+}
+
+/* Kelompok Header */
+.kelompok-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.kelompok-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+}
+
+.kelompok-counter {
+    font-size: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Table Styles */
+.kelompok-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.kelompok-table thead {
+    background-color: #f5f5f5;
+}
+
+.kelompok-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.kelompok-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+}
+
+.kelompok-table tbody tr {
+    background-color: #e3f2fd;
+    transition: var(--tran-02);
+}
+
+.kelompok-table tbody tr:hover {
+    background-color: #bbdefb;
+}
+
+.delete-btn {
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: var(--tran-02);
+}
+
+.delete-btn:hover {
+    background-color: #333;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-size: 15px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #000;
+    padding: 12px 30px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: var(--tran-03);
+}
+
+.btn-secondary:hover {
+    background-color: #000;
+    color: white;
+}
+
+/* Form Styles */
+.form-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #000;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group input[type="number"],
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Sen;
+    transition: var(--tran-02);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #0288d1;
+    box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.1);
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    gap: 10px;
+}
+
+.input-with-icon input {
+    flex: 1;
+}
+
+.search-btn {
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--tran-02);
+}
+
+.search-btn:hover {
+    background-color: #333;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-card {
+    animation: fadeIn 0.3s ease;
 }
