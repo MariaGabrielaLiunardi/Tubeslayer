@@ -3,15 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Tubeslayer</title>
+    <title>Daftar Peserta - Tubeslayer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
-    <link rel="stylesheet" href="/css/matkul-detail.css">
+    <link rel="stylesheet" href="/css/matkul-peserta.css"> 
 
     <script src="/js/dash-user.js" defer></script>
-    <script src="/js/matkul-detail.js" defer></script> 
-    
+    <script src="/js/matkul-peserta.js" defer></script>
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -72,8 +71,8 @@
         </div>
 
         <div class="mk-tab">
-            <button class="tab active">Kuliah</button>
-            <button class="tab">Daftar Peserta</button>
+            <button class="tab">Kuliah</button>
+            <button class="tab active">Daftar Peserta</button> 
             <button class="tab">Nilai</button>
         </div>
 
@@ -89,30 +88,46 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <id="mk-title">Mata Kuliah</id>
+                Daftar Mata Kuliah > Mata Kuliah > <b>Daftar Peserta</b>
+            </div>
+            
+            <div class="search-and-count">
+                <div class="search-box">
+                    <input type="text" placeholder="Cari nama disini...">
+                    <button><img src="/icon/search.png" alt="search"></button>
+                </div>
+                <span class="peserta-count">Peserta: x peserta</span>
             </div>
 
-            <div id="list-tugas-view">
+            <div class="peserta-content">
                 
-                <div class="mk-content">
-
-                    <div class="tugas-box">
-                        <h3>Tugas Mendatang</h3>
-                        <div class="tugas-mendatang-list">
-                            <div class="tugas-kosong" id="tugas-mendatang-kosong">
-                                Yuhuu! Tidak ada tugas yang harus dikerjakan~
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tugas-besar-list" id="tugas-besar-list">
-                        <div id="tugas-besar-kosong" class="tugas-kosong-besar">
-                            Tidak ada tugas besar yang tersedia.
-                        </div>
-                    </div>
+                <div class="peserta-table-wrapper">
+                    <table id="peserta-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>NPM</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="page-item page-1"><td>1.</td><td>Marsella Moretta</td><td>6182301058</td><td class="role-peserta">Peserta</td></tr>
+                            <tr class="page-item page-1"><td>2.</td><td>Rafael Cleon Adam</td><td>6182301017</td><td class="role-peserta">Peserta</td></tr>
+                            <tr class="page-item page-1"><td>3.</td><td>Clara Joycelyne Siauttara</td><td>20080107</td><td class="role-dosen">Dosen</td></tr>
+                        </tbody>
+                    </table>
                 </div>
+
+                <div class="pagination">
+                    <button class="page-arrow" id="prev-page" disabled>&lt;</button>
+                    <span class="page-info" id="current-page">1 dari X</span>
+                    <button class="page-arrow" id="next-page">&gt;</button>
                 </div>
-            </div> </div> </section>
+
+            </div>
+            
+        </div> </section>
 
 </body>
 
