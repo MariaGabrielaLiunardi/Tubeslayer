@@ -1,122 +1,134 @@
 -- HAPUS database lama kalau ada
--- DROP DATABASE IF EXISTS tubeslayer;
+DROP DATABASE IF EXISTS tubeslayer;
 
 -- BIKIN database baru
--- CREATE DATABASE tubeslayer;
+CREATE DATABASE tubeslayer;
 
 -- PAKAI database tersebut
 USE tubeslayer;
+SHOW TABLES;
 
-CREATE TABLE User (
-    idUser VARCHAR(30) PRIMARY KEY,
+CREATE TABLE user_table (
+    id_user VARCHAR(30) PRIMARY KEY,
     email VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(30) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     nama VARCHAR(60) NOT NULL,
     role VARCHAR(12) NOT NULL,
-    isActive TINYINT(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB;
+    is_active TINYINT(1) NOT NULL DEFAULT 1
+);
 
-CREATE TABLE RubrikNilai (
-    idRubrik INT AUTO_INCREMENT PRIMARY KEY
-) ENGINE=InnoDB;
+CREATE TABLE rubrik_nilai (
+    id_rubrik INT AUTO_INCREMENT PRIMARY KEY
+);
 
-CREATE TABLE MataKuliah (
-    kodeMK VARCHAR(15) PRIMARY KEY,
+CREATE TABLE mata_kuliah (
+    kode_mk VARCHAR(15) PRIMARY KEY,
     nama VARCHAR(50) NOT NULL,
     sks INT NOT NULL,
-    isActive TINYINT(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB;
+    is_active TINYINT(1) NOT NULL DEFAULT 1
+);
 
-CREATE TABLE TugasBesar (
-    idTugas INT AUTO_INCREMENT PRIMARY KEY,
-    idUser VARCHAR(30) NOT NULL,
-    idRubrik INT NOT NULL,
-    kodeMK VARCHAR(15) NOT NULL,
-    judulTugas VARCHAR(50) NOT NULL,
+CREATE TABLE tugas_besar (
+    id_tugas INT AUTO_INCREMENT PRIMARY KEY,
+    id_user VARCHAR(30) NOT NULL,
+    id_rubrik INT NOT NULL,
+    kode_mk VARCHAR(15) NOT NULL,
+    judul_tugas VARCHAR(50) NOT NULL,
     deskripsi VARCHAR(500) NOT NULL,
     deadline DATETIME NOT NULL,
     status VARCHAR(50) NOT NULL,
-    modeKel VARCHAR(30) NOT NULL,
-    minAnggota INT NOT NULL,
-    maxAnggota INT NOT NULL,
-    isActive TINYINT(1) NOT NULL DEFAULT 1,
-    FOREIGN KEY (idUser) REFERENCES UserTable(idUser),
-    FOREIGN KEY (idRubrik) REFERENCES RubrikNilai(idRubrik),
-    FOREIGN KEY (kodeMK) REFERENCES MataKuliah(kodeMK)
-) ENGINE=InnoDB;
+    mode_kel VARCHAR(30) NOT NULL,
+    min_anggota INT NOT NULL,
+    max_anggota INT NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    FOREIGN KEY (id_user) REFERENCES user_table(id_user),
+    FOREIGN KEY (id_rubrik) REFERENCES rubrik_nilai(id_rubrik),
+    FOREIGN KEY (kode_mk) REFERENCES mata_kuliah(kode_mk)
+);
 
-CREATE TABLE Kelompok (
-    idKelompok INT AUTO_INCREMENT PRIMARY KEY,
-    namaKelompok VARCHAR(50) NOT NULL
-) ENGINE=InnoDB;
+CREATE TABLE kelompok (
+    id_kelompok INT AUTO_INCREMENT PRIMARY KEY,
+    nama_kelompok VARCHAR(50) NOT NULL
+);
+CREATE TABLE tugas_besar_kelompok (
+    id_kelompok INT NOT NULL,
+    id_tugas INT NOT NULL,
+    PRIMARY KEY (id_kelompok, id_tugas),
+    FOREIGN KEY (id_kelompok) REFERENCES kelompok(id_kelompok),
+    FOREIGN KEY (id_tugas) REFERENCES tugas_besar(id_tugas)
+);
 
-CREATE TABLE TugasBesarKelompok (
-    idKelompok INT NOT NULL,
-    idTugas INT NOT NULL,
-    PRIMARY KEY (idKelompok, idTugas),
-    FOREIGN KEY (idKelompok) REFERENCES Kelompok(idKelompok),
-    FOREIGN KEY (idTugas) REFERENCES TugasBesar(idTugas)
-) ENGINE=InnoDB;
-
-CREATE TABLE MataKuliahDosen (
-    idUser VARCHAR(30) NOT NULL,
-    kodeMK VARCHAR(15) NOT NULL,
+CREATE TABLE mata_kuliah_dosen (
+    id_user VARCHAR(30) NOT NULL,
+    kode_mk VARCHAR(15) NOT NULL,
     kelas VARCHAR(3) NOT NULL,
     semester INT NOT NULL,
-    tahunAkademik VARCHAR(4) NOT NULL,
-    isActive TINYINT(1) NOT NULL DEFAULT 1,
-    PRIMARY KEY (idUser, kodeMK),
-    FOREIGN KEY (idUser) REFERENCES UserTable(idUser),
-    FOREIGN KEY (kodeMK) REFERENCES MataKuliah(kodeMK)
-) ENGINE=InnoDB;
+    tahun_akademik VARCHAR(4) NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (id_user, kode_mk),
+    FOREIGN KEY (id_user) REFERENCES user_table(id_user),
+    FOREIGN KEY (kode_mk) REFERENCES mata_kuliah(kode_mk)
+);
 
-CREATE TABLE MataKuliahMahasiswa (
-    idUser VARCHAR(30) NOT NULL,
-    kodeMK VARCHAR(15) NOT NULL,
+CREATE TABLE mata_kuliah_mahasiswa (
+    id_user VARCHAR(30) NOT NULL,
+    kode_mk VARCHAR(15) NOT NULL,
     kelas VARCHAR(3) NOT NULL,
     semester INT NOT NULL,
-    tahunAkademik VARCHAR(4) NOT NULL,
-    isActive TINYINT(1) NOT NULL DEFAULT 1,
-    PRIMARY KEY (idUser, kodeMK),
-    FOREIGN KEY (idUser) REFERENCES UserTable(idUser),
-    FOREIGN KEY (kodeMK) REFERENCES MataKuliah(kodeMK)
-) ENGINE=InnoDB;
+    tahun_akademik VARCHAR(4) NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (id_user, kode_mk),
+    FOREIGN KEY (id_user) REFERENCES user_table(id_user),
+    FOREIGN KEY (kode_mk) REFERENCES mata_kuliah(kode_mk)
+);
 
-CREATE TABLE UserKelompok (
-    idUser VARCHAR(30) NOT NULL,
-    idKelompok INT NOT NULL,
+CREATE TABLE user_kelompok (
+    id_user VARCHAR(30) NOT NULL,
+    id_kelompok INT NOT NULL,
     role VARCHAR(8) NOT NULL,
-    isActive TINYINT(1) NOT NULL DEFAULT 1,
-    PRIMARY KEY (idUser, idKelompok),
-    FOREIGN KEY (idUser) REFERENCES UserTable(idUser),
-    FOREIGN KEY (idKelompok) REFERENCES Kelompok(idKelompok)
-) ENGINE=InnoDB;
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (id_user, id_kelompok),
+    FOREIGN KEY (id_user) REFERENCES user_table(id_user),
+    FOREIGN KEY (id_kelompok) REFERENCES kelompok(id_kelompok)
+);
 
-CREATE TABLE Nilai (
-    idNilai INT AUTO_INCREMENT PRIMARY KEY,
-    idUser VARCHAR(30) NOT NULL,
-    idTugas INT NOT NULL,
-    nilaiPribadi INT NOT NULL,
-    nilaiKelompok INT NOT NULL,
-    FOREIGN KEY (idUser) REFERENCES UserTable(idUser),
-    FOREIGN KEY (idTugas) REFERENCES TugasBesar(idTugas)
-) ENGINE=InnoDB;
+CREATE TABLE nilai (
+    id_nilai INT AUTO_INCREMENT PRIMARY KEY,
+    id_user VARCHAR(30) NOT NULL,
+    id_tugas INT NOT NULL,
+    nilai_pribadi INT NOT NULL,
+    nilai_kelompok INT NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES user_table(id_user),
+    FOREIGN KEY (id_tugas) REFERENCES tugas_besar(id_tugas)
+);
 
-CREATE TABLE KomponenNilai (
-    idKomponen INT AUTO_INCREMENT PRIMARY KEY,
-    idRubrik INT NOT NULL,
-    namaKomponen VARCHAR(50) NOT NULL,
+CREATE TABLE komponen_nilai (
+    id_komponen INT AUTO_INCREMENT PRIMARY KEY,
+    id_rubrik INT NOT NULL,
+    nama_komponen VARCHAR(50) NOT NULL,
     bobot INT NOT NULL,
     catatan VARCHAR(300) NOT NULL,
     jam TIME NOT NULL,
     tanggal DATE NOT NULL,
-    FOREIGN KEY (idRubrik) REFERENCES RubrikNilai(idRubrik)
-) ENGINE=InnoDB;
+    FOREIGN KEY (id_rubrik) REFERENCES rubrik_nilai(id_rubrik)
+);
+
+INSERT INTO user_table (id_user, email, password, nama, role, is_active) VALUES
+('6182301001', 'andi@unpar.ac.id', '$2a$10$lpXunJk2Te8/hHcfFFmpduViPATPUYuau.rAK1ckJbpDh5m8MSXV2', 'Andi Pratama', 'dosen', 1),
+('6182301002', 'budi@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Budi Santoso', 'mahasiswa', 1),
+('6182301003', 'citra@estudent.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Citra Lestari', 'mahasiswa', 1),
+('6182301004', 'dewistudent.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Dewi Anggraini', 'mahasiswa', 1),
+('6182301005', 'eko@unpar.ac.id', '$2a$10$lpXunJk2Te8/hHcfFFmpduViPATPUYuau.rAK1ckJbpDh5m8MSXV2', 'Eko Wijaya', 'dosen', 1),
+('6182301006', 'fina@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Fina Kusuma', 'mahasiswa', 1),
+('6182301007', 'galih@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Galih Putra', 'mahasiswa', 1),
+('6182301008', 'hana@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Hana Aprilia', 'mahasiswa', 1),
+('6182301009', 'indra@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Indra Maulana', 'mahasiswa', 1),
+('6182301010', 'joni@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Joni Saputra', 'mahasiswa', 1);
 
 INSERT INTO rubrik_nilai (id_rubrik) VALUES
 (1),(2),(3),(4),(5),(6),(7),(8),(9),(10);
 
-INSERT INTO mata_kuliah (kodemk, nama, sks, isActive) VALUES
+INSERT INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
 ('IF101', 'Algoritma', 3, 1),
 ('IF102', 'Struktur Data', 3, 1),
 ('IF201', 'Basis Data', 3, 1),
@@ -128,7 +140,9 @@ INSERT INTO mata_kuliah (kodemk, nama, sks, isActive) VALUES
 ('IF302', 'Kecerdasan Buatan', 3, 1),
 ('IF303', 'Rekayasa Perangkat Lunak', 3, 1);
 
-INSERT INTO tugas_besar (idTugas, idUser, idRubrik, kodeMK, judulTugas, deskripsi, deadline, status, modeKel, minAnggota, maxAnggota, isActive) VALUES
+DESCRIBE tugas_besar;
+
+INSERT INTO tugas_besar (id_tugas, id_user, id_rubrik, kode_mk, judul_tugas, deskripsi, deadline, status, mode_kel, min_anggota, max_anggota, is_active) VALUES
 (1, '6182301001', 1, 'IF101', 'Sorting Analyzer', 'Analisis 5 algoritma sorting', '2025-01-20 23:59:00', 'Open', 'Kelompok', 3, 5, 1),
 (2, '6182301001', 2, 'IF102', 'Graph Explorer', 'Implementasi BFS dan DFS', '2025-01-25 23:59:00', 'Open', 'Kelompok', 2, 4, 1),
 (3, '6182301005', 3, 'IF201', 'DB Design', 'Membuat ERD dan relasi database', '2025-01-22 23:59:00', 'Open', 'Individu', 1, 1, 1),
@@ -140,7 +154,7 @@ INSERT INTO tugas_besar (idTugas, idUser, idRubrik, kodeMK, judulTugas, deskrips
 (9, '6182301001', 9, 'IF302', 'Expert System', 'Sistem pakar diagnosa tanaman', '2025-02-15 23:59:00', 'Open', 'Kelompok', 3, 6, 1),
 (10,'6182301005',10, 'IF303', 'SRS Document', 'Membuat SRS untuk aplikasi tertentu', '2025-02-12 23:59:00', 'Open', 'Kelompok', 3, 5, 1);
 
-INSERT INTO kelompok (idKelompok, namaKelompok) VALUES
+INSERT INTO kelompok (id_kelompok, nama_kelompok) VALUES
 (1, 'Kelompok Alpha'),
 (2, 'Kelompok Beta'),
 (3, 'Kelompok Gamma'),
@@ -192,7 +206,7 @@ INSERT INTO user_kelompok VALUES
 ('6182301006',7,'member',1),
 ('6182301007',8,'leader',1);
 
-INSERT INTO nilai (idNilai, idUser, idTugas, nilaiPribadi, nilaiKelompok) VALUES
+INSERT INTO Nilai (id_nilai, id_user, id_tugas, nilai_pribadi, nilai_kelompok) VALUES
 (1,'6182301002',1,85,90),
 (2,'6182301003',1,88,90),
 (3,'6182301004',2,80,85),

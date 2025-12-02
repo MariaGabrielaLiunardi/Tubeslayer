@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "user")
+@Table(name = "User")
 @Data
 public class User {
     @Id
-    @Column(name = "idUser", length = 30)
+    @Column(name = "id_user", length = 30)
     private String idUser;
 
     @Column(name = "email", length = 50, nullable = false, unique = true)
@@ -23,6 +23,6 @@ public class User {
     @Column(name = "role", length = 12, nullable = false)
     private String role;
 
-    @Column(name = "isActive", nullable = false)
+    @Column(name = "is_active", nullable = false)
     private boolean isActive = true; // default true
 }

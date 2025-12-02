@@ -5,19 +5,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "MataKuliahMahasiswa")
+@Table(name = "mata_kuliah_mahasiswa")
 @Data
 @IdClass(MataKuliahMahasiswaId.class)
 public class MataKuliahMahasiswa {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "idUser")
+    @JoinColumn(name = "id_user")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "kodeMK")
+    @JoinColumn(name = "kode_mk")
     private MataKuliah mataKuliah;
 
     @Column(length = 3)

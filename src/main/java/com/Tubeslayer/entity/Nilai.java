@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "Nilai")
+@Table(name = "nilai")
 @Data
 public class Nilai {
 
@@ -13,11 +13,11 @@ public class Nilai {
     private Integer idNilai;
 
     @ManyToOne
-    @JoinColumn(name = "idUser")
+    @JoinColumn(name = "id_user")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "idTugas")
+    @JoinColumn(name = "id_tugas")
     private TugasBesar tugas;
 
     private int nilaiPribadi;

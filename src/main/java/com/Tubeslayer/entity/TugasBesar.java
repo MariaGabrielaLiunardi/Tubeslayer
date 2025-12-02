@@ -6,7 +6,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TugasBesar")
+@Table(name = "tugas_besar")
 @Data
 public class TugasBesar {
 
@@ -15,15 +15,15 @@ public class TugasBesar {
     private Integer idTugas;
 
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private User dosen;
 
     @OneToOne
-    @JoinColumn(name = "idRubrik")
+    @JoinColumn(name = "id_rubrik")
     private RubrikNilai rubrik;
 
     @ManyToOne
-    @JoinColumn(name = "kodeMK", nullable = false)
+    @JoinColumn(name = "kode_mk", nullable = false)
     private MataKuliah mataKuliah;
 
     @Column(length = 50, nullable = false)

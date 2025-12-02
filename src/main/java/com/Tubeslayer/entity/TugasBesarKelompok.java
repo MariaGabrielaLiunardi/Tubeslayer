@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "tugas_besar_kelompok")
+@Table(name = "TugasBesarKelompok")
 @Data
 @IdClass(TugasBesarKelompokId.class)
 public class TugasBesarKelompok {
@@ -27,7 +27,7 @@ public class TugasBesarKelompok {
     private Kelompok kelompok;
 
     @ManyToOne
-    @JoinColumn(name = "tugas_besar_id")
+    @JoinColumn(name = "TugasBesarId")
     private TugasBesar tugas;
 }
 
