@@ -1,0 +1,254 @@
+body {
+    overflow-y: hidden;
+}
+
+/* ================= WRAPPER ================= */
+.detail-wrapper {
+    padding: 30px 60px;
+}
+
+/* ================= BREADCRUMB ================= */
+.breadcrumb {
+    font-size: 16px;
+    margin-bottom: 20px;
+    margin-left: 25px;
+}
+
+/* ================= HEADER MK ================= */
+.mk-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background: #CCF0F7;
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+}
+
+.mk-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #1fa2ff, #a6d8ff);
+}
+
+.mk-info h1 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.mk-info p {
+    margin-top: 8px;
+    color: gray;
+    font-size: 18px;
+}
+
+/* ================= TAB ================= */
+.mk-tab {
+    background: #0078B5;
+    width: fit-content;
+    border-radius: 40px;
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+    top: 110px;
+}
+
+.tab {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #4CA6D3;
+    border-radius: 30px;
+    padding: 12px 36px; 
+}
+
+/* ================= KONTEN BAWAH ================= */
+.mk-content {
+    display: flex;
+    gap: 40px;
+}
+
+/* ================= TUGAS MENDATANG ================= */
+.tugas-box {
+    background: white;
+    width: 300px;
+    padding: 25px;
+    border-radius: 25px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+    margin-left: 20px;
+}
+
+.tugas-box h3 {
+    font-size: 22px;
+}
+
+.tugas-kosong {
+    margin-top: 25px;
+    background: #c8eaff;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+/* ================= TUGAS BESAR ================= */
+.tugas-besar {
+    flex: 1;
+    background: #fff4ec;
+    padding: 35px 60px 35px 25px;  /* ✅ kanan diperbesar */
+    border-radius: 30px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+    margin-right: 20px;          /* ✅ jarak dari tepi kanan */
+    gap: 12px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.tugas-besar h3 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    margin: 0;
+}
+
+.folder-icon{
+    width: 28px;
+    height: 28px;
+}
+
+.tugas-besar p {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.btn-lihat {
+    position: absolute;
+    bottom: 25px;
+    right: 30px;   /* ✅ pojok kanan bawah */
+
+    background: black;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* ================= PAKSA BACKGROUND SAMA DASHBOARD ================= */
+.home {
+    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%) !important;
+    padding-top: 18px;
+}
+
+/* ================= HEADER KANAN ================= */
+.home .header {
+    height: 80px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home .header .left-section {
+    margin-left: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.home .header .left-section .dashboard-title {
+    font-weight: bold;
+    font-size: 20pt;
+}
+
+.home .header .right-section {
+    margin-right: 30px;
+    gap: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.home .header .right-section .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.name {
+    font-weight: bold;
+    font-size: 14pt;
+}
+
+.role {
+    font-size: 12pt;
+}
+
+.pfp {
+    width: 45px;
+    height: 45px;
+}
+
+.logout-btn {
+    width: 25px;
+    height: 25px;
+}
+
+.logout {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: #C1EBFF;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 3px 1px grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contents {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top: calc(100% - 80px);
+    gap: 35px;
+}
+
+.header-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1360px;
+    height: 160px;
+    background: url(../img/dashboard-header.png);
+    background-size: cover;
+    border-radius: 15px;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 2px 3px 1px grey;
+}
+
+/* ================= BACKGROUND PUTIH BESAR ================= */
+.detail-wrapper {
+    margin-top: 8px;
+    margin-left: 22px;
+    margin-right: 22px;
+    margin-bottom: 100px;
+
+    background: white;
+    border-radius: 24px;
+
+    padding: 0px 0px 80px;  
+
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+}

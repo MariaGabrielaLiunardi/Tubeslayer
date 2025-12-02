@@ -1,0 +1,586 @@
+@import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+    max-width: 100%;
+    font-family: Sen;
+    margin: 0; 
+    padding: 0; 
+}
+
+:root{
+    /* Transition */
+    --tran-02: all 0.2s ease; 
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.4s ease;
+    --tran-05: all 0.5s ease;
+}
+
+body{
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* === SIDEBAR === */
+.sidebar .text{
+    font-size: 15px; 
+    font-weight: 500;
+    color: black;
+    transition: var(--tran-03);
+    white-space: nowrap;
+    opacity: 1;
+}
+
+.sidebar.close .text{
+    opacity: 0;
+}
+
+.sidebar .image{
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar{
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    height: 100%;
+    width: 230px;
+    padding: 10px 14px; 
+    background-color: white;
+    transition: var(--tran-05);
+    z-index: 100;
+}
+
+.sidebar.close{
+    width:73px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sidebar li{
+    height: 50px;
+    margin-top: 10px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar li .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: auto;
+    margin-right: 20px; 
+    margin-left: 10px
+}
+
+.sidebar li .icon,
+.sidebar li .text{
+    transition: var(--tran-02);
+}
+
+.sidebar header{
+    position: relative;
+}
+
+.sidebar .image-text img{
+    width: 55px;
+}
+
+.sidebar header .image-text{
+    display: flex;
+    align-items: center;
+}
+
+header .image-text .header-text{
+    display: flex;
+    flex-direction: column;
+}
+
+.header-text .name{
+    font-weight: bold;
+    color: #0078B5;
+    font-size:15pt;
+}
+
+.sidebar .toggle{
+    position: absolute; 
+    top: 50%; 
+    right: -40px; 
+    transform: translateY(-50%) rotate(180deg);
+    height: 35px;
+    width: 35px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: black; 
+    font-size: 25px;
+    cursor: pointer;
+    transition: var(--tran-03);
+}
+
+.sidebar.close .toggle{
+    transform: translateY(-50%); 
+}
+
+.sidebar li a{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: var(--tran-04); 
+    border-radius: 10px;
+}
+
+.sidebar li a:hover{
+    background-color: #C1EBFF;
+}
+
+.sidebar .menu{
+    margin-top: 50px;
+}
+
+.sidebar .menu-bar{
+    height: calc(100% - 50px);
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar li.active a {
+    background-color: #C1EBFF; 
+}
+
+.home{
+    position: relative;
+    height: 100vh;
+    left: 73px; 
+    width: calc(100% - 73px);
+    transition: var(--tran-05);
+    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.close ~ .home{
+    filter: blur(0px);
+    pointer-events: auto;
+} 
+
+.sidebar:not(.close) ~ .home {
+    filter: blur(3px) brightness(0.7); 
+    transition: var(--tran-05); 
+    pointer-events: none; 
+}
+
+.sidebar.close ~ .home {
+    filter: blur(0px); 
+    pointer-events: auto;
+}
+
+.sidebar:not(.close) ~ .home {
+    filter: blur(3px) brightness(0.7); 
+    transition: var(--tran-05); 
+    pointer-events: none; 
+}
+
+.sidebar:not(.close) ~ .home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); 
+    z-index: 5;
+}
+
+.home .header{
+    height: 80px; 
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home .header .left-section{
+    margin-left: 48px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; 
+}
+
+.home .header .left-section .dashboard-title{
+    font-weight: bold;
+    font-size: 20pt; 
+}
+
+.home .header .right-section{
+    margin-right: 30px; 
+    gap: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.home .header .right-section .info{
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+}
+
+.name{
+    font-weight: bold;
+    font-size: 14pt; 
+}
+
+.role{
+    font-size: 12pt; 
+}
+
+.pfp{
+    width: 45px;
+    height: 45px;
+}
+
+.logout-btn{
+    width: 25px;
+    height: 25px;
+}
+
+.logout{
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: #C1EBFF; 
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 3px 1px grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contents{
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top: calc(100% - 80px);
+    gap: 35px; 
+}
+
+.header-section{
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 1360px;
+    height: 160px; 
+    background: url(../img/dashboard-header.png); 
+    background-size:cover;
+    border-radius: 15px; 
+    flex-direction: column;
+    gap: 10px; 
+    box-shadow: 2px 3px 1px grey;
+}
+
+.web-title{
+    font-weight: bold;
+    font-size: 30pt;
+}
+
+.welcome-message{
+    color: #757575;  
+    font-size: 14pt;    
+}
+
+.overview-section{
+    width: 1360px; 
+    display: flex; 
+    flex-direction: column;
+}
+
+.overview-title{
+    font-weight: bold;
+    font-size: 17pt; 
+}
+
+.overview-div{
+    margin-top: 10px;   
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-overview{
+    width: 660px; 
+    height: 150px; 
+    border-radius: 15px;
+    background-color: white;
+    display: flex; 
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 2px 3px 1px grey;
+    gap: 20px; 
+}
+
+.date{
+    font-weight: bold;
+    font-size: 14pt; 
+    margin-left: 30px; 
+}
+
+.semester{
+    font-weight: bold;
+    font-size: 14pt;  
+    margin-left: 30px;
+}
+
+.right-overview{
+    width: 660px; 
+    height: 150px; 
+    border-radius: 15px; 
+    background-color: white;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 2px 3px 1px grey;
+    gap: 20px; 
+}
+
+.mk{
+    font-weight: bold;
+    font-size: 14pt; 
+    margin-left: 30px; 
+}
+
+.tubes-aktif{
+    font-weight: bold;
+    font-size: 14pt;  
+    margin-left: 30px;
+}
+
+.content-section{
+    width: 1360px; 
+    display: flex; 
+    flex-direction: column;
+    align-content: center;
+    gap: 20px; 
+}
+
+.content-title{  
+    display: flex;
+    justify-content: space-between;
+}
+
+.lihat-semua-btn{
+    text-decoration: none;
+    color:white;
+    background-color: black;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px; 
+    font-size: 10pt; 
+    padding-left: 10px; 
+    padding-right: 10px;
+    box-shadow: 2px 2px 3px grey;
+}
+
+.content-title{
+    font-weight: bold;
+    font-size: 17pt; 
+}
+
+.content-div{
+    display: flex;
+    justify-content: space-between;
+}
+
+.content1, .content2, .content3, .content4{
+    width: 320px; 
+    height: 150px; 
+    background-color: white;
+    border-radius: 15px; 
+    justify-content: center;
+    box-shadow: 2px 3px 1px grey;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; 
+}
+
+.nama-mk{
+    font-weight: bold;
+    font-size: 15pt; 
+}
+
+.kelas{
+    font-size: 13pt; 
+}
+
+
+/* --- Variabel Warna Khusus untuk Card --- */
+:root {
+    /* Gradien Card: Biru ke Cyan */
+    --card-gradient-start-1: #4A98F7; /* Biru Primer (untuk Mata Kuliah/Mahasiswa) */
+    --card-gradient-end-1: #66B5FF; /* Biru lebih terang */
+    --card-gradient-start-2: #00BFFF; /* Cyan untuk Dosen (sesuai gambar) */
+    --card-gradient-end-2: #87CEEB; /* Cyan lebih terang */
+    --card-bg-bottom: #FFFFFF; /* Putih bersih untuk bagian teks */
+    --card-icon-color: #2A4890; /* Biru tua untuk ikon */
+    --card-text-color: #333333;
+    --transition-03: all 0.3s ease;
+}
+
+
+/* 1. Kontainer Utama (content-section) - MENGGUNAKAN FLEXBOX UNTUK LAYOUT LURUS */
+.content-section {
+    display: flex;
+    /* Menyusun item secara horizontal */
+    flex-direction: row; 
+    /* Pusatkan item di tengah kontainer */
+    justify-content: center; 
+    align-items: center; 
+    
+    gap: 40px; /* Jarak antar kartu (sesuai gambar) */
+    padding: 50px 30px;
+    flex-wrap: wrap; 
+    min-height: calc(100vh - 70px); 
+    width: 100%;
+}
+/* --- Variabel Warna Card --- */
+:root {
+    /* 1. Warna Mata Kuliah (Blue/Primary) */
+    --card-gradient-start-1: #FFFFFF; 
+    --card-gradient-end-1: #0077B6; 
+    
+    /* 2. Warna Dosen (Cyan/Secondary) */
+    --card-gradient-start-2: #FFFFFF; 
+    --card-gradient-end-2: #00B4D8; 
+    
+    /* 3. Warna Mahasiswa (Ketiga/Tertiary - Menggunakan #90E0EF) */
+    --card-gradient-start-3: #FFFFFF; 
+    --card-gradient-end-3: #90E0EF; 
+
+    --card-bg-bottom: #FFFFFF;
+    --card-icon-color: #2A4890; 
+    --card-text-color: #333333;
+    --transition-03: all 0.3s ease;
+}
+
+/* 2. Gaya Dasar Kartu (.card) - Dimensi dan Visual Split */
+.card {
+    /* Dimensi yang Proporsional dengan Gambar */
+    width: 320px; 
+    height: 350px; 
+    border-radius: 20px; 
+    
+    text-align: center;
+    cursor: pointer;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    align-items: center;
+    padding: 0; 
+    background-color: var(--card-bg-bottom); 
+    overflow: hidden; 
+    
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); 
+    transition: var(--transition-03);
+    position: relative; 
+}
+
+/* Efek Hover */
+.card:hover {
+    transform: translateY(-8px); 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); 
+}
+
+/* Bagian Gradien Atas (Menggunakan Pseudo-element ::before) */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 75%; 
+    z-index: 1;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    /* Gradien Default (Mata Kuliah) */
+    background: linear-gradient(to bottom, var(--card-gradient-start-1), var(--card-gradient-end-1));
+}
+
+/* Penyesuaian Gradien untuk Card Dosen (Cyan) */
+.card.dosen::before {
+    background: linear-gradient(to bottom, var(--card-gradient-start-2), var(--card-gradient-end-2));
+}
+
+/* Penyesuaian Gradien untuk Card Mahasiswa (Warna Ketiga) */
+.card.mahasiswa::before { /* Menggunakan .mahasiswa yang benar, bukan .mahasisawa */
+    background: linear-gradient(to bottom, var(--card-gradient-start-3), var(--card-gradient-end-3));
+}
+
+/* 3. Kontainer Ikon (.icon-container) */
+.icon-container {
+    width: 100%;
+    height: 75%; 
+    
+    /* PENTING: Hapus pemusatan Flexbox agar ikon bisa diposisikan absolut */
+    /* display: flex; 
+    align-items: center;
+    justify-content: center; */
+
+    position: absolute; 
+    top: 0;
+    z-index: 2; 
+}
+
+
+/* 4. Gaya Ikon Gambar (Menggunakan Ukuran Besar Anda: 420px) */
+.icon-container img {
+    /* Ukuran yang Anda berikan (Ikon akan terlihat terpotong/meluap) */
+    width: 420px; 
+    height: 420px;
+    
+    object-fit: contain;
+    
+    position: absolute; 
+    
+    top: -40px;     /* Angka negatif atau kecil untuk membuat ikon meluap ke atas/kiri */
+    right: -50px;  /* Angka negatif atau kecil untuk membuat ikon meluap ke kiri/bawah */
+    
+    /* CATATAN: Karena width 420px lebih besar dari card 320px, kita perlu
+       menggeser ikon agar bagian kanan/atasnya terlihat di sudut. */
+    /* Dengan top: -50px dan right: -100px, ikon akan menjorok keluar
+       sehingga hanya sebagian besar dari ikon yang terlihat di area gradien. */
+       
+    opacity: 0.8; 
+}
+
+.card.dosen .icon-container img {
+    top: -60px; 
+}
+
+/* 5. Judul (.title) - Bagian Teks Bawah */
+.title {
+    font-size: 20px; 
+    font-weight: 600;
+    color: var(--card-text-color);
+    position: relative;
+    z-index: 3;
+    padding-bottom: 25px; 
+    
+    /* PASTIKAN PROPERTI INI ADA: */
+    text-align: center; /* Membuat teks di dalam elemen sejajar ke tengah */
+}
