@@ -6,14 +6,14 @@ import com.Tubeslayer.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public User login(String email, String rawPassword) {
         User user = userRepository.findByEmail(email)
@@ -22,7 +22,8 @@ public class AuthService {
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new RuntimeException("Password salah");
         }
-        return user; // login sukses
+        return user;
     }
 }
+
 
