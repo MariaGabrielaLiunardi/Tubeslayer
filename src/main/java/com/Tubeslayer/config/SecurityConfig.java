@@ -34,7 +34,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .userDetailsService(customUserDetailsService)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/index.html", "/login", "/css/**", "/js/**", "/logo/**", "/icon/**", "/img/**").permitAll()
+                .requestMatchers("/", "/index", "/login", "/css/**", "/js/**", "/logo/**", "/icon/**", "/img/**").permitAll()
                 .requestMatchers("/dashboard").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/dosen/**").hasRole("DOSEN")
@@ -43,7 +43,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .loginProcessingUrl("/perform_login")
+                .loginProcessingUrl("/login")
                 .successHandler(customSuccessHandler)   // ⬅ pakai custom success handler
                 .failureUrl("/login?error=true")
                 .permitAll()
