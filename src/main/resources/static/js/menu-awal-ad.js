@@ -10,6 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+const btnMatkul = document.getElementById("btnMatkul");
+    if (btnMatkul) {
+        btnMatkul.addEventListener("click", () => {
+            window.location.href = "kelola-mata-kuliah.html";
+        });
+    }
+
     // 2. Logic untuk Mengubah Highlight (Kelas 'active') Saat Link Diklik
 
     const navLinks = document.querySelectorAll('.sidebar .nav-link');

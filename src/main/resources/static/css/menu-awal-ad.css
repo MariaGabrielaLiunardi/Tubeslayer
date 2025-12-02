@@ -581,6 +581,5 @@ header .image-text .header-text{
     z-index: 3;
     padding-bottom: 25px; 
     
-    /* PASTIKAN PROPERTI INI ADA: */
     text-align: center; /* Membuat teks di dalam elemen sejajar ke tengah */
 }
