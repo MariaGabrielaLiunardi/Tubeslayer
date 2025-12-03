@@ -7,7 +7,7 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 @Data
 public class MataKuliahMahasiswaId implements Serializable {
-    private Long userId;
+    private String idUser;
     private String kodeMk;
 }
 
