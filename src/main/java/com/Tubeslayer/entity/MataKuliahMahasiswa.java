@@ -7,17 +7,19 @@ import lombok.Data;
 @Entity
 @Table(name = "mata_kuliah_mahasiswa")
 @Data
-@IdClass(MataKuliahMahasiswaId.class)
 public class MataKuliahMahasiswa {
 
-    @Id
+    @EmbeddedId
+    private MataKuliahMahasiswaId id;
+
     @ManyToOne
-    @JoinColumn(name = "id_user") 
+    @MapsId("userId")
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private User user;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "kode_mk") 
+    @MapsId("kodeMk")
+    @JoinColumn(name = "kode_mk", referencedColumnName = "kodeMK")
     private MataKuliah mataKuliah;
 
     @Column(length = 3)
