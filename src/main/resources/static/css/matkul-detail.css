@@ -1,30 +1,33 @@
 /* ================= GLOBAL ================= */
 html, body {
-    height: 100%; 
+    height: 100%;
     margin: 0;
     padding: 0;
 }
 
-/* ================= PAKSA BACKGROUND SAMA DASHBOARD (DIPERBAIKI FINAL) ================= */
-.home {
-    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%) !important;
-    padding-top: 18px;
-    min-height: 100vh; 
-    height: auto; 
-    /* Kunci: background-attachment: fixed agar background tetap saat scroll */
-    background-attachment: fixed;
-    /* Menjamin background mengisi seluruh area tanpa pengulangan */
-    background-size: cover; 
+body {
+    overflow-y: auto;
+    overflow-x: auto;
+    
+    background: linear-gradient(
+        360deg, 
+        rgba(255, 241, 235, 1) 0%,
+        rgba(172, 224, 249, 1) 50%, 
+        rgba(172, 224, 249, 1) 100% /* area scroll */
+    ) !important;
+
+    min-height: 100vh;
+    background-attachment: scroll; 
+    background-size: 100% 100%; /* gradien seluruh bagian */
     background-repeat: no-repeat;
 }
 
-body {
-    overflow-y: auto; 
-    overflow-x: auto;
+.home{
+    padding-top: 18px;
 }
 
 
-/* ================= BACKGROUND PUTIH BESAR (.detail-wrapper) ================= */
+/* ================= BACKGROUND PUTIH MATKUL ================= */
 .detail-wrapper {
     margin-top: 25px; 
     margin-left: 22px;
@@ -40,7 +43,7 @@ body {
     position: relative; 
 }
 
-/* ================= HEADER UTAMA (Dipulihkan) ================= */
+/* ================= HEADER ================= */
 .home .header {
     height: 80px; 
     width: 100%;
@@ -75,7 +78,7 @@ body {
     justify-content: center;
 }
 
-/* ================= ELEMEN UTAMA HEADER ================= */
+/* ================= ELEMEN HEADER ================= */
 .name {
     font-weight: bold;
     font-size: 14pt;
@@ -108,7 +111,7 @@ body {
     align-items: center;
 }
 
-/* ================= TAB (SERAGAM) ================= */
+/* ================= TAB ================= */
 .mk-tab {
     background: #0078B5;
     width: fit-content;
@@ -138,7 +141,7 @@ body {
     padding: 10px 30px; 
 }
 
-/* ================= HEADER MK (BOX BIRU MUDA) ================= */
+/* ================= HEADER MK ================= */
 .mk-header {
     display: flex;
     align-items: center;
@@ -175,7 +178,7 @@ body {
     margin-left: 25px;
 }
 
-/* ================= TOMBOL TAMBAH TUGAS (DI LIST VIEW - TENGAH BAWAH) ================= */
+/* ================= TOMBOL TAMBAH TUGAS ================= */
 .tambah-tugas-wrapper-list {
     /* PENTING: Ditempatkan di bawah mk-content dan di tengah horizontal */
     display: flex;
@@ -197,7 +200,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* ================= KONTEN BAWAH (FLEXBOX) ================= */
+/* ================= KONTEN BAWAH ================= */
 .mk-content {
     display: flex;
     gap: 40px;
@@ -263,7 +266,7 @@ body {
     gap: 20px; 
 }
 
-/* PENTING: Style untuk placeholder tugas besar kosong */
+/* placeholder tugas besar kosong */
 #tugas-besar-kosong {
     background: #fff4ec;
     padding: 35px 30px 35px 25px; 
@@ -367,7 +370,7 @@ body {
     height: 150px;
 }
 
-/* Tombol Submit Form di Tengah Bawah */
+/* tombol submit form */
 .btn-submit-tugas {
     display: block; 
     margin: 40px auto 0 auto; 

@@ -35,35 +35,33 @@ public class DosenController {
         }
         model.addAttribute("semester", semester);
 
-        int jumlahMk = MataKuliahDosenRepository
+        /*int jumlahMk = MataKuliahDosenRepository
                 .countById_IdUserAndTahunAkademikAndIsActive(user.getIdUser(), "2025", true);
 
         int jumlahTb = TugasBesarRepository
                 .countByIdUserAndStatusAndIsActive(user.getIdUser(), "Open", true);
 
         model.addAttribute("jumlahMk", jumlahMk);
-        model.addAttribute("jumlahTb", jumlahTb);
+        model.addAttribute("jumlahTb", jumlahTb);*/
 
         return "dosen/dashboard"; // ⬅ sesuai lokasi file
     }
 
-        // 1. Mapping untuk halaman daftar semua mata kuliah
+    // 1. Mapping untuk halaman daftar semua mata kuliah
     @GetMapping("/dosen/mata-kuliah")
-    public String mahasiswaMataKuliahList() {
+    public String dosenMataKuliahList() {
         return "dosen/mata-kuliah";
     }
 
     // 2. Mapping untuk halaman detail mata kuliah (Kuliah)
     @GetMapping("/dosen/matkul-detail") 
-    public String mahasiswaMatkulDetail() {
-        // template location: templates/Matakuliah/matkul-detail.html
+    public String dosenMatkulDetail() {
         return "dosen/matkul-detail"; 
     }
 
     // 3. Mapping untuk halaman daftar peserta
-    // Template: templates/Matakuliah/matkul-peserta.html
     @GetMapping("/dosen/matkul-peserta")
-    public String mahasiswaMatkulPeserta() {
+    public String dosenMatkulPeserta() {
         return "dosen/matkul-peserta"; 
     }
 }

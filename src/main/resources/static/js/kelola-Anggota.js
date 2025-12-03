@@ -1,435 +1,534 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // ========== DATA & STATE ==========
-    
-    // TODO: AMBIL DATA USER DARI SESSION/DATABASE
-    let currentUser = {
-        nama: "",
-        nim: "",
-        isKetua: false
-    };
-    
-    // TODO: FUNGSI UNTUK LOAD CURRENT USER (Menggunakan .then())
-    function loadCurrentUser() {
-        // CARA INTEGRASI DENGAN DATABASE:
-        // fetch('/api/user/current', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Assign data dari database
-        //     currentUser = {
-        //         nama: data.nama,
-        //         nim: data.nim,
-        //         isKetua: data.isKetua
-        //     };
-        //     
-        //     // Update UI
-        //     const userNameElement = document.getElementById('current-user-name');
-        //     if (userNameElement) {
-        //         userNameElement.textContent = currentUser.nama;
-        //     }
-        //     
-        //     console.log('Current user loaded:', currentUser);
-        // })
-        // .catch(error => {
-        //     console.error('Error loading current user:', error);
-        //     alert('Gagal memuat data user. Silakan refresh halaman.');
-        // });
-        
-        // TEMPORARY: Untuk testing tanpa backend (HAPUS SAAT INTEGRASI)
-        currentUser = {
-            nama: "Keisha Neira Jocelyn",
-            nim: "6182301001",
-            isKetua: true // UBAH KE false UNTUK TEST NON-KETUA
-        };
-        console.log('Current user loaded:', currentUser);
-    }
-    
-    // TODO: AMBIL DATA ANGGOTA KELOMPOK DARI DATABASE
-    let kelompokAnggota = [];
-    
-    // TODO: FUNGSI UNTUK LOAD ANGGOTA KELOMPOK (Menggunakan .then())
-    function loadKelompokAnggota() {
-        // CARA INTEGRASI DENGAN DATABASE:
-        // const kelompokId = 1; // Ambil dari currentUser atau URL
-        // fetch(`/api/kelompok/${kelompokId}/anggota`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Assign data dari database
-        //     kelompokAnggota = data; // atau data.anggota
-        //     
-        //     // Render setelah load
-        //     renderMemberList();
-        //     console.log('Kelompok anggota loaded:', kelompokAnggota);
-        // })
-        // .catch(error => {
-        //     console.error('Error loading kelompok anggota:', error);
-        //     alert('Gagal memuat data anggota kelompok.');
-        // });
-        
-        // TEMPORARY: Untuk testing tanpa backend (HAPUS SAAT INTEGRASI)
-        kelompokAnggota = [
-            {
-                nama: currentUser.nama,
-                nim: currentUser.nim,
-                role: "Ketua"
+const API_BASE_URL = '/api'; // Sesuaikan dengan base URL Spring Boot Anda
+const TUGAS_ID = 1; // ID tugas yang sedang diakses (bisa diambil dari URL parameter)
+
+// ===============================
+// DATA LAYER - DATABASE INTEGRATION
+// ===============================
+
+/**
+ * Load semua kelompok untuk tugas tertentu
+ */
+async function loadKelompokFromDatabase(idTugas) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/kelompok/tugas/${idTugas}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
             }
-        ];
-        renderMemberList();
-        console.log('Kelompok anggota loaded:', kelompokAnggota);
-    }
-    
-    // Selected member sementara dari search
-    let selectedMember = null;
-    
-    // ========== DOM ELEMENTS ==========
-    
-    // Views
-    const viewDeskripsi = document.getElementById('view-deskripsi');
-    const viewAnggota = document.getElementById('view-anggota');
-    const viewPilihAnggota = document.getElementById('view-pilih-anggota');
-    
-    // Buttons
-    const btnKelolaAnggota = document.getElementById('btn-kelola-anggota');
-    const btnKembaliAnggota = document.getElementById('btn-kembali-anggota');
-    const btnTambahAnggota = document.getElementById('btn-tambah-anggota');
-    const btnSelesaiAnggota = document.getElementById('btn-selesai-anggota');
-    const btnKembaliPilih = document.getElementById('btn-kembali-pilih');
-    const btnKonfirmasi = document.getElementById('btn-konfirmasi');
-    const btnSearch = document.getElementById('btn-search');
-    
-    // Other elements
-    const memberList = document.getElementById('member-list');
-    const memberCounter = document.getElementById('member-counter');
-    const memberCounterPilih = document.getElementById('member-counter-pilih');
-    const warningNonKetua = document.getElementById('warning-non-ketua');
-    const searchInput = document.getElementById('search-mahasiswa');
-    const searchResults = document.getElementById('search-results');
-    
-    // ========== FUNCTIONS ==========
-    
-    // Switch between views
-    function showView(viewToShow) {
-        viewDeskripsi.classList.remove('active');
-        viewAnggota.classList.remove('active');
-        viewPilihAnggota.classList.remove('active');
-        viewToShow.classList.add('active');
-    }
-    
-    // Render member list
-    function renderMemberList() {
-        memberList.innerHTML = '';
-        
-        kelompokAnggota.forEach((member) => {
-            const memberItem = document.createElement('div');
-            memberItem.className = 'member-item';
-            
-            memberItem.innerHTML = `
-                <div class="member-info">
-                    <span class="member-name">${member.nama}</span>
-                    ${member.role ? `<span class="member-badge">${member.role}</span>` : ''}
-                </div>
-            `;
-            
-            memberList.appendChild(memberItem);
         });
-        
-        updateCounter();
-    }
-    
-    // Update member counter
-    function updateCounter() {
-        const count = kelompokAnggota.length;
-        const counterText = `${count}/5 Anggota`;
-        memberCounter.textContent = counterText;
-        memberCounterPilih.textContent = counterText;
-    }
-    
-    // Setup view anggota based on user role
-    function setupViewAnggota() {
-        if (!currentUser.isKetua) {
-            btnTambahAnggota.disabled = true;
-            btnTambahAnggota.style.backgroundColor = '#9e9e9e';
-            btnSelesaiAnggota.disabled = true;
-            btnSelesaiAnggota.style.backgroundColor = '#9e9e9e';
-            warningNonKetua.style.display = 'block';
-        } else {
-            btnTambahAnggota.disabled = false;
-            btnTambahAnggota.style.backgroundColor = '#000';
-            btnSelesaiAnggota.disabled = false;
-            btnSelesaiAnggota.style.backgroundColor = '#000';
-            warningNonKetua.style.display = 'none';
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error loading kelompok:', error);
+        throw error;
     }
-    
-    // TODO: SEARCH MAHASISWA DARI DATABASE (Menggunakan .then())
-    function searchMahasiswa(query) {
-        if (!query || query.trim() === '') {
-            searchResults.classList.remove('active');
-            return;
-        }
-        
-        // CARA INTEGRASI DENGAN DATABASE:
-        // fetch(`/api/mahasiswa/search?q=${encodeURIComponent(query)}`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Filter mahasiswa yang sudah jadi anggota
-        //     const existingNims = kelompokAnggota.map(m => m.nim);
-        //     const filtered = data.filter(mhs => !existingNims.includes(mhs.nim));
-        //     
-        //     renderSearchResults(filtered);
-        // })
-        // .catch(error => {
-        //     console.error('Error searching mahasiswa:', error);
-        //     searchResults.innerHTML = '<div class="no-results">Error saat mencari mahasiswa</div>';
-        //     searchResults.classList.add('active');
-        // });
-        
-        // TEMPORARY: Simulasi hasil search (HAPUS SAAT INTEGRASI)
-        const mahasiswaDatabase = [
-            { nama: "Marsella Moretta", nim: "6182301058" },
-            { nama: "Ahmad Rizki", nim: "6182301002" },
-            { nama: "Siti Nurhaliza", nim: "6182301003" },
-            { nama: "Budi Santoso", nim: "6182301004" },
-            { nama: "Dewi Lestari", nim: "6182301005" },
-            { nama: "Eko Prasetyo", nim: "6182301006" },
-            { nama: "Fitri Handayani", nim: "6182301007" },
-            { nama: "Gilang Ramadhan", nim: "6182301008" },
-        ];
-        
-        const lowerQuery = query.toLowerCase();
-        const existingNims = kelompokAnggota.map(m => m.nim);
-        const filtered = mahasiswaDatabase.filter(mhs => {
-            const matchName = mhs.nama.toLowerCase().includes(lowerQuery);
-            const matchNim = mhs.nim.includes(lowerQuery);
-            const notMember = !existingNims.includes(mhs.nim);
-            return (matchName || matchNim) && notMember;
+}
+
+/**
+ * Simpan kelompok baru ke database
+ * @param {Object} kelompok - Data kelompok yang akan disimpan
+ */
+async function saveKelompokToDatabase(kelompok) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/kelompok`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(kelompok)
         });
-        
-        renderSearchResults(filtered);
-    }
-    
-    // Render search results
-    function renderSearchResults(results) {
-        searchResults.innerHTML = '';
-        
-        if (results.length === 0) {
-            searchResults.innerHTML = '<div class="no-results">Tidak ada hasil ditemukan</div>';
-            searchResults.classList.add('active');
-            return;
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
-        results.forEach(mhs => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'search-result-item';
-            resultItem.innerHTML = `
-                <div class="search-result-name">${mhs.nama}</div>
-                <div class="search-result-nim">${mhs.nim}</div>
-            `;
-            
-            resultItem.addEventListener('click', () => {
-                selectMahasiswa(mhs);
-            });
-            
-            searchResults.appendChild(resultItem);
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error saving kelompok:', error);
+        throw error;
+    }
+}
+
+/**
+ * Hapus kelompok dari database
+ * @param {number} idKelompok - ID kelompok yang akan dihapus
+ */
+async function deleteKelompokFromDatabase(idKelompok) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/kelompok/${idKelompok}`, {
+            method: 'POST', // Menggunakan POST karena requirement
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
-        
-        searchResults.classList.add('active');
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error deleting kelompok:', error);
+        throw error;
     }
-    
-    // Select mahasiswa from search results
-    function selectMahasiswa(mahasiswa) {
-        selectedMember = mahasiswa;
-        searchInput.value = `${mahasiswa.nama} - ${mahasiswa.nim}`;
-        searchResults.classList.remove('active');
-    }
-    
-    // TODO: ADD MEMBER KE DATABASE (Menggunakan .then())
-    function addMember() {
-        if (!selectedMember) {
-            alert('Silakan pilih mahasiswa terlebih dahulu');
-            return;
-        }
-        
-        if (kelompokAnggota.length >= 5) {
-            alert('Kelompok sudah penuh (maksimal 5 anggota)');
-            return;
-        }
-        
-        const isAlreadyMember = kelompokAnggota.some(m => m.nim === selectedMember.nim);
-        if (isAlreadyMember) {
-            alert('Mahasiswa ini sudah menjadi anggota kelompok');
-            return;
-        }
-        
-        // CARA INTEGRASI DENGAN DATABASE:
-        // const kelompokId = 1; // Ambil dari currentUser atau state
-        // fetch(`/api/kelompok/${kelompokId}/anggota`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         nim: selectedMember.nim
-        //     })
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     if (!data.success) {
-        //         alert(data.message || 'Gagal menambahkan anggota');
-        //         return;
-        //     }
-        //     
-        //     // Reload data dari database setelah berhasil
-        //     loadKelompokAnggota();
-        //     
-        //     // Reset and go back
-        //     selectedMember = null;
-        //     searchInput.value = '';
-        //     showView(viewAnggota);
-        //     
-        //     console.log('Member added successfully');
-        // })
-        // .catch(error => {
-        //     console.error('Error adding member:', error);
-        //     alert('Gagal menambahkan anggota. Silakan coba lagi.');
-        // });
-        
-        // TEMPORARY: Add to local array (HAPUS SAAT INTEGRASI)
-        kelompokAnggota.push({
-            nama: selectedMember.nama,
-            nim: selectedMember.nim,
-            role: null
+}
+
+/**
+ * Finalisasi semua kelompok untuk tugas tertentu
+ * @param {number} idTugas - ID tugas yang akan difinalisasi
+ */
+async function finalisasiKelompokToDatabase(idTugas) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/kelompok/finalisasi/${idTugas}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error finalizing kelompok:', error);
+        throw error;
+    }
+}
+
+/**
+ * Cari mahasiswa berdasarkan ID atau nama
+ * @param {string} query - ID atau nama mahasiswa
+ */
+async function searchMahasiswa(query) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/mahasiswa/search?q=${encodeURIComponent(query)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error searching mahasiswa:', error);
+        throw error;
+    }
+}
+
+/**
+ * Get detail tugas besar
+ * @param {number} idTugas - ID tugas
+ */
+async function getTugasBesar(idTugas) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/tugas/${idTugas}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error getting tugas:', error);
+        throw error;
+    }
+}
+
+// ===============================
+// VIEW CONTROLLER
+// ===============================
+class ViewManager {
+    constructor() {
+        this.views = {
+            default: document.getElementById('defaultView'),
+            daftarKelompok: document.getElementById('daftarKelompokView'),
+            formKelompok: document.getElementById('formKelompokView')
+        };
         
-        selectedMember = null;
-        searchInput.value = '';
-        renderMemberList();
-        showView(viewAnggota);
-        console.log('Member added successfully');
+        this.currentView = 'default';
     }
 
-        function removeMember(index, nim) {
-        // Konfirmasi sebelum hapus
-        const member = kelompokAnggota[index];
-        const confirmDelete = confirm(`Apakah Anda yakin ingin menghapus ${member.nama} dari kelompok?`);
-        
-        if (!confirmDelete) {
-            return;
+    showView(viewName) {
+        // Sembunyikan semua views
+        Object.values(this.views).forEach(view => {
+            if (view) view.style.display = 'none';
+        });
+
+        // Tampilkan view yang dipilih
+        if (this.views[viewName]) {
+            this.views[viewName].style.display = 'block';
+            this.currentView = viewName;
         }
-        
-        // CARA INTEGRASI DENGAN DATABASE:
-        // const kelompokId = 1; // Ambil dari currentUser atau state
-        // fetch(`/api/kelompok/${kelompokId}/anggota/${nim}`, {
-        //     method: 'DELETE',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     if (!data.success) {
-        //         alert(data.message || 'Gagal menghapus anggota');
-        //         return;
-        //     }
-        //     
-        //     // Reload data dari database setelah berhasil
-        //     loadKelompokAnggota();
-        //     
-        //     console.log('Member removed successfully');
-        // })
-        // .catch(error => {
-        //     console.error('Error removing member:', error);
-        //     alert('Gagal menghapus anggota. Silakan coba lagi.');
-        // });
-        
-        // TEMPORARY: Remove from local array (HAPUS SAAT INTEGRASI)
-        kelompokAnggota.splice(index, 1);
-        renderMemberList();
-        console.log('Member removed successfully');
     }
-    
-    // ========== EVENT LISTENERS ==========
-    
-    // Button: Kelola Anggota
-    btnKelolaAnggota.addEventListener('click', () => {
-        loadKelompokAnggota();
-        setupViewAnggota();
-        showView(viewAnggota);
-    });
-    
-    // Button: Kembali (dari view anggota)
-    btnKembaliAnggota.addEventListener('click', () => {
-        showView(viewDeskripsi);
-    });
-    
-    // Button: Tambah
-    btnTambahAnggota.addEventListener('click', () => {
-        if (kelompokAnggota.length >= 5) {
-            alert('Kelompok sudah penuh (maksimal 5 anggota)');
+
+    getCurrentView() {
+        return this.currentView;
+    }
+}
+
+// ===============================
+// KELOMPOK CONTROLLER
+// ===============================
+class KelompokController {
+    constructor(viewManager, idTugas) {
+        this.viewManager = viewManager;
+        this.idTugas = idTugas;
+        this.kelompokList = [];
+        this.tugasData = null;
+        this.init();
+    }
+
+    async init() {
+        this.setupEventListeners();
+        await this.loadTugasData();
+        await this.loadKelompok();
+    }
+
+    setupEventListeners() {
+        // Button: Daftar Kelompok (dari default view)
+        const daftarKelompokBtn = document.getElementById('daftarKelompokBtn');
+        if (daftarKelompokBtn) {
+            daftarKelompokBtn.addEventListener('click', () => {
+                this.showDaftarKelompok();
+            });
+        }
+
+        // Button: Kembali ke default view
+        const backToDefaultBtn = document.getElementById('backToDefaultBtn');
+        if (backToDefaultBtn) {
+            backToDefaultBtn.addEventListener('click', () => {
+                this.viewManager.showView('default');
+            });
+        }
+
+        // Button: Buat Kelompok (dari daftar kelompok view)
+        const buatKelompokBtn = document.getElementById('buatKelompokBtn');
+        if (buatKelompokBtn) {
+            buatKelompokBtn.addEventListener('click', () => {
+                this.showFormKelompok();
+            });
+        }
+
+        // Button: Kembali dari form
+        const kembaliFromFormBtn = document.getElementById('kembaliFromFormBtn');
+        if (kembaliFromFormBtn) {
+            kembaliFromFormBtn.addEventListener('click', () => {
+                this.showDaftarKelompok();
+            });
+        }
+
+        // Button: Finalisasi Kelompok
+        const finalisasiBtn = document.getElementById('finalisasiKelompokBtn');
+        if (finalisasiBtn) {
+            finalisasiBtn.addEventListener('click', () => {
+                this.finalisasiKelompok();
+            });
+        }
+
+        // Form Submit
+        const formKelompok = document.getElementById('formKelompok');
+        if (formKelompok) {
+            formKelompok.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleFormSubmit();
+            });
+        }
+
+        // Search Button
+        const searchBtn = document.querySelector('.search-btn');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', () => {
+                this.handleSearchMahasiswa();
+            });
+        }
+    }
+
+    async loadTugasData() {
+        try {
+            this.tugasData = await getTugasBesar(this.idTugas);
+            console.log('Tugas data loaded:', this.tugasData);
+        } catch (error) {
+            console.error('Error loading tugas data:', error);
+            alert('Gagal memuat data tugas');
+        }
+    }
+
+    async loadKelompok() {
+        try {
+            this.kelompokList = await loadKelompokFromDatabase(this.idTugas);
+            console.log('Kelompok loaded:', this.kelompokList);
+        } catch (error) {
+            console.error('Error loading kelompok:', error);
+            alert('Gagal memuat data kelompok. Silakan refresh halaman.');
+        }
+    }
+
+    showDaftarKelompok() {
+        this.viewManager.showView('daftarKelompok');
+        this.renderKelompokTable();
+    }
+
+    showFormKelompok() {
+        this.viewManager.showView('formKelompok');
+        
+        // Reset form
+        const form = document.getElementById('formKelompok');
+        if (form) form.reset();
+
+        // Set default value dari tugas data
+        if (this.tugasData) {
+            const maxAnggotaInput = document.getElementById('maxAnggota');
+            const minAnggotaInput = document.getElementById('minAnggota');
+            
+            if (maxAnggotaInput) maxAnggotaInput.value = this.tugasData.max_anggota || 5;
+            if (minAnggotaInput) minAnggotaInput.value = this.tugasData.min_anggota || 3;
+        }
+    }
+
+    renderKelompokTable() {
+        const container = document.getElementById('kelompokTableContainer');
+        const counterElement = document.getElementById('jumlahKelompok');
+
+        if (!container) return;
+
+        // Update counter
+        if (counterElement) {
+            counterElement.textContent = this.kelompokList.length;
+        }
+
+        // Jika tidak ada kelompok
+        if (this.kelompokList.length === 0) {
+            container.innerHTML = '<div class="empty-state">Belum ada kelompok yang dibuat</div>';
             return;
         }
-        searchInput.value = '';
-        selectedMember = null;
-        searchResults.classList.remove('active');
-        showView(viewPilihAnggota);
-    });
-    
-    // Button: Selesai
-    btnSelesaiAnggota.addEventListener('click', () => {
-        showView(viewDeskripsi);
-    });
-    
-    // Button: Kembali (dari view pilih)
-    btnKembaliPilih.addEventListener('click', () => {
-        selectedMember = null;
-        searchInput.value = '';
-        searchResults.classList.remove('active');
-        showView(viewAnggota);
-    });
-    
-    // Button: Konfirmasi
-    btnKonfirmasi.addEventListener('click', () => {
-        addMember();
-    });
-    
-    // Button: Search
-    btnSearch.addEventListener('click', () => {
-        searchMahasiswa(searchInput.value);
-    });
-    
-    // Input: Search on Enter
-    searchInput.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') {
-            searchMahasiswa(searchInput.value);
+
+        // Buat table
+        let tableHTML = `
+            <table class="kelompok-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kelompok</th>
+                        <th>Ketua</th>
+                        <th>Jumlah Anggota</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        this.kelompokList.forEach((kelompok, index) => {
+            const jumlahAnggota = kelompok.jumlah_anggota || kelompok.anggota?.length || 1;
+            const ketuaNama = kelompok.nama_ketua || kelompok.ketua?.nama || 'N/A';
+            
+            tableHTML += `
+                <tr>
+                    <td>${index + 1}.</td>
+                    <td>${kelompok.nama_kelompok || 'Kelompok ' + (index + 1)}</td>
+                    <td>${ketuaNama}</td>
+                    <td>${jumlahAnggota}/${kelompok.max_anggota || this.tugasData?.max_anggota || 'N/A'}</td>
+                    <td>
+                        <button class="delete-btn" data-id="${kelompok.id_kelompok}">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+
+        container.innerHTML = tableHTML;
+
+        // Attach delete event listeners
+        this.attachDeleteListeners();
+    }
+
+    attachDeleteListeners() {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                this.deleteKelompok(id);
+            });
+        });
+    }
+
+    async handleSearchMahasiswa() {
+        const namaKetuaInput = document.getElementById('namaKetua');
+        if (!namaKetuaInput) return;
+
+        const query = namaKetuaInput.value.trim();
+        if (!query) {
+            alert('Masukkan ID atau nama mahasiswa untuk mencari');
+            return;
         }
-    });
-    
-    // Click outside to close search results
-    document.addEventListener('click', (e) => {
-        if (!searchResults.contains(e.target) && 
-            !searchInput.contains(e.target) && 
-            !btnSearch.contains(e.target)) {
-            searchResults.classList.remove('active');
+
+        try {
+            const results = await searchMahasiswa(query);
+            
+            if (results && results.length > 0) {
+                // Ambil hasil pertama
+                const mahasiswa = results[0];
+                namaKetuaInput.value = `${mahasiswa.nama} - ${mahasiswa.id_user}`;
+                
+                // Simpan ID user untuk digunakan saat submit
+                namaKetuaInput.dataset.userId = mahasiswa.id_user;
+            } else {
+                alert('Mahasiswa tidak ditemukan');
+            }
+        } catch (error) {
+            console.error('Error searching mahasiswa:', error);
+            alert('Gagal mencari mahasiswa. Silakan coba lagi.');
         }
-    });
+    }
+
+    async handleFormSubmit() {
+        const maxAnggota = parseInt(document.getElementById('maxAnggota').value);
+        const minAnggota = parseInt(document.getElementById('minAnggota').value);
+        const namaKetuaInput = document.getElementById('namaKetua');
+        const namaKetua = namaKetuaInput.value.trim();
+
+        // Validasi
+        if (minAnggota > maxAnggota) {
+            alert('Jumlah minimal anggota tidak boleh lebih besar dari maksimal!');
+            return;
+        }
+
+        if (!namaKetua) {
+            alert('Nama ketua kelompok harus diisi!');
+            return;
+        }
+
+        // Extract ID user dari input (jika sudah di-search)
+        let idUserKetua = namaKetuaInput.dataset.userId;
+        
+        // Jika belum di-search, coba extract dari format "Nama - ID"
+        if (!idUserKetua && namaKetua.includes('-')) {
+            const parts = namaKetua.split('-');
+            idUserKetua = parts[parts.length - 1].trim();
+        }
+
+        if (!idUserKetua) {
+            alert('Silakan gunakan tombol search untuk mencari mahasiswa');
+            return;
+        }
+
+        // Buat kelompok baru
+        const kelompokBaru = {
+            id_tugas: this.idTugas,
+            nama_kelompok: `Kelompok ${this.kelompokList.length + 1}`,
+            id_user_ketua: idUserKetua,
+            max_anggota: maxAnggota,
+            min_anggota: minAnggota
+        };
+
+        try {
+            const result = await saveKelompokToDatabase(kelompokBaru);
+            
+            // Reload kelompok list
+            await this.loadKelompok();
+            
+            // Kembali ke daftar kelompok
+            this.showDaftarKelompok();
+            
+            // Tampilkan notifikasi sukses
+            alert('Kelompok berhasil dibuat!');
+        } catch (error) {
+            console.error('Error saving kelompok:', error);
+            alert('Gagal membuat kelompok. Silakan coba lagi.');
+        }
+    }
+
+    async deleteKelompok(idKelompok) {
+        const confirm = window.confirm('Apakah Anda yakin ingin menghapus kelompok ini?');
+        
+        if (!confirm) return;
+
+        try {
+            await deleteKelompokFromDatabase(idKelompok);
+            
+            // Reload kelompok list
+            await this.loadKelompok();
+            
+            // Re-render table
+            this.renderKelompokTable();
+            
+            alert('Kelompok berhasil dihapus!');
+        } catch (error) {
+            console.error('Error deleting kelompok:', error);
+            alert('Gagal menghapus kelompok. Silakan coba lagi.');
+        }
+    }
+
+    async finalisasiKelompok() {
+        if (this.kelompokList.length === 0) {
+            alert('Tidak ada kelompok yang dapat difinalisasi!');
+            return;
+        }
+
+        const confirm = window.confirm(
+            `Anda akan memfinalisasi ${this.kelompokList.length} kelompok. ` +
+            'Setelah difinalisasi, kelompok tidak dapat diubah lagi. Lanjutkan?'
+        );
+
+        if (!confirm) return;
+
+        try {
+            await finalisasiKelompokToDatabase(this.idTugas);
+            
+            alert('Kelompok berhasil difinalisasi!');
+            
+            // Reload data
+            await this.loadKelompok();
+            
+            // Kembali ke default view
+            this.viewManager.showView('default');
+        } catch (error) {
+            console.error('Error finalizing kelompok:', error);
+            alert('Gagal memfinalisasi kelompok. Silakan coba lagi.');
+        }
+    }
+}
+
+// ===============================
+// UTILITY FUNCTIONS
+// ===============================
+
+/**
+ * Get ID tugas dari URL parameter
+ */
+function getTugasIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return parseInt(urlParams.get('id_tugas')) || TUGAS_ID;
+}
+
+// ===============================
+// INITIALIZATION
+// ===============================
+document.addEventListener('DOMContentLoaded', () => {
+    const idTugas = getTugasIdFromUrl();
+    const viewManager = new ViewManager();
+    const kelompokController = new KelompokController(viewManager, idTugas);
     
-    // ========== INITIALIZATION ==========
-    loadCurrentUser();
-    console.log('Kelola Anggota module loaded');
-    
+    console.log('Kelompok Manager initialized with database integration');
+    console.log('ID Tugas:', idTugas);
 });
