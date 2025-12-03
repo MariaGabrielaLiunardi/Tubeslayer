@@ -21,6 +21,10 @@ body{
     overflow-x: hidden;
 }
 
+.bold{
+    font-weight: bold;
+}
+
 /* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"></html>>
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Tubeslayer</title>
    <link rel="stylesheet" href="/css/dash-user.css">
-    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
    <script src="/js/dash-user.js" defer></script>
    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -28,12 +27,12 @@
             <ul class="menu-links">
                 <li class="nav-link active">
                     <a href="/dosen/dashboard">
-                        <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+ -                   <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
                         <span class="text nav-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-link">
-                    <a href="/dosen/mata-kuliah">
+                    <a href="mata-kuliah.html">
                         <img src="/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
                         <span class="text nav-text">Mata Kuliah</span>
                     </a>
@@ -49,8 +48,8 @@
         </div>
         <div class="right-section">
             <div class="info">
-                <span class="name">Nama</span>
-                <span class="role">Role</span>
+                    <span class="bold" th:text="${user.nama}">Nama</span>
+                    <span th:text="${user.role}">Role</span>
             </div>
             <img src="/icon/pfp.png" class="pfp" alt="pfp">
             <button type="button" class="logout">
@@ -61,19 +60,29 @@
     <div class="contents">
         <div class="header-section">
             <span class="web-title">Tubeslayer</span>
-            <span class="welcome-message">Selamat datang nama!</span>
+            <span class="welcome-message">
+                Selamat datang <span th:text="${user.nama}">Nama</span>!
+            </span>
         </div>
         <div class="overview-section">
             <span class="overview-title">Overview</span>
             <div class="overview-div">
                 <div class="left-overview">
-                    <span class="date">Tanggal:</span>
-                    <span class="semester">Semester:</span>
+                    <span class="date">
+                        Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
+                    </span>
+                    <span class="semester">
+                        Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
+                    </span>
                 </div>
                 <div class="right-overview">
-                    <span class="mk">Mata kuliah semester ini:</span>
-                    <span class="tubes-aktif">Tugas besar aktif:</span>
-                </div>
+                    <span class="mk">Jumlah mata kuliah semester ini: 
+                        <span th:text="${jumlahMk}">0</span>
+                    </span>
+
+                    <span class="tubes-aktif">Jumlah tugas besar aktif: 
+                        <span th:text="${jumlahTb}">0</span>
+                    </span>
             </div>
         </div>
         <div class="content-section">

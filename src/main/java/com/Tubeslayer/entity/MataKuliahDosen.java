@@ -1,21 +1,23 @@
 package com.Tubeslayer.entity;
 
-import com.Tubeslayer.entity.id.MataKuliahDosenId; 
+import com.Tubeslayer.entity.id.MataKuliahDosenId;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "mata_kuliah_dosen")
 @Data
-@IdClass(MataKuliahDosenId.class)
 public class MataKuliahDosen {
 
-    @Id
+    @EmbeddedId
+    private MataKuliahDosenId id;
+
+    @MapsId("idUser") // merujuk ke field idUser di MataKuliahDosenId
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
 
-    @Id
+    @MapsId("kodeMk") // merujuk ke field kodeMk di MataKuliahDosenId
     @ManyToOne
     @JoinColumn(name = "kode_mk")
     private MataKuliah mataKuliah;

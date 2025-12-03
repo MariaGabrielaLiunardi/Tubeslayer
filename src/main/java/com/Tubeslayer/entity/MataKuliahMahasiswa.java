@@ -12,14 +12,14 @@ public class MataKuliahMahasiswa {
     @EmbeddedId
     private MataKuliahMahasiswaId id;
 
+    @MapsId("idUser") // merujuk ke field idUser di MataKuliahMahasiswaId
     @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    @JoinColumn(name = "id_user")
     private User user;
 
+    @MapsId("kodeMk") // merujuk ke field kodeMk di MataKuliahMahasiswaId
     @ManyToOne
-    @MapsId("kodeMk")
-    @JoinColumn(name = "kode_mk", referencedColumnName = "kodeMK")
+    @JoinColumn(name = "kode_mk")
     private MataKuliah mataKuliah;
 
     @Column(length = 3)

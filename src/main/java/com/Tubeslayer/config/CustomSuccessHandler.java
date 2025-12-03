@@ -19,8 +19,10 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
+                
 
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        System.out.println("Roles user setelah login: " + roles); // <--- Tambahkan ini
 
         if (roles.contains("ROLE_ADMIN")) {
             response.sendRedirect("/admin/dashboard");
@@ -28,6 +30,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             response.sendRedirect("/dosen/dashboard");
         } else if (roles.contains("ROLE_MAHASISWA")) {
             response.sendRedirect("/mahasiswa/dashboard");
+        } else{
+            response.sendRedirect("/");
         }
     }
 }
