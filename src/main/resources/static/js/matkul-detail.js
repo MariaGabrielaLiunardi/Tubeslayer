@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Event listener untuk tombol Tambah Tugas
         toggleButton.addEventListener('click', toggleView);
         
-        // --- SUBMIT FORM TUGAS (Logika ini hanya untuk Dosen) ---
+        // --- SUBMIT FORM TUGAS (hanya untuk dosen) ---
         if (tugasForm) {
             tugasForm.addEventListener('submit', (event) => {
                 event.preventDefault(); 

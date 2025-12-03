@@ -12,12 +12,12 @@ public class MataKuliahMahasiswa {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user") 
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "kode_mk")
+    @JoinColumn(name = "kode_mk") 
     private MataKuliah mataKuliah;
 
     @Column(length = 3)
@@ -25,8 +25,9 @@ public class MataKuliahMahasiswa {
 
     private int semester;
 
-    @Column(length = 4)
+    @Column(name = "tahun_akademik", length = 4) 
     private String tahunAkademik;
 
+    @Column(name = "is_active") 
     private boolean isActive = true;
 }
