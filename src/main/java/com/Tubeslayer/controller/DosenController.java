@@ -11,23 +11,21 @@ public class DosenController {
         return "dosen/dashboard";  // templates/dosen/dashboard.html
     }
 
-        // 1. Mapping untuk halaman daftar semua mata kuliah
+    // 1. Mapping untuk halaman daftar semua mata kuliah
     @GetMapping("/dosen/mata-kuliah")
-    public String mahasiswaMataKuliahList() {
+    public String dosenMataKuliahList() {
         return "dosen/mata-kuliah";
     }
 
     // 2. Mapping untuk halaman detail mata kuliah (Kuliah)
     @GetMapping("/dosen/matkul-detail") 
-    public String mahasiswaMatkulDetail() {
-        // template location: templates/Matakuliah/matkul-detail.html
+    public String dosenMatkulDetail() {
         return "dosen/matkul-detail"; 
     }
 
     // 3. Mapping untuk halaman daftar peserta
-    // Template: templates/Matakuliah/matkul-peserta.html
     @GetMapping("/dosen/matkul-peserta")
-    public String mahasiswaMatkulPeserta() {
+    public String dosenMatkulPeserta() {
         return "dosen/matkul-peserta"; 
     }
 }

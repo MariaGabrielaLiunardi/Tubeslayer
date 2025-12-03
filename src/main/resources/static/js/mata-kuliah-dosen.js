@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const title = card.querySelector("h3").innerText;
             
             // Pindah ke halaman detail (matkul-detail.html)
-            window.location.href = "/mahasiswa/matkul-detail?mk=" + encodeURIComponent(title);
+            window.location.href = "/dosen/matkul-detail?mk=" + encodeURIComponent(title);
         });
     });
     

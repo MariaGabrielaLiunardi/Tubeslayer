@@ -8,10 +8,11 @@
 
     <link rel="stylesheet" href="/css/dash-user.css">
     <link rel="stylesheet" href="/css/matkul-detail.css">
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
 
     <script src="/js/dash-user.js" defer></script>
-    <script src="/js/matkul-detail.js" defer></script> 
-    
+    <script src="/js/matkul-detail.js" defer></script>
+
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -35,14 +36,14 @@
             <div class="menu">
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="dash-user.html">
+                        <a href="/dosen/dashboard">
                             <img src="/icon/dashboard.png" class="icon">
                             <span class="text nav-text">Dashboard</span>
                         </a>
                     </li>
 
                     <li class="nav-link active">
-                        <a href="mata-kuliah.html">
+                        <a href="/dosen/mata-kuliah">
                             <img src="/icon/open-book.png" class="icon">
                             <span class="text nav-text">Mata Kuliah</span>
                         </a>
@@ -93,22 +94,63 @@
             </div>
 
             <div id="list-tugas-view">
-                
                 <div class="mk-content">
 
+                    <!-- Tugas Mendatang -->
                     <div class="tugas-box">
                         <h3>Tugas Mendatang</h3>
                         <div class="tugas-mendatang-list">
-                            <div class="tugas-kosong" id="tugas-mendatang-kosong">
-                                Yuhuu! Tidak ada tugas yang harus dikerjakan~
+
+                            <!-- Dummy Card 1 -->
+                            <div class="tugas-mendatang-card">
+                                <div class="deadline-info">
+                                    <img src="/icon/calendar.png" class="kalender-icon">
+                                    <span>Deadline: 05/12/2025</span>
+                                </div>
+                                <p>Quiz Bab 4 - Searching Algorithms</p>
                             </div>
+
+                            <!-- Dummy Card 2 -->
+                            <div class="tugas-mendatang-card">
+                                <div class="deadline-info">
+                                    <img src="/icon/calendar.png" class="kalender-icon">
+                                    <span>Deadline: 12/12/2025</span>
+                                </div>
+                                <p>Mini Project - Pathfinding AI</p>
+                            </div>
+
                         </div>
                     </div>
 
+                    <!-- Tugas Besar -->
                     <div class="tugas-besar-list" id="tugas-besar-list">
-                        <div id="tugas-besar-kosong" class="tugas-kosong-besar">
-                            Tidak ada tugas besar yang tersedia.
+
+                        <!-- Dummy TB 1 -->
+                        <div class="tugas-besar">
+                            <div class="tugas-header">
+                                <img src="/icon/blue-folder.png" class="folder-icon">
+                                <h3>Tugas Besar 1:</h3>
+                            </div>
+                            <p>
+                                Implementasi A* dan Greedy Best First Search pada game maze sederhana.
+                                Dikerjakan berkelompok 3–5 orang.
+                            </p>
+                            <button class="btn-lihat">Lihat Tugas ></button>
                         </div>
+
+                        <!-- Dummy TB 2 -->
+                        <div class="tugas-besar">
+                            <div class="tugas-header">
+                                <img src="/icon/blue-folder.png" class="folder-icon">
+                                <h3>Tugas Besar 2:</h3>
+                            </div>
+                            <p>
+                                Membuat sistem rekomendasi berbasis machine learning untuk pemilihan mata kuliah.
+                                Presentasi di akhir semester.
+                            </p>
+                            <button class="btn-lihat">Lihat Tugas ></button>
+                        </div>
+
                     </div>
                 </div>
 
@@ -116,11 +158,14 @@
                     <button class="btn-tambah-tugas" id="toggle-tambah-tugas">Tambah Tugas</button>
                 </div>
 
-            </div> <div id="buat-tugas-view" style="display: none;">
+            </div>
+
+
+            <div id="buat-tugas-view" style="display: none;">
                 <div id="form-buat-tugas">
                     <h2 id="form-title">Buat Tugas</h2>
                     <form id="tugas-form">
-                        
+
                         <div class="form-group">
                             <label for="nama-tugas">Nama Tugas:</label>
                             <input type="text" id="nama-tugas" placeholder="Isi nama tugas disini...">
@@ -135,11 +180,13 @@
                             <label for="deskripsi-tugas">Deskripsi Tugas:</label>
                             <textarea id="deskripsi-tugas" placeholder="Isi deskripsi tugas disini..."></textarea>
                         </div>
-                        
+
                         <button type="submit" class="btn-submit-tugas">Tambah Tugas</button>
                     </form>
                 </div>
-            </div> </div> </section>
+            </div>
+        </div>
+    </section>
 
 </body>
 

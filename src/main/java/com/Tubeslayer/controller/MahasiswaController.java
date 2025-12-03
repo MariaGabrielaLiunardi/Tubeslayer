@@ -13,6 +13,11 @@ public class MahasiswaController {
     // 1. Mapping untuk halaman daftar semua mata kuliah
     @GetMapping("/mahasiswa/mata-kuliah")
     public String mahasiswaMataKuliahList() {
+        // 1. Ambil data Mata Kuliah dari DB
+       // List<MataKuliah> listMK = mataKuliahRepository.findAll(); 
+    
+        // 2. Tambahkan list ke objek Model, agar bisa diakses di Thymeleaf
+        //model.addAttribute("mataKuliahList", listMK);
         return "mahasiswa/mata-kuliah";
     }
 
