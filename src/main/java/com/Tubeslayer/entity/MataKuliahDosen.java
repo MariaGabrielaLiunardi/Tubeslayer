@@ -1,23 +1,25 @@
 package com.Tubeslayer.entity;
 
-import com.Tubeslayer.entity.id.MataKuliahDosenId; 
+import com.Tubeslayer.entity.id.MataKuliahDosenId;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "mata_kuliah_dosen")
 @Data
-@IdClass(MataKuliahDosenId.class)
 public class MataKuliahDosen {
 
-    @Id
+    @EmbeddedId
+    private MataKuliahDosenId id;
+
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @MapsId("userId") // maps composite key field to association PK
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private User user;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "kode_mk")
+    @MapsId("kodeMk") // maps composite key field to association PK
+    @JoinColumn(name = "kode_mk", referencedColumnName = "kodeMK")
     private MataKuliah mataKuliah;
 
     @Column(length = 3)

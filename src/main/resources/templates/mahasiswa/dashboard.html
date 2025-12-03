@@ -48,8 +48,8 @@
         </div>
         <div class="right-section">
             <div class="info">
-                <span class="name">Nama</span>
-                <span class="role">Role</span>
+                <span class="bold" th:text="${user.nama}">Nama</span>
+                <span th:text="${user.role}">Role</span>
             </div>
             <img src="/icon/pfp.png" class="pfp" alt="pfp">
             <button type="button" class="logout">
@@ -60,14 +60,20 @@
     <div class="contents">
         <div class="header-section">
             <span class="web-title">Tubeslayer</span>
-            <span class="welcome-message">Selamat datang nama!</span>
+            <span class="welcome-message">
+                Selamat datang <span th:text="${user.nama}">Nama</span>!
+            </span>
         </div>
         <div class="overview-section">
             <span class="overview-title">Overview</span>
             <div class="overview-div">
                 <div class="left-overview">
-                    <span class="date">Tanggal:</span>
-                    <span class="semester">Semester:</span>
+                    <span class="date">
+                        Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
+                    </span>
+                    <span class="semester">
+                        Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
+                    </span>
                 </div>
                 <div class="right-overview">
                     <span class="mk">Mata kuliah semester ini:</span>

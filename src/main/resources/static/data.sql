@@ -6,6 +6,19 @@ CREATE DATABASE tubeslayer;
 
 -- PAKAI database tersebut
 USE tubeslayer;
+
+SHOW Tables; 
+
+show create table user_kelompok;
+
+ALTER TABLE tugas_besar_kelompok
+DROP FOREIGN KEY FK8ol2m7n810n562aqcdfbu1b3f; 
+ALTER TABLE tugas_besar_kelompok
+DROP FOREIGN KEY tugas_besar_kelompok_ibfk_1; 
+ALTER TABLE tugas_besar_kelompok
+DROP FOREIGN KEY tugas_besar_kelompok_ibfk_2; 
+
+
 SHOW TABLES;
 
 CREATE TABLE user_table (
