@@ -2,41 +2,27 @@ package com.Tubeslayer.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.List; 
 
 @Entity
-@Table(name = "User")
+@Table(name = "user_table")
 @Data
 public class User {
-
     @Id
-    @Column(name = "idUser", length = 30)
+    @Column(name = "id_user", length = 30)
     private String idUser;
 
-    @Column(unique = true, length = 50)
+    @Column(name = "email", length = 50, nullable = false, unique = true)
     private String email;
 
-    @Column(length = 30, nullable = false)
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @Column(length = 60, nullable = false)
+    @Column(name = "nama", length = 60, nullable = false)
     private String nama;
 
-    @Column(length = 12, nullable = false)
+    @Column(name = "role", length = 12, nullable = false)
     private String role;
 
-    @Column(nullable = false)
-    private boolean isActive = true;
-
-    // Relasi dengan TugasBesar (sebagai dosen)
-    @OneToMany(mappedBy = "dosen")
-    private List<TugasBesar> tugasList;
-
-    // Relasi dengan UserKelompok
-    @OneToMany(mappedBy = "user")
-    private List<UserKelompok> userKelompok;
-
-    // Relasi dengan Nilai
-    @OneToMany(mappedBy = "user")
-    private List<Nilai> nilaiList;
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true; // default true
 }

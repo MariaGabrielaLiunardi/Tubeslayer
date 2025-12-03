@@ -5,19 +5,21 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "MataKuliahMahasiswa")
+@Table(name = "mata_kuliah_mahasiswa")
 @Data
-@IdClass(MataKuliahMahasiswaId.class)
 public class MataKuliahMahasiswa {
 
-    @Id
+    @EmbeddedId
+    private MataKuliahMahasiswaId id;
+
     @ManyToOne
-    @JoinColumn(name = "idUser")
+    @MapsId("userId")
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private User user;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "kodeMK")
+    @MapsId("kodeMk")
+    @JoinColumn(name = "kode_mk", referencedColumnName = "kodeMK")
     private MataKuliah mataKuliah;
 
     @Column(length = 3)
@@ -25,8 +27,9 @@ public class MataKuliahMahasiswa {
 
     private int semester;
 
-    @Column(length = 4)
+    @Column(name = "tahun_akademik", length = 4) 
     private String tahunAkademik;
 
+    @Column(name = "is_active") 
     private boolean isActive = true;
 }

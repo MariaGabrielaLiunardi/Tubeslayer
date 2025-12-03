@@ -5,24 +5,24 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "UserKelompok")
+@Table(name = "user_kelompok")
 @Data
 @IdClass(UserKelompokId.class)
 public class UserKelompok {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "idUser")
+    @JoinColumn(name = "id_user")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "idKelompok")
+    @JoinColumn(name = "id_kelompok")
     private Kelompok kelompok;
 
     @Column(length = 8, nullable = false)
     private String role;
 
-    private boolean isActive = true;
+    private boolean is_active = true;
 }
 

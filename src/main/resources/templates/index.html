@@ -4,12 +4,12 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Tubeslayer</title>
-   <link rel="icon" href="../../static/img/blue-logo.png" type="image/x-icon">
-   <link rel="stylesheet" href="../../static/css/auth-styles.css">
+   <link rel="icon" th:href="@{/logo/blue-logo.png}" type="image/png">
+   <link rel="stylesheet" href="/css/auth-styles.css">
 </head>
 <body>
    <header>
-    <img src="../../static/img/logo/black-logo.png" alt="Logo">
+    <img th:src="@{/logo/black-logo.png}" alt="Logo">
    </header>
    <main>
        <section id="informasi-dasar">
@@ -18,7 +18,7 @@
             <br>Kelola deadline, koordinasi tim, dan pantau progres proyek dengan mudah dalam satu tempat.</p>
        </section>
        <section id="login">
-           <a href="login.html" type="button" id="login-btn">Login</a>
+           <a href="login" type="button" id="login-btn">Login</a>
        </section>
    </main>
 </body>

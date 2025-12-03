@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tubeslayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../../static/css/dash-user.css">
+    <link rel="stylesheet" href="../../static/css/matkul-detail.css">
+    <link rel="icon" href="../../static/logo/blue-logo.png" type="image/png">
+
+    <script src="../../static/js/dash-user.js" defer></script>
+    <script src="../../static/js/matkul-detail.js" defer></script>
+
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bxr bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="/mahasiswa/dashboard">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a href="/mahasiswa/mata-kuliah">
+                            <img src="/icon/open-book.png" class="icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Mata Kuliah</span>
+            </div>
+
+            <div class="right-section">
+                <div class="info">
+                    <span class="name">Keisha Neira Jocelyn</span>
+                    <span class="role">Mahasiswa</span>
+                </div>
+                <img src="/icon/pfp.png" class="pfp">
+                <button class="logout">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <div class="mk-tab">
+            <button class="tab active">Kuliah</button>
+            <button class="tab">Daftar Peserta</button>
+            <button class="tab">Nilai</button>
+        </div>
+
+        <div class="detail-wrapper">
+
+            <div class="mk-header">
+                <div class="mk-img"></div>
+                <div class="mk-info">
+                    <h1>Artificial Intelligence</h1>
+                    <p><b>Koordinator:</b> Clara Joycelyne Siauttara</p>
+                    <p><b>NIP:</b> 20080107</p>
+                </div>
+            </div>
+
+            <div class="breadcrumb">
+                Daftar Mata Kuliah > <id="mk-title">Mata Kuliah</id>
+            </div>
+
+            <div id="list-tugas-view">
+
+                <div class="mk-content">
+
+                    <!-- Tugas Mendatang -->
+                    <div class="tugas-box">
+                        <h3>Tugas Mendatang</h3>
+                        <div class="tugas-mendatang-list">
+
+                            <!-- Dummy 1 -->
+                            <div class="tugas-mendatang-card">
+                                <div class="deadline-info">
+                                    <img src="/icon/kalender.png" class="kalender-icon">
+                                    <span>Deadline: 06/10/2025</span>
+                                </div>
+                                <p>Tugas Besar Tahap 1</p>
+                            </div>
+
+                            <!-- Dummy 2 -->
+                            <div class="tugas-mendatang-card">
+                                <div class="deadline-info">
+                                    <img src="/icon/kalender.png" class="kalender-icon">
+                                    <span>Deadline: 18/12/2025</span>
+                                </div>
+                                <p>Tugas Besar Tahap 2</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Tugas Besar -->
+                    <div class="tugas-besar-list" id="tugas-besar-list">
+
+                        <!-- Dummy TB 1 -->
+                        <div class="tugas-besar">
+                            <div class="tugas-header">
+                                <img src="/icon/blue-folder.png" class="folder-icon">
+                                <h3>Tugas Besar Tahap 1</h3>
+                            </div>
+                            <p>
+                                Pada tugas ini Anda diminta untuk membuat program yang dapat membantu mahasiswa untuk 
+                                menghitung nilai IPK mereka. 
+                                Tugas ini dilakukan berkelompok sebanyak 5 orang. 
+                            </p>
+                            <a href="../hlmn_tubes/hlmtubes.html">
+                                <button class="btn-lihat">Lihat Tugas ></button>
+                            </a>
+                        </div>
+
+                        <!-- Dummy TB 2 -->
+                        <div class="tugas-besar">
+                            <div class="tugas-header">
+                                <img src="/icon/blue-folder.png" class="folder-icon">
+                                <h3>Tugas Besar Tahap 2</h3>
+                            </div>
+                            <p>
+                                Projek Akhir: Sistem rekomendasi berbasis Machine Learning.
+                                Presentasi pada akhir semester.
+                            </p>
+                            <button class="btn-lihat">Lihat Tugas ></button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

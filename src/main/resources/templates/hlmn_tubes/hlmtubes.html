@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas Besar Tahap 1</title>
+    <link rel="stylesheet" href="../../static/css/hlmtubes-styles.css">
+    <script src="../../static/js/sidebar-hlmtubes.js" defer></script>
+    <script src="../../static/js/kelola-Anggota.js" defer></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="../../static/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link active">
+                        <a href="#">
+                            <img src="../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <img src="../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left"></div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-name" id="current-user-name">Keisha Neira Jocelyn</div>
+                    <div class="user-role">Mahasiswa</div>
+                </div>
+                <div class="user-avatar"> <!--pfp-->
+                    <img src="../../static/icon/pfp.png" alt="useravtr">
+                </div>
+                <div class="notification-icon"><!--logout but-->
+                    <img src="../../static/icon/logout.png" alt="logouticon">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab">Kuliah</button>
+            <button class="tab">Daftar Peserta</button>
+            <button class="tab">Nilai</button>
+        </div>
+
+        <!-- Card Container -->
+        <div class="card-container">
+            <!-- Title Section -->
+            <div class="title-section">
+                <div class="book-icon">
+                    <img src="../../static/icon/open-book.png" alt="bookiconbig">
+                </div>
+                <h1>Tugas Besar Tahap 1</h1>
+            </div>
+
+            <!-- Content Card -->
+            <div class="content-card">
+                
+                <!-- VIEW 1: Deskripsi Tugas (Default View) -->
+                <div id="view-deskripsi" class="view-content active">
+                    <div class="breadcrumb">
+                        Daftar Mata Kuliah <span>></span> Artificial Intelligence <span>></span> Tugas Besar Tahap 1
+                    </div>
+
+                    <div class="content-header">
+                        <div class="folder-icon">
+                            <img src="../../static/icon/blue-folder.png" alt="foldericon">
+                        </div>
+                        <h2>Tugas Besar Tahap 1</h2>
+                    </div>
+
+                    <p class="content-description">
+                        Pada tugas ini Anda diminta untuk membuat program yang dapat membantu mahasiswa untuk menghitung nilai IPK mereka.
+                    </p>
+
+                    <p class="content-description">
+                        Tugas ini dilakukan berkelompok sebanyak 5 orang dan kelompok ditentukan oleh Mahasiswa.
+                    </p>
+
+                    <div class="group-info">
+                        <strong>Kelompok Anda:</strong> Kelompok 1
+                    </div>
+
+                    <div class="deadline-section">
+                        <div class="deadline">
+                            Deadline : Senin, 27 November 2025
+                        </div>
+                        <button class="manage-btn" id="btn-kelola-anggota">Kelola Anggota</button>
+                    </div>
+                </div>
+
+                <!-- VIEW 2: Anggota Kelompok -->
+                <div id="view-anggota" class="view-content">
+                    <div class="content-header">
+                        <h2>Anggota Kelompok</h2>
+                    </div>
+
+                    <!-- List Anggota -->
+                    <div class="member-list" id="member-list">
+                        <!-- Member items will be inserted here by JavaScript -->
+                    </div>
+
+                    <!-- Member Counter -->
+                    <div class="member-counter" id="member-counter">
+                        1/5 Anggota
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn-secondary" id="btn-kembali-anggota">Kembali</button>
+                        <div class="right-buttons">
+                            <button class="btn-primary" id="btn-tambah-anggota">Tambah</button>
+                            <button class="btn-primary" id="btn-selesai-anggota">Selesai</button>
+                        </div>
+                    </div>
+
+                    <!-- Warning untuk non-ketua -->
+                    <p class="warning-text" id="warning-non-ketua" style="display: none;">
+                        *Anda tidak memiliki akses untuk mengelola anggota!
+                    </p>
+                </div>
+
+                <!-- VIEW 3: Pilih Anggota Kelompok -->
+                <div id="view-pilih-anggota" class="view-content">
+                    <div class="content-header">
+                        <h2>Pilih anggota kelompok</h2>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="search-section">
+                        <label for="search-mahasiswa">Masukan Nama:</label>
+                        <div class="search-input-wrapper">
+                            <input 
+                                type="text" 
+                                id="search-mahasiswa" 
+                                placeholder="Marsella Moretta - 6182301058"
+                                autocomplete="off"
+                            >
+                            <button class="btn-search" id="btn-search">
+                                <i class='bx bx-search'></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Search Results Dropdown -->
+                        <div class="search-results" id="search-results">
+                            <!-- Results will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Member Counter -->
+                    <div class="member-counter" id="member-counter-pilih">
+                        1/5 Anggota
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn-secondary" id="btn-kembali-pilih">Kembali</button>
+                        <button class="btn-primary" id="btn-konfirmasi">Konfirmasi</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../static/js/sidebar.js"></script>
+    <script src="../../static/js/kelola-anggota.js"></script>
+</body>
+</html>
