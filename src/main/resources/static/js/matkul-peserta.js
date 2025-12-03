@@ -1,17 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
     // --- Logika Tab Navigation ---
+    const currentPath = window.location.pathname;
+    const basePath = currentPath.includes('/dosen/') ? '/dosen' : '/mahasiswa';
+
+    // --- Logika Tab Navigation ---
     const tabs = document.querySelectorAll('.mk-tab button');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const tabName = tab.textContent;
 
-            // Pindah ke halaman detail (Kuliah)
-            if (tabName === 'Kuliah') {
-                window.location.href = '/mahasiswa/matkul-detail';
-            } else if (tabName === 'Daftar Peserta') {
-                 // Refresh halaman peserta
-                window.location.href = '/mahasiswa/matkul-peserta';
+            // Navigasi menggunakan basePath yang benar
+            if (tabName === 'Daftar Peserta') {
+                window.location.href = basePath + '/matkul-peserta';
+            } else if (tabName === 'Kuliah') {
+                window.location.href = basePath + '/matkul-detail';
             }
         });
     });
