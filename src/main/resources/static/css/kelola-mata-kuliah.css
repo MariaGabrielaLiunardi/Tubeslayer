@@ -383,11 +383,11 @@ header .image-text .header-text{
 .table-header-row,
 .data-row {
     display: grid;
-    grid-template-columns: 10% 20% 45% 25%;
+    grid-template-columns:10% 20% 30% 20% 20%;
     padding: 10px;
     align-items: center;
     text-align: center;     
-    font-size: 17px;
+    font-size: 14px;
 }
 
 .data-row {
@@ -520,7 +520,7 @@ header .image-text .header-text{
 }
 
 .tambah-matkul-content {
-    width: 600px;
+    width: 500px;
     background: #FFF1EB;
     padding: 25px 30px;
     border-radius: 16px;
@@ -528,7 +528,8 @@ header .image-text .header-text{
 
     display: flex;
     flex-direction: column;  
-    margin-top: -30px;     
+    margin-top: 5px;     
+    font-size: 14px;
             
 }
 
@@ -536,20 +537,20 @@ header .image-text .header-text{
 #tambah-matkul-form {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* jarak antar elemen */
+    gap: 5px; /* jarak antar elemen */
    
 }
 
 /* Label */
 #tambah-matkul-form label {
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0px;
 }
 
 /* Input & Select */
 #tambah-matkul-form input,
 #tambah-matkul-form select {
-    padding: 10px;
+    padding: 4px 8px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background: white;
@@ -567,7 +568,6 @@ header .image-text .header-text{
     width: 100%;
     flex-direction: column;
 }
-
 
 /* --- Untuk Hapus Mata Kuliah --- */
 /* Wrapper utama */

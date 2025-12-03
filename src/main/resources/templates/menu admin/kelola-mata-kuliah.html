@@ -105,6 +105,7 @@
                     <span>No</span>
                     <span>Kode</span>
                     <span>Nama</span>
+                    <span>SKS</span>
                     <span>Status</span>
                 </div>
 
@@ -149,10 +150,17 @@
                         <label for="nama-matkul">Nama Mata Kuliah:</label>
                         <input type="text" id="nama-matkul" name="nama-matkul" required placeholder="Isi nama mata kuliah disini...">
 
+                        <label for="sks-matkul">Jumlah SKS:</label>
+                        <select id="sks-matkul" name="sks-matkul">
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+
                         <label for="status-matkul">Status Mata Kuliah:</label>
                         <select id="status-matkul" name="status-matkul" required>
-                            <option value="Aktif">Aktif</option>
-                            <option value="Nonaktif">Nonaktif</option>
+                            <option value="1">Aktif</option>
+                            <option value="0">Nonaktif</option>
                         </select>
 
                         <button type="submit" class="btn btn-submit" id="btn-submit">Tambah Mata Kuliah</button>
