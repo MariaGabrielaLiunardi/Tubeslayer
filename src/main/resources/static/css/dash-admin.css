@@ -18,6 +18,7 @@
 
 body{
     height: 100vh;
+    background-color: rgba(172, 224, 249, 1);
     overflow-x: hidden;
 }
 
@@ -299,6 +300,7 @@ header .image-text .header-text{
 .web-title{
     font-weight: bold;
     font-size: 30pt;
+    line-height: 1; /* Mengatur tinggi baris sama dengan ukuran font */
 }
 
 .welcome-message{
@@ -442,6 +444,104 @@ header .image-text .header-text{
     font-size: 13pt; 
 }
 
+/* Card Section */
+.content-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    padding: 30px;
+    padding-top: 0; 
+}
+
+/* Card Base */
+.card {
+    width: 380px;   /* lebih kecil dari menu-awal */
+    height: 250px;  /* disesuaikan agar compact */
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+/* Gradien background */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height:80%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background: linear-gradient(to bottom, #ffffff, #0077B6);
+}
+
+.card.dosen::before {
+    background: linear-gradient(to bottom, #ffffff, #00B4D8);
+}
+
+.card.mahasiswa::before {
+    background: linear-gradient(to bottom, #ffffff, #90E0EF);
+}
+
+.icon-container {
+    position: relative; 
+    width: 100%;
+    height: 70%; 
+    z-index: 2;
+    /* Properti Flexbox untuk Pemusatan */
+    display: flex;
+    justify-content: center; /* Pusat Horizontal */
+    align-items: center; /* Pusat Vertikal */
+}
+
+.icon-container img {
+    position: relative; /* Ganti ke relative/tetap absolute, tapi pemusatan dilakukan oleh parent */
+    width: 75%; /* Sesuaikan ukuran ikon (misalnya 60% dari container) */
+    height: auto;
+    top: -15px; /* Hapus offset yang tidak perlu */
+    right: 0; /* Hapus offset yang tidak perlu */
+    opacity: 0.8;
+    /* Hapus properti top, right, yang sebelumnya menyebabkan pergeseran */
+}
+
+.icon-container-dosen{
+    position: relative; /* Ganti ke relative/tetap absolute, tapi pemusatan dilakukan oleh parent */
+    width: 75%; /* Sesuaikan ukuran ikon (misalnya 60% dari container) */
+    height: auto;
+    top: -15px; /* Hapus offset yang tidak perlu */
+    right: 0; /* Hapus offset yang tidak perlu */
+    opacity: 0.8;
+}
+
+/* Text */
+.title {
+    font-size: 16pt;
+    font-weight: bold;
+    color: #333;
+    z-index: 3;
+    margin-bottom: 10px;
+}
+
+.kelas {
+    font-size: 12pt;
+    color: #555;
+    z-index: 3;
+    margin-bottom: 15px;
+}
 
 
 
