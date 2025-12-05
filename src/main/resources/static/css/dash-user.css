@@ -380,14 +380,12 @@ header .image-text .header-text{
     font-weight: normal; /* angka jadi normal */
 }
 
-
 .content-section{
     width: 1360px; 
     display: flex; 
     flex-direction: column;
     align-content: center;
     gap: 20px; 
-    margin-top: 20px; 
 }
 
 .content-title{  

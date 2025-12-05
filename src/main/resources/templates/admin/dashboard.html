@@ -67,7 +67,7 @@
         <div class="header-section">
             <span class="web-title">Tubeslayer</span>
             <span class="welcome-message">
-                Selamat datang <span th:text="${user.nama}">Nama</span>!
+                Selamat datang <span th:text="${user.nama}">Nama</span>! 💻
             </span>
         </div>
         <div class="overview-section">
@@ -75,15 +75,22 @@
             <div class="overview-div">
                 <div class="left-overview">
                     <span class="date">
-                        Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
+                        📅 Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
                     </span>
                     <span class="semester">
-                        Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
+                      🎓 Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
                     </span>
                 </div>
                 <div class="right-overview">
-                    <span class="mk">Mata kuliah semester ini:</span>
-                    <span class="tubes-aktif">Tugas besar aktif:</span>
+                    <span class="mk">
+                       📚 Jumlah mata kuliah aktif: 
+                        <span class="mk-value" th:text="${jumlahMk}">0</span>
+                    </span>
+
+                    <span class="tubes-aktif">
+                      📝 Jumlah tugas besar aktif: 
+                        <span class="tb-value" th:text="${jumlahTb}">0</span>
+                    </span>
                 </div>
             </div>
         </div>

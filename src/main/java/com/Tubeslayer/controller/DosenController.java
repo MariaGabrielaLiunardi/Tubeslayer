@@ -11,15 +11,15 @@ import org.springframework.ui.Model;
 import com.Tubeslayer.repository.MataKuliahDosenRepository;
 import com.Tubeslayer.repository.TugasBesarRepository;
 import com.Tubeslayer.service.CustomUserDetails;
-import com.Tubeslayer.service.DashboardService;
+import com.Tubeslayer.service.DashboardDosenService;
 import com.Tubeslayer.entity.User;
 
 @Controller
 public class DosenController {
 
-    private final DashboardService dashboardService;
+    private final DashboardDosenService dashboardService;
 
-    public DosenController(DashboardService dashboardService) {
+    public DosenController(DashboardDosenService dashboardService) {
         this.dashboardService = dashboardService;
     }
 

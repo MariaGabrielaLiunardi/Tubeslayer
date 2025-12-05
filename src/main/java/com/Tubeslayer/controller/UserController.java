@@ -35,11 +35,10 @@ public class UserController {
     }
 
     // Logout: (Boleh dipertahankan atau gunakan default Spring Security)
-    /*
     @GetMapping("/logout")
     public String logout(jakarta.servlet.http.HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
-    */
+    
 }

@@ -52,16 +52,18 @@
                     <span th:text="${user.role}">Role</span>
             </div>
             <img src="/icon/pfp.png" class="pfp" alt="pfp">
-            <button type="button" class="logout">
-                <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
-            </button>
+            <a th:href="@{/logout}" class="logout-link">
+                    <button type="button" class="logout">
+                        <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    </button>
+            </a>
         </div>
     </div>
     <div class="contents">
         <div class="header-section">
             <span class="web-title">Tubeslayer</span>
             <span class="welcome-message">
-                Selamat datang <span th:text="${user.nama}">Nama</span>!
+                Selamat datang <span th:text="${user.nama}">Nama</span>! 🧑‍🏫 
             </span>
         </div>
         <div class="overview-section">
@@ -69,23 +71,24 @@
             <div class="overview-div">
                 <div class="left-overview">
                     <span class="date">
-                        Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
+                        📅 Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
                     </span>
                     <span class="semester">
-                        Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
+                       🎓 Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
                     </span>
                 </div>
                 <div class="right-overview">
                     <span class="mk">
-                    Jumlah mata kuliah semester ini: 
+                    📚 Jumlah mata kuliah semester ini: 
                     <span class="mk-value" th:text="${jumlahMk}">0</span>
                     </span>
 
                     <span class="tubes-aktif">
-                    Jumlah tugas besar aktif: 
+                    📝 Jumlah tugas besar aktif: 
                     <span class="tb-value" th:text="${jumlahTb}">0</span>
                     </span>
                 </div>
+            </div>
         </div>
         <div class="content-section">
             <div class="content-title">
