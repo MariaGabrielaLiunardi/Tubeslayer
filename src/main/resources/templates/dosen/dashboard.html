@@ -32,7 +32,7 @@
                     </a>
                 </li>
                 <li class="nav-link">
-                    <a href="mata-kuliah.html">
+                    <a href="/dosen/mata-kuliah">
                         <img src="/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
                         <span class="text nav-text">Mata Kuliah</span>
                     </a>
@@ -93,26 +93,15 @@
         <div class="content-section">
             <div class="content-title">
                 <span class="content-title">Mata Kuliah</span>
-                <a href="#" class="lihat-semua-btn">
+                <a href="/dosen/mata-kuliah" class="lihat-semua-btn">
                     Lihat Semua >
                 </a>
             </div>
             <div class="content-div">
-                <div class="content1">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content2">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content3">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content4">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
+                <div th:each="md, iterStat : ${mataKuliahDosenList}"
+                    th:class="'content-item gradient-' + ${iterStat.index % 4 + 1}">
+                    <span class="nama-mk" th:text="${md.mataKuliah.nama}">Nama MK</span>
+                    <span class="kelas" th:text="'Kelas ' + ${md.kelas}">Kelas</span>
                 </div>
             </div>
         </div>

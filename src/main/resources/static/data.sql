@@ -9,7 +9,17 @@ USE tubeslayer;
 
 SHOW Tables; 
 
+select * 
+from mata_kuliah_mahasiswa; 
+
+select * 
+from user_table;  
+
+select * from user_table; 
+
 show create table user_kelompok;
+
+select * from user_table; 
 
 ALTER TABLE tugas_besar_kelompok
 DROP FOREIGN KEY FK8ol2m7n810n562aqcdfbu1b3f; 
@@ -156,16 +166,16 @@ INSERT INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
 DESCRIBE tugas_besar;
 
 INSERT INTO tugas_besar (id_tugas, id_user, id_rubrik, kode_mk, judul_tugas, deskripsi, deadline, status, mode_kel, min_anggota, max_anggota, is_active) VALUES
-(1, '6182301002', 1, 'IF101', 'Sorting Analyzer', 'Analisis 5 algoritma sorting', '2025-01-20 23:59:00', 'Open', 'Kelompok', 3, 5, 1),
-(2, '6182301003', 2, 'IF102', 'Graph Explorer', 'Implementasi BFS dan DFS', '2025-01-25 23:59:00', 'Open', 'Kelompok', 2, 4, 1),
-(3, '6182301004', 3, 'IF201', 'DB Design', 'Membuat ERD dan relasi database', '2025-01-22 23:59:00', 'Open', 'Individu', 1, 1, 1),
-(4, '6182301006', 4, 'IF202', 'Packet Sniffer', 'Analisis traffic jaringan', '2025-02-01 23:59:00', 'Open', 'Kelompok', 3, 6, 1),
-(5, '6182301007', 5, 'IF203', 'Web Portfolio', 'Membangun website portofolio', '2025-02-03 23:59:00', 'Open', 'Individu', 1, 1, 1),
-(6, '6182301008', 6, 'IF204', 'Mobile Finance App', 'Aplikasi catatan keuangan', '2025-01-28 23:59:00', 'Open', 'Kelompok', 2, 5, 1),
-(7, '6182301009', 7, 'IF205', 'CPU Scheduler', 'Simulasi algoritma penjadwalan CPU', '2025-01-30 23:59:00', 'Open', 'Individu', 1, 1, 1),
-(8, '6182301010', 8, 'IF301', 'ML Regression', 'Implementasi linear regression', '2025-02-10 23:59:00', 'Open', 'Kelompok', 2, 4, 1),
-(9, '6182301002', 9, 'IF302', 'Expert System', 'Sistem pakar diagnosa tanaman', '2025-02-15 23:59:00', 'Open', 'Kelompok', 3, 6, 1),
-(10,'6182301003',10, 'IF303', 'SRS Document', 'Membuat SRS untuk aplikasi tertentu', '2025-02-12 23:59:00', 'Open', 'Kelompok', 3, 5, 1);
+(1, '6182301002', 1, 'IF101', 'Sorting Analyzer', 'Analisis 5 algoritma sorting', '2025-01-20 23:59:00', 'Open', 'Dosen', 3, 5, 1),
+(2, '6182301003', 2, 'IF102', 'Graph Explorer', 'Implementasi BFS dan DFS', '2025-01-25 23:59:00', 'Open', 'Mahasiswa', 2, 4, 1),
+(3, '6182301004', 3, 'IF201', 'DB Design', 'Membuat ERD dan relasi database', '2025-01-22 23:59:00', 'Open', 'Mahasiswa', 1, 1, 1),
+(4, '6182301006', 4, 'IF202', 'Packet Sniffer', 'Analisis traffic jaringan', '2025-02-01 23:59:00', 'Open', 'Dosen', 3, 6, 1),
+(5, '6182301007', 5, 'IF203', 'Web Portfolio', 'Membangun website portofolio', '2025-02-03 23:59:00', 'Open', 'Dosen', 1, 1, 1),
+(6, '6182301008', 6, 'IF204', 'Mobile Finance App', 'Aplikasi catatan keuangan', '2025-01-28 23:59:00', 'Open', 'Dosen', 2, 5, 1),
+(7, '6182301009', 7, 'IF205', 'CPU Scheduler', 'Simulasi algoritma penjadwalan CPU', '2025-01-30 23:59:00', 'Open', 'Mahasiswa', 1, 1, 1),
+(8, '6182301010', 8, 'IF301', 'ML Regression', 'Implementasi linear regression', '2025-02-10 23:59:00', 'Open', 'Dosen', 2, 4, 1),
+(9, '6182301002', 9, 'IF302', 'Expert System', 'Sistem pakar diagnosa tanaman', '2025-02-15 23:59:00', 'Open', 'Mahasiswa', 3, 6, 1),
+(10,'6182301003',10, 'IF303', 'SRS Document', 'Membuat SRS untuk aplikasi tertentu', '2025-02-12 23:59:00', 'Open', 'Dosen', 3, 5, 1);
 
 INSERT INTO kelompok (id_kelompok, nama_kelompok) VALUES
 (1, 'Kelompok Alpha'),

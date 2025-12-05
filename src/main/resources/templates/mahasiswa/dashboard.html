@@ -95,26 +95,21 @@
         <div class="content-section">
             <div class="content-title">
                 <span class="content-title">Mata Kuliah</span>
-                <a href="#" class="lihat-semua-btn">
+                <a href="/mahasiswa/mata-kuliah" class="lihat-semua-btn">
                     Lihat Semua >
                 </a>
             </div>
             <div class="content-div">
-                <div class="content1">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content2">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content3">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content4">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
+                <div th:each="mk, iterStat : ${mataKuliahList}"
+                    th:class="|content-item gradient-${(iterStat.index % 4) + 1}|">
+                    <span class="nama-mk" th:text="${mk.nama}">Nama MK</span>
+                    
+                    <!-- iterasi mahasiswaList, tapi hanya ambil yang sama dengan user login -->
+                    <span class="kelas" th:each="mm : ${mk.mahasiswaList}" 
+                        th:if="${mm.user.idUser == user.idUser}"
+                        th:text="'Kelas ' + ${mm.kelas}">
+                        Kelas
+                    </span>
                 </div>
             </div>
         </div>
