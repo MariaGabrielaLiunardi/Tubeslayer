@@ -8,6 +8,6 @@ import jakarta.persistence.Embeddable;
 @Data
 public class MataKuliahMahasiswaId implements Serializable {
     private String idUser;
-    private String kodeMk;
+    private String kodeMK;
 }
 

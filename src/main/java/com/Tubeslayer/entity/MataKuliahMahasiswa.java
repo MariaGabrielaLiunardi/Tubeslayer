@@ -17,7 +17,7 @@ public class MataKuliahMahasiswa {
     @JoinColumn(name = "id_user")
     private User user;
 
-    @MapsId("kodeMk") // merujuk ke field kodeMk di MataKuliahMahasiswaId
+    @MapsId("kodeMK") // merujuk ke field kodeMk di MataKuliahMahasiswaId
     @ManyToOne
     @JoinColumn(name = "kode_mk")
     private MataKuliah mataKuliah;

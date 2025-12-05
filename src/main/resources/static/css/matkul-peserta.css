@@ -1,48 +1,68 @@
 /* ================= GLOBAL ================= */
 html, body {
-    height: 100%;
+    height: 100%; 
     margin: 0;
     padding: 0;
 }
 
 body {
-    overflow-y: auto;
+    overflow-y: auto; 
     overflow-x: auto;
     
-    background: linear-gradient(
-        360deg, 
-        rgba(255, 241, 235, 1) 0%,
+    /* Perbaikan 1: Tetapkan warna background body utama ke biru */
+    background-color: rgba(172, 224, 249, 1); 
+
+    /* Gradient hanya untuk bagian atas yang terlihat */
+    background-image: linear-gradient(
+        180deg, 
+        /* Warna atas (kuning muda) */
+        rgba(255, 241, 235, 1) 0%, 
+        /* Biru dimulai di 50% */
         rgba(172, 224, 249, 1) 50%, 
-        rgba(172, 224, 249, 1) 100% /* area scroll */
-    ) !important;
+        /* Biru berakhir di 100% */
+        rgba(172, 224, 249, 1) 100%
+    );
 
     min-height: 100vh;
+    height: auto; 
+    
+    /* Perbaikan 2: Gradient menempel pada konten dan bisa di-scroll */
     background-attachment: scroll; 
-    background-size: 100% 100%; /* gradien seluruh bagian */
+    
+    /* Perbaikan 3: Gradient hanya setinggi 100vh dan tidak mengulang */
+    background-size: 100% 100vh; 
     background-repeat: no-repeat;
 }
 
-.home{
+/* ================= PAKSA BACKGROUND SAMA DASHBOARD (FIXED) ================= */
+.home {
+    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%) !important;
     padding-top: 18px;
+    min-height: 100%; 
+    background-attachment: fixed;
+    background-size: 100% auto; 
+    background-repeat: repeat-y;
 }
 
-/* ================= BACKGROUND PUTIH ================= */
+
+/* ================= BACKGROUND PUTIH BESAR (.detail-wrapper) ================= */
 .detail-wrapper {
-    margin-top: 25px; 
+    margin-top: 10px; 
     margin-left: 22px;
     margin-right: 22px;
     margin-bottom: 50px; 
 
+    top: 10px;
     background: white;
     border-radius: 24px;
 
     padding: 0px 0px 100px; 
 
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
-    position: relative; 
+    position: relative;  
 }
 
-/* ================= HEADER UTAMA ================= */
+/* ================= HEADER UTAMA (Dipulihkan) ================= */
 .home .header {
     height: 80px; 
     width: 100%;
@@ -77,7 +97,7 @@ body {
     justify-content: center;
 }
 
-/* ================= ELEMEN HEADER ================= */
+/* ================= ELEMEN UTAMA HEADER ================= */
 .name {
     font-weight: bold;
     font-size: 14pt;
@@ -110,17 +130,16 @@ body {
     align-items: center;
 }
 
-/* ================= TAB ================= */
+/* ================= TAB (SERAGAM & FIXED) ================= */
 .mk-tab {
     background: #0078B5;
     width: fit-content;
     border-radius: 40px;
-    padding: 5px;
     display: flex;
     gap: 5px;
+    margin-top: 60px;
     margin-left: 30px;
     margin-bottom: 10px;
-    top: 110px;
 }
 
 .tab {
@@ -140,7 +159,7 @@ body {
     padding: 10px 30px; 
 }
 
-/* ================= HEADER MK ================= */
+/* ================= HEADER MK (BOX BIRU MUDA) ================= */
 .mk-header {
     display: flex;
     align-items: center;
@@ -177,7 +196,7 @@ body {
     margin-left: 25px;
 }
 
-/* ================= SEARCH & COUNT ================= */
+/* ================= SEARCH & COUNT (DIPINDAHKAN KE LUAR KOTAK KUNING) ================= */
 .search-and-count {
     display: flex;
     justify-content: space-between;
@@ -229,7 +248,7 @@ body {
 }
 
 
-/* ================= PESERTA CONTENT ================= */
+/* ================= PESERTA CONTENT (KOTAK KUNING MUDA) ================= */
 .peserta-content {
     /* Background Kuning Muda */
     background: #fff4ec; 
@@ -240,7 +259,7 @@ body {
     padding: 25px 40px 40px 40px; 
 }
 
-/* ================= TABLE PESERTA ================= */
+/* ================= TABLE PESERTA (FIXED LAYOUT) ================= */
 .peserta-table-wrapper {
     overflow-x: auto; 
     display: block; 
@@ -273,6 +292,7 @@ body {
 
 
 .peserta-table-wrapper tbody tr {
+    /* Warna Biru Muda untuk baris tabel */
     background-color: #c8eaff; 
     border-radius: 15px;
     overflow: hidden; 
@@ -290,6 +310,7 @@ body {
     vertical-align: middle; 
 }
 
+/* PENTING: Rounding sudut untuk baris */
 .peserta-table-wrapper tbody td:first-child {
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
@@ -300,6 +321,7 @@ body {
     border-bottom-right-radius: 15px;
 }
 
+/* Styling Khusus Role */
 .role-peserta {
     color: #333;
     font-weight: 500;
@@ -310,7 +332,7 @@ body {
     font-weight: bold;
 }
 
-/* ================= PAGINASI ================= */
+/* ================= PAGINASI (Tombol Geser) ================= */
 .pagination {
     display: flex;
     justify-content: flex-end; 
@@ -322,6 +344,7 @@ body {
 
 .pagination .page-info {
     padding: 5px 10px;
+    /* Background Biru Muda */
     background: #c8eaff; 
     border-radius: 5px;
     font-size: 14px;

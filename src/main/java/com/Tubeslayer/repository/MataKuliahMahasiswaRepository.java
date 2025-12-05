@@ -1,16 +1,20 @@
 package com.Tubeslayer.repository;
 
-//import com.Tubeslayer.model.MataKuliah;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import com.Tubeslayer.entity.MataKuliahMahasiswa;
 import com.Tubeslayer.entity.id.MataKuliahMahasiswaId;
-
-// JpaRepository<[Nama Entitas], [Tipe Data Primary Key]>
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface MataKuliahMahasiswaRepository extends JpaRepository<MataKuliahMahasiswa, MataKuliahMahasiswaId> {
 
-    // hitung jumlah MK aktif untuk mahasiswa tertentu
+    // Ambil daftar MK aktif berdasarkan user
+    List<MataKuliahMahasiswa> findByUser_IdUserAndIsActive(String idUser, Boolean active);
+
+    // Ambil daftar peserta berdasarkan kode MK
+    List<MataKuliahMahasiswa> findByMataKuliah_KodeMKAndIsActive(String kodeMk, Boolean active);
+
+    // Hitung jumlah MK aktif untuk mahasiswa tertentu di tahun akademik tertentu
     int countById_IdUserAndTahunAkademikAndIsActive(String idUser, String tahunAkademik, boolean isActive);
 }
