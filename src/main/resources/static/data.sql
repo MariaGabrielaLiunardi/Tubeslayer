@@ -253,4 +253,3 @@ INSERT INTO komponen_nilai VALUES
 (9,8,'Training',50,'Hasil regresi','09:30:00','2025-02-03'),
 (10,9,'Rule Base',40,'Rule lengkap','10:30:00','2025-02-05');
 
-

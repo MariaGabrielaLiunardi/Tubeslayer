@@ -11,9 +11,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 const btnMatkul = document.getElementById("btnMatkul");
+const btnDosen = document.getElementById("btnDosen");
+const btnMahasiswa = document.getElementById("btnMaha");
+
     if (btnMatkul) {
         btnMatkul.addEventListener("click", () => {
             window.location.href = "kelola-mata-kuliah.html";
+        });
+    }
+
+    if (btnDosen) {
+        btnDosen.addEventListener("click", () => {
+            window.location.href = "kelola-dosen.html";
+        });
+    }
+
+    if (btnMahasiswa) {
+        btnMahasiswa.addEventListener("click", () => {
+            window.location.href = "kelola-mahasiswa.html";
         });
     }
 

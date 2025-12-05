@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Mata Kuliah - Tubeslayer</title>
+    <title>Kelola Dosen - Tubeslayer</title>
     
-    <link rel="stylesheet" href="../../static/css/kelola-mata-kuliah.css">
-    <script src="../../static/js/kelola-mata-kuliah.js" defer></script>
+    <link rel="stylesheet" href="../../static/css/kelola-dosen.css">
+    <script src="../../static/js/kelola-dosen.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
@@ -41,8 +41,7 @@
                         <span class="text nav-text">Data</span>
                     </a>
                 </li>
-
-                <li class="nav-link">
+                   <li class="nav-link">
                     <a href="#">
                         <img src="../../static/icon/archive.png" class="icon archive-icon">
                         <span class="text nav-text">Arsip Mata Kuliah</span>
@@ -53,13 +52,12 @@
     </div>
 </nav>
 
-
 <section class="home">
 
     <div class="header">
         <div class="left-section">
             <div class="judul">
-               <span class="dashboard-title">Kelola Mata Kuliah</span>
+               <span class="dashboard-title">Kelola Dosen</span>
             </div>
         </div>
 
@@ -77,24 +75,23 @@
         </div>
     </div>
 
-
     <div class="content-section">
 
-        <div class="matkul-banner">
-            <img src="../../static/icon/matkul biru.png" alt="Icon Buku">
-            <h1>Kelola Mata Kuliah</h1>
+        <div class="dosen-banner">
+            <img src="../../static/icon/dosen biru.png" alt="Icon Dosen">
+            <h1>Kelola Dosen</h1>
         </div>
 
         <div class="list-container">
 
             <div class="list-header">
                <h3 id="list-title">
-                    Daftar Mata Kuliah 
+                    Daftar Dosen 
                     <span id="sub-title"></span>
                     <span id="sub-title-2"></span>
                 </h3>
-                <div class="search-box" id ="search-bar">
-                    <input type="text" placeholder="Cari nama disini...">
+                <div class="search-box" id="search-bar">
+                    <input type="text" placeholder="Cari nama dosen disini...">
                     <i class='bx bx-search'></i>
                 </div>
             </div>
@@ -103,9 +100,9 @@
             <div class="custom-table-container" id="table-view">
                 <div class="table-header-row">
                     <span>No</span>
-                    <span>Kode</span>
+                    <span>NIP</span>
                     <span>Nama</span>
-                    <span>SKS</span>
+                    <span>Mata Kuliah</span>
                     <span>Status</span>
                 </div>
 
@@ -114,15 +111,16 @@
                 <div class="data-row"></div>
             </div>
 
+            <!-- FOOTER -->
             <div class="footer-actions" id="footer-view">
                 <div class="button-group">
-                    <button class="btn btn-delete" id="btn-delete">Hapus Mata Kuliah</button>
-                    <button class="btn btn-add" id="btn-add">Tambah Mata Kuliah</button>
+                    <button class="btn btn-delete" id="btn-delete">Hapus Dosen</button>
+                    <button class="btn btn-add" id="btn-add">Tambah Dosen</button>
                 </div>
             </div>
 
             <!-- VIEW 2: Pilih Cara -->
-            <div class="pilih-cara" id="pilih-cara" style="display: none;">
+            <div class="pilih-cara" id="pilih-cara">
                 <div class="pilih-cara-content">
                     <div class="button-group">
                         <button class="btn btn-import" id="btn-import">Import</button>
@@ -132,54 +130,46 @@
             </div>
 
             <!-- VIEW 3: Milih yang import -->
-            <div class="import-matkul" id ="import-matkul">
-                <div class="import-matkul-content">
-                    <!--<span>Pilih file untuk mengimpor mata kuliah:</span>-->
+            <div class="import-dosen" id="import-dosen">
+                <div class="import-dosen-content">
                     <input type="file" id="file-input" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                     <button class="btn btn-pilih-file" id="btn-pilih-file">Upload</button>
                 </div>
             </div>
 
             <!-- VIEW 4 : Milih Tambah Baru-->
-            <div class="tambah-matkul" id="tambah-matkul">
-                <div class="tambah-matkul-content">
-                    <form id="tambah-matkul-form">
-                        <label for="kode-matkul">Kode Mata Kuliah:</label>
-                        <input type="text" id="kode-matkul" name="kode-matkul" required placeholder="Isi kode mata kuliah disini...">
+            <div class="tambah-dosen" id="tambah-dosen">
+                <div class="tambah-dosen-content">
+                    <form id="tambah-dosen-form">
+                        <label for="nip-dosen">NIP:</label>
+                        <input type="text" id="nip-dosen" name="nidn-dosen" required placeholder="Isi NIP dosen...">
 
-                        <label for="nama-matkul">Nama Mata Kuliah:</label>
-                        <input type="text" id="nama-matkul" name="nama-matkul" required placeholder="Isi nama mata kuliah disini...">
+                        <label for="nama-dosen">Nama Dosen:</label>
+                        <input type="text" id="nama-dosen" name="nama-dosen" required placeholder="Isi nama dosen...">
 
-                        <label for="sks-matkul">Jumlah SKS:</label>
-                        <select id="sks-matkul" name="sks-matkul">
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
+                        <label for="matkul-dosen">Mata Kuliah:</label>
+                        <input type="text" id="matkul-dosen" name="matkul-dosen" required placeholder="Mata kuliah yang diampu...">
 
-                        <label for="status-matkul">Status Mata Kuliah:</label>
-                        <select id="status-matkul" name="status-matkul" required>
+                        <label for="status-dosen">Status:</label>
+                        <select id="status-dosen" name="status-dosen" required>
                             <option value="1">Aktif</option>
                             <option value="0">Nonaktif</option>
                         </select>
 
-                        <button type="submit" class="btn btn-submit" id="btn-submit">Tambah Mata Kuliah</button>
+                        <button type="submit" class="btn btn-submit" id="btn-submit">Tambah Dosen</button>
                     </form>
                 </div>
             </div>
 
-           <!-- VIEW 5: Hapus Mata Kuliah -->
-            <div class="hapus-mata-kuliah" id="hapus-mata-kuliah">
-                <div class="hapus-mata-kuliah-content">
-                    <!-- Wrapper input + suggestion -->
+            <!-- VIEW 5: Hapus Dosen -->
+            <div class="hapus-dosen" id="view-hapus-dosen">
+                <div class="hapus-dosen-content">
                     <div class="input-wrapper">
-                        <div class="search-box" id="search-bar">
-                            <input type="text" id="search-input" placeholder="Cari nama mata kuliah disini...">
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Cari nama dosen disini...">
                         </div>
-                        <!-- Dropdown suggestions -->
                         <ul class="suggestions" id="suggestions"></ul>
                     </div>
-                    <!-- Button group -->
                     <div class="button-group">
                         <button class="btn btn-cancel" id="btn-cancel-delete">Batal</button>
                         <button class="btn btn-confirm-delete" id="btn-confirm-delete">Hapus</button>
@@ -187,16 +177,17 @@
                 </div>
             </div>
 
-            <!--VIEW 6: Konfimasi Hapus-->
+            <!-- VIEW 6: Konfirmasi Hapus-->
             <div class="konfirmasi-hapus" id="konfirmasi-hapus">
                 <div class="konfirmasi-hapus-content">
-                    <span>Apakah Anda yakin ingin menghapus mata kuliah ini?</span>
+                    <span>Apakah Anda yakin ingin menghapus dosen ini?</span>
                     <div class="button-group">
                         <button class="btn btn-cancel" id="btn-cancel-confirm">Batal</button>
                         <button class="btn btn-confirm-delete" id="btn-confirm-delete-final">Hapus</button>
                     </div>  
                 </div>
             </div>
+
         </div>
     </div>
 </section>
