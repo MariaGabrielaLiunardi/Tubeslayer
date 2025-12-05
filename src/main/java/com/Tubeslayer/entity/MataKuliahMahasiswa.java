@@ -27,7 +27,7 @@ public class MataKuliahMahasiswa {
 
     private int semester;
 
-    @Column(name = "tahun_akademik", length = 4) 
+    @Column(name = "tahun_akademik", length = 10) 
     private String tahunAkademik;
 
     @Column(name = "is_active") 

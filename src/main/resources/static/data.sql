@@ -9,7 +9,17 @@ USE tubeslayer;
 
 SHOW Tables; 
 
+select * 
+from mata_kuliah_mahasiswa; 
+
+select * 
+from user_table;  
+
+select * from user_table; 
+
 show create table user_kelompok;
+
+select * from user_table; 
 
 ALTER TABLE tugas_besar_kelompok
 DROP FOREIGN KEY FK8ol2m7n810n562aqcdfbu1b3f; 
@@ -76,7 +86,7 @@ CREATE TABLE mata_kuliah_dosen (
     kode_mk VARCHAR(15) NOT NULL,
     kelas VARCHAR(3) NOT NULL,
     semester INT NOT NULL,
-    tahun_akademik VARCHAR(4) NOT NULL,
+    tahun_akademik VARCHAR(10) NOT NULL,
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (id_user, kode_mk),
     FOREIGN KEY (id_user) REFERENCES user_table(id_user),
@@ -88,7 +98,7 @@ CREATE TABLE mata_kuliah_mahasiswa (
     kode_mk VARCHAR(15) NOT NULL,
     kelas VARCHAR(3) NOT NULL,
     semester INT NOT NULL,
-    tahun_akademik VARCHAR(4) NOT NULL,
+    tahun_akademik VARCHAR(10) NOT NULL,
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (id_user, kode_mk),
     FOREIGN KEY (id_user) REFERENCES user_table(id_user),
@@ -127,16 +137,16 @@ CREATE TABLE komponen_nilai (
 );
 
 INSERT INTO user_table (id_user, email, password, nama, role, is_active) VALUES
-('6182301001', 'andi@unpar.ac.id', '$2a$10$lpXunJk2Te8/hHcfFFmpduViPATPUYuau.rAK1ckJbpDh5m8MSXV2', 'Andi Pratama', 'dosen', 1),
-('6182301002', 'budi@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Budi Santoso', 'mahasiswa', 1),
-('6182301003', 'citra@estudent.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Citra Lestari', 'mahasiswa', 1),
-('6182301004', 'dewistudent.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Dewi Anggraini', 'mahasiswa', 1),
-('6182301005', 'eko@unpar.ac.id', '$2a$10$lpXunJk2Te8/hHcfFFmpduViPATPUYuau.rAK1ckJbpDh5m8MSXV2', 'Eko Wijaya', 'dosen', 1),
-('6182301006', 'fina@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Fina Kusuma', 'mahasiswa', 1),
-('6182301007', 'galih@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Galih Putra', 'mahasiswa', 1),
-('6182301008', 'hana@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Hana Aprilia', 'mahasiswa', 1),
-('6182301009', 'indra@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Indra Maulana', 'mahasiswa', 1),
-('6182301010', 'joni@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Joni Saputra', 'mahasiswa', 1);
+('6182301001', 'andi@unpar.ac.id', '$2a$10$lpXunJk2Te8/hHcfFFmpduViPATPUYuau.rAK1ckJbpDh5m8MSXV2', 'Andi Pratama', 'Dosen', 1),
+('6182301002', 'budi@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Budi Santoso', 'Mahasiswa', 1),
+('6182301003', 'citra@estudent.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Citra Lestari', 'Mahasiswa', 1),
+('6182301004', 'dewistudent.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Dewi Anggraini', 'Mahasiswa', 1),
+('6182301005', 'eko@unpar.ac.id', '$2a$10$lpXunJk2Te8/hHcfFFmpduViPATPUYuau.rAK1ckJbpDh5m8MSXV2', 'Eko Wijaya', 'Dosen', 1),
+('6182301006', 'fina@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Fina Kusuma', 'Mahasiswa', 1),
+('6182301007', 'galih@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Galih Putra', 'Mahasiswa', 1),
+('6182301008', 'hana@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Hana Aprilia', 'Mahasiswa', 1),
+('6182301009', 'indra@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Indra Maulana', 'Mahasiswa', 1),
+('6182301010', 'joni@student.unpar.ac.id', '$2a$10$8fAQ94qX0o1GiPJbKVuXBOcStH4rvC/N0ZnDlp.H3aMoBU/2toeMC', 'Joni Saputra', 'Mahasiswa', 1);
 
 INSERT INTO rubrik_nilai (id_rubrik) VALUES
 (1),(2),(3),(4),(5),(6),(7),(8),(9),(10);
@@ -156,16 +166,16 @@ INSERT INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
 DESCRIBE tugas_besar;
 
 INSERT INTO tugas_besar (id_tugas, id_user, id_rubrik, kode_mk, judul_tugas, deskripsi, deadline, status, mode_kel, min_anggota, max_anggota, is_active) VALUES
-(1, '6182301001', 1, 'IF101', 'Sorting Analyzer', 'Analisis 5 algoritma sorting', '2025-01-20 23:59:00', 'Open', 'Kelompok', 3, 5, 1),
-(2, '6182301001', 2, 'IF102', 'Graph Explorer', 'Implementasi BFS dan DFS', '2025-01-25 23:59:00', 'Open', 'Kelompok', 2, 4, 1),
-(3, '6182301005', 3, 'IF201', 'DB Design', 'Membuat ERD dan relasi database', '2025-01-22 23:59:00', 'Open', 'Individu', 1, 1, 1),
-(4, '6182301005', 4, 'IF202', 'Packet Sniffer', 'Analisis traffic jaringan', '2025-02-01 23:59:00', 'Open', 'Kelompok', 3, 6, 1),
-(5, '6182301001', 5, 'IF203', 'Web Portfolio', 'Membangun website portofolio', '2025-02-03 23:59:00', 'Open', 'Individu', 1, 1, 1),
-(6, '6182301005', 6, 'IF204', 'Mobile Finance App', 'Aplikasi catatan keuangan', '2025-01-28 23:59:00', 'Open', 'Kelompok', 2, 5, 1),
-(7, '6182301001', 7, 'IF205', 'CPU Scheduler', 'Simulasi algoritma penjadwalan CPU', '2025-01-30 23:59:00', 'Open', 'Individu', 1, 1, 1),
-(8, '6182301005', 8, 'IF301', 'ML Regression', 'Implementasi linear regression', '2025-02-10 23:59:00', 'Open', 'Kelompok', 2, 4, 1),
-(9, '6182301001', 9, 'IF302', 'Expert System', 'Sistem pakar diagnosa tanaman', '2025-02-15 23:59:00', 'Open', 'Kelompok', 3, 6, 1),
-(10,'6182301005',10, 'IF303', 'SRS Document', 'Membuat SRS untuk aplikasi tertentu', '2025-02-12 23:59:00', 'Open', 'Kelompok', 3, 5, 1);
+(1, '6182301002', 1, 'IF101', 'Sorting Analyzer', 'Analisis 5 algoritma sorting', '2025-01-20 23:59:00', 'Open', 'Dosen', 3, 5, 1),
+(2, '6182301003', 2, 'IF102', 'Graph Explorer', 'Implementasi BFS dan DFS', '2025-01-25 23:59:00', 'Open', 'Mahasiswa', 2, 4, 1),
+(3, '6182301004', 3, 'IF201', 'DB Design', 'Membuat ERD dan relasi database', '2025-01-22 23:59:00', 'Open', 'Mahasiswa', 1, 1, 1),
+(4, '6182301006', 4, 'IF202', 'Packet Sniffer', 'Analisis traffic jaringan', '2025-02-01 23:59:00', 'Open', 'Dosen', 3, 6, 1),
+(5, '6182301007', 5, 'IF203', 'Web Portfolio', 'Membangun website portofolio', '2025-02-03 23:59:00', 'Open', 'Dosen', 1, 1, 1),
+(6, '6182301008', 6, 'IF204', 'Mobile Finance App', 'Aplikasi catatan keuangan', '2025-01-28 23:59:00', 'Open', 'Dosen', 2, 5, 1),
+(7, '6182301009', 7, 'IF205', 'CPU Scheduler', 'Simulasi algoritma penjadwalan CPU', '2025-01-30 23:59:00', 'Open', 'Mahasiswa', 1, 1, 1),
+(8, '6182301010', 8, 'IF301', 'ML Regression', 'Implementasi linear regression', '2025-02-10 23:59:00', 'Open', 'Dosen', 2, 4, 1),
+(9, '6182301002', 9, 'IF302', 'Expert System', 'Sistem pakar diagnosa tanaman', '2025-02-15 23:59:00', 'Open', 'Mahasiswa', 3, 6, 1),
+(10,'6182301003',10, 'IF303', 'SRS Document', 'Membuat SRS untuk aplikasi tertentu', '2025-02-12 23:59:00', 'Open', 'Dosen', 3, 5, 1);
 
 INSERT INTO kelompok (id_kelompok, nama_kelompok) VALUES
 (1, 'Kelompok Alpha'),
@@ -184,28 +194,28 @@ INSERT INTO tugas_besar_kelompok VALUES
 (6,9),(7,10),(8,3),(9,5),(10,7);
 
 INSERT INTO mata_kuliah_dosen VALUES
-('6182301001', 'IF101', 'A', 1, '2025', 1),
-('6182301001', 'IF102', 'A', 1, '2025', 1),
-('6182301001', 'IF203', 'B', 2, '2025', 1),
-('6182301001', 'IF205', 'A', 3, '2025', 1),
-('6182301001', 'IF302', 'C', 3, '2025', 1),
-('6182301005', 'IF201', 'A', 1, '2025', 1),
-('6182301005', 'IF202', 'B', 2, '2025', 1),
-('6182301005', 'IF204', 'A', 2, '2025', 1),
-('6182301005', 'IF301', 'C', 3, '2025', 1),
-('6182301005', 'IF303', 'B', 3, '2025', 1);
+('6182301001', 'IF101', 'A', 1, '2025/2026', 1),
+('6182301001', 'IF102', 'A', 1, '2025/2026', 1),
+('6182301001', 'IF203', 'B', 2, '2025/2026', 1),
+('6182301001', 'IF205', 'A', 3, '2025/2026', 1),
+('6182301001', 'IF302', 'C', 3, '2025/2026', 1),
+('6182301005', 'IF201', 'A', 1, '2025/2026', 1),
+('6182301005', 'IF202', 'B', 2, '2025/2026', 1),
+('6182301005', 'IF204', 'A', 2, '2025/2026', 1),
+('6182301005', 'IF301', 'C', 3, '2025/2026', 1),
+('6182301005', 'IF303', 'B', 3, '2025/2026', 1);
 
 INSERT INTO mata_kuliah_mahasiswa VALUES
-('6182301002','IF101','A',1,'2025',1),
-('6182301003','IF101','A',1,'2025',1),
-('6182301004','IF101','A',1,'2025',1),
-('6182301006','IF102','A',1,'2025',1),
-('6182301007','IF102','A',1,'2025',1),
-('6182301008','IF203','B',2,'2025',1),
-('6182301009','IF203','B',2,'2025',1),
-('6182301010','IF205','A',3,'2025',1),
-('6182301006','IF301','C',3,'2025',1),
-('6182301007','IF303','B',3,'2025',1);
+('6182301002','IF101','A',1,'2025/2026',1),
+('6182301003','IF101','A',1,'2025/2026',1),
+('6182301004','IF101','A',1,'2025/2026',1),
+('6182301006','IF102','A',1,'2025/2026',1),
+('6182301007','IF102','A',1,'2025/2026',1),
+('6182301008','IF203','B',2,'2025/2026',1),
+('6182301009','IF203','B',2,'2025/2026',1),
+('6182301010','IF205','A',3,'2025/2026',1),
+('6182301006','IF301','C',3,'2025/2026',1),
+('6182301007','IF303','B',3,'2025/2026',1);
 
 INSERT INTO user_kelompok VALUES
 ('6182301002',1,'member',1),
@@ -242,5 +252,4 @@ INSERT INTO komponen_nilai VALUES
 (8,7,'Simulasi',60,'Simulasi 3 algoritma','08:00:00','2025-02-01'),
 (9,8,'Training',50,'Hasil regresi','09:30:00','2025-02-03'),
 (10,9,'Rule Base',40,'Rule lengkap','10:30:00','2025-02-05');
-
 

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Mahasiswa - Tubeslayer</title>
+    
+    <link rel="stylesheet" href="../../static/css/kelola-mahasiswa.css">
+    <script src="../../static/js/kelola-mahasiswa.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+  <nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img src="../../static/logo/blue-logo.png" alt="logo">
+            </span>
+
+            <div class="text header-text">
+                <span class="name">Tubeslayer</span>
+            </div>
+        </div>
+    </header>
+        <i class='bxr bx-chevron-right toggle'></i>
+    <div class="menu-bar">
+        <div class="menu">
+            <ul class="menu-links">
+                <li class="nav-link active">
+                    <a href="#">
+                        <img src="../../static/icon/dashboard.png" class="icon dashboard-icon">
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="menu-awal-ad.html">
+                        <img src="../../static/icon/database.png" class="icon database-icon">
+                        <span class="text nav-text">Data</span>
+                    </a>
+                </li>
+                   <li class="nav-link">
+                    <a href="#">
+                        <img src="../../static/icon/archive.png" class="icon archive-icon">
+                        <span class="text nav-text">Arsip Mata Kuliah</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="home">
+
+    <div class="header">
+        <div class="left-section">
+            <div class="judul">
+               <span class="dashboard-title">Kelola Mahasiswa</span>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="info">
+                <span class="name">Maria Gabriela</span>
+                <span class="role">Admin</span>
+            </div>
+
+            <img src="../../static/icon/pfp.png" class="pfp" alt="pfp">
+
+            <button type="button" class="logout">
+                <img src="../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+            </button>
+        </div>
+    </div>
+
+    <div class="content-section">
+
+        <div class="mahasiswa-banner">
+            <img src="../../static/icon/mahasiswa biru.png" alt="Icon Mahasiswa">
+            <h1>Kelola Mahasiswa</h1>
+        </div>
+
+        <div class="list-container">
+
+            <div class="list-header">
+               <h3 id="list-title">
+                    Daftar Mahasiswa
+                    <span id="sub-title"></span>
+                    <span id="sub-title-2"></span>
+                </h3>
+                <div class="search-box" id="search-bar">
+                    <input type="text" placeholder="Cari nama mahasiswa...">
+                    <i class='bx bx-search'></i>
+                </div>
+            </div>
+
+            <!-- VIEW 1: Tabel -->
+            <div class="custom-table-container" id="table-view">
+                <div class="table-header-row">
+                    <span>No</span>
+                    <span>NPM</span>
+                    <span>Nama</span>
+                    <span>Semester</span>
+                    <span>Status</span>
+                </div>
+
+                <div class="data-row"></div>
+                <div class="data-row"></div>
+                <div class="data-row"></div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer-actions" id="footer-view">
+                <div class="button-group">
+                    <button class="btn btn-delete" id="btn-delete">Hapus Mahasiswa</button>
+                    <button class="btn btn-add" id="btn-add">Tambah Mahasiswa</button>
+                </div>
+            </div>
+
+            <!-- VIEW 2: Pilih Cara -->
+            <div class="pilih-cara" id="pilih-cara">
+                <div class="pilih-cara-content">
+                    <div class="button-group">
+                        <button class="btn btn-import" id="btn-import">Import</button>
+                        <button class="btn btn-manual" id="btn-manual">Tambah Baru</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 3: Milih yang import -->
+            <div class="import-mahasiswa" id="import-mahasiswa">
+                <div class="import-mahasiswa-content">
+                    <input type="file" id="file-input" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    <button class="btn btn-pilih-file" id="btn-pilih-file">Upload</button>
+                </div>
+            </div>
+
+            <!-- VIEW 4 : Milih Tambah Baru-->
+            <div class="tambah-mahasiswa" id="tambah-mahasiswa">
+                <div class="tambah-mahasiswa-content">
+                    <form id="tambah-mahasiswa-form">
+                        <label for="npm-mahasiswa">NPM:</label>
+                        <input type="text" id="npm-mahasiswa" name="npm-mahasiswa" required placeholder="Isi NPM mahasiswa...">
+
+                        <label for="nama-mahasiswa">Nama Mahasiswa:</label>
+                        <input type="text" id="nama-mahasiswa" name="nama-mahasiswa" required placeholder="Isi nama mahasiswa...">
+
+                        <label for="sem-mahasiswa">Semester:</label>
+                        <input type="number" id="sem-mahasiswa" name="sem-mahasiswa" required placeholder="Semester saat ini...">
+
+                        <label for="status-mahasiswa">Status:</label>
+                        <select id="status-mahasiswa" name="status-mahasiswa" required>
+                            <option value="1">Aktif</option>
+                            <option value="0">Nonaktif</option>
+                        </select>
+
+                        <button type="submit" class="btn btn-submit" id="btn-submit">Tambah Mahasiswa</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- VIEW 5: Hapus Mahasiswa -->
+            <div class="hapus-mahasiswa" id="view-hapus-mahasiswa">
+                <div class="hapus-mahasiswa-content">
+                    <div class="input-wrapper">
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Cari nama mahasiswa disini...">
+                        </div>
+                        <ul class="suggestions" id="suggestions"></ul>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-cancel" id="btn-cancel-delete">Batal</button>
+                        <button class="btn btn-confirm-delete" id="btn-confirm-delete">Hapus</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 6: Konfirmasi Hapus-->
+            <div class="konfirmasi-hapus" id="konfirmasi-hapus">
+                <div class="konfirmasi-hapus-content">
+                    <span>Apakah Anda yakin ingin menghapus mahasiswa ini?</span>
+                    <div class="button-group">
+                        <button class="btn btn-cancel" id="btn-cancel-confirm">Batal</button>
+                        <button class="btn btn-confirm-delete" id="btn-confirm-delete-final">Hapus</button>
+                    </div>  
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+</body>
+</html>

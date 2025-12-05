@@ -216,6 +216,11 @@ uploadBtn.addEventListener("click", () => {
 
     });
 
+   /* ===============================
+   6. HAPUS MATA KULIAH  
+================================ */
+
+
     //Bagian Hapus Mata kuliah
     const mataKuliah = [
     "Algoritma",
@@ -230,6 +235,7 @@ uploadBtn.addEventListener("click", () => {
     const input = document.getElementById("search-input");
     const suggestionsBox = document.getElementById("suggestions");
     const btnHapus = document.getElementById("btn-delete");
+    const btnBatal = document.getElementById("btn-cancel-delete");
     let selectedMK = null;
     searchHapus.style.display = "none";
 
@@ -241,9 +247,16 @@ uploadBtn.addEventListener("click", () => {
         subTitle.textContent = " > Hapus Mata Kuliah";
     });
 
-input.addEventListener("input", () => {
-    const keyword = input.value.toLowerCase();
-    suggestionsBox.innerHTML = "";
+    btnBatal.addEventListener("click", () => {
+        searchHapus.style.display = "none";
+        tableView.style.display = "block";
+        footerView.style.display = "flex";
+        searchbar.style.display = "block";
+    });
+
+    input.addEventListener("input", () => {
+        const keyword = input.value.toLowerCase();
+        suggestionsBox.innerHTML = "";
 
     if (keyword.length === 0) {
         suggestionsBox.style.display = "none";

@@ -1,5 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap');
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow-y: auto;
+    overflow-x: auto;
+    
+    background: linear-gradient(
+        360deg, 
+        rgba(255, 241, 235, 1) 0%,
+        rgba(172, 224, 249, 1) 50%, 
+        rgba(172, 224, 249, 1) 100% /* area scroll */
+    ) !important;
+
+    min-height: 100vh;
+    background-attachment: scroll; 
+    background-size: 100% 100%; /* gradien seluruh bagian */
+    background-repeat: no-repeat;
+}
+
 * {
     box-sizing: border-box;
     max-width: 100%;
@@ -7,21 +30,12 @@
     margin: 0; 
     padding: 0; 
 }
-
 :root{
     /* Transition */
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
-}
-
-body{
-    height: 100vh;
-}
-
-.bold{
-    font-weight: bold;
 }
 
 /* === SIDEBAR === */
@@ -162,9 +176,8 @@ header .image-text .header-text{
 }
 
 .home{
-    position: absolute;
+    position: relative;
     height: 100vh;
-    top: 0; 
     left: 73px; 
     width: calc(100% - 73px);
     transition: var(--tran-05);
@@ -238,6 +251,7 @@ header .image-text .header-text{
     display: flex; 
     flex-direction: column;
     justify-content: center;
+    padding-top: 5px;
 }
 
 .name{
@@ -281,203 +295,22 @@ header .image-text .header-text{
     gap: 35px; 
 }
 
-.header-section{
-    display: flex; 
-    justify-content: center;
+/* --- Reset & Font Dasar --- */
+.content-section {
+    padding: 20px;
+}
+
+/* --- Header & Navigasi Atas --- */
+
+.header .left-section {
+    display: flex;
     align-items: center;
-    width: 1360px;
-    height: 160px; 
-    background: url(../img/dashboard-header.png); 
-    background-size:cover;
-    border-radius: 15px; 
-    flex-direction: column;
-    gap: 10px; 
-    box-shadow: 2px 3px 1px grey;
+    gap: 10px;
 }
 
-.web-title{
-    font-weight: bold;
-    font-size: 30pt;
+.menu-toggle-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: #5BA4E6; /* Warna biru icon */
 }
-
-.welcome-message{
-    color: #757575;  
-    font-size: 14pt;    
-}
-
-.overview-section{
-    width: 1360px; 
-    display: flex; 
-    flex-direction: column;
-}
-
-.overview-title{
-    font-weight: bold;
-    font-size: 17pt; 
-}
-
-.overview-div{
-    margin-top: 10px;   
-    display: flex;
-    justify-content: space-between;
-}
-
-.left-overview{
-    width: 660px; 
-    height: 150px; 
-    border-radius: 15px;
-    background-color: white;
-    display: flex; 
-    justify-content: center;
-    flex-direction: column;
-    box-shadow: 2px 3px 1px grey;
-    gap: 20px; 
-}
-
-.date{
-    font-weight: bold;
-    font-size: 14pt; 
-    margin-left: 30px; 
-}
-
-.semester{
-    font-weight: bold;
-    font-size: 14pt;  
-    margin-left: 30px;
-}
-
-.right-overview{
-    width: 660px; 
-    height: 150px; 
-    border-radius: 15px; 
-    background-color: white;
-    display: flex; 
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: 2px 3px 1px grey;
-    gap: 20px; 
-}
-
-.mk{
-    font-weight: bold;
-    font-size: 14pt; 
-    margin-left: 30px; 
-}
-
-.tubes-aktif{
-    font-weight: bold;
-    font-size: 14pt;  
-    margin-left: 30px;
-}
-
-.mk, .tubes-aktif {
-    font-weight: bold;   /* label tetap bold */
-    font-size: 14pt;
-    margin-left: 30px;
-}
-
-.mk-value, .tb-value {
-    font-weight: normal; /* angka jadi normal */
-}
-
-.content-section{
-    width: 1360px; 
-    display: flex; 
-    flex-direction: column;
-    align-content: center;
-    gap: 20px; 
-}
-
-.content-title{  
-    display: flex;
-    justify-content: space-between;
-}
-
-.lihat-semua-btn{
-    text-decoration: none;
-    color:white;
-    background-color: black;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px; 
-    font-size: 10pt; 
-    padding-left: 10px; 
-    padding-right: 10px;
-    box-shadow: 2px 2px 3px grey;
-}
-
-.content-title{
-    font-weight: bold;
-    font-size: 17pt; 
-}
-
-.content-div {
-    display: flex;
-    flex-wrap: wrap;      /* biar bisa turun ke baris baru */
-    gap: 20px;            /* jarak antar box */
-    justify-content: flex-start; /* rata kiri */
-}
-
-.content-item {
-    width: 320px; 
-    height: 150px; 
-    background-color: white;
-    border-radius: 15px; 
-    box-shadow: 2px 3px 1px grey;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px; 
-    transition: var(--tran-03);
-}
-
-/* .content-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 4px 6px 8px rgba(0,0,0,0.2);
-} */
-
-.nama-mk{
-    font-weight: bold;
-    font-size: 15pt; 
-}
-
-.kelas{
-    font-size: 13pt; 
-}
-
-/* ================= BACKGROUND CARD ================= */
-.gradient-1 {
-    background: linear-gradient(#31acef, white);
-}
-
-.gradient-2 {
-    background: url("/icon/matkul-2.png");
-    background-size: cover;
-    background-position: center;
-}
-
-.gradient-3 {
-    background: radial-gradient(circle at center,
-            #29ACEF 10%,
-            #9dd6f5 40%,
-            #eaf7ff 70%,
-            #ffffff 100%);
-}
-
-.gradient-4 {
-    background: url("/icon/matkul-4.png");
-    background-size: cover;
-    background-position: center;
-}
-
-
-
-
-
-
-
-
 

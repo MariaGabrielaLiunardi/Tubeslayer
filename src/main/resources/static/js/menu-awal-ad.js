@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Logic untuk Toggle Sidebar
-
     const sidebar = document.querySelector('.sidebar');
     const toggle = document.querySelector('.toggle'); 
 
@@ -10,31 +9,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-const btnMatkul = document.getElementById("btnMatkul");
+    // 2. Redirect tombol card
+    const btnMatkul = document.getElementById("btnMatkul");
+    const btnDosen = document.getElementById("btnDosen");
+    const btnMahasiswa = document.getElementById("btnMaha");
+
     if (btnMatkul) {
         btnMatkul.addEventListener("click", () => {
-            window.location.href = "kelola-mata-kuliah.html";
+            window.location.href = "/admin/kelola-mata-kuliah"; 
         });
     }
 
-    // 2. Logic untuk Mengubah Highlight (Kelas 'active') Saat Link Diklik
+    if (btnDosen) {
+        btnDosen.addEventListener("click", () => {
+            window.location.href = "/admin/kelola-dosen"; 
+        });
+    }
 
+    if (btnMahasiswa) {
+        btnMahasiswa.addEventListener("click", () => {
+            window.location.href = "/admin/kelola-mahasiswa"; 
+        });
+    }
+
+    // 3. Highlight sidebar sesuai URL aktif
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
+    const currentPath = window.location.pathname; // contoh: "/admin/dashboard"
 
     navLinks.forEach(li => {
         const anchor = li.querySelector('a');
+        const href = anchor.getAttribute('href');
 
-        anchor.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            
-            // a. Hapus kelas 'active' dari semua tautan navigasi
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-            });
-
-            // b. Tambahkan kelas 'active' hanya ke elemen <li> yang baru diklik
+        // match fleksibel: kalau currentPath mulai dengan href
+        if (currentPath.startsWith(href)) {
             li.classList.add('active');
-        });
+        } else {
+            li.classList.remove('active');
+        }
     });
 });
-

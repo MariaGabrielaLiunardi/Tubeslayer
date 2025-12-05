@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
+import jakarta.servlet.http.HttpSession;
 
 import com.Tubeslayer.dto.TugasBesarRequest;
 
@@ -34,6 +35,12 @@ import com.Tubeslayer.repository.MataKuliahMahasiswaRepository; // REPOSITORY PE
 import com.Tubeslayer.entity.MataKuliah;
 import com.Tubeslayer.entity.TugasBesar;
 import com.Tubeslayer.service.CustomUserDetails;
+import com.Tubeslayer.service.DashboardDosenService;
+import com.Tubeslayer.entity.MataKuliahDosen;
+import com.Tubeslayer.entity.User;
+import com.Tubeslayer.service.MataKuliahService;
+
+import java.util.List; 
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,6 +68,16 @@ public class DosenController {
 
     @GetMapping("/dosen/dashboard")
     public String dashboard(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+    private final DashboardDosenService dashboardService;
+    private final MataKuliahService mataKuliahService;
+
+    public DosenController(DashboardDosenService dashboardService, MataKuliahService mataKuliahService) {
+        this.dashboardService = dashboardService;
+        this.mataKuliahService = mataKuliahService;
+    }
+
+    @GetMapping("/dosen/dashboard")
+    public String dosenDashboard(@AuthenticationPrincipal CustomUserDetails user, Model model, HttpSession session) {
         model.addAttribute("user", user);
 
         LocalDate today = LocalDate.now();
@@ -71,6 +88,15 @@ public class DosenController {
                 year + "/" + (year + 1) :
                 (year - 1) + "/" + year;
         model.addAttribute("semester", semester);
+      
+        int jumlahMk = dashboardService.getJumlahMkAktif(user.getIdUser(), tahunAkademik);
+        int jumlahTb = dashboardService.getJumlahTbAktif(user.getIdUser());
+        model.addAttribute("jumlahMk", jumlahMk);
+        model.addAttribute("jumlahTb", jumlahTb);
+
+        // ambil list MK aktif dosen
+        List<MataKuliahDosen> listMK = mataKuliahService.getTop4ActiveByUserAndTahunAkademik(user.getIdUser(), tahunAkademik);
+        model.addAttribute("mataKuliahDosenList", listMK);
 
         return "dosen/dashboard";
     }

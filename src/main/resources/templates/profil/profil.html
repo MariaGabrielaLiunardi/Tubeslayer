@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - Tubeslayer</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/profil.css">
+
+    <!-- JS -->
+    <script src="/js/profil.js" defer></script>
+    <script src="/js/sidebar-hlmtubes.js" defer></script>
+
+    <!-- Icons -->
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bx bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="/hlmn_tubes/dashboard.html">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/admin/menu-awal-ad.html">
+                            <img src="/icon/database.png" class="icon">
+                            <span class="text nav-text">Data</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a href="/profil">
+                            <img src="/icon/pfp.png" class="icon">
+                            <span class="text nav-text">Profil</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME CONTENT -->
+    <section class="home">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Profil</span>
+            </div>
+
+            <div class="right-section">
+                <button class="logout">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content-section">
+            <div class="list-container">
+
+                <img src="/icon/pfp.png" class="pfp">
+
+                <h2 id="profil-nama"></h2>
+                <p id="profil-role"></p>
+
+                <div class="profil-info">
+                    <p id="profil-id"></p>
+                    <p id="profil-email"></p>
+                    <p id="profil-extra"></p>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+</body>
+</html>

@@ -27,7 +27,7 @@ public class MataKuliahDosen {
 
     private int semester;
 
-    @Column(length = 4)
+    @Column(length = 10)
     private String tahunAkademik;
 
     private boolean isActive = true;
