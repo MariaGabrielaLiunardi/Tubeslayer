@@ -18,7 +18,6 @@
 
 body{
     height: 100vh;
-    overflow-x: hidden;
 }
 
 .bold{
@@ -163,8 +162,9 @@ header .image-text .header-text{
 }
 
 .home{
-    position: relative;
+    position: absolute;
     height: 100vh;
+    top: 0; 
     left: 73px; 
     width: calc(100% - 73px);
     transition: var(--tran-05);
@@ -370,12 +370,24 @@ header .image-text .header-text{
     margin-left: 30px;
 }
 
+.mk, .tubes-aktif {
+    font-weight: bold;   /* label tetap bold */
+    font-size: 14pt;
+    margin-left: 30px;
+}
+
+.mk-value, .tb-value {
+    font-weight: normal; /* angka jadi normal */
+}
+
+
 .content-section{
     width: 1360px; 
     display: flex; 
     flex-direction: column;
     align-content: center;
     gap: 20px; 
+    margin-top: 20px; 
 }
 
 .content-title{  
