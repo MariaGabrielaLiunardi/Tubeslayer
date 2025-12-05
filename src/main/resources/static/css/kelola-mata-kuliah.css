@@ -86,6 +86,17 @@ body {
     align-items: center;
 }
 
+.sidebar li a.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
+}
+
+
+.sidebar li.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
+}
+
 .sidebar li .icon{
     display: flex;
     align-items: center;

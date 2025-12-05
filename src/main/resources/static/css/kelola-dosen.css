@@ -95,6 +95,13 @@ body {
     margin-left: 10px
 }
 
+.sidebar li a.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
+}
+
+
+
 .sidebar li .icon,
 .sidebar li .text{
     transition: var(--tran-02);
@@ -171,8 +178,9 @@ header .image-text .header-text{
     justify-content: space-between;
 }
 
-.sidebar li.active a {
-    background-color: #C1EBFF; 
+.sidebar li.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
 }
 
 .home{
