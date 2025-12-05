@@ -13,12 +13,12 @@ import com.Tubeslayer.repository.TugasBesarRepository;
 // import com.Tubeslayer.entity.User;
 
 @Service
-public class DashboardService {
+public class DashboardDosenService {
 
     private final MataKuliahDosenRepository mkRepo;
     private final TugasBesarRepository tbRepo;
 
-    public DashboardService(MataKuliahDosenRepository mkRepo,
+    public DashboardDosenService(MataKuliahDosenRepository mkRepo,
                             TugasBesarRepository tbRepo) {
         this.mkRepo = mkRepo;
         this.tbRepo = tbRepo;
