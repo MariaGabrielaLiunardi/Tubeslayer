@@ -175,6 +175,19 @@ header .image-text .header-text{
     flex-direction: column;
 }
 
+.home .header {
+    flex-shrink: 0; /* jangan biarkan header mengecil */
+    height: 80px;
+}
+
+.home::before {
+    z-index: 0;
+}
+.home .header {
+    z-index: 10;
+    position: relative;
+}
+
 .sidebar.close ~ .home{
     filter: blur(0px);
     pointer-events: auto;

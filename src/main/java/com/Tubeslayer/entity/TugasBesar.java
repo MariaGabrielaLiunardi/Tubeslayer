@@ -1,37 +1,35 @@
 package com.Tubeslayer.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import java.util.Set;
+import lombok.*;
+
 import java.time.LocalDateTime;
-import com.Tubeslayer.entity.User;
-// Asumsi Entitas RubrikNilai ada
-// Asumsi Entitas Nilai ada
-// Asumsi Entitas TugasBesarKelompok ada
+import java.util.Set;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"rubrik", "mataKuliah", "tugasKelompok", "nilaiList"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tugas_besar")
-@Data
 public class TugasBesar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Integer idTugas;
 
-    // Field relasi Dosen
-@ManyToOne(fetch = FetchType.LAZY) // <--- KOREKSI
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false)
     private User dosen;
 
-    // Relasi Rubrik (EAGER default -> ubah ke LAZY)
-// Relasi Rubrik (Pemilik Foreign Key)
-@OneToOne(fetch = FetchType.LAZY) 
-@JoinColumn(name = "id_rubrik", unique = true) // <-- Tambahkan unique=true untuk validasi DB/Hibernate
-private RubrikNilai rubrik;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_rubrik", unique = true)
+    private RubrikNilai rubrik;
 
-    // Relasi Mata Kuliah (EAGER default -> ubah ke LAZY)
-    @ManyToOne(fetch = FetchType.LAZY) // <--- KOREKSI
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "kode_mk", nullable = false)
     private MataKuliah mataKuliah;
 
@@ -52,17 +50,15 @@ private RubrikNilai rubrik;
 
     private int minAnggota;
     private int maxAnggota;
-    private boolean isActive = true; // <-- Field isActive sudah dideklarasikan
+    private boolean isActive = true;
 
-// Koleksi One-to-Many (WAJIB LAZY dan SET)
-    @OneToMany(mappedBy = "tugas", fetch = FetchType.LAZY) 
-    private Set<TugasBesarKelompok> tugasKelompok; // HARUS SET
+    @OneToMany(mappedBy = "tugas", fetch = FetchType.LAZY)
+    private Set<TugasBesarKelompok> tugasKelompok;
 
-    @OneToMany(mappedBy = "tugas", fetch = FetchType.LAZY) 
-    private Set<Nilai> nilaiList; // HARUS SET
-    
-    // Kita buat setter yang benar yang akan dipanggil oleh DosenController:
-    public void setDosen(User dosen) { 
-        this.dosen = dosen; 
+    @OneToMany(mappedBy = "tugas", fetch = FetchType.LAZY)
+    private Set<Nilai> nilaiList;
+
+    public void setDosen(User dosen) {
+        this.dosen = dosen;
     }
 }
