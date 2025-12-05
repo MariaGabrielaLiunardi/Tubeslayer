@@ -47,4 +47,11 @@ public class AdminController {
 
         return "admin/dashboard";
     }
+
+    @GetMapping("/admin/menu-awal-ad")
+    public String menuAwalAdmin(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+        model.addAttribute("user", user);
+        return "admin/menu-awal-ad"; // templates/admin/menu-awal-ad.html
+}
+
 }

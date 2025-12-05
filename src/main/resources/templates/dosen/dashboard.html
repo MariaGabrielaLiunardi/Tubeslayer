@@ -48,10 +48,12 @@
         </div>
         <div class="right-section">
             <div class="info">
-                    <span class="bold" th:text="${user.nama}">Nama</span>
-                    <span th:text="${user.role}">Role</span>
+                <span class="bold" th:text="${user.nama}">Nama</span>
+                <span th:text="${user.role}">Role</span>
             </div>
-            <img src="/icon/pfp.png" class="pfp" alt="pfp">
+            <a th:href="@{/profil/profil}">
+                <img src="/icon/pfp.png" class="pfp" alt="pfp">
+            </a>
             <a th:href="@{/logout}" class="logout-link">
                     <button type="button" class="logout">
                         <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">

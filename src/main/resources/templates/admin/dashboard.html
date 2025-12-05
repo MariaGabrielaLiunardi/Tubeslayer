@@ -15,7 +15,6 @@
             <span class="image">
                 <img src="/logo/blue-logo.png" alt="logo">
             </span>
-
             <div class ="text header-text">
                 <span class="name">Tubeslayer</span>
             </div>
@@ -26,13 +25,13 @@
         <div class="menu">
             <ul class="menu-links">
                 <li class="nav-link active">
-                    <a href="#">
+                    <a href="/admin/dashboard">
                         <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
                         <span class="text nav-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-link">
-                    <a href="menu-awal-ad.html">
+                    <a href="/admin/menu-awal-ad">
                         <img src="/icon/database.png" alt="Database Icon" class="icon database-icon">
                         <span class="text nav-text">Data</span>
                     </a>
@@ -57,7 +56,7 @@
                 <span class="bold" th:text="${user.nama}">Nama</span>
                 <span th:text="${user.role}">Role</span>
             </div>
-            <a href="profil/profil.html">
+            <a th:href="@{/profil/profil}">
                 <img src="/icon/pfp.png" class="pfp" alt="pfp">
             </a>
             <a th:href="@{/logout}" class="logout-link">
