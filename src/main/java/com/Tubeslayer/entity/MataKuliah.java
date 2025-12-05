@@ -2,7 +2,7 @@ package com.Tubeslayer.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.List; 
+import java.util.Set; 
 
 @Entity
 @Table(name = "mata_kuliah")
@@ -10,7 +10,7 @@ import java.util.List;
 public class MataKuliah {
 
     @Id
-    @Column(length = 15)
+    @Column(name = "kode_mk", length = 15)
     private String kodeMK;
 
     @Column(length = 50, nullable = false)
@@ -19,13 +19,13 @@ public class MataKuliah {
     private int sks;
     private boolean isActive = true;
 
-    @OneToMany(mappedBy = "mataKuliah")
-    private List<TugasBesar> tugasList;
+    @OneToMany(mappedBy = "mataKuliah", fetch = FetchType.LAZY) // Tambah LAZY, ganti List ke Set
+    private Set<TugasBesar> tugasList;
 
-    @OneToMany(mappedBy = "mataKuliah")
-    private List<MataKuliahDosen> dosenList;
+    @OneToMany(mappedBy = "mataKuliah", fetch = FetchType.LAZY) // Tambah LAZY, ganti List ke Set
+    private Set<MataKuliahDosen> dosenList;
 
-    @OneToMany(mappedBy = "mataKuliah")
-    private List<MataKuliahMahasiswa> mahasiswaList;
+    @OneToMany(mappedBy = "mataKuliah", fetch = FetchType.LAZY) // Tambah LAZY, ganti List ke Set
+    private Set<MataKuliahMahasiswa> mahasiswaList;
 }
 

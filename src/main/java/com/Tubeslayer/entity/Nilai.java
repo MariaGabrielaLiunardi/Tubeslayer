@@ -16,9 +16,11 @@ public class Nilai {
     @JoinColumn(name = "id_user")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "id_tugas")
-    private TugasBesar tugas;
+// Relasi Tugas (ManyToOne)
+@ManyToOne(fetch = FetchType.LAZY)
+// TAMBAHKAN unique=true di sini jika satu Tugas hanya boleh memiliki satu Nilai.
+@JoinColumn(name = "id_tugas", unique = true) 
+private TugasBesar tugas;
 
     private int nilaiPribadi;
     private int nilaiKelompok;

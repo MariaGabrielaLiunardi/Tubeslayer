@@ -1,39 +1,48 @@
 /* ================= GLOBAL ================= */
 html, body {
-    height: 100%;
+    height: 100%; 
     margin: 0;
     padding: 0;
 }
 
 body {
-    overflow-y: auto;
+    overflow-y: auto; 
     overflow-x: auto;
     
-    background: linear-gradient(
-        360deg, 
-        rgba(255, 241, 235, 1) 0%,
+    /* Perbaikan 1: Tetapkan warna background body utama ke biru */
+    background-color: rgba(172, 224, 249, 1); 
+
+    /* Gradient hanya untuk bagian atas yang terlihat */
+    background-image: linear-gradient(
+        180deg, 
+        /* Warna atas (kuning muda) */
+        rgba(255, 241, 235, 1) 0%, 
+        /* Biru dimulai di 50% */
         rgba(172, 224, 249, 1) 50%, 
-        rgba(172, 224, 249, 1) 100% /* area scroll */
-    ) !important;
+        /* Biru berakhir di 100% */
+        rgba(172, 224, 249, 1) 100%
+    );
 
     min-height: 100vh;
+    height: auto; 
+    
+    /* Perbaikan 2: Gradient menempel pada konten dan bisa di-scroll */
     background-attachment: scroll; 
-    background-size: 100% 100%; /* gradien seluruh bagian */
+    
+    /* Perbaikan 3: Gradient hanya setinggi 100vh dan tidak mengulang */
+    background-size: 100% 100vh; 
     background-repeat: no-repeat;
 }
 
-.home{
-    padding-top: 18px;
-}
 
-
-/* ================= BACKGROUND PUTIH MATKUL ================= */
+/* ================= BACKGROUND PUTIH BESAR (.detail-wrapper) ================= */
 .detail-wrapper {
-    margin-top: 25px; 
+    margin-top: 10px; 
     margin-left: 22px;
     margin-right: 22px;
     margin-bottom: 50px; 
 
+    top: 10px;
     background: white;
     border-radius: 24px;
 
@@ -43,14 +52,14 @@ body {
     position: relative; 
 }
 
-/* ================= HEADER ================= */
+/* ================= HEADER UTAMA (Dipulihkan) ================= */
 .home .header {
     height: 80px; 
     width: 100%;
     display: flex;
     justify-content: space-between; 
     align-items: center;
-    padding: 0 10px 0 10px; 
+    padding: 18px 10px 0 10px; 
 }
 
 .home .header .left-section {
@@ -78,7 +87,7 @@ body {
     justify-content: center;
 }
 
-/* ================= ELEMEN HEADER ================= */
+/* ================= ELEMEN UTAMA HEADER ================= */
 .name {
     font-weight: bold;
     font-size: 14pt;
@@ -111,17 +120,16 @@ body {
     align-items: center;
 }
 
-/* ================= TAB ================= */
+/* ================= TAB (SERAGAM) ================= */
 .mk-tab {
     background: #0078B5;
     width: fit-content;
     border-radius: 40px;
-    padding: 5px;
     display: flex;
     gap: 5px;
+    margin-top: 60px;
     margin-left: 30px;
     margin-bottom: 10px;
-    top: 110px;
 }
 
 .tab {
@@ -141,7 +149,7 @@ body {
     padding: 10px 30px; 
 }
 
-/* ================= HEADER MK ================= */
+/* ================= HEADER MK (BOX BIRU MUDA) ================= */
 .mk-header {
     display: flex;
     align-items: center;
@@ -178,7 +186,7 @@ body {
     margin-left: 25px;
 }
 
-/* ================= TOMBOL TAMBAH TUGAS ================= */
+/* ================= TOMBOL TAMBAH TUGAS (DI LIST VIEW - TENGAH BAWAH) ================= */
 .tambah-tugas-wrapper-list {
     /* PENTING: Ditempatkan di bawah mk-content dan di tengah horizontal */
     display: flex;
@@ -200,7 +208,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* ================= KONTEN BAWAH ================= */
+/* ================= KONTEN BAWAH (FLEXBOX) ================= */
 .mk-content {
     display: flex;
     gap: 40px;
@@ -266,7 +274,7 @@ body {
     gap: 20px; 
 }
 
-/* placeholder tugas besar kosong */
+/* PENTING: Style untuk placeholder tugas besar kosong */
 #tugas-besar-kosong {
     background: #fff4ec;
     padding: 35px 30px 35px 25px; 
@@ -370,7 +378,7 @@ body {
     height: 150px;
 }
 
-/* tombol submit form */
+/* Tombol Submit Form di Tengah Bawah */
 .btn-submit-tugas {
     display: block; 
     margin: 40px auto 0 auto; 

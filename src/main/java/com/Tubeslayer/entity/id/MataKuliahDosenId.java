@@ -9,5 +9,5 @@ import java.io.Serializable;
 @Embeddable
 public class MataKuliahDosenId implements Serializable {
     private String idUser;      
-    private String kodeMk;   
+    private String kodeMK;   
 }

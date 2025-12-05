@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title>Tubeslayer</title>
+    <title>Tubeslayer - Mata Kuliah</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
     <link rel="stylesheet" href="/css/mata-kuliah-styles.css">
     <link rel="icon" href="/logo/blue-logo.png" type="image/png">
 
-
-    <script src="/js/mata-kuliah.js" defer></script>
+    <script src="/js/mata-kuliah-mhs.js" defer></script>
     <script src="/js/dash-user.js" defer></script>
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
 
-    <!-- ================= SIDEBAR ================= -->
     <nav class="sidebar close">
         <header>
             <div class="image-text">
@@ -37,14 +35,14 @@
             <div class="menu">
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="/mahasiswa/dashboard">
+                        <a th:href="@{/mahasiswa/dashboard}">
                             <img src="/icon/dashboard.png" class="icon">
                             <span class="text nav-text">Dashboard</span>
                         </a>
                     </li>
 
                     <li class="nav-link active">
-                        <a href="/mahasiswa/mata-kuliah">
+                        <a th:href="@{/mahasiswa/mata-kuliah}">
                             <img src="/icon/open-book.png" class="icon">
                             <span class="text nav-text">Mata Kuliah</span>
                         </a>
@@ -54,60 +52,45 @@
         </div>
     </nav>
 
-    <!-- ================= HEADER ================= -->
     <section class="home">
 
         <div class="header">
 
             <div class="right-section">
                 <div class="info">
-                    <span class="name">Keisha Neira Jocelyn</span>
-                    <span class="role">Mahasiswa</span>
+                    <span class="name" th:text="${user.nama}">Nama Mahasiswa</span>
+                    <span class="role" th:text="${user.role}">Mahasiswa</span>
                 </div>
 
                 <img src="/icon/pfp.png" class="pfp">
 
-                <button class="logout">
+                <button class="logout" id="logoutButton">
                     <img src="/icon/logout.png" class="logout-btn">
                 </button>
             </div>
         </div>
 
-        <!-- ================= ISI MATA KULIAH ================= -->
         <div class="main-content">
 
             <h2 class="page-title">Mata Kuliah</h2>
 
             <section class="course-grid">
 
-                <div class="card">
-                    <div class="card-img gradient-1"></div>
-                    <span class="badge">Kelas B</span>
-                    <h3>Artificial Intelligence</h3>
-                </div>
+                <div class="card" th:each="enroll : ${enrollList}" th:attr="data-kode-mk=${enroll.mataKuliah.kodeMK}">
 
-                <div class="card">
-                    <div class="card-img gradient-2"></div>
-                    <span class="badge">Kelas A</span>
-                    <h3>Rekayasa Perangkat Lunak</h3>
-                </div>
+                    <div class="card-img" th:classappend="'gradient-' + ${(enrollList.indexOf(enroll) % 4) + 1}"></div>
 
-                <div class="card">
-                    <div class="card-img gradient-3"></div>
-                    <span class="badge">Kelas BD</span>
-                    <h3>Dasar Pemrograman</h3>
-                </div>
+                    <span class="badge" th:text="'Kelas ' + ${enroll.kelas}">Kelas X</span>
 
-                <div class="card">
-                    <div class="card-img gradient-4"></div>
-                    <span class="badge">Kelas C</span>
-                    <h3>Manajemen Proyek</h3>
+                    <h3 th:text="${enroll.mataKuliah.nama}">Nama Mata Kuliah</h3>
                 </div>
 
             </section>
 
             <footer class="semester">
-                Semester 5 Tahun Ajaran 2026/2027
+                <span th:text="|Semester ${semesterLabel} Tahun Ajaran ${semesterTahunAjaran}|">
+                    Semester Tes Tahun Ajaran Tes/Tes
+                </span>
             </footer>
 
         </div>
