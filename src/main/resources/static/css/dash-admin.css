@@ -21,6 +21,10 @@ body{
     overflow-x: hidden;
 }
 
+.bold{
+    font-weight: bold;
+}
+
 /* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
@@ -365,6 +369,16 @@ header .image-text .header-text{
     font-weight: bold;
     font-size: 14pt;  
     margin-left: 30px;
+}
+
+.mk, .tubes-aktif {
+    font-weight: bold;   /* label tetap bold */
+    font-size: 14pt;
+    margin-left: 30px;
+}
+
+.mk-value, .tb-value {
+    font-weight: normal; /* angka jadi normal */
 }
 
 .content-section{

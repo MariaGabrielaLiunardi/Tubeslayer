@@ -380,14 +380,12 @@ header .image-text .header-text{
     font-weight: normal; /* angka jadi normal */
 }
 
-
 .content-section{
     width: 1360px; 
     display: flex; 
     flex-direction: column;
     align-content: center;
     gap: 20px; 
-    margin-top: 20px; 
 }
 
 .content-title{  
@@ -415,24 +413,31 @@ header .image-text .header-text{
     font-size: 17pt; 
 }
 
-.content-div{
+.content-div {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;      /* biar bisa turun ke baris baru */
+    gap: 20px;            /* jarak antar box */
+    justify-content: flex-start; /* rata kiri */
 }
 
-.content1, .content2, .content3, .content4{
+.content-item {
     width: 320px; 
     height: 150px; 
     background-color: white;
     border-radius: 15px; 
-    justify-content: center;
     box-shadow: 2px 3px 1px grey;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 10px; 
+    transition: var(--tran-03);
 }
+
+/* .content-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 4px 6px 8px rgba(0,0,0,0.2);
+} */
 
 .nama-mk{
     font-weight: bold;
@@ -441,6 +446,31 @@ header .image-text .header-text{
 
 .kelas{
     font-size: 13pt; 
+}
+
+/* ================= BACKGROUND CARD ================= */
+.gradient-1 {
+    background: linear-gradient(#31acef, white);
+}
+
+.gradient-2 {
+    background: url("/icon/matkul-2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.gradient-3 {
+    background: radial-gradient(circle at center,
+            #29ACEF 10%,
+            #9dd6f5 40%,
+            #eaf7ff 70%,
+            #ffffff 100%);
+}
+
+.gradient-4 {
+    background: url("/icon/matkul-4.png");
+    background-size: cover;
+    background-position: center;
 }
 
 

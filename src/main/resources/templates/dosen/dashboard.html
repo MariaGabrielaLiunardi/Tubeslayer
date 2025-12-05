@@ -32,7 +32,7 @@
                     </a>
                 </li>
                 <li class="nav-link">
-                    <a href="mata-kuliah.html">
+                    <a href="/dosen/mata-kuliah">
                         <img src="/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
                         <span class="text nav-text">Mata Kuliah</span>
                     </a>
@@ -52,16 +52,18 @@
                     <span th:text="${user.role}">Role</span>
             </div>
             <img src="/icon/pfp.png" class="pfp" alt="pfp">
-            <button type="button" class="logout">
-                <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
-            </button>
+            <a th:href="@{/logout}" class="logout-link">
+                    <button type="button" class="logout">
+                        <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    </button>
+            </a>
         </div>
     </div>
     <div class="contents">
         <div class="header-section">
             <span class="web-title">Tubeslayer</span>
             <span class="welcome-message">
-                Selamat datang <span th:text="${user.nama}">Nama</span>!
+                Selamat datang <span th:text="${user.nama}">Nama</span>! 🧑‍🏫 
             </span>
         </div>
         <div class="overview-section">
@@ -69,47 +71,37 @@
             <div class="overview-div">
                 <div class="left-overview">
                     <span class="date">
-                        Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
+                        📅 Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
                     </span>
                     <span class="semester">
-                        Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
+                       🎓 Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
                     </span>
                 </div>
                 <div class="right-overview">
                     <span class="mk">
-                    Jumlah mata kuliah semester ini: 
+                    📚 Jumlah mata kuliah semester ini: 
                     <span class="mk-value" th:text="${jumlahMk}">0</span>
                     </span>
 
                     <span class="tubes-aktif">
-                    Jumlah tugas besar aktif: 
+                    📝 Jumlah tugas besar aktif: 
                     <span class="tb-value" th:text="${jumlahTb}">0</span>
                     </span>
                 </div>
+            </div>
         </div>
         <div class="content-section">
             <div class="content-title">
                 <span class="content-title">Mata Kuliah</span>
-                <a href="#" class="lihat-semua-btn">
+                <a href="/dosen/mata-kuliah" class="lihat-semua-btn">
                     Lihat Semua >
                 </a>
             </div>
             <div class="content-div">
-                <div class="content1">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content2">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content3">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content4">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
+                <div th:each="md, iterStat : ${mataKuliahDosenList}"
+                    th:class="'content-item gradient-' + ${iterStat.index % 4 + 1}">
+                    <span class="nama-mk" th:text="${md.mataKuliah.nama}">Nama MK</span>
+                    <span class="kelas" th:text="'Kelas ' + ${md.kelas}">Kelas</span>
                 </div>
             </div>
         </div>

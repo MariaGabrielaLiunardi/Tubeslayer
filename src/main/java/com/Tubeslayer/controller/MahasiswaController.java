@@ -10,30 +10,52 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 
 import com.Tubeslayer.service.CustomUserDetails;
+import com.Tubeslayer.service.DashboardMahasiswaService;
+import com.Tubeslayer.service.MataKuliahService;
+import com.Tubeslayer.entity.MataKuliah;
+
+import java.util.List; 
 
 @Controller
 public class MahasiswaController {
 
+    private final DashboardMahasiswaService dashboardService;
+    private final MataKuliahService mataKuliahService;
+
+    public MahasiswaController(DashboardMahasiswaService dashboardService,
+                               MataKuliahService mataKuliahService) {
+        this.dashboardService = dashboardService;
+        this.mataKuliahService = mataKuliahService;
+    }
+
     @GetMapping("/mahasiswa/dashboard")
-    public String dashboard(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+    public String mahasiswaDashboard(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
-        // ambil tanggal sekarang
+
         LocalDate today = LocalDate.now();
         model.addAttribute("tanggal", today.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
 
-        // hitung semester
         int year = today.getYear();
         int month = today.getMonthValue();
-        String semester;
-
+        String tahunAkademik;
         if (month >= 7) {
-            semester = year + "/" + (year + 1);   // contoh: 2025/2026
+            tahunAkademik = year + "/" + (year + 1);
         } else {
-            semester = (year - 1) + "/" + year;   // contoh: 2024/2025
+            tahunAkademik = (year - 1) + "/" + year;
         }
-        model.addAttribute("semester", semester);
-        return "mahasiswa/dashboard"; // file HTML kamu
+        model.addAttribute("semester", tahunAkademik);
+
+        int jumlahMk = dashboardService.getJumlahMkAktif(user.getIdUser(), tahunAkademik);
+        int jumlahTb = dashboardService.getJumlahTbAktif(user.getIdUser());
+        model.addAttribute("jumlahMk", jumlahMk);
+        model.addAttribute("jumlahTb", jumlahTb);
+
+        List<MataKuliah> listMK = mataKuliahService.getActiveByMahasiswaAndTahunAkademik(user.getIdUser(), tahunAkademik);
+        model.addAttribute("mataKuliahList", listMK);
+
+        return "mahasiswa/dashboard";
     }
+
     // 1. Mapping untuk halaman daftar semua mata kuliah
     @GetMapping("/mahasiswa/mata-kuliah")
     public String mahasiswaMataKuliahList() {
