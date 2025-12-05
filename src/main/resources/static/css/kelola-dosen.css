@@ -30,7 +30,6 @@ body {
     margin: 0; 
     padding: 0; 
 }
-
 :root{
     /* Transition */
     --tran-02: all 0.2s ease; 
@@ -252,6 +251,7 @@ header .image-text .header-text{
     display: flex; 
     flex-direction: column;
     justify-content: center;
+    padding-top: 5px;
 }
 
 .name{
@@ -314,7 +314,7 @@ header .image-text .header-text{
     color: #5BA4E6; /* Warna biru icon */
 }
 
-.matkul-banner {
+.dosen-banner {
     position: relative;
     width: 100%;                    
     max-width: 1400px;                /* biar rapi */
@@ -327,24 +327,31 @@ header .image-text .header-text{
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     margin-bottom: 0px;
     z-index: 2;
+    margin-top: 15px;
 }
 
-.matkul-banner img {
-    width: 100px;
-    height: 130px;
+.dosen-banner img {
+    width: 120px;
+    height: 80px;
     border-radius: 25px;
+    transform: translateY(-10px); 
+    margin-bottom: 10px;
 }
 
-.matkul-banner h1 {
+.dosen-banner h1 {
     font-size: 22px;                 
     font-weight: bold;
     color: #073B66;
     margin: 0;
+    height: 80px;
+    margin-top: 50px;
+
 }
 
 /* --- Area Daftar & Pencarian --- */
 .list-container {
     width: 100%;
+    margin-bottom: -10px;
 }
 
 .list-header {
@@ -503,14 +510,14 @@ header .image-text .header-text{
 }
 
 /* --- Untuk yang View 3: Import Mata Kuliah --- */
-#import-matkul {
+#import-dosen {
     display: none;
 
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#import-matkul .import-matkul-content {
+#import-dosen .import-dosen-content {
     background-color: #E3E3E3; 
     height: 200px;
     width: auto;
@@ -524,19 +531,19 @@ header .image-text .header-text{
     justify-content: center;
 }
 
-#import-matkul .import-matkul-content .btn-pilih-file{
+#import-dosen .import-dosen-content .btn-pilih-file{
     flex-direction: column;
 }
 
 /* --- Tombol Tambah Baru --- */
 /* Card container */
-.tambah-matkul {
+.tambah-dosen {
     display: flex;
     justify-content: center;   /* center horizontal */
     align-items: center;       /* center vertical */
 }
 
-.tambah-matkul-content {
+.tambah-dosen-content {
     width: 500px;
     background: #FFF1EB;
     padding: 25px 30px;
@@ -551,7 +558,7 @@ header .image-text .header-text{
 }
 
 /* Form styling */
-#tambah-matkul-form {
+#tambah-dosen-form {
     display: flex;
     flex-direction: column;
     gap: 5px; /* jarak antar elemen */
@@ -559,14 +566,14 @@ header .image-text .header-text{
 }
 
 /* Label */
-#tambah-matkul-form label {
+#tambah-dosen-form label {
     font-weight: 500;
     margin-bottom: 0px;
 }
 
 /* Input & Select */
-#tambah-matkul-form input,
-#tambah-matkul-form select {
+#tambah-dosen-form input,
+#tambah-dosen-form select {
     padding: 4px 8px;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -574,127 +581,68 @@ header .image-text .header-text{
     font-size: 14px;
 }
 
-#tambah-matkul-form input:focus,
-#tambah-matkul-form select:focus {
+#tambah-dosen-form input:focus,
+#tambah-dosen-form select:focus {
     border-color: #ffa98e;
     box-shadow: 0 0 0 3px rgba(255,139,112,0.15);
     outline: none;
 }
 
-.tambah-matkul-content .btn-submit{
+.tambah-dosen-content .btn-submit{
     width: 100%;
     flex-direction: column;
 }
 
-/* --- Untuk Hapus Mata Kuliah --- */
+/* --- Untuk Hapus Dosen --- */
+
 /* Wrapper utama */
-.hapus-mata-kuliah {
+.hapus-dosen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 9999;
+    display: none; 
 }
 
 /* Box konten */
-.hapus-mata-kuliah-content {
+.hapus-dosen-content {
     background: #FFF1EB;
     width: 420px;
     padding: 25px;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    display: flex;
+    display: flex; 
     flex-direction: column;
     gap: 20px;
     position: relative;
     transform: translateY(70px);
 }
 
-/* Input wrapper (baru) */
-.hapus-mata-kuliah-content .input-wrapper {
-    position: relative;  /* Parent dari suggestions */
-}
-
-/* Search box */
-.hapus-mata-kuliah-content .search-box {
+/* Input wrapper */
+.hapus-dosen-content .input-wrapper {
     position: relative;
 }
 
-.hapus-mata-kuliah-content .search-box input {
+/* Suggestions dropdown */
+.hapus-dosen-content .suggestions {
+    display: none;
+}
+
+/* Button group */
+.hapus-dosen-content .button-group {
+    display: flex; 
+    justify-content: center;
+    gap: 12px;
+}
+
+.hapus-dosen-content .search-box input {
     width: 100%;
     padding: 12px 15px;
     border-radius: 10px;
     border: 1.5px solid #cfcfcf;
     background: #fff;
 }
-
-/* Suggestions dropdown */
-.hapus-mata-kuliah-content .suggestions {
-    position: absolute;
-    top: 100%;           
-    left: 0;
-    width: 100%;
-    z-index: 999;
-
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    list-style: none;
-
-    margin-top: 6px;
-    padding: 0;
-
-    display: none;       
-
-    max-height: 180px;  
-    overflow-y: auto;
-
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* Style item suggestion */
-.hapus-mata-kuliah-content .suggestions li {
-    padding: 10px 15px;
-    cursor: pointer;
-}
-
-.hapus-mata-kuliah-content .suggestions li:hover {
-    background: #FFF1EB;
-}
-
-/* Button group */
-.hapus-mata-kuliah-content .button-group {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-}
-
-
-/* Halaman Konfirmasi Hapus */
-.konfirmasi-hapus {
-    display: none; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-}
-.konfirmasi-hapus-content {
-    background-color: #FFF1EB; 
-    width: 400px;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-    transform: translateY(70px);
-}       
