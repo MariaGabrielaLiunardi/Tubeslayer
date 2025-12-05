@@ -58,4 +58,9 @@ public class MahasiswaController {
     public String mahasiswaMatkulPeserta() {
         return "mahasiswa/matkul-peserta"; 
     }
+
+    @GetMapping("/hlmn_tubes/hlmtubes")
+    public String halamanTubes() {
+        return "/hlmn_tubes/hlmtubes"; 
+    }
 }

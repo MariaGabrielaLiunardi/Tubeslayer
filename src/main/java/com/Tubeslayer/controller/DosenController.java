@@ -11,9 +11,17 @@ import org.springframework.ui.Model;
 import com.Tubeslayer.repository.MataKuliahDosenRepository;
 import com.Tubeslayer.repository.TugasBesarRepository;
 import com.Tubeslayer.service.CustomUserDetails;
+import com.Tubeslayer.service.DashboardService;
+import com.Tubeslayer.entity.User;
 
 @Controller
 public class DosenController {
+
+    private final DashboardService dashboardService;
+
+    public DosenController(DashboardService dashboardService) {
+        this.dashboardService = dashboardService;
+    }
 
     @GetMapping("/dosen/dashboard")
     public String dosenDashboard(@AuthenticationPrincipal CustomUserDetails user, Model model) {
@@ -35,14 +43,12 @@ public class DosenController {
         }
         model.addAttribute("semester", semester);
 
-        /*int jumlahMk = MataKuliahDosenRepository
-                .countById_IdUserAndTahunAkademikAndIsActive(user.getIdUser(), "2025", true);
-
-        int jumlahTb = TugasBesarRepository
-                .countByIdUserAndStatusAndIsActive(user.getIdUser(), "Open", true);
+        // panggil service
+        int jumlahMk = dashboardService.getJumlahMkAktif(user.getIdUser(), semester);
+        int jumlahTb = dashboardService.getJumlahTbAktif(user.getIdUser());
 
         model.addAttribute("jumlahMk", jumlahMk);
-        model.addAttribute("jumlahTb", jumlahTb);*/
+        model.addAttribute("jumlahTb", jumlahTb);
 
         return "dosen/dashboard"; // ⬅ sesuai lokasi file
     }

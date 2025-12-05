@@ -159,7 +159,8 @@ header .image-text .header-text{
 }
 
 .home{
-    position: relative;
+    position: absolute;
+    top: 0;
     height: 100vh;
     left: 73px; 
     width: calc(100% - 73px);

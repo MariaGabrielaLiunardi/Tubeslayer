@@ -27,7 +27,7 @@
             <ul class="menu-links">
                 <li class="nav-link active">
                     <a href="/dosen/dashboard">
- -                   <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                    <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
                         <span class="text nav-text">Dashboard</span>
                     </a>
                 </li>
@@ -76,14 +76,16 @@
                     </span>
                 </div>
                 <div class="right-overview">
-                    <span class="mk">Jumlah mata kuliah semester ini: 
-                        <span th:text="${jumlahMk}">0</span>
+                    <span class="mk">
+                    Jumlah mata kuliah semester ini: 
+                    <span class="mk-value" th:text="${jumlahMk}">0</span>
                     </span>
 
-                    <span class="tubes-aktif">Jumlah tugas besar aktif: 
-                        <span th:text="${jumlahTb}">0</span>
+                    <span class="tubes-aktif">
+                    Jumlah tugas besar aktif: 
+                    <span class="tb-value" th:text="${jumlahTb}">0</span>
                     </span>
-            </div>
+                </div>
         </div>
         <div class="content-section">
             <div class="content-title">

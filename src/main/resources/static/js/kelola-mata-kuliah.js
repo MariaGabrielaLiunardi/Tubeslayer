@@ -149,8 +149,8 @@ uploadBtn.addEventListener("click", () => {
             const no = index + 1;
             const kode = row[0] || "-";
             const nama = row[1] || "-";
-            const sks = row[2] || "2";
-            const status = row[3] || "1";
+            const sks = row[2] || "0";
+            const status = row[3] || "0";
 
             const div = document.createElement("div");
             div.classList.add("data-row");
@@ -176,9 +176,6 @@ uploadBtn.addEventListener("click", () => {
     reader.readAsArrayBuffer(file);
 });
 
-   /* ===============================
-   5. PILIH MANUAL TAMBAH → MASUK TABEL 
-================================ */
     //fungsi tambah ke tabel
     function tambahKeTabel(kode, nama, sks, status) {
         const tableView = document.getElementById("table-view");
