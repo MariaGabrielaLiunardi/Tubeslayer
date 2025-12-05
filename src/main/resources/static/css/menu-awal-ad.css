@@ -153,9 +153,9 @@ header .image-text .header-text{
     flex-direction: column;
     justify-content: space-between;
 }
-
-.sidebar li.active a {
-    background-color: #C1EBFF; 
+.sidebar li.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
 }
 
 .home{

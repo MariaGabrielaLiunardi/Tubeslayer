@@ -9,20 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
-    const currentPath = window.location.pathname; // contoh: "/admin/dashboard/detail/123"
 
-    // Highlight sesuai URL aktif (jalan saat halaman dimuat)
+    // 1. Highlight sesuai URL aktif (jalan saat halaman dimuat)
+    const currentPath = window.location.pathname;
     navLinks.forEach(li => {
         const anchor = li.querySelector('a');
-        const href = anchor.getAttribute('href');
-        if (currentPath.startsWith(href)) {
+        if (anchor.getAttribute('href') === currentPath) {
             li.classList.add('active');
         } else {
             li.classList.remove('active');
         }
     });
 
-    // Highlight saat klik (opsional)
+    // 2. Highlight saat klik (opsional, biar langsung kelihatan sebelum pindah halaman)
     navLinks.forEach(li => {
         const anchor = li.querySelector('a');
         anchor.addEventListener('click', () => {

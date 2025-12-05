@@ -24,7 +24,7 @@
     <div class="menu-bar">
         <div class="menu">
             <ul class="menu-links">
-                <li class="nav-link active">
+                <li class="nav-link">
                     <a href="/admin/dashboard">
                         <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
                         <span class="text nav-text">Dashboard</span>
@@ -107,29 +107,32 @@
 
             <div class="content-div">
                 <!-- Card Mata Kuliah -->
-                <div class="card mata-kuliah">
-                    <div class="icon-container">
-                        <img src="/icon/matkul biru.png" alt="Icon Mata Kuliah">
+                <a th:href="@{/admin/kelola-mata-kuliah}">
+                    <div class="card mata-kuliah">
+                        <div class="icon-container">
+                            <img src="/icon/matkul biru.png" alt="Icon Mata Kuliah">
+                        </div>
+                        <span class="title">Kelola Mata Kuliah</span>
                     </div>
-                    <span class="title">Kelola Mata Kuliah</span>
+                </a>
 
-                </div>
-
-                <!-- Card Dosen -->
-                <div class="card dosen">
-                    <div class="icon-container-dosen">
-                        <img src="/icon/dosen biru.png" alt="Icon Dosen">
+                <a th:href="@{/admin/kelola-dosen}">
+                    <div class="card dosen">
+                        <div class="icon-container-dosen">
+                            <img src="/icon/dosen biru.png" alt="Icon Dosen">
+                        </div>
+                        <span class="title">Kelola Dosen</span>
                     </div>
-                    <span class="title">Kelola Dosen</span>
-                </div>
+                </a>
 
-                <!-- Card Mahasiswa -->
-                <div class="card mahasiswa">
-                    <div class="icon-container">
-                        <img src="/icon/mahasiswa biru.png" alt="Icon Mahasiswa">
+                <a th:href="@{/admin/kelola-mahasiswa}">
+                    <div class="card mahasiswa">
+                        <div class="icon-container">
+                            <img src="/icon/mahasiswa biru.png" alt="Icon Mahasiswa">
+                        </div>
+                        <span class="title">Kelola Mahasiswa</span>
                     </div>
-                    <span class="title">Kelola Mahasiswa</span>
-                </div>
+                </a>
             </div>
         </div>
     </div>
