@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const anchor = li.querySelector('a');
 
         anchor.addEventListener('click', (e) => {
-            e.preventDefault(); 
+            //e.preventDefault(); 
             
             // a. Hapus kelas 'active' dari semua tautan navigasi
             navLinks.forEach(link => {
