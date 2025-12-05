@@ -58,6 +58,7 @@ public class MahasiswaController {
 
     @GetMapping("/mahasiswa/dashboard")
     public String mahasiswaDashboard(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+        System.out.println("Controller mahasiswaDashboard dipanggil!");
         model.addAttribute("user", user);
 
         LocalDate today = LocalDate.now();
