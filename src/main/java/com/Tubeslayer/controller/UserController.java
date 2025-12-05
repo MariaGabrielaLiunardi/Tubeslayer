@@ -27,14 +27,24 @@ public class UserController {
         return "login"; 
     }
 
-    // Dashboard view: Hanya menampilkan halaman dashboard.
-    // Spring Security yang mengamankan (hanya yang login bisa masuk).
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "dashboard";
-    }
+//     // Dashboard view: Hanya menampilkan halaman dashboard.
+//     // Spring Security yang mengamankan (hanya yang login bisa masuk).
+//    @GetMapping("/dashboard")
+//     public String dashboard(HttpSession session, Model model) { // Tambahkan parameter HttpSession dan Model
+        
+//         // Mengambil data dari session yang diisi CustomSuccessHandler
+//         String username = (String) session.getAttribute("username");
+//         String role = (String) session.getAttribute("role");
+        
+//         // Menambahkan ke model untuk ditampilkan di template (e.g., dashboard.html)
+//         model.addAttribute("username", username);
+//         model.addAttribute("role", role);
+        
+//         return "dashboard";
+//     }
 
-    // Logout: (Boleh dipertahankan atau gunakan default Spring Security)
+    // Logout: (Tetap gunakan default Spring Security di SecurityConfig, 
+    // tapi fungsi controller ini juga memastikan session manual hilang)
     @GetMapping("/logout")
     public String logout(jakarta.servlet.http.HttpSession session) {
         session.invalidate();

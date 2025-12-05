@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
+import jakarta.servlet.http.HttpSession;
 
 import com.Tubeslayer.repository.MataKuliahDosenRepository;
 import com.Tubeslayer.repository.TugasBesarRepository;
@@ -24,7 +25,11 @@ public class DosenController {
     }
 
     @GetMapping("/dosen/dashboard")
-    public String dosenDashboard(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+    public String dosenDashboard(@AuthenticationPrincipal CustomUserDetails user, Model model, HttpSession session) {
+        // Ambil data yang disimpan oleh CustomSuccessHandler
+        String emailDariSession = (String) session.getAttribute("username"); // Ini seharusnya email user
+        String roleDariSession = (String) session.getAttribute("role");     // Ini seharusnya role user (misal: DOSEN)
+        
         model.addAttribute("user", user);
 
         // ambil tanggal sekarang
