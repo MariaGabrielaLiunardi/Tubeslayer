@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface TugasBesarRepository extends JpaRepository<TugasBesar, Integer> {
 
     // hitung jumlah tugas besar aktif untuk dosen tertentu
-    int countByIdUserAndStatusAndIsActive(String idUser, String status, boolean isActive);
+    int countByDosenIdUserAndStatusAndIsActive(String idUser, String status, boolean isActive);
 }

@@ -12,14 +12,14 @@ public class MataKuliahDosen {
     @EmbeddedId
     private MataKuliahDosenId id;
 
+    @MapsId("idUser") // merujuk ke field idUser di MataKuliahDosenId
     @ManyToOne
-    @MapsId("userId") // maps composite key field to association PK
-    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    @JoinColumn(name = "id_user")
     private User user;
 
+    @MapsId("kodeMk") // merujuk ke field kodeMk di MataKuliahDosenId
     @ManyToOne
-    @MapsId("kodeMk") // maps composite key field to association PK
-    @JoinColumn(name = "kode_mk", referencedColumnName = "kodeMK")
+    @JoinColumn(name = "kode_mk")
     private MataKuliah mataKuliah;
 
     @Column(length = 3)

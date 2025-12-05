@@ -149,8 +149,8 @@ uploadBtn.addEventListener("click", () => {
             const no = index + 1;
             const kode = row[0] || "-";
             const nama = row[1] || "-";
-            const sks = row[2] || "0";
-            const status = row[3] || "0";
+            const sks = row[2] || "2";
+            const status = row[3] || "1";
 
             const div = document.createElement("div");
             div.classList.add("data-row");
@@ -176,6 +176,9 @@ uploadBtn.addEventListener("click", () => {
     reader.readAsArrayBuffer(file);
 });
 
+   /* ===============================
+   5. PILIH MANUAL TAMBAH → MASUK TABEL 
+================================ */
     //fungsi tambah ke tabel
     function tambahKeTabel(kode, nama, sks, status) {
         const tableView = document.getElementById("table-view");
@@ -216,6 +219,11 @@ uploadBtn.addEventListener("click", () => {
 
     });
 
+   /* ===============================
+   6. HAPUS MATA KULIAH  
+================================ */
+
+
     //Bagian Hapus Mata kuliah
     const mataKuliah = [
     "Algoritma",
@@ -230,6 +238,7 @@ uploadBtn.addEventListener("click", () => {
     const input = document.getElementById("search-input");
     const suggestionsBox = document.getElementById("suggestions");
     const btnHapus = document.getElementById("btn-delete");
+    const btnBatal = document.getElementById("btn-cancel-delete");
     let selectedMK = null;
     searchHapus.style.display = "none";
 
@@ -241,9 +250,16 @@ uploadBtn.addEventListener("click", () => {
         subTitle.textContent = " > Hapus Mata Kuliah";
     });
 
-input.addEventListener("input", () => {
-    const keyword = input.value.toLowerCase();
-    suggestionsBox.innerHTML = "";
+    btnBatal.addEventListener("click", () => {
+        searchHapus.style.display = "none";
+        tableView.style.display = "block";
+        footerView.style.display = "flex";
+        searchbar.style.display = "block";
+    });
+
+    input.addEventListener("input", () => {
+        const keyword = input.value.toLowerCase();
+        suggestionsBox.innerHTML = "";
 
     if (keyword.length === 0) {
         suggestionsBox.style.display = "none";
