@@ -20,7 +20,6 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     List<MataKuliahDosen> findByMataKuliah_KodeMKAndIsActive(String kodeMk, boolean isActive); 
     
     // Hapus semua kode TugasBesar di repository ini
-}
     // hitung jumlah mk aktif untuk dosen tertentu di tahun akademik tertentu
     int countById_IdUserAndTahunAkademikAndIsActive(String idUser, String tahunAkademik, boolean isActive);
 
@@ -36,6 +35,5 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     List<MataKuliahDosen> findActiveByUserAndTahunAkademik(@Param("idUser") String idUser,
                                                           @Param("tahunAkademik") String tahunAkademik,
                                                           Pageable pageable);
-
 }
 
