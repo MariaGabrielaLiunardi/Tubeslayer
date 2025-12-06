@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
     <div class="menu-bar">
         <div class="menu">
             <ul class="menu-links">
-                <li class="nav-link active">
+                <li class="nav-link">
                     <a href="/admin/dashboard">
                         <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
                         <span class="text nav-text">Dashboard</span>
@@ -104,23 +104,35 @@
                     Lihat Semua >
                 </a>
             </div>
+
             <div class="content-div">
-                <div class="content1">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content2">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content3">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
-                <div class="content4">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
-                </div>
+                <!-- Card Mata Kuliah -->
+                <a th:href="@{/admin/kelola-mata-kuliah}">
+                    <div class="card mata-kuliah">
+                        <div class="icon-container">
+                            <img src="/icon/matkul biru.png" alt="Icon Mata Kuliah">
+                        </div>
+                        <span class="title">Kelola Mata Kuliah</span>
+                    </div>
+                </a>
+
+                <a th:href="@{/admin/kelola-dosen}">
+                    <div class="card dosen">
+                        <div class="icon-container-dosen">
+                            <img src="/icon/dosen biru.png" alt="Icon Dosen">
+                        </div>
+                        <span class="title">Kelola Dosen</span>
+                    </div>
+                </a>
+
+                <a th:href="@{/admin/kelola-mahasiswa}">
+                    <div class="card mahasiswa">
+                        <div class="icon-container">
+                            <img src="/icon/mahasiswa biru.png" alt="Icon Mahasiswa">
+                        </div>
+                        <span class="title">Kelola Mahasiswa</span>
+                    </div>
+                </a>
             </div>
         </div>
     </div>

@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const anchor = li.querySelector('a');
         const href = anchor.getAttribute('href');
 
-        // match fleksibel: kalau currentPath mulai dengan href
-        if (currentPath.startsWith(href)) {
+        if (currentPath === href || 
+            (href === "/admin/menu-awal-ad" && currentPath.startsWith("/admin/kelola"))) {
             li.classList.add('active');
         } else {
             li.classList.remove('active');
