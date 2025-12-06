@@ -427,15 +427,7 @@ header .image-text .header-text{
     margin-top: 30px;
 }
 
-.tilte-rubrik {
-    display: flex;
-    margin-top: 40px;
-    /* Mengganti properti 'size' yang tidak valid */
-    font-size: 36px; 
-    /* MENAMBAH INI: Meratakan elemen ini ke kiri (start) dalam container parent flex */
-    align-self: flex-start; 
-    margin-left: 20px;
-}
+
 
 /* === Assignment Table Header and Row (Moved into Yellow Rectangle) === */
 .assignment-table-wrapper {
@@ -559,15 +551,22 @@ header .image-text .header-text{
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.432);
 }
 
+<<<<<<< Updated upstream:src/main/resources/static/css/jadwal-penilaian-mahasiswa.css
 .kembali {
     position: absolute;
     bottom: 20px;
     right: 20px;
 
+=======
+.edit-rubrik{
+    width: 200px; /* Tetapkan lebar tetap atau sesuaikan dengan persentase yang lebih kecil */
+    color: white;
+>>>>>>> Stashed changes:src/main/resources/static/css/rubrik-penilaian-dosen.css
     background-color: black;
     color: white;
     padding: 12px 25px;
     border-radius: 15px;
+<<<<<<< Updated upstream:src/main/resources/static/css/jadwal-penilaian-mahasiswa.css
     text-decoration: none;
     font-weight: 700;
 
@@ -584,3 +583,29 @@ header .image-text .header-text{
     background-color: #333;
     transform: translateY(-3px);
 }
+=======
+    padding: 15px 15px;
+    text-align: center;
+    cursor: pointer; /* Tambahkan kursor agar terlihat seperti tombol */
+    text-decoration: none; /* Hapus dekorasi link default pada <a> */
+    
+    /* Properti Flexbox untuk perataan teks di dalam tombol */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+    
+    /* Hapus align-self dan margin-top */
+}
+
+.header-rubrik {
+    width: 100%; /* Lebar penuh dari parent (.rectangle-white) */
+    display: flex; /* Aktifkan Flexbox */
+    justify-content: space-between; /* Pisahkan judul dan tombol */
+    align-items: center; /* Sejajarkan secara vertikal di tengah */
+    margin-top: 10px; /* Jarak dari atas .rectangle-white */
+    padding-left: 40px; /* Samakan dengan padding parent agar sejajar dengan .rectangle-yellow */
+    padding-right: 40px; /* Samakan dengan padding parent agar sejajar dengan .rectangle-yellow */
+}
+>>>>>>> Stashed changes:src/main/resources/static/css/rubrik-penilaian-dosen.css

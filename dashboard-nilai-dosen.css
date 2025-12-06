@@ -406,10 +406,6 @@ header .image-text .header-text{
 }
 
 /* Cards */
-.cards {
-    display: flex;
-    justify-content: space-around;
-}
 
 .card {
     width: 220px;
@@ -418,10 +414,43 @@ header .image-text .header-text{
     border-radius: 20px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     text-align: center;
+<<<<<<< Updated upstream:dashboard-nilai-dosen.css
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+=======
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+
+    text-decoration: none;  /* hilangkan underline */
+    color: inherit;
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-12px);       /* naik sedikit */
+    box-shadow: 0 18px 45px rgba(0,0,0,0.3); /* tambah glow */
+    cursor: pointer;
+}
+
+/* Overlay square behind the icon - full width, leaves space for title */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;                       /* full card width */
+    height: 320px;                     /* overlay height, leaves ~80px for title */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, rgba(100, 180, 220, 0.8) 100%);
+    border-radius: 20px 20px 0 0;
+    z-index: 1;
+>>>>>>> Stashed changes:src/main/resources/static/css/dashboard-nilai-mahasiswa.css
 }
 
 .card img {

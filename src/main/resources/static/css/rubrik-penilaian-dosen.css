@@ -323,7 +323,6 @@ header .image-text .header-text{
     border-bottom-right-radius: 40px;
 }
 
-
 /* Move blue active/background from the Dashboard item to the Open Book item
    without changing HTML: override the original active anchor and apply
    the blue background to the second menu item (Open Book). */
@@ -428,15 +427,7 @@ header .image-text .header-text{
     margin-top: 30px;
 }
 
-.tilte-rubrik {
-    display: flex;
-    margin-top: 40px;
-    /* Mengganti properti 'size' yang tidak valid */
-    font-size: 36px; 
-    /* MENAMBAH INI: Meratakan elemen ini ke kiri (start) dalam container parent flex */
-    align-self: flex-start; 
-    margin-left: 20px;
-}
+
 
 /* === Assignment Table Header and Row (Moved into Yellow Rectangle) === */
 .assignment-table-wrapper {
@@ -456,8 +447,8 @@ header .image-text .header-text{
     justify-content: flex-start;
 }
 
-.col-rubrik {
-    width: 40%; 
+.col-komponen {
+    width: 45%; /* Diubah dari 50% */
     text-align: left;
     background-color: #CDE8F6;
     border-radius: 15px;
@@ -465,23 +456,16 @@ header .image-text .header-text{
 }
 
 .col-bobot {
-    width: 15%; 
-    text-align: left; /* Rata tengah untuk Bobot */
+    width: 10%; /* Tetap 10% */
+    /* Menghapus padding-left: 20px; yang duplikat */
+    text-align: center; /* Rata tengah untuk Bobot */
     background-color: #CDE8F6;
     border-radius: 15px;
     padding: 15px 15px;
 }
 
-.col-nilai {
-    width: 15%; /* Diubah dari 50% */
-    text-align: left;
-    background-color: #CDE8F6;
-    border-radius: 15px;
-    padding: 15px 15px;
-}
-
-.col-catatan {
-    width: 45%; /* Diubah dari 50% */
+.col-keterangan {
+    width: 40%; /* Diubah dari 50% */
     text-align: left;
     background-color: #CDE8F6;
     border-radius: 15px;
@@ -500,8 +484,8 @@ header .image-text .header-text{
     justify-content: flex-start;
 }
 
-.col-isi-rubrik{
-    width: 40%; /* Diubah dari 47% agar sama dengan header */
+.col-isi-komponen{
+    width: 45%; /* Diubah dari 47% agar sama dengan header */
     text-align: left;
     background-color: white;
     border-radius: 15px;
@@ -510,7 +494,7 @@ header .image-text .header-text{
 }
 
 .col-isi-bobot{
-    width: 15%; /* Diubah dari 11% agar sama dengan header dan rata tengah */
+    width: 10%; /* Diubah dari 11% agar sama dengan header dan rata tengah */
     text-align: center; 
     background-color: white;
     border-radius: 15px;
@@ -518,17 +502,8 @@ header .image-text .header-text{
     border: solid black 1px;
 }
 
-.col-isi-jam{
-    width: 15%; /* Diubah dari 46% agar sama dengan header */
-    text-align: left;
-    background-color: white;
-    border-radius: 15px;
-    padding: 25px 15px;
-    border: solid black 1px;
-}
-
-.col-isi-catatan{
-    width: 45%; /* Diubah dari 46% agar sama dengan header */
+.col-isi-keterangan{
+    width: 40%; /* Diubah dari 46% agar sama dengan header */
     text-align: left;
     background-color: white;
     border-radius: 15px;
@@ -576,61 +551,32 @@ header .image-text .header-text{
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.432);
 }
 
-.kembali {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-
-    background-color: black;
+.edit-rubrik{
+    width: 200px; /* Tetapkan lebar tetap atau sesuaikan dengan persentase yang lebih kecil */
     color: white;
-    padding: 12px 25px;
+    background-color: black;
     border-radius: 15px;
-    text-decoration: none;
-    font-weight: 700;
-
+    padding: 15px 15px;
+    text-align: center;
+    cursor: pointer; /* Tambahkan kursor agar terlihat seperti tombol */
+    text-decoration: none; /* Hapus dekorasi link default pada <a> */
+    
+    /* Properti Flexbox untuk perataan teks di dalam tombol */
     display: flex;
     justify-content: center;
     align-items: center;
-
-    cursor: pointer;
-    transition: 0.25s ease;
-    z-index: 5;
-}
-
-.kembali:hover {
-    background-color: #333;
-    transform: translateY(-3px);
-}
-<<<<<<< Updated upstream:src/main/resources/static/css/pemberian-nilai-mahasiswa.css
-
-.nilai-container {
-    position: absolute;
-    display: flex;
-    gap: 40px;
-    border-color: solid black 1px;
-    margin-top: 360px;
-}
-
-.nilai-container > div {
-    background: white;
-    
-    border-radius: 15px;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 700;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding-left: 20px;
-    border-color: solid black 1px;
+    
+    /* Hapus align-self dan margin-top */
 }
 
-.value{
-    background-color: #CDE8F6;
-    padding: 20px 20px;
-    border-radius: 15px;
-    border-color: solid black 1px;
+.header-rubrik {
+    width: 100%; /* Lebar penuh dari parent (.rectangle-white) */
+    display: flex; /* Aktifkan Flexbox */
+    justify-content: space-between; /* Pisahkan judul dan tombol */
+    align-items: center; /* Sejajarkan secara vertikal di tengah */
+    margin-top: 10px; /* Jarak dari atas .rectangle-white */
+    padding-left: 40px; /* Samakan dengan padding parent agar sejajar dengan .rectangle-yellow */
+    padding-right: 40px; /* Samakan dengan padding parent agar sejajar dengan .rectangle-yellow */
 }
-=======
->>>>>>> Stashed changes:src/main/resources/static/css/rubrik-penilaian-mahasiswa.css

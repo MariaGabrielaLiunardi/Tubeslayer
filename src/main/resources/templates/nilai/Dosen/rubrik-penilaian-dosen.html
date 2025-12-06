@@ -3,9 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Jadwal Penilaian Mahasiswa</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/jadwal-penilaian-mahasiswa.css">
-        <script src="../../../static/js/jadwal-penilaian-mahasiswa.js" defer></script>
+        <title>Rubrik Penilaian Mahasiswa</title>
+        <link rel="stylesheet" href="../../../../resources/static/css/rubrik-penilaian-dosen.css">
+        <script src="../../../static/js/rubrik-penilaian-dosen.js" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
 
@@ -33,8 +33,8 @@
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="nilai-mahasiswa.html">
-                                <img src="../../../static/icon/open-book.png" class="icon open-book-icon">
+                            <a href="#">
+                                <img src="../../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
                                 <span class="text nav-text">Mata Kuliah</span>
                             </a>
                         </li>
@@ -50,8 +50,8 @@
                 </div>
                 <div class="right-section">
                     <div class="info">
-                        <span class="name">Keisha Neira Jocelyn</span>
-                        <span class="role">Mahasiswa</span>
+                        <span class="name">Clara Joycelyne</span>
+                        <span class="role">Dosen</span>
                     </div>
                     <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
                     <button type="button" class="logout">
@@ -83,47 +83,48 @@
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="tilte-rubrik">Jadwal Penilaian</div>
+                    <div class="header-rubrik">
+                        <div class="tilte-rubrik">Rubrik Penilaian</div>
+                        <a href=".html"><div class="edit-rubrik">Edit Rubrik</div></a>
+                    </div>
+
                     <div class="rectangle-yellow">
                         <div class="assignment-table-wrapper">
                             <div class="assignment-header">
-                                <div class="col-komponen">Komponen</div>
-                                <div class="col-tanggal">Tanggal</div>
-                                <div class="col-jam">Jam</div>
+                                <div class="col-komponen">Komponen Penilaian</div>
+                                <div class="col-bobot">Bobot (%)</div>
+                                <div class="col-keterangan">Keterangan</div>
                             </div>
 
                             <div class="assignment-row">
                                 <div class="col-isi-komponen"></div>
-                                <div class="col-isi-tanggal"></div>
-                                <div class="col-isi-jam"></div>
+                                <div class="col-isi-bobot"></div>
+                                <div class="col-isi-keterangan"></div>
                             </div>
 
                             <div class="assignment-row">
                                 <div class="col-isi-komponen"></div>
-                                <div class="col-isi-tanggal"></div>
-                                <div class="col-isi-jam"></div>
+                                <div class="col-isi-bobot"></div>
+                                <div class="col-isi-keterangan"></div>
                             </div>
 
                             <div class="assignment-row">
                                 <div class="col-isi-komponen"></div>
-                                <div class="col-isi-tanggal"></div>
-                                <div class="col-isi-jam"></div>
+                                <div class="col-isi-bobot"></div>
+                                <div class="col-isi-keterangan"></div>
                             </div>
 
                             <div class="assignment-row">
                                 <div class="col-isi-komponen"></div>
-                                <div class="col-isi-tanggal"></div>
-                                <div class="col-isi-jam"></div>
+                                <div class="col-isi-bobot"></div>
+                                <div class="col-isi-keterangan"></div>
                             </div>
                         </div>
 
-                        <a href="dashboard-nilai-mahasiswa.html"> <div class="kembali">Kembali</div> </a>
-
-<<<<<<< Updated upstream:src/main/resources/templates/nilai/Mahasiswa/jadwal-penilaian-mahasiswa.html
-=======
-                        <a href="dashboard-nilai-mahasiswa.html"> <div class="kembali">Kembali</div> </a>
-
->>>>>>> Stashed changes:src/main/resources/templates/nilai/Mahasiswa/rubrik-penilaian-mahasiswa.html
+                        <div class="total-bobot">
+                                <div class="total">Total Bobot</div>
+                                <div class="bobot">-</div> 
+                        </div>
                     </div>
                 </div>
             </div>
