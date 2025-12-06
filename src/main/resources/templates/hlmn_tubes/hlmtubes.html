@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tugas Besar Tahap 1</title>
+    <title th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar'}">Tugas Besar</title>
     <link rel="stylesheet" href="/css/hlmtubes-styles.css">
+    <link rel="stylesheet" href="/css/kelola-anggota-complete.css">
     <script src="/js/sidebar-hlmtubes.js" defer></script>
     <script src="/js/kelola-Anggota.js" defer></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
 </head>
 <body>
     <!-- Sidebar -->
@@ -28,14 +28,14 @@
         <div class="menu-bar">
             <div class="menu">
                 <ul class="menu-links">
-                    <li class="nav-link active">
-                        <a href="#">
+                    <li class="nav-link">
+                        <a th:href="@{/mahasiswa/dashboard}">
                             <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
                             <span class="text nav-text">Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-link">
-                        <a href="#">
+                    <li class="nav-link active">
+                        <a th:href="@{/mahasiswa/mata-kuliah}">
                             <img src="/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
                             <span class="text nav-text">Mata Kuliah</span>
                         </a>
@@ -52,23 +52,29 @@
             <div class="header-left"></div>
             <div class="header-right">
                 <div class="user-info">
-                    <div class="user-name" id="current-user-name">Keisha Neira Jocelyn</div>
-                    <div class="user-role">Mahasiswa</div>
+                    <div class="user-name" id="current-user-name" th:text="${user.nama}">Nama User</div>
+                    <div class="user-role" th:text="${user.role}">Role</div>
                 </div>
-                <div class="user-avatar"> <!--pfp-->
+                <div class="user-avatar">
                     <img src="/icon/pfp.png" alt="useravtr">
                 </div>
-                <div class="notification-icon"><!--logout but-->
+                <div class="notification-icon">
                     <img src="/icon/logout.png" alt="logouticon">
                 </div>
             </div>
         </div>
 
         <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab">Kuliah</button>
-            <button class="tab">Daftar Peserta</button>
-            <button class="tab">Nilai</button>
+        <div class="mk-tab" th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}">
+            <button class="tab active" data-tab-target="kuliah" 
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK})}'|">
+                Kuliah
+            </button>
+            <button class="tab" data-tab-target="peserta" 
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|">
+                Daftar Peserta
+            </button>
+            <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
         <!-- Card Container -->
@@ -78,7 +84,7 @@
                 <div class="book-icon">
                     <img src="/icon/open-book.png" alt="bookiconbig">
                 </div>
-                <h1>Tugas Besar Tahap 1</h1>
+                <h1 th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar'}">Tugas Besar</h1>
             </div>
 
             <!-- Content Card -->
@@ -87,34 +93,51 @@
                 <!-- VIEW 1: Deskripsi Tugas (Default View) -->
                 <div id="view-deskripsi" class="view-content active">
                     <div class="breadcrumb">
-                        Daftar Mata Kuliah <span>></span> Artificial Intelligence <span>></span> Tugas Besar Tahap 1
+                        Daftar Mata Kuliah <span>></span> 
+                        <span th:text="${mkDetail != null ? mkDetail.nama : 'Mata Kuliah'}">Mata Kuliah</span> 
+                        <span>></span> 
+                        <span th:text="${tugas != null ? tugas.judulTugas : 'Tugas'}">Tugas</span>
                     </div>
 
                     <div class="content-header">
                         <div class="folder-icon">
                             <img src="/icon/blue-folder.png" alt="foldericon">
                         </div>
-                        <h2>Tugas Besar Tahap 1</h2>
+                        <h2 th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar'}">Tugas Besar</h2>
                     </div>
 
-                    <p class="content-description">
-                        Pada tugas ini Anda diminta untuk membuat program yang dapat membantu mahasiswa untuk menghitung nilai IPK mereka.
+                    <p class="content-description" th:text="${tugas != null ? tugas.deskripsi : 'Deskripsi tugas'}">
+                        Deskripsi tugas
                     </p>
 
                     <p class="content-description">
-                        Tugas ini dilakukan berkelompok sebanyak 5 orang dan kelompok ditentukan oleh Mahasiswa.
+                        <span th:text="|Tugas ini dilakukan berkelompok sebanyak ${maxAnggota} orang.|">
+                            Tugas ini dilakukan berkelompok.
+                        </span>
                     </p>
 
-                    <div class="group-info">
-                        <strong>Kelompok Anda:</strong> Kelompok 1
+                    <div class="group-info" th:if="${jumlahAnggota > 0}">
+                        <strong>Anggota Kelompok Anda:</strong> 
+                        <span th:text="${jumlahAnggota} + ' dari ' + ${maxAnggota} + ' anggota'">0 dari 5 anggota</span>
                     </div>
 
                     <div class="deadline-section">
                         <div class="deadline">
-                            Deadline : Senin, 27 November 2025
+                            Deadline : 
+                            <span th:text="${tugas != null ? #temporals.format(tugas.deadline, 'EEEE, dd MMMM yyyy', new java.util.Locale('id', 'ID')) : '-'}">
+                                -
+                            </span>
                         </div>
-                        <button class="manage-btn" id="btn-kelola-anggota">Kelola Anggota</button>
+                        <button class="manage-btn" id="btn-kelola-anggota" 
+                                th:disabled="${!isLeader}">
+                            Kelola Anggota
+                        </button>
                     </div>
+
+                    <!-- Warning jika bukan leader -->
+                    <p class="warning-text" th:if="${!isLeader}" style="display: block;">
+                        *Hanya ketua kelompok yang dapat mengelola anggota!
+                    </p>
                 </div>
 
                 <!-- VIEW 2: Anggota Kelompok -->
@@ -123,27 +146,33 @@
                         <h2>Anggota Kelompok</h2>
                     </div>
 
-                    <!-- List Anggota -->
+                    <!-- List Anggota (akan diisi oleh JavaScript) -->
                     <div class="member-list" id="member-list">
-                        <!-- Member items will be inserted here by JavaScript -->
+                        <p class="no-members">Memuat data anggota...</p>
                     </div>
 
                     <!-- Member Counter -->
                     <div class="member-counter" id="member-counter">
-                        1/5 Anggota
+                        <span th:text="${jumlahAnggota} + '/' + ${maxAnggota} + ' Anggota'">
+                            0/5 Anggota
+                        </span>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
                         <button class="btn-secondary" id="btn-kembali-anggota">Kembali</button>
                         <div class="right-buttons">
-                            <button class="btn-primary" id="btn-tambah-anggota">Tambah</button>
+                            <button class="btn-primary" id="btn-tambah-anggota" 
+                                    th:disabled="${!isLeader}">
+                                Tambah
+                            </button>
                             <button class="btn-primary" id="btn-selesai-anggota">Selesai</button>
                         </div>
                     </div>
 
                     <!-- Warning untuk non-ketua -->
-                    <p class="warning-text" id="warning-non-ketua" style="display: none;">
+                    <p class="warning-text" id="warning-non-ketua" 
+                       th:style="${!isLeader ? 'display: block;' : 'display: none;'}">
                         *Anda tidak memiliki akses untuk mengelola anggota!
                     </p>
                 </div>
@@ -156,7 +185,7 @@
 
                     <!-- Search Input -->
                     <div class="search-section">
-                        <label for="search-mahasiswa">Masukan Nama:</label>
+                        <label for="search-mahasiswa">Masukkan Nama:</label>
                         <div class="search-input-wrapper">
                             <input 
                                 type="text" 
@@ -177,7 +206,9 @@
 
                     <!-- Member Counter -->
                     <div class="member-counter" id="member-counter-pilih">
-                        1/5 Anggota
+                        <span th:text="${jumlahAnggota} + '/' + ${maxAnggota} + ' Anggota'">
+                            0/5 Anggota
+                        </span>
                     </div>
 
                     <!-- Action Buttons -->
@@ -191,8 +222,12 @@
         </div>
     </div>
 
+    <!-- Hidden data untuk JavaScript -->
+    <input type="hidden" id="idTugas" th:value="${tugas != null ? tugas.idTugas : ''}" />
+    <input type="hidden" id="maxAnggota" th:value="${maxAnggota}" />
+    <input type="hidden" id="isLeader" th:value="${isLeader}" />
+
     <!-- Scripts -->
     <script src="/js/sidebar.js"></script>
-    <script src="/js/kelola-anggota.js"></script>
 </body>
 </html>

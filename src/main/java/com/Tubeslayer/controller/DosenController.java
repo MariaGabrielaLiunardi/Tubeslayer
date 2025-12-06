@@ -22,12 +22,14 @@ import com.Tubeslayer.service.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Controller
 public class DosenController {
@@ -37,6 +39,10 @@ public class DosenController {
     @Autowired private MataKuliahDosenRepository mkDosenRepo; 
     @Autowired(required = false) private RubrikNilaiRepository rubrikNilaiRepo;
     @Autowired(required = false) private MataKuliahMahasiswaRepository mkMahasiswaRepo; 
+    @Autowired(required = false) private KelompokRepository kelompokRepo;
+    @Autowired(required = false) private TugasBesarKelompokRepository tugasKelompokRepo;
+    @Autowired(required = false) private UserKelompokRepository userKelompokRepo;
+    @Autowired(required = false) private UserRepository userRepo;
 
     private final DashboardDosenService dashboardService;
     private final MataKuliahService mataKuliahService;
@@ -176,6 +182,259 @@ public class DosenController {
             System.err.println("Error saat menambah tugas: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", "Gagal menambahkan tugas: " + e.getMessage()));
+        }
+    }
+
+     @GetMapping("/api/kelompok/tugas/{idTugas}")
+    @ResponseBody
+    public ResponseEntity<?> getKelompokByTugas(@PathVariable Integer idTugas) {
+        try {
+            // Cek apakah tugas ada
+            TugasBesar tugas = tugasRepo.findById(idTugas)
+                .orElseThrow(() -> new Exception("Tugas tidak ditemukan"));
+
+            // Ambil semua relasi tugas_besar_kelompok untuk tugas ini
+            List<TugasBesarKelompok> tugasKelompokList = tugasKelompokRepo.findByIdTugas(idTugas);
+            
+            // Build response dengan detail kelompok dari database
+            List<Map<String, Object>> kelompokDetailList = tugasKelompokList.stream()
+                .map(tk -> {
+                    Kelompok kelompok = tk.getKelompok();
+                    Map<String, Object> detail = new HashMap<>();
+                    
+                    detail.put("id_kelompok", kelompok.getIdKelompok());
+                    detail.put("nama_kelompok", kelompok.getNamaKelompok());
+                    detail.put("id_tugas", idTugas);
+                    
+                    // Ambil semua anggota kelompok dari user_kelompok
+                    List<UserKelompok> anggotaList = userKelompokRepo.findByKelompok_IdKelompok(kelompok.getIdKelompok());
+                    detail.put("jumlah_anggota", anggotaList.size());
+                    
+                    // Cari ketua kelompok (role = 'leader')
+                    UserKelompok ketua = anggotaList.stream()
+                        .filter(uk -> "leader".equalsIgnoreCase(uk.getRole()))
+                        .findFirst()
+                        .orElse(null);
+                    
+                    if (ketua != null) {
+                        detail.put("nama_ketua", ketua.getUser().getNama());
+                        detail.put("id_user_ketua", ketua.getUser().getIdUser());
+                    } else {
+                        detail.put("nama_ketua", "N/A");
+                        detail.put("id_user_ketua", null);
+                    }
+                    
+                    detail.put("max_anggota", tugas.getMaxAnggota());
+                    detail.put("min_anggota", tugas.getMinAnggota());
+                    
+                    return detail;
+                })
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok(kelompokDetailList);
+            
+        } catch (Exception e) {
+            System.err.println("Error getting kelompok: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * POST - Buat kelompok baru dan simpan ke database
+     */
+    @PostMapping("/api/kelompok")
+    @ResponseBody
+    public ResponseEntity<?> createKelompok(@RequestBody Map<String, Object> request) {
+        try {
+            Integer idTugas = (Integer) request.get("id_tugas");
+            String namaKelompok = (String) request.get("nama_kelompok");
+            String idUserKetua = (String) request.get("id_user_ketua");
+
+            // Validasi input
+            if (idTugas == null || namaKelompok == null || idUserKetua == null) {
+                throw new Exception("Data tidak lengkap");
+            }
+
+            // Cek apakah tugas ada di database
+            TugasBesar tugas = tugasRepo.findById(idTugas)
+                .orElseThrow(() -> new Exception("Tugas tidak ditemukan"));
+
+            // Cek apakah user ketua ada di database
+            User ketua = userRepo.findById(idUserKetua)
+                .orElseThrow(() -> new Exception("User tidak ditemukan"));
+
+            // Validasi role user harus mahasiswa
+            if (!"Mahasiswa".equalsIgnoreCase(ketua.getRole())) {
+                throw new Exception("Ketua kelompok harus seorang mahasiswa");
+            }
+
+            // 1. Buat kelompok baru di tabel kelompok
+            Kelompok kelompokBaru = new Kelompok();
+            kelompokBaru.setNamaKelompok(namaKelompok);
+            kelompokRepo.save(kelompokBaru);
+
+            // 2. Hubungkan kelompok dengan tugas di tabel tugas_besar_kelompok
+            TugasBesarKelompok tugasKelompok = new TugasBesarKelompok();
+            tugasKelompok.setIdKelompok(kelompokBaru.getIdKelompok());
+            tugasKelompok.setIdTugas(idTugas);
+            tugasKelompok.setKelompok(kelompokBaru);
+            tugasKelompok.setTugas(tugas);
+            tugasKelompokRepo.save(tugasKelompok);
+
+            // 3. Tambahkan ketua ke kelompok di tabel user_kelompok
+            UserKelompok userKelompok = new UserKelompok();
+            userKelompok.setUser(ketua);
+            userKelompok.setKelompok(kelompokBaru);
+            userKelompok.setRole("leader");
+            userKelompok.set_active(true);
+            userKelompokRepo.save(userKelompok);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("id_kelompok", kelompokBaru.getIdKelompok());
+            response.put("nama_kelompok", namaKelompok);
+            response.put("message", "Kelompok berhasil dibuat");
+
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            System.err.println("Error creating kelompok: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * POST - Hapus kelompok dari database (cascade delete)
+     */
+    @PostMapping("/api/kelompok/{idKelompok}")
+    @ResponseBody
+    public ResponseEntity<?> deleteKelompok(@PathVariable Integer idKelompok) {
+        try {
+            // Cek apakah kelompok ada di database
+            Kelompok kelompok = kelompokRepo.findById(idKelompok)
+                .orElseThrow(() -> new Exception("Kelompok tidak ditemukan"));
+
+            // 1. Hapus relasi user_kelompok terlebih dahulu
+            List<UserKelompok> userKelompokList = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
+            if (!userKelompokList.isEmpty()) {
+                userKelompokRepo.deleteAll(userKelompokList);
+            }
+
+            // 2. Hapus relasi tugas_besar_kelompok
+            List<TugasBesarKelompok> tugasKelompokList = tugasKelompokRepo.findByIdKelompok(idKelompok);
+            if (!tugasKelompokList.isEmpty()) {
+                tugasKelompokRepo.deleteAll(tugasKelompokList);
+            }
+
+            // 3. Hapus kelompok dari tabel kelompok
+            kelompokRepo.delete(kelompok);
+
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Kelompok berhasil dihapus"
+            ));
+            
+        } catch (Exception e) {
+            System.err.println("Error deleting kelompok: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * POST - Finalisasi kelompok untuk tugas (update status di database)
+     */
+    @PostMapping("/api/kelompok/finalisasi/{idTugas}")
+    @ResponseBody
+    public ResponseEntity<?> finalisasiKelompok(@PathVariable Integer idTugas) {
+        try {
+            // Cek apakah tugas ada di database
+            TugasBesar tugas = tugasRepo.findById(idTugas)
+                .orElseThrow(() -> new Exception("Tugas tidak ditemukan"));
+
+            // Update status tugas menjadi "Finalized"
+            tugas.setStatus("Finalized");
+            tugasRepo.save(tugas);
+
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Kelompok berhasil difinalisasi"
+            ));
+            
+        } catch (Exception e) {
+            System.err.println("Error finalizing kelompok: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * GET - Search mahasiswa by ID atau nama dari database
+     */
+    @GetMapping("/api/mahasiswa/search")
+    @ResponseBody
+    public ResponseEntity<?> searchMahasiswa(@RequestParam String q) {
+        try {
+            // Search mahasiswa dari database berdasarkan nama atau ID
+            // Query: WHERE role = 'Mahasiswa' AND (nama LIKE '%q%' OR id_user LIKE '%q%')
+            List<User> results = userRepo.findByRoleAndNamaContainingIgnoreCaseOrRoleAndIdUserContaining(
+                "Mahasiswa", q, "Mahasiswa", q
+            );
+
+            // Format response
+            List<Map<String, String>> response = results.stream()
+                .limit(10) // Limit hasil pencarian
+                .map(user -> {
+                    Map<String, String> userMap = new HashMap<>();
+                    userMap.put("id_user", user.getIdUser());
+                    userMap.put("nama", user.getNama());
+                    userMap.put("email", user.getEmail());
+                    return userMap;
+                })
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            System.err.println("Error searching mahasiswa: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * GET - Get detail tugas besar dari database
+     */
+    @GetMapping("/api/tugas/{idTugas}")
+    @ResponseBody
+    public ResponseEntity<?> getTugas(@PathVariable Integer idTugas) {
+        try {
+            TugasBesar tugas = tugasRepo.findById(idTugas)
+                .orElseThrow(() -> new Exception("Tugas tidak ditemukan"));
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("id_tugas", tugas.getIdTugas());
+            response.put("judul_tugas", tugas.getJudulTugas());
+            response.put("deskripsi", tugas.getDeskripsi());
+            response.put("max_anggota", tugas.getMaxAnggota());
+            response.put("min_anggota", tugas.getMinAnggota());
+            response.put("deadline", tugas.getDeadline().toString());
+            response.put("status", tugas.getStatus());
+            response.put("mode_kel", tugas.getModeKel());
+
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            System.err.println("Error getting tugas: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", e.getMessage()));
         }
     }
 }
