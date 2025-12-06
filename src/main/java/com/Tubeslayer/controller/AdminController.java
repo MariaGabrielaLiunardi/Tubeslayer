@@ -52,27 +52,27 @@ public class AdminController {
     @GetMapping("/admin/menu-awal-ad")
     public String menuAwalAdmin(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
-        return "admin/menu-awal-ad";
+        return "admin/menu-awal-ad"; // templates/admin/menu-awal-ad.html
     }
 
-    // ============================
-    // HALAMAN ADMIN LAINNYA
-    // ============================
     @GetMapping("/admin/kelola-mata-kuliah")
     public String kelolaMataKuliah(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
-        return "admin/kelola-mata-kuliah";
+        return "admin/kelola-mata-kuliah"; 
+        // templates/admin/mata-kuliah.html
     }
 
     @GetMapping("/admin/kelola-dosen")
     public String kelolaDosen(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
-        return "admin/kelola-dosen";
+        return "admin/kelola-dosen"; 
+        // templates/admin/dosen.html
     }
 
     @GetMapping("/admin/kelola-mahasiswa")
     public String kelolaMahasiswa(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
-        return "admin/kelola-mahasiswa";
+        return "admin/kelola-mahasiswa"; 
+        // templates/admin/mahasiswa.html
     }
 }

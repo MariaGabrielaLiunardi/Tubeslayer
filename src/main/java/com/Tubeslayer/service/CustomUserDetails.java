@@ -19,6 +19,10 @@ public class CustomUserDetails implements UserDetails {
         return user.getIdUser(); 
     }
 
+    public User getUser() { 
+        return this.user;
+    }
+
     public String getNama() { return user.getNama(); }
 
     public String getRole() { return user.getRole(); }
