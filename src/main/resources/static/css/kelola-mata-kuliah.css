@@ -1,5 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap');
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow-y: auto;
+    overflow-x: auto;
+    
+    background: linear-gradient(
+        360deg, 
+        rgba(255, 241, 235, 1) 0%,
+        rgba(172, 224, 249, 1) 50%, 
+        rgba(172, 224, 249, 1) 100% /* area scroll */
+    ) !important;
+
+    min-height: 100vh;
+    background-attachment: scroll; 
+    background-size: 100% 100%; /* gradien seluruh bagian */
+    background-repeat: no-repeat;
+}
+
 * {
     box-sizing: border-box;
     max-width: 100%;
@@ -14,11 +37,6 @@
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
-}
-
-body{
-    height: 100vh;
-    overflow-x: hidden;
 }
 
 /* === SIDEBAR === */
@@ -66,6 +84,17 @@ body{
     list-style: none;
     display: flex;
     align-items: center;
+}
+
+.sidebar li a.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
+}
+
+
+.sidebar li.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
 }
 
 .sidebar li .icon{
@@ -280,7 +309,6 @@ header .image-text .header-text{
 /* --- Reset & Font Dasar --- */
 .content-section {
     padding: 20px;
-    font-family: 'Poppins', sans-serif;
 }
 
 /* --- Header & Navigasi Atas --- */
@@ -383,11 +411,11 @@ header .image-text .header-text{
 .table-header-row,
 .data-row {
     display: grid;
-    grid-template-columns: 10% 20% 45% 25%;
+    grid-template-columns:10% 20% 30% 20% 20%;
     padding: 10px;
     align-items: center;
     text-align: center;     
-    font-size: 17px;
+    font-size: 14px;
 }
 
 .data-row {
@@ -520,7 +548,7 @@ header .image-text .header-text{
 }
 
 .tambah-matkul-content {
-    width: 600px;
+    width: 500px;
     background: #FFF1EB;
     padding: 25px 30px;
     border-radius: 16px;
@@ -528,7 +556,8 @@ header .image-text .header-text{
 
     display: flex;
     flex-direction: column;  
-    margin-top: -30px;     
+    margin-top: 5px;     
+    font-size: 14px;
             
 }
 
@@ -536,20 +565,20 @@ header .image-text .header-text{
 #tambah-matkul-form {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* jarak antar elemen */
+    gap: 5px; /* jarak antar elemen */
    
 }
 
 /* Label */
 #tambah-matkul-form label {
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0px;
 }
 
 /* Input & Select */
 #tambah-matkul-form input,
 #tambah-matkul-form select {
-    padding: 10px;
+    padding: 4px 8px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background: white;
@@ -567,7 +596,6 @@ header .image-text .header-text{
     width: 100%;
     flex-direction: column;
 }
-
 
 /* --- Untuk Hapus Mata Kuliah --- */
 /* Wrapper utama */

@@ -1,5 +1,41 @@
+/* ================= GLOBAL ================= */
+html, body {
+    height: 100%; 
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    overflow-y: hidden;
+    overflow-y: auto; 
+    overflow-x: auto;
+    
+    /* Perbaikan 1: Tetapkan warna background body utama ke biru */
+    background-color: rgba(172, 224, 249, 1); 
+
+    /* Gradient hanya untuk bagian atas yang terlihat */
+    background-image: linear-gradient(
+        180deg, 
+        /* Warna atas (kuning muda) */
+        rgba(255, 241, 235, 1) 0%, 
+        /* Biru dimulai di 50% */
+        rgba(172, 224, 249, 1) 50%, 
+        /* Biru berakhir di 100% */
+        rgba(172, 224, 249, 1) 100%
+    );
+
+    min-height: 100vh;
+    height: auto; 
+    
+    /* Perbaikan 2: Gradient menempel pada konten dan bisa di-scroll */
+    background-attachment: scroll; 
+    
+    /* Perbaikan 3: Gradient hanya setinggi 100vh dan tidak mengulang */
+    background-size: 100% 100vh; 
+    background-repeat: no-repeat;
+}
+
+.home{
+    padding-top: 18px;
 }
 
 /* ================= MAIN ================= */
@@ -102,9 +138,5 @@ body {
     font-size: 20px;
     font-weight: normal;
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
-.home{
-    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%);
 }
 

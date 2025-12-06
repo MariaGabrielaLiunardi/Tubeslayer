@@ -1,8 +1,8 @@
 -- HAPUS database lama kalau ada
--- DROP DATABASE IF EXISTS tubeslayer;
+DROP DATABASE IF EXISTS tubeslayer;
 
 -- BIKIN database baru
--- CREATE DATABASE tubeslayer;
+CREATE DATABASE tubeslayer;
 
 -- PAKAI database tersebut
 USE tubeslayer;

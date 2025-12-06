@@ -139,6 +139,7 @@ uploadBtn.addEventListener("click", () => {
                 <span>No</span>
                 <span>Kode</span>
                 <span>Nama</span>
+                <span>SKS</span>
                 <span>Status</span>
             </div>
         `;
@@ -148,7 +149,8 @@ uploadBtn.addEventListener("click", () => {
             const no = index + 1;
             const kode = row[0] || "-";
             const nama = row[1] || "-";
-            const status = row[2] || "Aktif";
+            const sks = row[2] || "0";
+            const status = row[3] || "0";
 
             const div = document.createElement("div");
             div.classList.add("data-row");
@@ -156,6 +158,7 @@ uploadBtn.addEventListener("click", () => {
                 <span>${no}</span>
                 <span>${kode}</span>
                 <span>${nama}</span>
+                <span>${sks}</span>
                 <span>${status}</span>
             `;
             tableView.appendChild(div);
@@ -173,9 +176,8 @@ uploadBtn.addEventListener("click", () => {
     reader.readAsArrayBuffer(file);
 });
 
-
     //fungsi tambah ke tabel
-    function tambahKeTabel(kode, nama, status) {
+    function tambahKeTabel(kode, nama, sks, status) {
         const tableView = document.getElementById("table-view");
 
         // hitung jumlah data-row untuk menentukan nomor
@@ -186,10 +188,11 @@ uploadBtn.addEventListener("click", () => {
         const div = document.createElement("div");
         div.classList.add("data-row");
 
-        div.innerHTML = `
+       div.innerHTML = `
             <span>${no}</span>
             <span>${kode}</span>
             <span>${nama}</span>
+            <span>${sks}</span>  
             <span>${status}</span>
         `;
 
@@ -202,9 +205,10 @@ uploadBtn.addEventListener("click", () => {
 
         let kode = document.getElementById("kode-matkul").value;
         let nama = document.getElementById("nama-matkul").value;
+        let sks = document.getElementById("sks-matkul").value;
         let status = document.getElementById("status-matkul").value;
 
-        tambahKeTabel(kode, nama, status);
+        tambahKeTabel(kode, nama,sks, status);
 
         this.reset();
         manualView.style.display = "none";
@@ -212,9 +216,14 @@ uploadBtn.addEventListener("click", () => {
 
     });
 
+   /* ===============================
+   6. HAPUS MATA KULIAH  
+================================ */
+
+
     //Bagian Hapus Mata kuliah
     const mataKuliah = [
-    "Algoritma dan Struktur Data",
+    "Algoritma",
     "Pemrograman Web",
     "Dasar Pemrograman",
     "Matematika Diskrit",
@@ -226,6 +235,7 @@ uploadBtn.addEventListener("click", () => {
     const input = document.getElementById("search-input");
     const suggestionsBox = document.getElementById("suggestions");
     const btnHapus = document.getElementById("btn-delete");
+    const btnBatal = document.getElementById("btn-cancel-delete");
     let selectedMK = null;
     searchHapus.style.display = "none";
 
@@ -237,9 +247,16 @@ uploadBtn.addEventListener("click", () => {
         subTitle.textContent = " > Hapus Mata Kuliah";
     });
 
-input.addEventListener("input", () => {
-    const keyword = input.value.toLowerCase();
-    suggestionsBox.innerHTML = "";
+    btnBatal.addEventListener("click", () => {
+        searchHapus.style.display = "none";
+        tableView.style.display = "block";
+        footerView.style.display = "flex";
+        searchbar.style.display = "block";
+    });
+
+    input.addEventListener("input", () => {
+        const keyword = input.value.toLowerCase();
+        suggestionsBox.innerHTML = "";
 
     if (keyword.length === 0) {
         suggestionsBox.style.display = "none";
