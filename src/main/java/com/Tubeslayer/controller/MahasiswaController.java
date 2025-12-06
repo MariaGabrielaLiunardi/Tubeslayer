@@ -1,53 +1,57 @@
 package com.Tubeslayer.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.Tubeslayer.repository.MataKuliahRepository;
 import com.Tubeslayer.repository.TugasBesarRepository;
 import com.Tubeslayer.repository.MataKuliahMahasiswaRepository;
 import com.Tubeslayer.repository.MataKuliahDosenRepository; 
+
+import java.util.List;
+import java.util.Optional; 
+import java.util.Collections;
+
+import com.Tubeslayer.entity.MataKuliah;
 import com.Tubeslayer.entity.MataKuliahDosen; 
 import com.Tubeslayer.entity.MataKuliahMahasiswa;
 import com.Tubeslayer.entity.TugasBesar;
-import com.Tubeslayer.entity.MataKuliah; // Import yang benar
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 
 import com.Tubeslayer.service.CustomUserDetails;
 import com.Tubeslayer.service.DashboardMahasiswaService;
 import com.Tubeslayer.service.MataKuliahService;
+import com.Tubeslayer.entity.MataKuliah;
 
-import java.util.List;
-import java.util.Collections;
-import java.util.Optional; 
+import java.util.List; 
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors; // Tambah import ini untuk MataKuliahDosen::getMataKuliah
 
 @Controller
 public class MahasiswaController {
 
-    // --- DEPENDENSI MENGGUNAKAN FINAL ---
-    private final MataKuliahRepository mataKuliahRepo;
-    private final TugasBesarRepository tugasRepo;
-    private final MataKuliahMahasiswaRepository mkmRepo;
-    private final MataKuliahDosenRepository mkDosenRepo;
+    @Autowired
+    private MataKuliahRepository mataKuliahRepo;
+
+    @Autowired
+    private TugasBesarRepository tugasRepo;
+
+    @Autowired
+    private MataKuliahMahasiswaRepository mkmRepo;
+    
+    @Autowired 
+    private MataKuliahDosenRepository mkDosenRepo;
+
     private final DashboardMahasiswaService dashboardService;
     private final MataKuliahService mataKuliahService;
 
-    // --- CONSTRUCTOR INJECTION ---
-    public MahasiswaController(MataKuliahRepository mataKuliahRepo,
-                               TugasBesarRepository tugasRepo,
-                               MataKuliahMahasiswaRepository mkmRepo,
-                               MataKuliahDosenRepository mkDosenRepo,
-                               DashboardMahasiswaService dashboardService,
+    public MahasiswaController(DashboardMahasiswaService dashboardService,
                                MataKuliahService mataKuliahService) {
-        this.mataKuliahRepo = mataKuliahRepo;
-        this.tugasRepo = tugasRepo;
-        this.mkmRepo = mkmRepo;
-        this.mkDosenRepo = mkDosenRepo;
         this.dashboardService = dashboardService;
         this.mataKuliahService = mataKuliahService;
     }
@@ -58,6 +62,8 @@ public class MahasiswaController {
         model.addAttribute("user", user);
 
         LocalDate today = LocalDate.now();
+        model.addAttribute("tanggal", today.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
+
         int year = today.getYear();
         String semesterTahunAjaran;
         String semesterLabel;
@@ -74,30 +80,15 @@ public class MahasiswaController {
         
         model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
         model.addAttribute("semesterLabel", semesterLabel);
-
-        // Tambahan untuk DashboardService
+        int month = today.getMonthValue();
         String tahunAkademik;
-        if (today.getMonthValue() >= 7) {
+        if (month >= 7) {
             tahunAkademik = year + "/" + (year + 1);
         } else {
             tahunAkademik = (year - 1) + "/" + year;
         }
         model.addAttribute("semester", tahunAkademik);
-    }
-    // ----------------------------------------------------
 
-    @GetMapping("/mahasiswa/dashboard")
-    public String dashboard(@AuthenticationPrincipal CustomUserDetails user, Model model) {
-        model.addAttribute("user", user);
-        
-        LocalDate today = LocalDate.now();
-        model.addAttribute("tanggal", today.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
-        
-        addSemesterAttributes(model); // Panggil utility untuk semester
-
-        String tahunAkademik = (String) model.getAttribute("semester");
-        
-        // Logika dashboardService
         int jumlahMk = dashboardService.getJumlahMkAktif(user.getIdUser(), tahunAkademik);
         int jumlahTb = dashboardService.getJumlahTbAktif(user.getIdUser());
         model.addAttribute("jumlahMk", jumlahMk);
@@ -121,7 +112,25 @@ public class MahasiswaController {
         model.addAttribute("enrollList", enrollList);
         model.addAttribute("user", user);
 
-        addSemesterAttributes(model); // Panggil utility untuk semester
+        // --- LOGIC SEMESTER (SALINAN DARI DASHBOARD) ---
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        String semesterTahunAjaran; 
+        String semesterLabel; 
+
+        semesterTahunAjaran = (today.getMonthValue() >= 7) ?
+                year + "/" + (year + 1) :
+                (year - 1) + "/" + year;
+        
+        if (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) { 
+            semesterLabel = "Ganjil"; 
+        } else {
+            semesterLabel = "Genap";
+        }
+        
+        model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
+        model.addAttribute("semesterLabel", semesterLabel);
+        // --------------------------------------------------------
 
         return "mahasiswa/mata-kuliah";
     }
@@ -143,12 +152,14 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // --- LOGIC MENGAMBIL KOORDINATOR DOSEN ---
+        // --- KOREKSI: LOGIC MENGAMBIL KOORDINATOR DOSEN ---
         MataKuliahDosen koordinator = null;
         
         try {
+            // Ambil semua dosen yang mengajar MK ini
             List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
             if (!dosenList.isEmpty()) {
+                // Ambil dosen pertama sebagai koordinator
                 koordinator = dosenList.get(0); 
             }
         } catch (Exception e) {
@@ -186,6 +197,7 @@ public class MahasiswaController {
         // --- 1. MENGAMBIL DATA KOORDINATOR ---
         MataKuliahDosen koordinator = null;
         try {
+            // Re-use logic for fetching coordinator
             List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
@@ -200,6 +212,7 @@ public class MahasiswaController {
         // --- 2. MENGAMBIL DATA PESERTA ---
         List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
         
+        // Asumsi: findByMataKuliah_KodeMKAndIsActive ada di MataKuliahMahasiswaRepository
         if (mkmRepo != null) {
             try {
                 listPeserta = mkmRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 

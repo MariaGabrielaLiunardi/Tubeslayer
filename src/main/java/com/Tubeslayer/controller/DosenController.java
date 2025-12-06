@@ -70,23 +70,34 @@ public class DosenController {
         return "dosen/dashboard";
     }
 
-    @GetMapping("/dosen/mata-kuliah")
-    public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model model) {
-        String idDosen = user.getIdUser(); 
-        List<MataKuliahDosen> relasiMKDosen = mkDosenRepo.findById_IdUserAndIsActive(idDosen, true);
-        
-        model.addAttribute("mataKuliahDosenList", relasiMKDosen);
-        model.addAttribute("user", user);
+ @GetMapping("/dosen/mata-kuliah")
+public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+    
+    String idDosen = user.getIdUser(); 
+    List<MataKuliahDosen> relasiMKDosen = mkDosenRepo.findById_IdUserAndIsActive(idDosen, true);
+    
+    model.addAttribute("mataKuliahDosenList", relasiMKDosen);
+    model.addAttribute("user", user);
 
-        LocalDate today = LocalDate.now();
-        int year = today.getYear();
-        String semester = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) 
-                ? "Ganjil " + year + "/" + (year + 1)
-                : "Genap " + (year - 1) + "/" + year;
-        model.addAttribute("semesterTahunAjaran", semester); 
+    LocalDate today = LocalDate.now();
+    int year = today.getYear();
+    
+    // --- KOREKSI LOGIC PENGIRIMAN SEMESTER ---
+    // Hitung string lengkap (misalnya, "Ganjil 2025/2026")
+    String semesterPenuh = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) 
+            ? "Ganjil " + year + "/" + (year + 1)
+            : "Genap " + (year - 1) + "/" + year;
+            
+    // Kirim string lengkap ini ke Model
+    model.addAttribute("semesterTahunAjaran", semesterPenuh); 
+    
+    // Kirim juga label Ganjil/Genap jika template membutuhkannya (meskipun sekarang tidak terpakai)
+    String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
+    model.addAttribute("semesterLabel", semesterLabel);
+    // ------------------------------------------
 
-        return "dosen/mata-kuliah";
-    }
+    return "dosen/mata-kuliah";
+}
 
     @GetMapping("/dosen/matkul-detail")
     public String mkDetail(@RequestParam(required = false) String kodeMk, 
