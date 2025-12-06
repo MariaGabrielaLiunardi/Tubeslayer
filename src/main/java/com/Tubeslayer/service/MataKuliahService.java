@@ -28,6 +28,11 @@ public class MataKuliahService {
         return mataKuliahDosenRepository.findActiveByUserAndTahunAkademik(idUser, tahunAkademik, PageRequest.of(0, 4));
     }
 
+    public List<MataKuliah> getMataKuliahNonAktif() {
+        return mataKuliahRepository.findByIsActive(false);
+    }
+
+
     //@Autowired
     //private MataKuliahRepository mataKuliahRepository;
 

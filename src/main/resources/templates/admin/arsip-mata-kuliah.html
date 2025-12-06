@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubeslayer - Arsip</title>
+    
+    <link rel="stylesheet" href="/css/arsip-mata-kuliah.css">
+    <script src="/js/arsip-mata-kuliah.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+  <nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img src="/logo/blue-logo.png" alt="logo">
+            </span>
+
+            <div class="text header-text">
+                <span class="name">Tubeslayer</span>
+            </div>
+        </div>
+    </header>
+        <i class='bxr bx-chevron-right toggle'></i>
+    <div class="menu-bar">
+        <div class="menu">
+            <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="/admin/dashboard">
+                        <img src="/icon/dashboard.png" class="icon dashboard-icon">
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                   <a href="/admin/menu-awal-ad">
+                        <img src="/icon/database.png" class="icon database-icon">
+                        <span class="text nav-text">Data</span>
+                    </a>
+                </li>
+
+                <li class="nav-link active">
+                    <a href="/admin/arstip-mata-kuliah">
+                        <img src="/icon/archive.png" class="icon archive-icon">
+                        <span class="text nav-text">Arsip Mata Kuliah</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<section class="home">
+
+    <div class="header">
+        <div class="left-section">
+            <div class="judul">
+               <span class="dashboard-title">Arsip Mata Kuliah</span>
+            </div>
+        </div>
+
+         <div class="right-section">
+            <div class="info">
+                <span class="bold" th:text="${user.nama}">Nama</span>
+                <span th:text="${user.role}">Role</span>
+            </div>
+            <a th:href="@{/profil/profil}">
+                <img src="/icon/pfp.png" class="pfp" alt="pfp">
+            </a>
+            <a th:href="@{/logout}" class="logout-link">
+                <button type="button" class="logout">
+                    <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
+                </button>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="content-section">
+
+        <div class="arsip-banner">
+            <img src="/icon/archive-blue.png" alt="Icon Archive">
+            <h1>Arsip Mata Kuliah</h1>
+        </div>
+
+        <div class="list-container">
+
+            <div class="list-header">
+               <h3 id="list-title">
+                    Daftar Mata Kuliah 
+                    <span id="sub-title"></span>
+                    <span id="sub-title-2"></span>
+                </h3>
+                <div class="search-box" id ="search-bar">
+                    <input type="text" placeholder="Cari nama disini...">
+                    <i class='bx bx-search'></i>
+                </div>
+            </div>
+
+            <!-- VIEW 1: Tabel -->
+            <div class="custom-table-container" id="table-view">
+                <div class="table-header-row">
+                    <span>No</span>
+                    <span>Nama</span>
+                    <span>Tahun ajar</span>
+                </div>
+
+                <div id="data-container">
+                    <div class="data-row" 
+                        th:each="mk, iter : ${arsipMK}">
+                        <span th:text="${iter.index + 1}">1</span>
+                        <span th:text="${mk.nama}">Pemrograman</span>
+                        <span th:text="${mk.tahunAkademik}">2024/2025</span>
+                    </div>
+                </div>
+
+                <div class="pagination"
+                    th:if="${arsipMK != null and !arsipMK.isEmpty()}">
+                    <button class="page-arrow" id="prev-page" disabled>&lt;</button>
+                    <span class="page-info" id="current-page">0 dari 0</span>
+                    <button class="page-arrow" id="next-page">&gt;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

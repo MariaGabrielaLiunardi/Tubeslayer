@@ -15,6 +15,9 @@ from mata_kuliah_mahasiswa;
 select * 
 from user_table;  
 
+select * 
+from mata_kuliah; 
+
 select * from user_table; 
 
 show create table user_kelompok;
@@ -161,7 +164,19 @@ INSERT INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
 ('IF205', 'Sistem Operasi', 3, 1),
 ('IF301', 'Machine Learning', 3, 1),
 ('IF302', 'Kecerdasan Buatan', 3, 1),
-('IF303', 'Rekayasa Perangkat Lunak', 3, 1);
+('IF303', 'Rekayasa Perangkat Lunak', 3, 1); 
+
+INSERT INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
+('IF707', 'Sistem Big Data untuk Organisasi', 3, 0),
+('IF701', 'Rekayasa Perangkat Lunak', 4, 0), 
+('IF702', 'Statistika dengan R', 3, 0), 
+('IF703', 'Machine Learning', 3, 0); 
+
+SELECT *
+FROM mata_kuliah mk inner join mata_kuliah_dosen md on
+	mk.kode_mk = md.kode_mk
+WHERE 
+	mk.is_active = false;
 
 DESCRIBE tugas_besar;
 
@@ -204,6 +219,9 @@ INSERT INTO mata_kuliah_dosen VALUES
 ('6182301005', 'IF204', 'A', 2, '2025/2026', 1),
 ('6182301005', 'IF301', 'C', 3, '2025/2026', 1),
 ('6182301005', 'IF303', 'B', 3, '2025/2026', 1);
+
+INSERT INTO mata_kuliah_dosen VALUES
+('6182301001', 'IF707', 'A', 1, '2023/2024', 1); 
 
 INSERT INTO mata_kuliah_mahasiswa VALUES
 ('6182301002','IF101','A',1,'2025/2026',1),
