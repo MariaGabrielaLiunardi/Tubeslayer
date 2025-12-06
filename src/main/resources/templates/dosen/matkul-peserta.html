@@ -92,7 +92,7 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Mata Kuliah</span> > <b>Daftar Peserta</b>
+                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Mata Kuliah</span> > Daftar Peserta
             </div>
             
             <div class="search-and-count">
@@ -120,11 +120,11 @@
                                 
                                 <td th:text="${iStat.count} + '.'">1.</td>
                                 
-                                <td th:text="${pesertaRel.user.nama}">Marsella Moretta</td>
+                                <td th:text="${pesertaRel.user.nama}">Nama</td>
                                 
-                                <td th:text="${pesertaRel.user.idUser}">6182301058</td>
+                                <td th:text="${pesertaRel.user.idUser}">XXXXX</td>
                                 
-                                <td class="role-peserta" th:text="${pesertaRel.kelas}">A</td>
+                                <td class="role-peserta" th:text="${pesertaRel.kelas}">X</td>
                             </tr>
                             
                             <tr th:if="${pesertaList.empty}">

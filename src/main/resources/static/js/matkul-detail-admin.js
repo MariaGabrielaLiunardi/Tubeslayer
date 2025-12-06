@@ -53,10 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
     
     // Baris DATA (yang memiliki 4 kolom, hasil render Thymeleaf)
-    const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
+    const masterDataRows = allTableRows.filter(row => row.children.length === 2); 
     
     // Baris pesan "Tidak ada peserta terdaftar..." (baris dengan colspan)
-    const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null; 
+    const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 2) : null; 
     
     let filteredPageItems = masterDataRows;
     
@@ -140,15 +140,13 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             // Filter baris berdasarkan Nama (Cell index 1) atau NIM (Cell index 2)
             filteredPageItems = masterDataRows.filter(row => {
-                if (row.cells.length < 3) return false;
+                if (row.cells.length < 2) return false;
                 
                 const nameCell = row.cells[1]; 
-                const nimCell = row.cells[2];  
                 
                 const matchesName = nameCell && nameCell.textContent.toLowerCase().includes(query);
-                const matchesNim = nimCell && nimCell.textContent.toLowerCase().includes(query);
 
-                return matchesName || matchesNim;
+                return matchesName; 
             });
         }
         

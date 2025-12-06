@@ -139,17 +139,17 @@ public String kelolaArsipMatkulDetail(
     }
     
     // 3. Menghitung Metrik Tugas
-    List<Map<String, Object>> tugasData = tugasList.stream().map(tugas -> {
-        // ... (logic Map.of / HashMap) ...
-        int idTugas = tugas.getIdTugas();
-        long kelompokCount = tugasRepo.getKelompokCount(idTugas); 
-        long submissionCount = tugasRepo.getSubmissionCount(idTugas);
-
+   List<Map<String, Object>> tugasData = tugasList.stream().map(tugas -> {
+        
         Map<String, Object> map = new java.util.HashMap<>(); 
         map.put("judulTugas", tugas.getJudulTugas());
-        map.put("idTugas", idTugas);
-        map.put("kelompokCount", kelompokCount);
-        map.put("submissionCount", submissionCount);
+        map.put("idTugas", tugas.getIdTugas()); // ID tetap berguna untuk navigasi detail tugas
+        
+        // Nilai default 0 tetap dipertahankan di Map (atau dihapus) untuk menjaga konsistensi Map
+        // Jika Map tidak memerlukan field ini, Anda bisa menghapusnya, tapi lebih aman tetap ada:
+        map.put("kelompokCount", 0); 
+        map.put("submissionCount", 0);
+        
         return map;
     }).collect(Collectors.toList());
 

@@ -107,7 +107,7 @@
             </div>
 
             <div class="breadcrumb">
-                Arsip Mata Kuliah > <span th:text="${mkDetail?.nama}">Mata Kuliah</span> > <b>Daftar Tugas Besar</b>
+                Arsip Mata Kuliah > <span th:text="${mkDetail?.nama}">Mata Kuliah</span> > Daftar Tugas Besar
             </div>
 
             <div class="search-and-count">
@@ -126,8 +126,6 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Tugas Besar</th>
-                                <th>Kelompok</th>
-                                <th>Submission</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -137,13 +135,10 @@
 
                                 <td th:text="${data.judulTugas}">Tugas Besar Tahap 1</td>
 
-                                <td th:text="${data.kelompokCount}">0</td>
-
-                                <td th:text="${data.submissionCount}">0</td>
                             </tr>
 
                             <tr th:if="${tugasDataList.empty}">
-                                <td colspan="4" style="text-align: center;">Tidak ada Tugas Besar terarsip untuk mata
+                                <td colspan="2" style="text-align: center;">Tidak ada Tugas Besar terarsip untuk mata
                                     kuliah ini.</td>
                             </tr>
 
