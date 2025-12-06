@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
-    <link rel="stylesheet" href="/css/matkul-peserta.css"> 
+    <link rel="stylesheet" href="/css/matkul-peserta.css">
     <link rel="icon" href="/logo/blue-logo.png" type="image/png">
-    
+
     <script src="/js/dash-user.js" defer></script>
-    <script src="/js/matkul-peserta-mhs.js" defer></script> <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <script src="/js/matkul-detail-admin.js" defer></script>
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -34,16 +35,23 @@
             <div class="menu">
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a th:href="@{/mahasiswa/dashboard}">
+                        <a th:href="@{/admin/dashboard}">
                             <img src="/icon/dashboard.png" class="icon">
                             <span class="text nav-text">Dashboard</span>
                         </a>
                     </li>
 
+                    <li class="nav-link">
+                        <a th:href="@{/admin/menu-awal-ad}">
+                            <img src="/icon/database.png" class="icon">
+                            <span class="text nav-text">Data</span>
+                        </a>
+                    </li>
+
                     <li class="nav-link active">
-                        <a th:href="@{/mahasiswa/mata-kuliah}">
-                            <img src="/icon/open-book.png" class="icon">
-                            <span class="text nav-text">Mata Kuliah</span>
+                        <a href="#">
+                            <img src="/icon/archive.png" class="icon archive-icon">
+                            <span class="text nav-text">Arsip Mata Kuliah</span>
                         </a>
                     </li>
                 </ul>
@@ -55,27 +63,29 @@
 
         <div class="header">
             <div class="left-section">
-                <span class="dashboard-title">Mata Kuliah</span>
+                <span class="dashboard-title">Arsip Mata Kuliah</span>
             </div>
 
             <div class="right-section">
                 <div class="info">
-                    <span class="name" th:text="${user.nama}">Keisha Neira Jocelyn</span>
-                    <span class="role" th:text="${user.role}">Mahasiswa</span>
+                    <span class="name" th:text="${user.nama}">Nama Admin</span>
+                    <span class="role" th:text="${user.role}">Peran Admin</span>
                 </div>
+
                 <img src="/icon/pfp.png" class="pfp">
+
                 <button class="logout" id="logoutButton">
                     <img src="/icon/logout.png" class="logout-btn">
                 </button>
             </div>
         </div>
 
-        <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
-            <button class="tab" data-tab-target="kuliah"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK})}'|">
-                Kuliah
+        <div class="mk-tab" th:data-mk-kode="${mkDetail?.kodeMK}">
+            <button class="tab active" data-tab-target="kuliah">Kuliah</button>
+            <button class="tab" data-tab-target="peserta" 
+                    th:onclick="|window.location.href='@{/admin/matkul-peserta(kodeMk=${mkDetail?.kodeMK})}'|">
+                Daftar Peserta
             </button>
-            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button> 
             <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
@@ -84,73 +94,66 @@
             <div class="mk-header">
                 <div class="mk-img"></div>
                 <div class="mk-info">
-                    <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
-                    
-                    <p>
-                        <b>Koordinator:</b> 
-                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Clara Joycelyne Siauttara</span>
+                    <h1 th:text="${mkDetail?.nama ?: 'Mata Kuliah Tidak Ditemukan'}">Mata Kuliah</h1>
+
+                    <p><b>Koordinator:</b> 
+                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span>
                     </p>
-                    
-                    <p>
-                        <b>NIP:</b> 
+                        
+                    <p><b>NIP:</b> 
                         <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span>
                     </p>
                 </div>
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Artificial Intelligence</span> > <b>Daftar Peserta</b>
+                Arsip Mata Kuliah > <span th:text="${mkDetail?.nama}">Mata Kuliah</span> > <b>Daftar Tugas Besar</b>
             </div>
-            
+
             <div class="search-and-count">
                 <div class="search-box">
-                    <input type="text" placeholder="Cari nama disini...">
+                    <input type="text" placeholder="Cari nama tugas disini...">
                     <button><img src="/icon/search.png" alt="search"></button>
                 </div>
-                <span class="peserta-count" th:text="|Peserta: ${pesertaList.size()} peserta|">Peserta: 0 peserta</span>
+                <span class="peserta-count" th:text="|Total Tugas: ${tugasDataList.size()}|">Total Tugas: 0</span>
             </div>
 
             <div class="peserta-content">
-                
+
                 <div class="peserta-table-wrapper">
                     <table id="peserta-table">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama</th>
-                                <th>NIM</th>
-                                <th>Kelas</th> 
+                                <th>Nama Tugas Besar</th>
+                                <th>Kelompok</th>
+                                <th>Submission</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="pesertaRel, iStat : ${pesertaList}" class="page-item">
-                                
+                            <tr th:each="data, iStat : ${tugasDataList}" class="page-item">
+
                                 <td th:text="${iStat.count} + '.'">1.</td>
-                                
-                                <td th:text="${pesertaRel.user.nama}">Marsella Moretta</td>
-                                
-                                <td th:text="${pesertaRel.user.idUser}">6182301058</td>
-                                
-                                <td th:text="${pesertaRel.kelas}">A</td>
+
+                                <td th:text="${data.judulTugas}">Tugas Besar Tahap 1</td>
+
+                                <td th:text="${data.kelompokCount}">0</td>
+
+                                <td th:text="${data.submissionCount}">0</td>
                             </tr>
-                            
-                            <tr th:if="${pesertaList.empty}">
-                                <td colspan="4" style="text-align: center;">Tidak ada peserta terdaftar dalam mata kuliah ini.</td>
+
+                            <tr th:if="${tugasDataList.empty}">
+                                <td colspan="4" style="text-align: center;">Tidak ada Tugas Besar terarsip untuk mata
+                                    kuliah ini.</td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
 
-                <div class="pagination">
-                    <button class="page-arrow" id="prev-page" disabled>&lt;</button>
-                    <span class="page-info" id="current-page">0 dari 0</span>
-                    <button class="page-arrow" id="next-page">&gt;</button>
-                </div>
-
             </div>
-            
-        </div> 
+
+        </div>
     </section>
 
 </body>

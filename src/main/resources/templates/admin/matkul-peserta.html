@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
-    <link rel="stylesheet" href="/css/matkul-peserta.css"> 
+    <link rel="stylesheet" href="/css/matkul-peserta.css">
     <link rel="icon" href="/logo/blue-logo.png" type="image/png">
-    
+
     <script src="/js/dash-user.js" defer></script>
-    <script src="/js/matkul-peserta-mhs.js" defer></script> <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <script src="/js/matkul-peserta-admin.js" defer></script>
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -34,16 +35,23 @@
             <div class="menu">
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a th:href="@{/mahasiswa/dashboard}">
+                        <a th:href="@{/admin/dashboard}">
                             <img src="/icon/dashboard.png" class="icon">
                             <span class="text nav-text">Dashboard</span>
                         </a>
                     </li>
 
+                    <li class="nav-link">
+                        <a th:href="@{/admin/menu-awal-ad}">
+                            <img src="/icon/database.png" class="icon">
+                            <span class="text nav-text">Data</span>
+                        </a>
+                    </li>
+
                     <li class="nav-link active">
-                        <a th:href="@{/mahasiswa/mata-kuliah}">
-                            <img src="/icon/open-book.png" class="icon">
-                            <span class="text nav-text">Mata Kuliah</span>
+                        <a href="#">
+                            <img src="/icon/archive.png" class="icon archive-icon">
+                            <span class="text nav-text">Arsip Mata Kuliah</span>
                         </a>
                     </li>
                 </ul>
@@ -60,8 +68,8 @@
 
             <div class="right-section">
                 <div class="info">
-                    <span class="name" th:text="${user.nama}">Keisha Neira Jocelyn</span>
-                    <span class="role" th:text="${user.role}">Mahasiswa</span>
+                    <span class="name" th:text="${user.nama}">Nama</span>
+                    <span class="role" th:text="${user.role}">Role</span>
                 </div>
                 <img src="/icon/pfp.png" class="pfp">
                 <button class="logout" id="logoutButton">
@@ -72,10 +80,10 @@
 
         <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
             <button class="tab" data-tab-target="kuliah"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK})}'|">
+                th:onclick="|window.location.href='@{/admin/arsip-matkul-detail(kodeMk=${mkDetail.kodeMK})}'|">
                 Kuliah
             </button>
-            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button> 
+            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button>
             <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
@@ -85,23 +93,22 @@
                 <div class="mk-img"></div>
                 <div class="mk-info">
                     <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
-                    
                     <p>
-                        <b>Koordinator:</b> 
-                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Clara Joycelyne Siauttara</span>
+                        <b>Koordinator:</b>
+                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span>
                     </p>
-                    
+
                     <p>
-                        <b>NIP:</b> 
+                        <b>NIP:</b>
                         <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span>
                     </p>
                 </div>
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Artificial Intelligence</span> > <b>Daftar Peserta</b>
+                Arsip Mata Kuliah > <span th:text="${mkDetail?.nama}">Mata Kuliah</span> > <b>Daftar Tugas Besar</b>
             </div>
-            
+
             <div class="search-and-count">
                 <div class="search-box">
                     <input type="text" placeholder="Cari nama disini...">
@@ -111,33 +118,35 @@
             </div>
 
             <div class="peserta-content">
-                
+
                 <div class="peserta-table-wrapper">
                     <table id="peserta-table">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>NIM</th>
-                                <th>Kelas</th> 
+                                <th>NPM</th>
+                                <th>Kelas</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="pesertaRel, iStat : ${pesertaList}" class="page-item">
-                                
+                            <tr th:each="pesertaRel, iStat : ${pesertaList}" class="page-item"
+                                th:classappend="|page-${(iStat.index div 3) + 1}|">
+
                                 <td th:text="${iStat.count} + '.'">1.</td>
-                                
-                                <td th:text="${pesertaRel.user.nama}">Marsella Moretta</td>
-                                
-                                <td th:text="${pesertaRel.user.idUser}">6182301058</td>
-                                
-                                <td th:text="${pesertaRel.kelas}">A</td>
+
+                                <td th:text="${pesertaRel.user.nama}">Nama</td>
+
+                                <td th:text="${pesertaRel.user.idUser}">NPM</td>
+
+                                <td class="role-peserta" th:text="${pesertaRel.kelas}">Kelas</td>
                             </tr>
-                            
+
                             <tr th:if="${pesertaList.empty}">
-                                <td colspan="4" style="text-align: center;">Tidak ada peserta terdaftar dalam mata kuliah ini.</td>
+                                <td colspan="4" style="text-align: center;">Tidak ada peserta terdaftar dalam mata
+                                    kuliah ini.</td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -149,8 +158,8 @@
                 </div>
 
             </div>
-            
-        </div> 
+
+        </div>
     </section>
 
 </body>
