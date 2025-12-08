@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Tubeslayer - Daftar Peserta</title>
+    <title>Tubeslayer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
@@ -60,8 +60,8 @@
 
             <div class="right-section">
                 <div class="info">
-                    <span class="name" th:text="${user.nama}">Keisha Neira Jocelyn</span>
-                    <span class="role" th:text="${user.role}">Mahasiswa</span>
+                    <span class="name" th:text="${user.nama}">Nama</span>
+                    <span class="role" th:text="${user.role}">Role</span>
                 </div>
                 <img src="/icon/pfp.png" class="pfp">
                 <button class="logout" id="logoutButton">
@@ -88,7 +88,7 @@
                     
                     <p>
                         <b>Koordinator:</b> 
-                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Clara Joycelyne Siauttara</span>
+                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span>
                     </p>
                     
                     <p>
@@ -99,7 +99,7 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Artificial Intelligence</span> > <b>Daftar Peserta</b>
+                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Mata Kuliah</span> > Daftar Peserta
             </div>
             
             <div class="search-and-count">
@@ -127,11 +127,11 @@
                                 
                                 <td th:text="${iStat.count} + '.'">1.</td>
                                 
-                                <td th:text="${pesertaRel.user.nama}">Marsella Moretta</td>
+                                <td th:text="${pesertaRel.user.nama}">Nama</td>
                                 
-                                <td th:text="${pesertaRel.user.idUser}">6182301058</td>
+                                <td th:text="${pesertaRel.user.idUser}">XXXXX</td>
                                 
-                                <td th:text="${pesertaRel.kelas}">A</td>
+                                <td th:text="${pesertaRel.kelas}">X</td>
                             </tr>
                             
                             <tr th:if="${pesertaList.empty}">

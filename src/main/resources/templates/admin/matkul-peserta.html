@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
-    <link rel="stylesheet" href="/css/matkul-peserta.css"> 
+    <link rel="stylesheet" href="/css/matkul-peserta.css">
     <link rel="icon" href="/logo/blue-logo.png" type="image/png">
-    
+
     <script src="/js/dash-user.js" defer></script>
-    <script src="/js/matkul-peserta-dosen.js" defer></script> 
+    <script src="/js/matkul-peserta-admin.js" defer></script>
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -35,16 +35,23 @@
             <div class="menu">
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a th:href="@{/dosen/dashboard}">
+                        <a th:href="@{/admin/dashboard}">
                             <img src="/icon/dashboard.png" class="icon">
                             <span class="text nav-text">Dashboard</span>
                         </a>
                     </li>
 
+                    <li class="nav-link">
+                        <a th:href="@{/admin/menu-awal-ad}">
+                            <img src="/icon/database.png" class="icon">
+                            <span class="text nav-text">Data</span>
+                        </a>
+                    </li>
+
                     <li class="nav-link active">
-                        <a th:href="@{/dosen/mata-kuliah}">
-                            <img src="/icon/open-book.png" class="icon">
-                            <span class="text nav-text">Mata Kuliah</span>
+                        <a href="#">
+                            <img src="/icon/archive.png" class="icon archive-icon">
+                            <span class="text nav-text">Arsip Mata Kuliah</span>
                         </a>
                     </li>
                 </ul>
@@ -56,7 +63,7 @@
 
         <div class="header">
             <div class="left-section">
-                <span class="dashboard-title">Mata Kuliah</span>
+                <span class="dashboard-title">Arsip Mata Kuliah</span>
             </div>
 
             <div class="right-section">
@@ -71,12 +78,12 @@
             </div>
         </div>
 
-        <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}"> 
-            <button class="tab" data-tab-target="kuliah" 
-                    th:onclick="|window.location.href='@{/dosen/matkul-detail(kodeMk=${mkDetail.kodeMK})}'|">
+        <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
+            <button class="tab" data-tab-target="kuliah"
+                th:onclick="|window.location.href='@{/admin/arsip-matkul-detail(kodeMk=${mkDetail.kodeMK})}'|">
                 Kuliah
             </button>
-            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button> 
+            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button>
             <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
@@ -85,16 +92,23 @@
             <div class="mk-header">
                 <div class="mk-img"></div>
                 <div class="mk-info">
-                    <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1> 
-                    <p><b>Koordinator:</b> <span th:text="${user.nama}">Dosen</span></p>
-                    <p><b>NIP:</b> <span th:text="${user.idUser}">XXXXX</span></p>
+                    <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
+                    <p>
+                        <b>Koordinator:</b>
+                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span>
+                    </p>
+
+                    <p>
+                        <b>NIP:</b>
+                        <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span>
+                    </p>
                 </div>
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Mata Kuliah</span> > Daftar Peserta
+                Arsip Mata Kuliah > <span th:text="${mkDetail?.nama}">Mata Kuliah</span> > Daftar Peserta
             </div>
-            
+
             <div class="search-and-count">
                 <div class="search-box">
                     <input type="text" placeholder="Cari nama disini...">
@@ -104,7 +118,7 @@
             </div>
 
             <div class="peserta-content">
-                
+
                 <div class="peserta-table-wrapper">
                     <table id="peserta-table">
                         <thead>
@@ -112,25 +126,27 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>NPM</th>
-                                <th>Kelas</th> </tr>
+                                <th>Kelas</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="pesertaRel, iStat : ${pesertaList}" class="page-item" 
+                            <tr th:each="pesertaRel, iStat : ${pesertaList}" class="page-item"
                                 th:classappend="|page-${(iStat.index div 3) + 1}|">
-                                
+
                                 <td th:text="${iStat.count} + '.'">1.</td>
-                                
+
                                 <td th:text="${pesertaRel.user.nama}">Nama</td>
-                                
-                                <td th:text="${pesertaRel.user.idUser}">XXXXX</td>
-                                
-                                <td class="role-peserta" th:text="${pesertaRel.kelas}">X</td>
+
+                                <td th:text="${pesertaRel.user.idUser}">NPM</td>
+
+                                <td class="role-peserta" th:text="${pesertaRel.kelas}">Kelas</td>
                             </tr>
-                            
+
                             <tr th:if="${pesertaList.empty}">
-                                <td colspan="4" style="text-align: center;">Tidak ada peserta terdaftar dalam mata kuliah ini.</td>
+                                <td colspan="4" style="text-align: center;">Tidak ada peserta terdaftar dalam mata
+                                    kuliah ini.</td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -142,8 +158,8 @@
                 </div>
 
             </div>
-            
-        </div> 
+
+        </div>
     </section>
 
 </body>

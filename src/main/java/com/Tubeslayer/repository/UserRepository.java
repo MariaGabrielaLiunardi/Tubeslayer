@@ -9,6 +9,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmail(String email);
+
+    long countByRoleAndIsActive(String role, boolean isActive);
     
     /**
      * @param role1 role 1 = Mahasiswa

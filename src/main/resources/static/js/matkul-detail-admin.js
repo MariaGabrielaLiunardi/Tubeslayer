@@ -4,18 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
 
     const tabs = document.querySelectorAll('.mk-tab button');
-    
-    tabs.forEach(tab => {
-        const tabTarget = tab.getAttribute('data-tab-target');
 
-        if (tabTarget === 'kuliah' && mataKuliahId) {
-            tab.addEventListener('click', () => {
-                window.location.href = `/mahasiswa/matkul-detail?mk=${encodeURIComponent(mataKuliahId)}`;
-            });
-        }
-    });
-
-    // Logout
+    // Logika Logout 
     
     const handleLogout = () => {
         fetch('/logout', { method: 'POST' }) 
@@ -32,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutButton.addEventListener('click', handleLogout);
     }
     
-    // Search & Pagination
+    // Pencarian & Pagination 
 
     const searchBox = document.querySelector('.search-box');
     const searchInput = searchBox ? searchBox.querySelector('input[type="text"]') : null;
@@ -41,10 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const tableBody = document.querySelector('#peserta-table tbody');
     
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
+   
+    const masterDataRows = allTableRows.filter(row => row.children.length === 2); 
     
-    const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
-    
-    const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null; 
+    const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 2) : null; 
     
     let filteredPageItems = masterDataRows;
     
@@ -61,10 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const showPage = (page) => {
         const start = (page - 1) * itemsPerPage;
         const end = page * itemsPerPage;
-        
+    
         masterDataRows.forEach(item => {
             item.style.display = 'none';
         });
+
         filteredPageItems.forEach((item, index) => {
             if (index >= start && index < end) {
                 item.style.display = 'table-row';
@@ -80,10 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
         totalPages = Math.ceil(filteredPageItems.length / itemsPerPage);
         
         if (pesertaCountSpan) {
-            pesertaCountSpan.textContent = `Peserta: ${filteredPageItems.length} peserta`; 
+            pesertaCountSpan.textContent = `Tugas: ${filteredPageItems.length} tugas`; 
         }
         
-        // Hasil pencarian 0
+        // Gak ada datanya
         if (filteredPageItems.length === 0) {
             
             if (noDataRow) {
@@ -98,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Hasil pencarian > 0
+        // Ada datanya 
         if (noDataRow) {
             noDataRow.style.display = 'none'; 
         }
@@ -117,25 +108,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const query = searchInput.value.toLowerCase().trim();
         
         if (query === "") {
-            filteredPageItems = masterDataRows;
+            filteredPageItems = masterDataRows; 
         } else {
             filteredPageItems = masterDataRows.filter(row => {
-                if (row.cells.length < 3) return false;
+                if (row.cells.length < 2) return false;
                 
                 const nameCell = row.cells[1]; 
-                const nimCell = row.cells[2];  
                 
                 const matchesName = nameCell && nameCell.textContent.toLowerCase().includes(query);
-                const matchesNim = nimCell && nimCell.textContent.toLowerCase().includes(query);
 
-                return matchesName || matchesNim;
+                return matchesName; 
             });
         }
         
         updateUI(true); 
     };
-
-    // Event Listeners Search
     
     if (searchButton) {
         searchButton.addEventListener('click', handleSearch);
@@ -149,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Event Listeners Pagination
+    // Event Listener Pagination
     
     if (prevButton) {
         prevButton.addEventListener('click', () => {
@@ -168,6 +155,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-
+    
     updateUI(); 
 });

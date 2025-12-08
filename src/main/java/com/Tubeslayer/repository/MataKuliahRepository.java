@@ -14,6 +14,10 @@ public interface MataKuliahRepository extends JpaRepository<MataKuliah, String> 
     
     // Method untuk menghitung semua Mata Kuliah yang isActive = true
     long countByIsActive(boolean isActive); 
+   // Ambil semua mata kuliah yang aktif
+    List<MataKuliah> findByIsActiveTrue();
+
+    List<MataKuliah> findByIsActive(Boolean isActive);
 
     // Ambil MK aktif berdasarkan mahasiswa dan semester
     @Query("""
