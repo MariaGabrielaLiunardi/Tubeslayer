@@ -172,9 +172,9 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
             
             if (rubrikNilaiRepo == null) throw new Exception("Rubrik Nilai Repository tidak di-inject.");
             
-            RubrikNilai defaultRubrik = rubrikNilaiRepo.findById(1)
-                .orElseThrow(() -> new Exception("Rubrik Nilai default (ID 1) tidak ditemukan."));
-            tugasBaru.setRubrik(defaultRubrik);
+            RubrikNilai newRubrik = new RubrikNilai();
+            rubrikNilaiRepo.save(newRubrik);
+            tugasBaru.setRubrik(newRubrik);
 
             tugasRepo.save(tugasBaru);
 

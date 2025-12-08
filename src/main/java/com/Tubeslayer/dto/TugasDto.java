@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-// Pastikan Lombok dependency sudah ada di build.gradle Anda
-
 @Data 
 public class TugasDto {
 

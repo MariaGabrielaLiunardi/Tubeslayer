@@ -14,12 +14,12 @@ body {
         360deg, 
         rgba(255, 241, 235, 1) 0%,
         rgba(172, 224, 249, 1) 50%, 
-        rgba(172, 224, 249, 1) 100% /* area scroll */
+        rgba(172, 224, 249, 1) 100% 
     ) !important;
 
     min-height: 100vh;
     background-attachment: scroll; 
-    background-size: 100% 100%; /* gradien seluruh bagian */
+    background-size: 100% 100%; 
     background-repeat: no-repeat;
 }
 
@@ -36,7 +36,6 @@ body {
 }
 
 :root{
-    /* Transition */
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
