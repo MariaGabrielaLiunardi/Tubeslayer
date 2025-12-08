@@ -58,9 +58,11 @@
                 <div class="user-avatar">
                     <img src="/icon/pfp.png" alt="useravtr">
                 </div>
-                <div class="notification-icon">
-                    <img src="/icon/logout.png" alt="logouticon">
-                </div>
+                <a th:href="@{/logout}" class="logout-link">
+                    <div class="notification-icon">
+                        <img src="/icon/logout.png" alt="logouticon">
+                    </div>
+                </a>
             </div>
         </div>
 

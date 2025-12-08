@@ -616,6 +616,10 @@ header .image-text .header-text {
     background-color: #333;
 }
 
+.search-results.active {
+    display: block;
+}
+
 .form-buttons {
     display: flex;
     justify-content: flex-end;
