@@ -16,25 +16,18 @@ public class KelompokJdbcRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    /**
-     * RowMapper untuk MahasiswaSearchDTO
-     */
     private static class MahasiswaSearchRowMapper implements RowMapper<MahasiswaSearchDTO> {
         @Override
         public MahasiswaSearchDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
             MahasiswaSearchDTO dto = new MahasiswaSearchDTO();
             dto.setIdUser(rs.getString("id_user"));
             dto.setNama(rs.getString("nama"));
-            dto.setNpm(rs.getString("id_user")); // NPM sama dengan id_user
+            dto.setNpm(rs.getString("id_user")); 
             dto.setKelas(rs.getString("kelas"));
             return dto;
         }
     }
 
-    /**
-     * Search mahasiswa berdasarkan nama dan idTugas
-     * Mahasiswa yang sudah tergabung dalam kelompok tidak akan muncul
-     */
     public List<MahasiswaSearchDTO> searchAvailableMahasiswa(Integer idTugas, String keyword) {
         String sql = 
             "SELECT DISTINCT " +
@@ -128,9 +121,6 @@ public class KelompokJdbcRepository {
         return jdbcTemplate.query(sql, new AnggotaKelompokRowMapper(), idTugas, idUser, idTugas);
     }
 
-    /**
-     * RowMapper untuk AnggotaKelompokDTO
-     */
     private static class AnggotaKelompokRowMapper implements RowMapper<AnggotaKelompokDTO> {
         @Override
         public AnggotaKelompokDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -143,7 +133,7 @@ public class KelompokJdbcRepository {
     }
 
     /**
-     * Check apakah user adalah leader
+     * Check jika user = leader
      */
     public boolean isLeader(Integer idTugas, String idUser) {
         String sql = 
@@ -241,6 +231,39 @@ public class KelompokJdbcRepository {
             return jdbcTemplate.queryForObject(sql, Integer.class, idTugas);
         } catch (Exception e) {
             return 5; // default value
+        }
+    }
+    /**
+     * Get mode kelompok dari tugas besar
+     */
+    public String getModeKelompok(Integer idTugas) {
+        String sql = "SELECT mode_kel FROM tugas_besar WHERE id_tugas = ?";
+        
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, idTugas);
+        } catch (Exception e) {
+            return "Mahasiswa"; // default value
+        }
+    }
+
+    /**
+     * Get nama kelompok untuk user tertentu pada tugas tertentu
+     */
+    public String getNamaKelompok(Integer idTugas, String idUser) {
+        String sql = 
+            "SELECT k.nama_kelompok " +
+            "FROM kelompok k " +
+            "INNER JOIN user_kelompok uk ON k.id_kelompok = uk.id_kelompok " +
+            "INNER JOIN tugas_besar_kelompok tbk ON k.id_kelompok = tbk.id_kelompok " +
+            "WHERE tbk.id_tugas = ? " +
+            "  AND uk.id_user = ? " +
+            "  AND uk.is_active = 1 " +
+            "LIMIT 1";
+        
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, idTugas, idUser);
+        } catch (Exception e) {
+            return null;
         }
     }
 

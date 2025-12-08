@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar'}">Tugas Besar</title>
     <link rel="stylesheet" href="/css/hlmtubes-styles.css">
-    <link rel="stylesheet" href="/css/kelola-anggota-complete.css">
+    
     <script src="/js/sidebar-hlmtubes.js" defer></script>
-    <script src="/js/kelola-Anggota.js" defer></script>
+    <script src="/js/kelola-anggota.js" defer></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
@@ -106,6 +106,7 @@
                         <h2 th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar'}">Tugas Besar</h2>
                     </div>
 
+                    <!-- Deskripsi Tugas -->
                     <p class="content-description" th:text="${tugas != null ? tugas.deskripsi : 'Deskripsi tugas'}">
                         Deskripsi tugas
                     </p>
@@ -114,11 +115,33 @@
                         <span th:text="|Tugas ini dilakukan berkelompok sebanyak ${maxAnggota} orang.|">
                             Tugas ini dilakukan berkelompok.
                         </span>
+                        <span th:if="${modeKelompok == 'Dosen'}" class="mode-info">
+                            Kelompok ditentukan oleh <strong>Dosen</strong>.
+                        </span>
+                        <span th:if="${modeKelompok == 'Mahasiswa'}" class="mode-info">
+                            Kelompok ditentukan oleh <strong>Mahasiswa</strong>.
+                        </span>
                     </p>
 
-                    <div class="group-info" th:if="${jumlahAnggota > 0}">
-                        <strong>Anggota Kelompok Anda:</strong> 
-                        <span th:text="${jumlahAnggota} + ' dari ' + ${maxAnggota} + ' anggota'">0 dari 5 anggota</span>
+        
+                    <div class="group-info-box" th:if="${hasKelompok}">
+                        <div class="group-info-header">
+                            <div class="group-title">
+                                <strong>Anggota Kelompok</strong>
+                            </div>
+                            <div class="group-details">
+                                <span class="kelompok-name" th:text="${namaKelompok}">Nama Kelompok</span>
+                                <span class="anggota-count" th:text="${jumlahAnggota} + '/' + ${maxAnggota} + ' Anggota'">
+                                    0/5 Anggota
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jika belum punya kelompok -->
+                    <div class="no-group-info" th:if="${!hasKelompok}">
+                        <i class='bx bx-info-circle'></i>
+                        <span>Anda belum tergabung dalam kelompok untuk tugas ini.</span>
                     </div>
 
                     <div class="deadline-section">
@@ -128,22 +151,53 @@
                                 -
                             </span>
                         </div>
-                        <button class="manage-btn" id="btn-kelola-anggota" 
-                                th:disabled="${!isLeader}">
+                        
+                        <!-- Tombol Kelola Anggota - Hanya untuk mode Mahasiswa -->
+                        <button class="manage-btn" 
+                                id="btn-kelola-anggota" 
+                                th:if="${modeKelompok == 'Mahasiswa'}"
+                                th:disabled="${!canManageAnggota}">
+                            <i class='bx bx-group'></i>
                             Kelola Anggota
                         </button>
+
+                        <!-- Info untuk mode Dosen -->
+                        <div class="mode-dosen-badge" th:if="${modeKelompok == 'Dosen'}">
+                            <i class='bx bx-lock-alt'></i>
+                            <span>Kelompok diatur oleh Dosen</span>
+                        </div>
                     </div>
 
-                    <!-- Warning jika bukan leader -->
-                    <p class="warning-text" th:if="${!isLeader}" style="display: block;">
-                        *Hanya ketua kelompok yang dapat mengelola anggota!
-                    </p>
+                    <!-- Warning Messages -->
+                    <div class="warning-messages">
+                        <!-- Warning: Bukan Leader -->
+                        <p class="warning-text warning-leader" 
+                           th:if="${modeKelompok == 'Mahasiswa' && hasKelompok && !isLeader}">
+                            <i class='bx bx-info-circle'></i>
+                            Hanya ketua kelompok yang dapat mengelola anggota!
+                        </p>
+
+                        <!-- Warning: Mode Dosen -->
+                        <p class="warning-text warning-mode" 
+                           th:if="${modeKelompok == 'Dosen'}">
+                            <i class='bx bx-info-circle'></i>
+                            Kelompok untuk tugas ini ditentukan oleh Dosen. Mahasiswa tidak dapat mengelola anggota kelompok.
+                        </p>
+
+                        <!-- Info: Belum ada kelompok & mode Mahasiswa -->
+                        <p class="info-text" 
+                           th:if="${modeKelompok == 'Mahasiswa' && !hasKelompok}">
+                            <i class='bx bx-info-circle'></i>
+                            Silakan hubungi ketua kelompok untuk bergabung, atau hubungi dosen pengampu.
+                        </p>
+                    </div>
                 </div>
 
                 <!-- VIEW 2: Anggota Kelompok -->
                 <div id="view-anggota" class="view-content">
                     <div class="content-header">
                         <h2>Anggota Kelompok</h2>
+                        <span class="kelompok-name" th:text="${namaKelompok}">Nama Kelompok</span>
                     </div>
 
                     <!-- List Anggota (akan diisi oleh JavaScript) -->
@@ -160,20 +214,33 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <button class="btn-secondary" id="btn-kembali-anggota">Kembali</button>
+                        <button class="btn-secondary" id="btn-kembali-anggota">
+                            <i class='bx bx-arrow-back'></i>
+                            Kembali
+                        </button>
                         <div class="right-buttons">
-                            <button class="btn-primary" id="btn-tambah-anggota" 
-                                    th:disabled="${!isLeader}">
+                            <button class="btn-primary" id="btn-tambah-anggota" th:disabled="${!canManageAnggota}">
+                                <i class='bx bx-user-plus'></i>
                                 Tambah
                             </button>
-                            <button class="btn-primary" id="btn-selesai-anggota">Selesai</button>
+                            <button class="btn-primary" id="btn-selesai-anggota">
+                                <i class='bx bx-check'></i>
+                                Selesai
+                            </button>
                         </div>
                     </div>
 
                     <!-- Warning untuk non-ketua -->
-                    <p class="warning-text" id="warning-non-ketua" 
-                       th:style="${!isLeader ? 'display: block;' : 'display: none;'}">
-                        *Anda tidak memiliki akses untuk mengelola anggota!
+                    <p class="warning-text" 
+                       id="warning-non-ketua" 
+                       th:style="${!canManageAnggota ? 'display: block;' : 'display: none;'}">
+                        <i class='bx bx-info-circle'></i>
+                        <span th:if="${modeKelompok == 'Dosen'}">
+                            Kelompok diatur oleh Dosen. Anda tidak dapat mengelola anggota.
+                        </span>
+                        <span th:if="${modeKelompok == 'Mahasiswa' && !isLeader}">
+                            Hanya ketua kelompok yang dapat mengelola anggota!
+                        </span>
                     </p>
                 </div>
 
@@ -213,8 +280,14 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <button class="btn-secondary" id="btn-kembali-pilih">Kembali</button>
-                        <button class="btn-primary" id="btn-konfirmasi">Konfirmasi</button>
+                        <button class="btn-secondary" id="btn-kembali-pilih">
+                            <i class='bx bx-arrow-back'></i>
+                            Kembali
+                        </button>
+                        <button class="btn-primary" id="btn-konfirmasi">
+                            <i class='bx bx-check'></i>
+                            Konfirmasi
+                        </button>
                     </div>
                 </div>
 
@@ -226,6 +299,8 @@
     <input type="hidden" id="idTugas" th:value="${tugas != null ? tugas.idTugas : ''}" />
     <input type="hidden" id="maxAnggota" th:value="${maxAnggota}" />
     <input type="hidden" id="isLeader" th:value="${isLeader}" />
+    <input type="hidden" id="canManageAnggota" th:value="${canManageAnggota}" />
+    <input type="hidden" id="modeKelompok" th:value="${modeKelompok}" />
 
     <!-- Scripts -->
     <script src="/js/sidebar.js"></script>

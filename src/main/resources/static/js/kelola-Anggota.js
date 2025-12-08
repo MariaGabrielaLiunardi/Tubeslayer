@@ -1,31 +1,27 @@
-// State management
 let currentMembers = [];
 let maxAnggota = 5;
 let minAnggota = 1;
 
-// Ambil idTugas dari hidden input atau URL
 function getIdTugas() {
-    // Coba ambil dari hidden input dulu
     const hiddenInput = document.getElementById('idTugas');
     if (hiddenInput && hiddenInput.value) {
         return hiddenInput.value;
     }
     
-    // Fallback ke URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('idTugas');
 }
 
-// Get max anggota dari hidden input
+
 function getMaxAnggota() {
     const hiddenInput = document.getElementById('maxAnggota');
     if (hiddenInput && hiddenInput.value) {
         return parseInt(hiddenInput.value);
     }
-    return 5; // default
+    return 5; 
 }
 
-// Check apakah user adalah leader
+
 function checkIsLeader() {
     const hiddenInput = document.getElementById('isLeader');
     if (hiddenInput && hiddenInput.value) {
@@ -34,7 +30,25 @@ function checkIsLeader() {
     return false;
 }
 
-// Initialize saat DOM ready
+
+function checkCanManage() {
+    const hiddenInput = document.getElementById('canManageAnggota');
+    if (hiddenInput && hiddenInput.value) {
+        return hiddenInput.value === 'true';
+    }
+    return false;
+}
+
+
+function getModeKelompok() {
+    const hiddenInput = document.getElementById('modeKelompok');
+    if (hiddenInput && hiddenInput.value) {
+        return hiddenInput.value;
+    }
+    return 'Mahasiswa';
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const idTugas = getIdTugas();
     
@@ -43,40 +57,78 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Set maxAnggota dari hidden input
+ 
     maxAnggota = getMaxAnggota();
     
-    // Check leader status
+
     const isLeader = checkIsLeader();
-    console.log('Is Leader:', isLeader);
+    const canManage = checkCanManage();
+    const modeKelompok = getModeKelompok();
     
-    // Disable buttons jika bukan leader
-    if (!isLeader) {
+    console.log('User Status:', {
+        isLeader: isLeader,
+        canManage: canManage,
+        modeKelompok: modeKelompok
+    });
+    
+
+    if (!canManage) {
         const btnTambah = document.getElementById('btn-tambah-anggota');
         const btnKelola = document.getElementById('btn-kelola-anggota');
         
-        if (btnTambah) btnTambah.disabled = true;
-        if (btnKelola) btnKelola.disabled = true;
+        if (btnTambah) {
+            btnTambah.disabled = true;
+            btnTambah.title = modeKelompok === 'Dosen' 
+                ? 'Kelompok diatur oleh Dosen' 
+                : 'Hanya ketua kelompok yang dapat mengelola anggota';
+        }
+        
+        if (btnKelola) {
+            btnKelola.disabled = true;
+            btnKelola.title = modeKelompok === 'Dosen' 
+                ? 'Kelompok diatur oleh Dosen' 
+                : 'Hanya ketua kelompok yang dapat mengelola anggota';
+        }
+        
+
+        const warning = document.getElementById('warning-non-ketua');
+        if (warning) {
+            warning.style.display = 'block';
+        }
     }
 
-    // Load anggota kelompok saat halaman dimuat
+
     loadAnggotaKelompok();
 
-    // Setup event listeners
+
     setupSearchFunctionality();
     setupViewNavigation();
 });
 
-// ============= LOAD ANGGOTA KELOMPOK =============
+
 async function loadAnggotaKelompok() {
     const idTugas = getIdTugas();
     
+    if (!idTugas) {
+        console.error('ID Tugas tidak ditemukan');
+        return;
+    }
+    
     try {
+        console.log('Loading anggota for idTugas:', idTugas);
+        
         const response = await fetch(`/mahasiswa/api/anggota-kelompok?idTugas=${idTugas}`);
         const data = await response.json();
 
         if (!response.ok) {
             throw new Error(data.error || 'Gagal memuat anggota');
+        }
+
+        console.log('API Response:', data);
+        console.log('Number of members:', data.length);
+        
+        if (data.length > 0) {
+            console.log('First member structure:', data[0]);
         }
 
         currentMembers = data;
@@ -85,11 +137,22 @@ async function loadAnggotaKelompok() {
 
     } catch (error) {
         console.error('Error loading anggota:', error);
-        showError('Gagal memuat data anggota kelompok');
+        
+
+        const memberList = document.getElementById('member-list');
+        if (memberList) {
+            memberList.innerHTML = `
+                <div class="error-message">
+                    <i class='bx bx-error'></i>
+                    <p>Gagal memuat data anggota kelompok</p>
+                    <small>${error.message}</small>
+                </div>
+            `;
+        }
     }
 }
 
-// Update tampilan list anggota
+
 function updateMemberDisplay() {
     const memberList = document.getElementById('member-list');
     if (!memberList) return;
@@ -105,35 +168,46 @@ function updateMemberDisplay() {
         const memberItem = document.createElement('div');
         memberItem.className = 'member-item';
         
-        const isLeader = member.role === 'leader';
-        const roleLabel = isLeader ? 'Ketua' : 'Anggota';
+
+        const isLeader = (member.role === 'leader') || (member.user && member.user.role === 'leader');
+        const memberName = member.nama || (member.user && member.user.nama) || 'Unknown';
+        const memberId = member.idUser || (member.user && member.user.idUser) || '';
         
+        console.log('Member data:', {
+            name: memberName,
+            id: memberId,
+            role: member.role,
+            isLeader: isLeader
+        });
+        
+
         memberItem.innerHTML = `
             <div class="member-info">
-                <span class="member-name">${member.user.nama}</span>
-                <span class="member-npm">${member.user.idUser}</span>
-                <span class="member-role ${isLeader ? 'role-leader' : 'role-member'}">${roleLabel}</span>
+                <span class="member-name">${memberName}</span>
+                ${isLeader ? '<span class="member-role-badge">Ketua</span>' : ''}
             </div>
             ${!isLeader ? `
-                <button class="btn-remove-member" data-id="${member.user.idUser}" data-nama="${member.user.nama}">
-                    <i class='bx bx-trash'></i>
+                <button class="btn-remove-member" data-id="${memberId}" data-nama="${memberName}" title="Hapus anggota">
+                    <i class='bx bx-minus'></i>
                 </button>
             ` : ''}
         `;
 
-        // Add event listener untuk tombol hapus
+
         if (!isLeader) {
             const removeBtn = memberItem.querySelector('.btn-remove-member');
-            removeBtn.addEventListener('click', function() {
-                confirmRemoveMember(member.user.idUser, member.user.nama);
-            });
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function() {
+                    confirmRemoveMember(memberId, memberName);
+                });
+            }
         }
 
         memberList.appendChild(memberItem);
     });
 }
 
-// Update counter anggota
+
 function updateMemberCounter() {
     const counters = document.querySelectorAll('.member-counter');
     counters.forEach(counter => {
@@ -141,7 +215,6 @@ function updateMemberCounter() {
     });
 }
 
-// ============= SEARCH FUNCTIONALITY =============
 function setupSearchFunctionality() {
     const searchInput = document.getElementById('search-mahasiswa');
     const searchButton = document.getElementById('btn-search');
@@ -152,13 +225,12 @@ function setupSearchFunctionality() {
         return;
     }
 
-    // Handle click pada tombol search
     searchButton.addEventListener('click', function(e) {
         e.preventDefault();
         performSearch();
     });
 
-    // Handle enter key
+
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -166,7 +238,7 @@ function setupSearchFunctionality() {
         }
     });
 
-    // Clear results on input clear
+    
     searchInput.addEventListener('input', function() {
         if (searchInput.value.trim() === '') {
             searchResults.innerHTML = '';
@@ -174,7 +246,7 @@ function setupSearchFunctionality() {
         }
     });
 
-    // Close results when clicking outside
+   
     document.addEventListener('click', function(e) {
         if (!searchInput.contains(e.target) && 
             !searchButton.contains(e.target) && 
@@ -184,7 +256,6 @@ function setupSearchFunctionality() {
     });
 }
 
-// Perform search
 async function performSearch() {
     const searchInput = document.getElementById('search-mahasiswa');
     const searchResults = document.getElementById('search-results');
@@ -196,7 +267,7 @@ async function performSearch() {
         return;
     }
 
-    // Show loading
+
     searchResults.innerHTML = '<div class="search-loading">Mencari...</div>';
     searchResults.style.display = 'block';
 
@@ -226,7 +297,7 @@ async function performSearch() {
     }
 }
 
-// Display search results
+
 function displaySearchResults(mahasiswaList) {
     const searchResults = document.getElementById('search-results');
     searchResults.innerHTML = '';
@@ -261,11 +332,10 @@ function displaySearchResults(mahasiswaList) {
     searchResults.style.display = 'block';
 }
 
-// Add member to group
 async function addMemberToGroup(mahasiswa) {
     const idTugas = getIdTugas();
 
-    // Validasi jumlah maksimal
+   
     if (currentMembers.length >= maxAnggota) {
         showError('Kelompok sudah penuh');
         return;
@@ -289,11 +359,11 @@ async function addMemberToGroup(mahasiswa) {
             throw new Error(data.error || 'Gagal menambahkan anggota');
         }
 
-        // Clear search
+   
         document.getElementById('search-mahasiswa').value = '';
         document.getElementById('search-results').style.display = 'none';
 
-        // Reload anggota
+  
         await loadAnggotaKelompok();
 
         showSuccess(`${mahasiswa.nama} berhasil ditambahkan`);
@@ -304,14 +374,13 @@ async function addMemberToGroup(mahasiswa) {
     }
 }
 
-// Confirm remove member
+
 function confirmRemoveMember(idUser, nama) {
     if (confirm(`Apakah Anda yakin ingin menghapus ${nama} dari kelompok?`)) {
         removeMemberFromGroup(idUser, nama);
     }
 }
 
-// Remove member from group
 async function removeMemberFromGroup(idUser, nama) {
     const idTugas = getIdTugas();
 
@@ -333,7 +402,7 @@ async function removeMemberFromGroup(idUser, nama) {
             throw new Error(data.error || 'Gagal menghapus anggota');
         }
 
-        // Reload anggota
+
         await loadAnggotaKelompok();
 
         showSuccess(`${nama} berhasil dihapus dari kelompok`);
@@ -344,9 +413,9 @@ async function removeMemberFromGroup(idUser, nama) {
     }
 }
 
-// ============= VIEW NAVIGATION =============
+
 function setupViewNavigation() {
-    // Button Kelola Anggota - dari view deskripsi ke view anggota
+
     const btnKelolaAnggota = document.getElementById('btn-kelola-anggota');
     if (btnKelolaAnggota) {
         btnKelolaAnggota.addEventListener('click', function() {
@@ -355,7 +424,7 @@ function setupViewNavigation() {
         });
     }
 
-    // Button Kembali dari view anggota ke view deskripsi
+    
     const btnKembaliAnggota = document.getElementById('btn-kembali-anggota');
     if (btnKembaliAnggota) {
         btnKembaliAnggota.addEventListener('click', function() {
@@ -363,7 +432,7 @@ function setupViewNavigation() {
         });
     }
 
-    // Button Tambah - dari view anggota ke view pilih anggota
+    
     const btnTambahAnggota = document.getElementById('btn-tambah-anggota');
     if (btnTambahAnggota) {
         btnTambahAnggota.addEventListener('click', function() {
@@ -371,7 +440,7 @@ function setupViewNavigation() {
         });
     }
 
-    // Button Selesai dari view anggota ke view deskripsi
+    
     const btnSelesaiAnggota = document.getElementById('btn-selesai-anggota');
     if (btnSelesaiAnggota) {
         btnSelesaiAnggota.addEventListener('click', function() {
@@ -379,45 +448,45 @@ function setupViewNavigation() {
         });
     }
 
-    // Button Kembali dari view pilih anggota ke view anggota
+    
     const btnKembaliPilih = document.getElementById('btn-kembali-pilih');
     if (btnKembaliPilih) {
         btnKembaliPilih.addEventListener('click', function() {
             showView('view-anggota');
-            // Clear search
+  
             document.getElementById('search-mahasiswa').value = '';
             document.getElementById('search-results').style.display = 'none';
         });
     }
 
-    // Button Konfirmasi dari view pilih anggota ke view anggota
+  
     const btnKonfirmasi = document.getElementById('btn-konfirmasi');
     if (btnKonfirmasi) {
         btnKonfirmasi.addEventListener('click', function() {
             showView('view-anggota');
-            // Clear search
+
             document.getElementById('search-mahasiswa').value = '';
             document.getElementById('search-results').style.display = 'none';
         });
     }
 }
 
-// Show specific view
+
 function showView(viewId) {
-    // Hide all views
+
     const allViews = document.querySelectorAll('.view-content');
     allViews.forEach(view => {
         view.classList.remove('active');
     });
 
-    // Show selected view
+
     const selectedView = document.getElementById(viewId);
     if (selectedView) {
         selectedView.classList.add('active');
     }
 }
 
-// ============= NOTIFICATION FUNCTIONS =============
+
 function showSuccess(message) {
     const toast = document.createElement('div');
     toast.className = 'toast toast-success';

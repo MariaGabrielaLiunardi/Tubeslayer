@@ -6,9 +6,9 @@
     <title th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</title>
     <link rel="stylesheet" href="/css/hlmtubes-Dosen-styles.css" />
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png"> 
     <script src="/js/sidebar-hlmtubes.js" defer></script>
-    <script src="/js/kelompok-manager.js" defer></script>
+    <script src="/js/management-kelompok.js" defer></script>
     <script th:inline="javascript">
       // Pass data dari Thymeleaf ke JavaScript
       window.TUGAS_DATA = {
@@ -79,11 +79,17 @@
     <!-- Main Content -->
     <div class="main-content">
       <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab" th:onclick="|window.location.href='@{/dosen/matkul-detail(kodeMk=${mkDetail.kodeMK})}'|">Kuliah</button>
-        <button class="tab" th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|">Daftar Peserta</button>
-        <button class="tab">Nilai</button>
-      </div>
+      <div class="mk-tab" th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}">
+            <button class="tab active" data-tab-target="kuliah" 
+                    th:onclick="|window.location.href='@{/dosen/matkul-detail(mk=${mkDetail.kodeMK})}'|">
+                Kuliah
+            </button>
+            <button class="tab" data-tab-target="peserta" 
+                    th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|">
+                Daftar Peserta
+            </button>
+            <button class="tab" data-tab-target="nilai">Nilai</button>
+        </div>
 
       <!-- Card Container -->
       <div class="card-container">
@@ -146,8 +152,8 @@
             <div class="kelompok-counter">Jumlah Kelompok: <span id="jumlahKelompok">0</span></div>
           </div>
 
-          <div id="kelompokTableContainer">
-          
+          <div id="kelompokTableContainer"> 
+            
           </div>
 
           <div class="action-buttons">
@@ -192,7 +198,95 @@
             </div>
           </form>
         </div>
+        
+        <!-- View: Detail Anggota Kelompok -->
+        <div class="content-card" id="detailAnggotaView" style="display: none;">
+  
+
+          <div class="content-header">
+            <h2>Anggota Kelompok</h2>
+            <span class="kelompok-name-subtitle" id="kelompokNameSubtitle">Nama Kelompok</span>
+          </div>
+
+          <!-- List Anggota -->
+          <div class="member-list" id="member-list-dosen">
+            <p class="no-members">Memuat data anggota...</p>
+          </div>
+
+          <!-- Member Counter -->
+          <div class="member-counter" id="member-counter-dosen">
+            0/5 Anggota
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn-secondary" id="btn-kembali-anggota-dosen">
+              <i class='bx bx-arrow-back'></i>
+              Kembali
+            </button>
+            <div class="right-buttons">
+              <button class="btn-primary" id="btn-tambah-anggota-dosen">
+                <i class='bx bx-user-plus'></i>
+                Tambah
+              </button>
+              <button class="btn-primary" id="btn-selesai-anggota-dosen">
+                <i class='bx bx-check'></i>
+                Selesai
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: Pilih Anggota -->
+        <div class="content-card" id="pilihAnggotaView" style="display: none;">
+  
+
+          <div class="content-header">
+            <h2>Pilih anggota kelompok</h2>
+          </div>
+
+          <!-- Search Input -->
+          <div class="search-section">
+            <label for="search-mahasiswa-dosen">Masukkan Nama:</label>
+            <div class="search-input-wrapper">
+              <input 
+                type="text" 
+                id="search-mahasiswa-dosen" 
+                placeholder="Nama mahasiswa - NPM"
+                autocomplete="off"
+              >
+              <button class="btn-search" id="btn-search-dosen">
+                <i class='bx bx-search'></i>
+              </button>
+            </div>
+            
+            <!-- Search Results Dropdown -->
+            <div class="search-results" id="search-results-dosen">
+              <!-- Results will be inserted here by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Member Counter -->
+          <div class="member-counter" id="member-counter-pilih-dosen">
+            0/5 Anggota
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn-secondary" id="btn-kembali-pilih-dosen">
+              <i class='bx bx-arrow-back'></i>
+              Kembali
+            </button>
+            <button class="btn-primary" id="btn-konfirmasi-dosen">
+              <i class='bx bx-check'></i>
+              Konfirmasi
+            </button>
+          </div>
+        </div>
+
+
       </div>
     </div>
+    <input type="hidden" id="currentIdKelompok" value="" />
   </body>
 </html>

@@ -111,6 +111,32 @@ public class DosenController {
         return "dosen/matkul-detail";
     }
 
+    @GetMapping("/dosen/tugas-detail")
+    public String tugasDetail(@RequestParam(required = false) Integer idTugas,
+                              @AuthenticationPrincipal CustomUserDetails user,
+                              Model model) {
+        if (idTugas == null) return "redirect:/dosen/mata-kuliah";
+
+        TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+        if (tugas == null) return "redirect:/dosen/mata-kuliah";
+
+        // Data tugas
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("user", user);
+        model.addAttribute("mkDetail", tugas.getMataKuliah());
+
+        // Format deadline dengan locale Indonesia
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id", "ID"));
+        String deadlineFormatted = tugas.getDeadline().format(formatter);
+        model.addAttribute("deadlineFormatted", deadlineFormatted);
+
+        // Tentukan penentu kelompok berdasarkan mode_kel
+        String penentuKelompok = "Dosen".equalsIgnoreCase(tugas.getModeKel()) ? "Dosen" : "Mahasiswa";
+        model.addAttribute("penentuKelompok", penentuKelompok);
+
+        return "hlmn_tubes/hlmtubes-dosen";
+    }
+
     @GetMapping("/dosen/matkul-peserta")
     public String peserta(@RequestParam(required = false) String kodeMk, 
                           @AuthenticationPrincipal CustomUserDetails user, 
@@ -434,6 +460,156 @@ public class DosenController {
             System.err.println("Error getting tugas: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+    @GetMapping("/api/kelompok/{idKelompok}/anggota")
+    @ResponseBody
+    public ResponseEntity<?> getAnggotaKelompok(@PathVariable Integer idKelompok) {
+        try {
+            // Cek apakah kelompok ada
+            Kelompok kelompok = kelompokRepo.findById(idKelompok)
+                .orElseThrow(() -> new Exception("Kelompok tidak ditemukan"));
+
+            // Ambil semua anggota kelompok
+            List<UserKelompok> anggotaList = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
+
+            // Format response
+            List<Map<String, Object>> response = anggotaList.stream()
+                .filter(uk -> uk.is_active()) // Filter hanya yang aktif
+                .map(uk -> {
+                    Map<String, Object> anggota = new HashMap<>();
+                    anggota.put("idUser", uk.getUser().getIdUser());
+                    anggota.put("nama", uk.getUser().getNama());
+                    anggota.put("email", uk.getUser().getEmail());
+                    anggota.put("role", uk.getRole());
+                    return anggota;
+                })
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            System.err.println("Error getting anggota: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * POST - Tambah anggota ke kelompok
+     */
+    @PostMapping("/api/kelompok/tambah-anggota")
+    @ResponseBody
+    public ResponseEntity<?> tambahAnggota(@RequestBody Map<String, Object> request) {
+        try {
+            Integer idKelompok = (Integer) request.get("idKelompok");
+            String idAnggota = (String) request.get("idAnggota");
+
+            // Validasi
+            if (idKelompok == null || idAnggota == null) {
+                throw new Exception("Data tidak lengkap");
+            }
+
+            // Cek kelompok exist
+            Kelompok kelompok = kelompokRepo.findById(idKelompok)
+                .orElseThrow(() -> new Exception("Kelompok tidak ditemukan"));
+
+            // Cek user exist
+            User user = userRepo.findById(idAnggota)
+                .orElseThrow(() -> new Exception("User tidak ditemukan"));
+
+            // Cek apakah user sudah ada di kelompok
+            List<UserKelompok> existing = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
+            boolean alreadyMember = existing.stream()
+                .anyMatch(uk -> uk.getUser().getIdUser().equals(idAnggota) && uk.is_active());
+
+            if (alreadyMember) {
+                throw new Exception("User sudah menjadi anggota kelompok");
+            }
+
+            // Cek max anggota
+            long currentCount = existing.stream().filter(uk -> uk.is_active()).count();
+            
+            // Get max anggota dari tugas
+            List<TugasBesarKelompok> tbkList = tugasKelompokRepo.findByIdKelompok(idKelompok);
+            if (!tbkList.isEmpty()) {
+                TugasBesar tugas = tbkList.get(0).getTugas();
+                if (currentCount >= tugas.getMaxAnggota()) {
+                    throw new Exception("Kelompok sudah penuh");
+                }
+            }
+
+            // Tambah anggota
+            UserKelompok newMember = new UserKelompok();
+            newMember.setUser(user);
+            newMember.setKelompok(kelompok);
+            newMember.setRole("member");
+            newMember.set_active(true);
+            userKelompokRepo.save(newMember);
+
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Anggota berhasil ditambahkan"
+            ));
+
+        } catch (Exception e) {
+            System.err.println("Error adding member: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * POST - Hapus anggota dari kelompok
+     */
+    @PostMapping("/api/kelompok/hapus-anggota")
+    @ResponseBody
+    public ResponseEntity<?> hapusAnggota(@RequestBody Map<String, Object> request) {
+        try {
+            Integer idKelompok = (Integer) request.get("idKelompok");
+            String idAnggota = (String) request.get("idAnggota");
+
+            // Validasi
+            if (idKelompok == null || idAnggota == null) {
+                throw new Exception("Data tidak lengkap");
+            }
+
+            // Cek kelompok exist
+            kelompokRepo.findById(idKelompok)
+                .orElseThrow(() -> new Exception("Kelompok tidak ditemukan"));
+
+            // Cek user exist
+            User user = userRepo.findById(idAnggota)
+                .orElseThrow(() -> new Exception("User tidak ditemukan"));
+
+            // Cari user_kelompok entry
+            List<UserKelompok> members = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
+            UserKelompok toRemove = members.stream()
+                .filter(uk -> uk.getUser().getIdUser().equals(idAnggota) && uk.is_active())
+                .findFirst()
+                .orElseThrow(() -> new Exception("User bukan anggota kelompok"));
+
+            // Tidak boleh hapus leader
+            if ("leader".equalsIgnoreCase(toRemove.getRole())) {
+                throw new Exception("Tidak dapat menghapus ketua kelompok");
+            }
+
+            // Soft delete
+            toRemove.set_active(false);
+            userKelompokRepo.save(toRemove);
+
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Anggota berhasil dihapus"
+            ));
+
+        } catch (Exception e) {
+            System.err.println("Error removing member: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("error", e.getMessage()));
         }
     }

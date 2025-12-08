@@ -271,17 +271,40 @@ public class MahasiswaController {
         }
 
         // Data untuk kelola anggota menggunakan JDBC
+        String modeKelompok = kelompokJdbcService.getModeKelompok(idTugas);
+        boolean hasKelompok = kelompokJdbcService.hasKelompok(idTugas, user.getIdUser());
         boolean isLeader = kelompokJdbcService.isLeader(idTugas, user.getIdUser());
+        boolean canManage = kelompokJdbcService.canManageAnggota(idTugas, user.getIdUser());
+
         int jumlahAnggota = kelompokJdbcService.countAnggota(idTugas, user.getIdUser());
         int maxAnggota = kelompokJdbcService.getMaxAnggota(idTugas);
+        String namaKelompok = kelompokJdbcService.getNamaKelompok(idTugas, user.getIdUser());
+
+        List<AnggotaKelompokDTO> anggotaList = Collections.emptyList();
+        if (hasKelompok) {
+            try {
+                anggotaList = kelompokJdbcService.getAnggotaKelompok(idTugas, user.getIdUser());
+            } catch (Exception e) {
+                System.err.println("Error fetching anggota: " + e.getMessage());
+            }
+        }
 
         model.addAttribute("user", user);
         model.addAttribute("tugas", tugas);
         model.addAttribute("mkDetail", mkDetail);
         model.addAttribute("koordinator", koordinator);
+
+        model.addAttribute("modeKelompok", modeKelompok);
+        model.addAttribute("hasKelompok", hasKelompok);
         model.addAttribute("isLeader", isLeader);
+        model.addAttribute("canManageAnggota", canManage);
+
         model.addAttribute("jumlahAnggota", jumlahAnggota);
         model.addAttribute("maxAnggota", maxAnggota);
+        
+        model.addAttribute("namaKelompok", namaKelompok != null ? namaKelompok : "Belum ada kelompok");
+        model.addAttribute("anggotaPreview", anggotaList);
+        
 
         return "hlmn_tubes/hlmtubes";
     }

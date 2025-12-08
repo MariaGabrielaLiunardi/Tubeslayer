@@ -25,12 +25,38 @@ public class KelompokJdbcService {
     public List<MahasiswaSearchDTO> getAllAvailableMahasiswa(Integer idTugas) {
         return kelompokJdbcRepo.getAllAvailableMahasiswa(idTugas);
     }
+
     public List<AnggotaKelompokDTO> getAnggotaKelompok(Integer idTugas, String idUser) {
         return kelompokJdbcRepo.getAnggotaKelompok(idTugas, idUser);
     }
 
     public boolean isLeader(Integer idTugas, String idUser) {
         return kelompokJdbcRepo.isLeader(idTugas, idUser);
+    }
+
+    public String getModeKelompok(Integer idTugas) {
+        return kelompokJdbcRepo.getModeKelompok(idTugas);
+    }
+    
+    public boolean canManageAnggota(Integer idTugas, String idUser) {
+        String modeKel = getModeKelompok(idTugas);
+        
+        // Jika mode kelompok diatur oleh Dosen, mahasiswa tidak bisa kelola
+        if ("Dosen".equalsIgnoreCase(modeKel)) {
+            return false;
+        }
+        
+        // Jika mode kelompok diatur oleh Mahasiswa hanya ketua yang bisa kelola anggota
+        if ("Mahasiswa".equalsIgnoreCase(modeKel)) {
+            return isLeader(idTugas, idUser);
+        }
+        
+        return false;
+    }
+
+    public boolean hasKelompok(Integer idTugas, String idUser) {
+        Integer idKelompok = kelompokJdbcRepo.getKelompokIdByUser(idTugas, idUser);
+        return idKelompok != null;
     }
 
     @Transactional
@@ -108,5 +134,9 @@ public class KelompokJdbcService {
     }
     public int getMaxAnggota(Integer idTugas) {
         return kelompokJdbcRepo.getMaxAnggota(idTugas);
+    }
+    
+    public String getNamaKelompok(Integer idTugas, String idUser) {
+        return kelompokJdbcRepo.getNamaKelompok(idTugas, idUser);
     }
 }
