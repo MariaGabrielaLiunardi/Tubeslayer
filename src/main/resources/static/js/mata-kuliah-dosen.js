@@ -1,31 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".card");
-    
+
     cards.forEach(card => {
+        const gradientId = card.getAttribute("data-gradient");
+        
+        // Cari div .mk-img di dalam card
+        const mkImg = card.querySelector(".mk-img");
+        if (mkImg && gradientId) {
+            mkImg.classList.add(`gradient-${gradientId}`);
+        }
+
         card.addEventListener("click", () => {
-            // Ambil kode MK dari atribut data
             const kodeMk = card.getAttribute("data-kode-mk");
-            
             if (kodeMk) {
-                // KIRIMKAN SEBAGAI PARAMETER 'kodeMk'
                 window.location.href = "/dosen/matkul-detail?kodeMk=" + encodeURIComponent(kodeMk);
             } else {
-                 console.error("Error: Kode Mata Kuliah (data-kode-mk) tidak ditemukan pada kartu.");
+                console.error("Error: Kode Mata Kuliah tidak ditemukan.");
             }
         });
     });
 
+
         const handleLogout = () => {
         console.log("Melakukan proses logout..."); 
-        // Menggunakan fetch POST untuk memicu logout Spring Security
         fetch('/logout', { method: 'POST' }) 
             .then(() => {
-                 // Setelah berhasil, redirect ke halaman utama
+                 // redirect ke halaman utama
                  window.location.href = '/'; 
             })
             .catch(error => {
                  console.error("Logout gagal:", error);
-                 // Fallback: tetap redirect meskipun fetch gagal
+                 // tetap redirect meskipun fetch gagal
                  window.location.href = '/'; 
             });
     };

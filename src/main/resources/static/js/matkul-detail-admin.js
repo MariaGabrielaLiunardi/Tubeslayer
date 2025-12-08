@@ -1,28 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- Ambil KodeMK untuk Navigasi Tab ---
     const mkTabDiv = document.querySelector('.mk-tab');
     const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
 
-    // --- Logika Tab Navigation (DISESUAIKAN UNTUK DOSEN) ---
     const tabs = document.querySelectorAll('.mk-tab button');
-    
-    //tabs.forEach(tab => {
-        //const tabTarget = tab.getAttribute('data-tab-target');
 
-        // NAVIGASI KE TAB KULIAH (DETAIL DOSEN)
-        //if (tabTarget === 'kuliah' && mataKuliahId) {
-            //tab.addEventListener('click', () => {
-                // Menggunakan endpoint /admin/arsip-matkul-detail dan parameter 'kodeMk'
-                //window.location.href = `/admin/arsip-matkul-detail?kodeMk=${encodeURIComponent(mataKuliahId)}`;
-            //});
-        //}
-        // Tambahkan logic untuk tab 'Nilai' jika sudah ada endpoint-nya
-    //});
-
-    // ------------------------------------------------------------------
-    // --- Logika Logout (Untuk tombol di header) ---
-    // ------------------------------------------------------------------
+    // Logika Logout 
     
     const handleLogout = () => {
         fetch('/logout', { method: 'POST' }) 
@@ -39,9 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutButton.addEventListener('click', handleLogout);
     }
     
-    // ------------------------------------------------------------------
-    // --- Logika Pencarian & Pagination ---
-    // ------------------------------------------------------------------
+    // Pencarian & Pagination 
 
     const searchBox = document.querySelector('.search-box');
     const searchInput = searchBox ? searchBox.querySelector('input[type="text"]') : null;
@@ -49,13 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const pesertaCountSpan = document.querySelector('.peserta-count');
     const tableBody = document.querySelector('#peserta-table tbody');
     
-    // Dapatkan SEMUA TR dari tbody
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
-    
-    // Baris DATA (yang memiliki 4 kolom, hasil render Thymeleaf)
+   
     const masterDataRows = allTableRows.filter(row => row.children.length === 2); 
     
-    // Baris pesan "Tidak ada peserta terdaftar..." (baris dengan colspan)
     const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 2) : null; 
     
     let filteredPageItems = masterDataRows;
@@ -64,22 +42,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextButton = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('current-page');
 
-    const itemsPerPage = 3; // Menggunakan 3 item per halaman (sesuai contoh Anda)
+    const itemsPerPage = 3; 
     let totalPages = 0;
     let currentPage = 1;
 
-    // --- FUNGSI UTAMA PAGINASI ---
+    // Pagination
 
     const showPage = (page) => {
         const start = (page - 1) * itemsPerPage;
         const end = page * itemsPerPage;
-        
-        // Sembunyikan semua baris data awal (master list)
+    
         masterDataRows.forEach(item => {
             item.style.display = 'none';
         });
 
-        // Tampilkan hanya baris yang difilter untuk halaman saat ini
         filteredPageItems.forEach((item, index) => {
             if (index >= start && index < end) {
                 item.style.display = 'table-row';
@@ -98,10 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Tugas: ${filteredPageItems.length} tugas`; 
         }
         
-        // --- HANDLE KETIKA HASIL PENCARIAN 0 ---
+        // Gak ada datanya
         if (filteredPageItems.length === 0) {
             
-            // Sembunyikan baris pesan default jika ada, karena tabel harus bersih
             if (noDataRow) {
                 noDataRow.style.display = 'none'; 
             }
@@ -109,15 +84,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (prevButton) prevButton.disabled = true;
             if (nextButton) nextButton.disabled = true;
             
-            // Penting: Pastikan semua baris tersembunyi
             masterDataRows.forEach(row => row.style.display = 'none');
             
             return;
         }
         
-        // --- HANDLE KETIKA HASIL PENCARIAN > 0 ---
+        // Ada datanya 
         if (noDataRow) {
-            noDataRow.style.display = 'none'; // Pastikan pesan default disembunyikan
+            noDataRow.style.display = 'none'; 
         }
 
         if (pageInfoSpan) pageInfoSpan.textContent = `${currentPage} dari ${totalPages}`;
@@ -128,17 +102,14 @@ document.addEventListener("DOMContentLoaded", () => {
         showPage(currentPage);
     };
 
-    // ------------------------------------------------------------------
-    // --- FUNGSI PENCARIAN ---
-    // ------------------------------------------------------------------
+    // Search 
 
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         
         if (query === "") {
-            filteredPageItems = masterDataRows; // Kembalikan ke master list penuh
+            filteredPageItems = masterDataRows; 
         } else {
-            // Filter baris berdasarkan Nama (Cell index 1) atau NIM (Cell index 2)
             filteredPageItems = masterDataRows.filter(row => {
                 if (row.cells.length < 2) return false;
                 
@@ -152,8 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         updateUI(true); 
     };
-
-    // --- EVENT LISTENERS PENCARIAN ---
     
     if (searchButton) {
         searchButton.addEventListener('click', handleSearch);
@@ -167,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- EVENT LISTENERS PAGINATION ---
+    // Event Listener Pagination
     
     if (prevButton) {
         prevButton.addEventListener('click', () => {
@@ -187,6 +156,5 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     
-    // --- INISIALISASI ---
     updateUI(); 
 });
