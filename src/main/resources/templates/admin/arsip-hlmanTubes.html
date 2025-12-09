@@ -1,136 +1,186 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar'}">Tugas Besar</title>
-    <link rel="stylesheet" href="/css/hlmtubes-styles.css">
-    <link rel="stylesheet" href="/css/detail-tugas.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar'}">
+      Tugas Besar
+    </title>
+    <link rel="stylesheet" href="/css/hlmtubes-styles.css" />
+    <link rel="stylesheet" href="/css/detail-tugas.css" />
     <script src="/js/sidebar-hlmtubes.js" defer></script>
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-</head>
-<body>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <!-- Sidebar -->
     <nav class="sidebar close">
-        <header>
-            <div class="image-text">
-                <span class="image">
-                    <img src="/logo/blue-logo.png" alt="logo">
-                </span>
-                <div class="text header-text">
-                    <span class="name">Tubeslayer</span>
-                </div>
-            </div>
-            <i class='bx bx-chevron-right toggle'></i>
-        </header>
-
-        <div class="menu-bar">
-            <div class="menu">
-                <ul class="menu-links">
-                    <li class="nav-link">
-                        <a th:href="@{/mahasiswa/dashboard}">
-                            <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
-                            <span class="text nav-text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-link active">
-                        <a th:href="@{/mahasiswa/mata-kuliah}">
-                            <img src="/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
-                            <span class="text nav-text">Mata Kuliah</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+      <header>
+        <div class="image-text">
+          <span class="image">
+            <img src="/logo/blue-logo.png" alt="logo" />
+          </span>
+          <div class="text header-text">
+            <span class="name">Tubeslayer</span>
+          </div>
         </div>
+        <i class="bx bx-chevron-right toggle"></i>
+      </header>
+
+      <div class="menu-bar">
+        <div class="menu">
+          <ul class="menu-links">
+            <li class="nav-link">
+              <a href="/admin/dashboard">
+                <img src="/icon/dashboard.png" class="icon dashboard-icon" />
+                <span class="text nav-text">Dashboard</span>
+              </a>
+            </li>
+
+            <li class="nav-link">
+              <a href="/admin/menu-awal-ad">
+                <img src="/icon/database.png" class="icon database-icon" />
+                <span class="text nav-text">Data</span>
+              </a>
+            </li>
+
+            <li class="nav-link active">
+              <a href="/admin/arsip-mata-kuliah">
+                <img src="/icon/archive.png" class="icon archive-icon" />
+                <span class="text nav-text">Arsip Mata Kuliah</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-left"></div>
-            <div class="header-right">
-                <div class="user-info">
-                    <div class="user-name" id="current-user-name" th:text="${user.nama}">Maria Gabriela</div>
-                    <div class="user-role" th:text="${user.role}">Admin</div>
-                </div>
-                <div class="user-avatar">
-                    <img src="/icon/pfp.png" alt="useravtr">
-                </div>
-                <a th:href="@{/logout}" class="logout-link">
-                    <div class="notification-icon">
-                        <img src="/icon/logout.png" alt="logouticon">
-                    </div>
-                </a>
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left"></div>
+        <div class="header-right">
+          <div class="user-info">
+            <div
+              class="user-name"
+              id="current-user-name"
+              th:text="${user.nama}"
+            >
+              Maria Gabriela
             </div>
+            <div class="user-role" th:text="${user.role}">Admin</div>
+          </div>
+          <div class="user-avatar">
+            <img src="/icon/pfp.png" alt="useravtr" />
+          </div>
+          <a th:href="@{/logout}" class="logout-link">
+            <div class="notification-icon">
+              <img src="/icon/logout.png" alt="logouticon" />
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div
+        class="mk-tab"
+        th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}"
+      >
+        <button
+          class="tab active"
+          data-tab-target="kuliah"
+          th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK})}'|"
+        >
+          Kuliah
+        </button>
+        <button
+          class="tab"
+          data-tab-target="peserta"
+          th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|"
+        >
+          Daftar Peserta
+        </button>
+        <button class="tab" data-tab-target="nilai">Nilai</button>
+      </div>
+
+      <!-- Card Container - NEW DESIGN -->
+      <div class="card-container-new">
+        <!-- Title Section -->
+        <div class="title-section-new">
+          <div class="book-icon-new">
+            <i class="bx bx-book-open"></i>
+          </div>
+          <h1
+            class="title-text"
+            th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar Tahap 1'}"
+          >
+            Tugas Besar Tahap 1
+          </h1>
         </div>
 
-        <!-- Tabs -->
-        <div class="mk-tab" th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}">
-            <button class="tab active" data-tab-target="kuliah" 
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK})}'|">
-                Kuliah
-            </button>
-            <button class="tab" data-tab-target="peserta" 
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|">
-                Daftar Peserta
-            </button>
-            <button class="tab" data-tab-target="nilai">Nilai</button>
-        </div>
+        <!-- Content Card -->
+        <div class="content-card-new">
+          <!-- Breadcrumb -->
+          <div class="breadcrumb-new">
+            <span>Daftar Mata Kuliah</span>
+            <span class="separator">></span>
+            <span
+              th:text="${mkDetail != null ? mkDetail.nama : 'Dasar Pemrograman'}"
+              >Dasar Pemrograman</span
+            >
+            <span class="separator">></span>
+            <span
+              th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar Tahap 1'}"
+              >Tugas Besar Tahap 1</span
+            >
+          </div>
 
-        <!-- Card Container - NEW DESIGN -->
-        <div class="card-container-new">
-            <!-- Title Section -->
-            <div class="title-section-new">
-                <div class="book-icon-new">
-                    <i class='bx bx-book-open'></i>
-                </div>
-                <h1 class="title-text" th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar Tahap 1'}">Tugas Besar Tahap 1</h1>
+          <!-- Folder Header -->
+          <div class="folder-header">
+            <div class="folder-icon-new">
+              <i class="bx bx-folder"></i>
             </div>
+            <h2
+              th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar Tahap 1'}"
+            >
+              Tugas Besar Tahap 1
+            </h2>
+          </div>
 
-            <!-- Content Card -->
-            <div class="content-card-new">
-                <!-- Breadcrumb -->
-                <div class="breadcrumb-new">
-                    <span>Daftar Mata Kuliah</span>
-                    <span class="separator">></span>
-                    <span th:text="${mkDetail != null ? mkDetail.nama : 'Dasar Pemrograman'}">Dasar Pemrograman</span>
-                    <span class="separator">></span>
-                    <span th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar Tahap 1'}">Tugas Besar Tahap 1</span>
-                </div>
+          <!-- Description -->
+          <p
+            class="description-text"
+            th:text="${tugas != null ? tugas.deskripsi : 'Pada tugas ini Anda diminta untuk membuat program yang dapat membantu mahasiswa untuk menghitung nilai IPK mereka.'}"
+          >
+            Pada tugas ini Anda diminta untuk membuat program yang dapat
+            membantu mahasiswa untuk menghitung nilai IPK mereka.
+          </p>
 
-                <!-- Folder Header -->
-                <div class="folder-header">
-                    <div class="folder-icon-new">
-                        <i class='bx bx-folder'></i>
-                    </div>
-                    <h2 th:text="${tugas != null ? tugas.judulTugas : 'Tugas Besar Tahap 1'}">Tugas Besar Tahap 1</h2>
-                </div>
+          <!-- Group Info -->
+          <p class="group-requirement">
+            <span
+              th:text="|Tugas ini dilakukan berkelompok sebanyak ${tugas != null ? tugas.maxAnggota : 5} orang dan kelompok ditentukan oleh ${tugas != null ? (tugas.modeKel == 'Mahasiswa' ? 'Mahasiswa' : 'Dosen') : 'Mahasiswa'}.|"
+            >
+              Tugas ini dilakukan berkelompok sebanyak 5 orang dan kelompok
+              ditentukan oleh Mahasiswa.
+            </span>
+          </p>
 
-                <!-- Description -->
-                <p class="description-text" th:text="${tugas != null ? tugas.deskripsi : 'Pada tugas ini Anda diminta untuk membuat program yang dapat membantu mahasiswa untuk menghitung nilai IPK mereka.'}">
-                    Pada tugas ini Anda diminta untuk membuat program yang dapat membantu mahasiswa untuk menghitung nilai IPK mereka.
-                </p>
-
-                <!-- Group Info -->
-                <p class="group-requirement">
-                    <span th:text="|Tugas ini dilakukan berkelompok sebanyak ${tugas != null ? tugas.maxAnggota : 5} orang dan kelompok ditentukan oleh ${tugas != null ? (tugas.modeKel == 'Mahasiswa' ? 'Mahasiswa' : 'Dosen') : 'Mahasiswa'}.|">
-                        Tugas ini dilakukan berkelompok sebanyak 5 orang dan kelompok ditentukan oleh Mahasiswa.
-                    </span>
-                </p>
-
-                <!-- Deadline Badge -->
-                <div class="deadline-badge">
-                    <span class="deadline-label">Deadline :</span>
-                    <span class="deadline-date" th:text="${tugas != null ? #temporals.format(tugas.deadline, 'EEEE, dd MMMM yyyy', new java.util.Locale('id', 'ID')) : 'Senin, 27 November 2025'}">
-                        Senin, 27 November 2025
-                    </span>
-                </div>
-            </div>
+          <!-- Deadline Badge -->
+          <div class="deadline-badge">
+            <span class="deadline-label">Deadline :</span>
+            <span
+              class="deadline-date"
+              th:text="${tugas != null ? #temporals.format(tugas.deadline, 'EEEE, dd MMMM yyyy', new java.util.Locale('id', 'ID')) : 'Senin, 27 November 2025'}"
+            >
+              Senin, 27 November 2025
+            </span>
+          </div>
         </div>
+      </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="/js/sidebar.js"></script>
-</body>
+  </body>
 </html>
