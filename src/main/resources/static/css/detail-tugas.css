@@ -1,0 +1,163 @@
+.card-container-new {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 0 30px 30px 30px;
+    background-color: white;
+}
+
+/* Title Section - Blue Background */
+.title-section-new {
+    background: linear-gradient(135deg, #B3E5FC 0%, #81D4FA 100%);
+    padding: 30px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.book-icon-new {
+    width: 70px;
+    height: 70px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+}
+
+.book-icon-new i {
+    font-size: 40px;
+    color: #0288d1;
+}
+
+.title-text {
+    font-size: 36px;
+    color: #000;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+/* Content Card - White Background */
+.content-card-new {
+    background-color: white;
+    padding: 35px 40px;
+}
+
+/* Breadcrumb */
+.breadcrumb-new {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #E3F2FD;
+    color: #424242;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.breadcrumb-new .separator {
+    margin: 0 10px;
+    color: #90A4AE;
+}
+
+/* Folder Header */
+.folder-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.folder-icon-new {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.folder-icon-new i {
+    font-size: 50px;
+    color: #42A5F5;
+}
+
+.folder-header h2 {
+    font-size: 24px;
+    color: #000;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Description Text */
+.description-text {
+    color: #424242;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+/* Group Requirement */
+.group-requirement {
+    color: #424242;
+    line-height: 1.8;
+    margin-bottom: 25px;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+/* Deadline Badge */
+.deadline-badge {
+    background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%);
+    padding: 12px 24px;
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(239, 83, 80, 0.2);
+}
+
+.deadline-label {
+    color: #B71C1C;
+    font-weight: 700;
+    font-size: 15px;
+    margin-right: 8px;
+}
+
+.deadline-date {
+    color: #C62828;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .title-section-new {
+        padding: 20px 25px;
+    }
+    
+    .book-icon-new {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .book-icon-new i {
+        font-size: 30px;
+    }
+    
+    .title-text {
+        font-size: 24px;
+    }
+    
+    .content-card-new {
+        padding: 25px 25px;
+    }
+    
+    .folder-header h2 {
+        font-size: 20px;
+    }
+    
+    .breadcrumb-new {
+        font-size: 12px;
+    }
+}
