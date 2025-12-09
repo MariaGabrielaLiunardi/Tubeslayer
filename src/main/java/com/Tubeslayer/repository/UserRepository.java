@@ -6,8 +6,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
+    
+    
+    // WAJIB: Method untuk search dosen by nama (case-insensitive)
+    List<User> findByRoleAndNamaContainingIgnoreCase(String role, String nama);
+    
+    // Opsional: Cek email sudah terdaftar
+    boolean existsByEmail(String email);
+    
+    // Opsional: Cari by email
     Optional<User> findByEmail(String email);
 
     long countByRoleAndIsActive(String role, boolean isActive);
