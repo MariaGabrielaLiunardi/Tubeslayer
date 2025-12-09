@@ -9,8 +9,6 @@ import java.util.Set;
 @Entity
 @Table(name = "user_table")
 @Data
-@EqualsAndHashCode(exclude = {"tugasBesarList", "mataKuliahMahasiswaList"}) 
-@ToString(exclude = {"tugasBesarList", "mataKuliahMahasiswaList"})
 public class User {
     @Id
     @Column(name = "id_user", length = 30)
