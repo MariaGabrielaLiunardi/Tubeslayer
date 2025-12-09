@@ -34,21 +34,25 @@ public interface MataKuliahRepository extends JpaRepository<MataKuliah, String> 
                                                           Pageable pageable);
     List<MataKuliah> findByIsActive(boolean b);
 
-    @Query(
-        value = """
-            SELECT new com.Tubeslayer.dto.MKArchiveDTO(
-                mk.kodeMK,
-                mk.nama
-            )
-            FROM MataKuliah mk
-            WHERE mk.isActive = false
-        """,
-        countQuery = """
-            SELECT COUNT(mk)
-            FROM MataKuliah mk
-            WHERE mk.isActive = false
-        """
+@Query(value = """
+    SELECT DISTINCT new com.Tubeslayer.dto.MKArchiveDTO(
+        mk.kodeMK,
+        mk.nama,
+        mkm.tahunAkademik
     )
-    Page<MKArchiveDTO> getArchiveMK(Pageable pageable);
+    FROM MataKuliah mk
+    JOIN mk.mahasiswaList mkm
+    WHERE mk.isActive = false
+""",
+countQuery = """
+    SELECT COUNT(DISTINCT mk.kodeMK, mkm.tahunAkademik)
+    FROM MataKuliah mk
+    JOIN mk.mahasiswaList mkm
+    WHERE mk.isActive = false
+""")
+Page<MKArchiveDTO> getArchiveMK(Pageable pageable);
+
+
+
 
 }
