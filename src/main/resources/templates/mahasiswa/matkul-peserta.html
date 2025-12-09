@@ -77,7 +77,11 @@
                 onclick="window.location.href=this.getAttribute('data-target-url')">
                 Kuliah
             </button>
-            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button>
+            <button class="tab active" data-tab-target="peserta"
+                th:attr="data-target-url=@{/mahasiswa/matkul-peserta(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')">
+                Daftar Peserta
+            </button>
             <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
@@ -109,7 +113,7 @@
                     <input type="text" placeholder="Cari nama disini...">
                     <button><img src="/icon/search.png" alt="search"></button>
                 </div>
-                <span class="peserta-count" th:text="|Peserta: ${pesertaList.size()} peserta|">Peserta: 0 peserta</span>
+                <span class="peserta-count" th:text="|Peserta: ${pesertaCount} peserta|">Peserta: 0 peserta</span>
             </div>
 
             <div class="peserta-content">
@@ -120,27 +124,30 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>NIM</th>
-                                <th>Kelas</th>
+                                <th>Nomor Pokok</th>
+                                <th>Role</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="pesertaRel, iStat : ${pesertaList}" class="page-item">
+                            <tr th:each="p, iStat : ${combinedPesertaList}" class="page-item">
 
-                                <td th:text="${iStat.count} + '.'">1.</td>
+                                <td th:text="${p.no} + '.'">1.</td>
 
-                                <td th:text="${pesertaRel.user.nama}">Nama</td>
+                                <td th:text="${p.nama}">Nama</td>
 
-                                <td th:text="${pesertaRel.user.idUser}">XXXXX</td>
+                                <td th:text="${p.nomorPokok}">XXXXX</td>
 
-                                <td th:text="${pesertaRel.kelas}">X</td>
+                                <td th:text="${p.role}">Koordinator/Mahasiswa</td>
                             </tr>
 
-                            <tr th:if="${pesertaList.empty}">
-                                <td colspan="4" style="text-align: center;">Tidak ada peserta terdaftar dalam mata
+                            <tr th:if="${combinedPesertaList != null and combinedPesertaList.size() == 1}">
+                                <td colspan="4" style="text-align: center;">Tidak ada mahasiswa terdaftar dalam mata
                                     kuliah ini.</td>
                             </tr>
 
+                            <tr th:if="${combinedPesertaList == null or combinedPesertaList.empty}">
+                                <td colspan="4" style="text-align: center;">Gagal memuat daftar peserta.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
