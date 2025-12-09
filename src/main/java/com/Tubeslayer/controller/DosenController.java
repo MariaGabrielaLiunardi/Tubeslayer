@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 
+import com.Tubeslayer.dto.PesertaMatkulDTO;
 import com.Tubeslayer.dto.TugasBesarRequest;
 import com.Tubeslayer.entity.*;
 
@@ -24,12 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Comparator; 
 
 @Controller
 public class DosenController {
@@ -71,6 +74,9 @@ public class DosenController {
         model.addAttribute("jumlahTb", jumlahTb);
 
         List<MataKuliahDosen> listMK = mataKuliahService.getTop4ActiveByUserAndTahunAkademik(user.getIdUser(), tahunAkademik);
+        
+        listMK.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
+        
         model.addAttribute("mataKuliahDosenList", listMK);
 
         return "dosen/dashboard";
@@ -81,38 +87,39 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     
     String idDosen = user.getIdUser(); 
     List<MataKuliahDosen> relasiMKDosen = mkDosenRepo.findById_IdUserAndIsActive(idDosen, true);
+
+    relasiMKDosen.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
     
     model.addAttribute("mataKuliahDosenList", relasiMKDosen);
     model.addAttribute("user", user);
 
     LocalDate today = LocalDate.now();
     int year = today.getYear();
-    
-    // --- KOREKSI LOGIC PENGIRIMAN SEMESTER ---
-    // Hitung string lengkap (misalnya, "Ganjil 2025/2026")
+
     String semesterPenuh = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) 
             ? "Ganjil " + year + "/" + (year + 1)
             : "Genap " + (year - 1) + "/" + year;
             
-    // Kirim string lengkap ini ke Model
     model.addAttribute("semesterTahunAjaran", semesterPenuh); 
     
-    // Kirim juga label Ganjil/Genap jika template membutuhkannya (meskipun sekarang tidak terpakai)
     String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
     model.addAttribute("semesterLabel", semesterLabel);
-    // ------------------------------------------
 
     return "dosen/mata-kuliah";
 }
 
     @GetMapping("/dosen/matkul-detail")
-    public String mkDetail(@RequestParam(required = false) String kodeMk, 
+    public String mkDetail(@RequestParam(required = false) String kodeMk,
+                            @RequestParam(required = false) Integer colorIndex,  
                            @AuthenticationPrincipal CustomUserDetails user, 
                            Model model) {
         if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
 
         MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
         if (mk == null) return "redirect:/dosen/mata-kuliah";
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        model.addAttribute("colorIndex", finalColorIndex);
 
         model.addAttribute("user", user); 
         List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
@@ -149,29 +156,78 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     }
 
     @GetMapping("/dosen/matkul-peserta")
-    public String peserta(@RequestParam(required = false) String kodeMk, 
-                          @AuthenticationPrincipal CustomUserDetails user, 
-                          Model model) {
-        if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
+    public String peserta(@RequestParam(required = false) String kodeMk,
+                         @RequestParam(required = false) Integer colorIndex, 
+                      @AuthenticationPrincipal CustomUserDetails user, 
+                      Model model) {
+    if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
 
-        MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
-        if (mk == null) return "redirect:/dosen/mata-kuliah";
+    MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
+    if (mk == null) return "redirect:/dosen/mata-kuliah";
 
-        List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
-        if (mkMahasiswaRepo != null) {
-            try {
-                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
-            } catch (Exception e) {
-                System.err.println("Error saat mengambil data peserta: " + e.getMessage());
-            }
+    // 1. Color Index (untuk gradien header)
+    int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+    model.addAttribute("colorIndex", finalColorIndex);
+
+    // 2. Ambil List Mahasiswa
+    List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
+    if (mkMahasiswaRepo != null) {
+        try {
+            listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
+        } catch (Exception e) {
+            System.err.println("Error saat mengambil data peserta: " + e.getMessage());
         }
-
-        model.addAttribute("mkDetail", mk);
-        model.addAttribute("user", user); 
-        model.addAttribute("pesertaList", listPeserta);
-
-        return "dosen/matkul-peserta";
     }
+    
+    // 3. Ambil Koordinator Dosen
+    User koordinator = user.getUser(); 
+
+    // --- 4. GABUNGKAN DOSEN DAN MAHASISWA MENGGUNAKAN DTO ---
+    List<PesertaMatkulDTO> combinedList = new ArrayList<>();
+    int counter = 1;
+
+    // 4.1. Tambahkan Dosen Koordinator (Selalu Baris Pertama)
+    combinedList.add(new PesertaMatkulDTO(
+        counter++, 
+        koordinator.getNama(), 
+        koordinator.getIdUser(), 
+        "Koordinator"
+    ));
+    
+    // 4.2. Konversi Mahasiswa ke DTO
+    List<PesertaMatkulDTO> mahasiswaDTOs = listPeserta.stream()
+        .map(rel -> new PesertaMatkulDTO(
+            0, // Index akan di-update setelah sorting
+            rel.getUser().getNama(),
+            rel.getUser().getIdUser(),
+            "Mahasiswa",
+            rel.getKelas()
+        ))
+        .collect(Collectors.toList());
+        
+    // 4.3. Urutkan Mahasiswa berdasarkan Nama
+    mahasiswaDTOs.sort(Comparator.comparing(PesertaMatkulDTO::getNama));
+
+    // 4.4. Gabungkan dan update nomor urut
+    combinedList.addAll(mahasiswaDTOs);
+    for (int i = 1; i < combinedList.size(); i++) {
+        combinedList.get(i).setNo(counter++);
+    }
+    // -------------------------------------------------------------
+
+    model.addAttribute("mkDetail", mk);
+    model.addAttribute("user", user); 
+
+    if (combinedList == null) {
+    combinedList = Collections.emptyList();
+    }
+
+    model.addAttribute("combinedPesertaList", combinedList);
+    model.addAttribute("combinedPesertaList", combinedList); // List baru untuk tabel
+    model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah HANYA Mahasiswa
+
+    return "dosen/matkul-peserta";
+}
 
     @PostMapping("/api/dosen/matakuliah/{kodeMk}/tugas")
     @ResponseBody 
@@ -429,7 +485,8 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
                 .map(user -> {
                     Map<String, String> userMap = new HashMap<>();
                     userMap.put("id_user", user.getIdUser());
-                    userMap.put("nama", user.getNama());
+                    // KOREKSI: Ini sepertinya salah, harusnya user.getNama()
+                    userMap.put("nama", user.getNama()); 
                     userMap.put("email", user.getEmail());
                     return userMap;
                 })
