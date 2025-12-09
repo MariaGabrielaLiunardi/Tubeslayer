@@ -78,19 +78,23 @@
             </div>
         </div>
 
-        <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
-            <button class="tab" data-tab-target="kuliah"
-                th:onclick="|window.location.href='@{/admin/arsip-matkul-detail(kodeMk=${mkDetail.kodeMK})}'|">
-                Kuliah
+        <div class="mk-tab" th:data-mk-kode="${mkDetail?.kodeMK}">
+             <button class="tab" data-tab-target="kuliah"
+                th:attr="data-target-url=@{/admin/arsip-matkul-detail(kodeMk=${mkDetail.kodeMK})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')"> Kuliah
             </button>
-            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button>
+
+            <button class="tab active" data-tab-target="peserta"
+                th:attr="data-target-url=@{/admin/matkul-peserta(kodeMk=${mkDetail.kodeMK})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')"> Daftar Peserta
+            </button>
             <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
         <div class="detail-wrapper">
 
             <div class="mk-header">
-                <div class="mk-img"></div>
+                <div class="mk-img" th:classappend="'gradient-' + (${colorIndex} + 1)"></div>
                 <div class="mk-info">
                     <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
                     <p>

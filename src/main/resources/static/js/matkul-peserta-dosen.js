@@ -13,20 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     });
-    
-    //const mkTabDiv = document.querySelector('.mk-tab');
-    //const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
-
-    //const tabs = document.querySelectorAll('.mk-tab button');
-    
-    //tabs.forEach(tab => {
-
-        //if (tabTarget === 'kuliah' && mataKuliahId) {
-            //tab.addEventListener('click', () => {
-                //window.location.href = `/dosen/matkul-detail?kodeMk=${encodeURIComponent(mataKuliahId)}`;
-            //});
-        //}
-    //});
 
     // Logout
     
