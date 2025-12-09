@@ -16,6 +16,7 @@ import com.Tubeslayer.service.CustomUserDetails;
 import com.Tubeslayer.service.DashboardAdminService;
 import com.Tubeslayer.service.MataKuliahService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page; 
 
 @Controller
 @RequestMapping("/admin")
@@ -144,11 +147,21 @@ public class AdminController {
     // VIEWS UNTUK ARSIP
     // ============================
     @GetMapping("/arsip-mata-kuliah")
-    public String getArsip(Model model) {
-        List<MKArchiveDTO> list = mataKuliahDosenRepo.getArchiveMK();
-        model.addAttribute("arsipMK", list);
+    public String getArsip(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MKArchiveDTO> pageMK = mataKuliahRepository.getArchiveMK(pageable);
+
+        model.addAttribute("arsipMK", pageMK.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pageMK.getTotalPages());
+        model.addAttribute("totalItems", pageMK.getTotalElements());
+
         return "admin/arsip-mata-kuliah";
-    }
+}
 
     @GetMapping("/arsip-matkul-detail")
     public String kelolaArsipMatkulDetail(@RequestParam(required = false) String kodeMk,

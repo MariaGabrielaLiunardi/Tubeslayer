@@ -43,7 +43,7 @@
                 </li>
 
                 <li class="nav-link active">
-                    <a href="/admin/arstip-mata-kuliah">
+                    <a href="/admin/arsip-mata-kuliah">
                         <img src="/icon/archive.png" class="icon archive-icon">
                         <span class="text nav-text">Arsip Mata Kuliah</span>
                     </a>
@@ -110,20 +110,43 @@
                 </div>
 
                 <div id="data-container">
-                    <div class="data-row" 
-                        th:each="mk, iter : ${arsipMK}">
-                        <span th:text="${iter.index + 1}">1</span>
-                        <span th:text="${mk.nama}">Pemrograman</span>
-                        <span th:text="${mk.tahunAkademik}">2024/2025</span>
-                    </div>
+                    <a th:each="mk, iter : ${arsipMK}"
+                    th:href="@{/admin/arsip-matkul-detail(kodeMk=${mk.kodeMK})}"
+                    class="data-row-link"
+                    style="display:block;">
+                        <div class="data-row">
+                            <span th:text="${iter.index + 1}"></span>
+                            <span th:text="${mk.nama}"></span>
+                            <span th:text="${mk.tahunAkademik}"></span>
+                        </div>
+                    </a>
                 </div>
 
-                <div class="pagination"
-                    th:if="${arsipMK != null and !arsipMK.isEmpty()}">
-                    <button class="page-arrow" id="prev-page" disabled>&lt;</button>
-                    <span class="page-info" id="current-page">0 dari 0</span>
-                    <button class="page-arrow" id="next-page">&gt;</button>
+                <div class="pagination" th:if="${totalPages > 1}">
+                    
+                    <!-- Tombol Prev -->
+                    <a class="page-arrow"
+                    th:if="${currentPage > 0}"
+                    th:href="@{/admin/arsip-mata-kuliah(page=${currentPage - 1}, size=${3})}">
+                        &lt;
+                    </a>
+                    <span class="page-arrow disabled" th:if="${currentPage == 0}">&lt;</span>
+
+                    <!-- Info halaman -->
+                    <span class="page-info">
+                        [[${currentPage + 1}]] / [[${totalPages}]]
+                    </span>
+
+                    <!-- Tombol Next -->
+                    <a class="page-arrow"
+                    th:if="${currentPage + 1 < totalPages}"
+                    th:href="@{/admin/arsip-mata-kuliah(page=${currentPage + 1}, size=${3})}">
+                        &gt;
+                    </a>
+                    <span class="page-arrow disabled" th:if="${currentPage + 1 == totalPages}">&gt;</span>
+
                 </div>
+
             </div>
         </div>
     </div>
