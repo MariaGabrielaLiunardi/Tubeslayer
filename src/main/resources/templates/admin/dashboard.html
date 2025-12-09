@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Tubeslayer</title>
+   <link rel="stylesheet" href="/css/dash-admin.css">
+   <script src="/js/dash-admin.js" defer></script>
+   <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+<nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img src="/logo/blue-logo.png" alt="logo">
+            </span>
+            <div class ="text header-text">
+                <span class="name">Tubeslayer</span>
+            </div>
+        </div>
+    </header>
+    <i class='bxr bx-chevron-right toggle'></i> 
+    <div class="menu-bar">
+        <div class="menu">
+            <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="/admin/dashboard">
+                        <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="/admin/menu-awal-ad">
+                        <img src="/icon/database.png" alt="Database Icon" class="icon database-icon">
+                        <span class="text nav-text">Data</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="/admin/arsip-mata-kuliah">
+                        <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                        <span class="text nav-text">Arsip Mata Kuliah</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<section class="home">
+    <div class="header">
+        <div class="left-section">
+            <span class="dashboard-title">Dashboard</span>
+        </div>
+        <div class="right-section">
+            <div class="info">
+                <span class="bold" th:text="${user.nama}">Nama</span>
+                <span th:text="${user.role}">Role</span>
+            </div>
+            <a th:href="@{/profil}">
+                <img src="/icon/pfp.png" class="pfp" alt="pfp">
+            </a>
+            <a th:href="@{/logout}" class="logout-link">
+                <button type="button" class="logout">
+                    <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="contents">
+        <div class="header-section">
+            <span class="web-title">Tubeslayer</span>
+            <span class="welcome-message">
+                Selamat datang <span th:text="${user.nama}">Nama</span>! 💻
+            </span>
+        </div>
+        <div class="overview-section">
+            <span class="overview-title">Overview</span>
+            <div class="overview-div">
+                <div class="left-overview">
+                    <span class="date">
+                        🧑‍🏫 Dosen terdaftar: 
+                        <span th:text="${jumlahDosen}" style="font-weight: normal;"></span>
+                    </span>
+
+                    <span class="semester">
+                        🧑‍🎓 Mahasiswa terdaftar: 
+                        <span th:text="${jumlahMahasiswa}" style="font-weight: normal;"></span>
+                    </span>
+                </div>
+                <div class="right-overview">
+                    <span class="mk">
+                       📚 Jumlah mata kuliah aktif: 
+                        <span class="mk-value" th:text="${jumlahMk}">0</span>
+                    </span>
+
+                    <span class="tubes-aktif">
+                      📝 Jumlah tugas besar aktif: 
+                        <span class="tb-value" th:text="${jumlahTb}">0</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="content-section">
+            <div class="content-title">
+                <span class="content-title">Data</span>
+                <a href="/admin/menu-awal-ad" class="lihat-semua-btn">
+                    Lihat Semua >
+                </a>
+            </div>
+
+            <div class="content-div">
+                <!-- Card Mata Kuliah -->
+                <a th:href="@{/admin/kelola-mata-kuliah}">
+                    <div class="card mata-kuliah">
+                        <div class="icon-container">
+                            <img src="/icon/matkul-biru.png" alt="Icon Mata Kuliah">
+                        </div>
+                        <span class="title">Kelola Mata Kuliah</span>
+                    </div>
+                </a>
+
+                <a th:href="@{/admin/kelola-dosen}">
+                    <div class="card dosen">
+                        <div class="icon-container-dosen">
+                            <img src="/icon/dosen-biru.png" alt="Icon Dosen">
+                        </div>
+                        <span class="title">Kelola Dosen</span>
+                    </div>
+                </a>
+
+                <a th:href="@{/admin/kelola-mahasiswa}">
+                    <div class="card mahasiswa">
+                        <div class="icon-container">
+                            <img src="/icon/mahasiswa-biru.png" alt="Icon Mahasiswa">
+                        </div>
+                        <span class="title">Kelola Mahasiswa</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

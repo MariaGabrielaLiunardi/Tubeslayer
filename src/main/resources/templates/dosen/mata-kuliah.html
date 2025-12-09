@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tubeslayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/dash-user.css">
+    <link rel="stylesheet" href="/css/mata-kuliah-styles.css">
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
+
+    <script src="/js/mata-kuliah-dosen.js" defer></script>
+    <script src="/js/dash-user.js" defer></script>
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bxr bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a th:href="@{/dosen/dashboard}">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a th:href="@{/dosen/mata-kuliah}">
+                            <img src="/icon/open-book.png" class="icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+
+        <div class="header">
+
+            <div class="right-section">
+                <div class="info">
+                    <span class="name" th:text="${user.nama}">Nama Dosen</span>
+                    <span class="role" th:text="${user.role}">Peran Dosen</span>
+                </div>
+
+                <img src="/icon/pfp.png" class="pfp">
+
+                <button class="logout" id="logoutButton">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <h2 class="page-title">Mata Kuliah</h2>
+
+            <section class="course-grid">
+
+                <div class="card" th:each="mkDosen, iStat : ${mataKuliahDosenList}"
+                    th:attr="data-kode-mk=${mkDosen.mataKuliah.kodeMK}">
+
+                    <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDosen.mataKuliah.kodeMK}, colorIndex=${iStat.index % 4})}"
+                        style="text-decoration: none; color: inherit;">
+
+                        <div class="card-img" th:classappend="'gradient-' + (${iStat.index % 4} + 1)"></div>
+                        <span class="badge" th:text="|Kelas ${mkDosen.kelas}|">Kelas X</span>
+                        <h3 th:text="${mkDosen.mataKuliah.nama}">Nama Mata Kuliah</h3>
+                    </a>
+                </div>
+
+            </section>
+
+            <footer class="semester">
+                <span th:text="|Semester ${semesterLabel} Tahun Ajaran ${semesterTahunAjaran}|">
+                    Semester x Tahun Ajaran xxxx/xxxx
+                </span>
+            </footer>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "tugas_besar_kelompok")
+@Table(name = "tugas_besar_kelompok") // Nama tabel diselaraskan
 @Data
 @IdClass(TugasBesarKelompokId.class)
 public class TugasBesarKelompok {
@@ -18,7 +18,7 @@ public class TugasBesarKelompok {
     @Column(name = "id_tugas")
     private Integer idTugas;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Relasi Kelompok
     @JoinColumn(
         name = "id_kelompok", 
         insertable = false, 
@@ -26,8 +26,11 @@ public class TugasBesarKelompok {
     )
     private Kelompok kelompok;
 
-    @ManyToOne
-    @JoinColumn(name = "tugas_besar_id")
+    @ManyToOne(fetch = FetchType.LAZY) // Relasi TugasBesar (Telah dikoreksi)
+    @JoinColumn(
+        name = "id_tugas", // <--- HARUS ID_TUGAS (Nama kolom DB)
+        insertable = false, 
+        updatable = false
+    )
     private TugasBesar tugas;
 }
-

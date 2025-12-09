@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Service
 public class AuthService {
     @Autowired
@@ -23,6 +26,18 @@ public class AuthService {
             throw new RuntimeException("Password salah");
         }
         return user; // login sukses
+    }
+
+    public User getLoggedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails userDetails) {
+            String email = userDetails.getUsername(); // username = email
+            
+            return userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User tidak ditemukan"));
+        }
+        throw new RuntimeException("User belum login");
     }
 }
 

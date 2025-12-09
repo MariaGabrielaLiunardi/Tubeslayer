@@ -1,5 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap');
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow-y: auto;
+    overflow-x: auto;
+    
+    background: linear-gradient(
+        360deg, 
+        rgba(255, 241, 235, 1) 0%,
+        rgba(172, 224, 249, 1) 50%, 
+        rgba(172, 224, 249, 1) 100% 
+    ) !important;
+
+    min-height: 100vh;
+    background-attachment: scroll; 
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+}
+
+.bold{
+    font-weight: bold;
+}
+
 * {
     box-sizing: border-box;
     max-width: 100%;
@@ -9,20 +36,10 @@
 }
 
 :root{
-    /* Transition */
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
-
-    --nav-primary-blue: #2269a3; /* Biru tua untuk inactive */
-    --nav-active-blue: #6da8ce;  /* Biru muda untuk active */
-    --nav-text-color: #ffffff;
-}
-
-body{
-    height: 100vh;
-    overflow-x: hidden;
 }
 
 /* === SIDEBAR === */
@@ -70,6 +87,17 @@ body{
     list-style: none;
     display: flex;
     align-items: center;
+}
+
+.sidebar li a.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
+}
+
+
+.sidebar li.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
 }
 
 .sidebar li .icon{
@@ -217,7 +245,7 @@ header .image-text .header-text{
 .home .header .left-section{
     margin-left: 48px; 
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     gap: 15px; 
 }
@@ -247,7 +275,6 @@ header .image-text .header-text{
 
 .role{
     font-size: 12pt; 
-    color: #757575;
 }
 
 .pfp{
@@ -273,163 +300,199 @@ header .image-text .header-text{
     align-items: center;
 }
 
-.rectangle-wrapper{
-    flex-grow: 1;
-    display: flex;
+.contents{
+    display: flex; 
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    top: calc(100% - 80px);
+    gap: 35px; 
+}
+
+/* --- Reset & Font Dasar --- */
+.content-section {
     padding: 20px;
 }
 
-/* Kontainer Utama Navigasi */
-.nav-segmented-control {
+/* --- Header & Navigasi Atas --- */
+
+.header .left-section {
     display: flex;
-    width: 100%;
-    max-width: 800px; /* Lebar maksimal */
-    height: 80px;
-    background-color: var(--nav-primary-blue);
-    border-radius: 40px; /* Sudut membulat penuh (setengah dari tinggi) */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Penting agar sudut melengkung sempurna */
-    font-family: Sen;
-    margin-top: 30px; /* Contoh margin agar tidak menempel ke header */
-    margin-left: 100px;
+    align-items: center;
+    gap: 10px;
 }
 
-/* Style untuk setiap Segmen */
-.nav-segmented-control > div {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--nav-text-color);
-    font-size: 30px;
-    font-weight: 500;
+.menu-toggle-btn {
+    font-size: 24px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    padding: 0 10px; /* Padding horizontal */
+    color: #5BA4E6; /* Warna biru icon */
 }
 
-/* Hover effect untuk segmen inactive */
-.nav-segmented-control > div:hover:not(.nav-active) {
-    background-color: rgba(255, 255, 255, 0.1); /* Sedikit gelap/terang saat di-hover */
-}
-
-/* Style untuk Segmen Aktif */
-.nav-segmented-control .nav-active {
-    background-color: var(--nav-active-blue);
-    font-weight: 700;
-    border-radius: 40px;
-}
-
-/* Memastikan sudut kanan segmen terakhir (jika aktif) tetap bulat sempurna */
-.nav-segmented-control > div:last-child {
-    border-top-right-radius: 40px; 
-    border-bottom-right-radius: 40px;
-}
-
-/* Move blue active/background from the Dashboard item to the Open Book item
-   without changing HTML: override the original active anchor and apply
-   the blue background to the second menu item (Open Book). */
-.menu-links li.nav-link.active a {
-    background-color: transparent; /* neutralize existing active rule */
-}
-
-.menu-links li:nth-child(2) a {
-    background-color: #C1EBFF; /* same blue as active */
-    border-radius: 10px; /* match anchor rounding used elsewhere */
-}
-
-.menu-links li:nth-child(2) a .text {
-    color: black; /* keep text readable on blue */
-    font-weight: 600;
-}
-
-/* Hover effect on Dashboard icon (first menu item) */
-.menu-links li:nth-child(1) a:hover {
-    background-color: #C1EBFF;
-}
-
-.container .rectangle-white{
-    width: 1648px;
-    height: 802px;
-}
-
-.container {
+.arsip-banner {
     position: relative;
+    width: 100%;                    
+    max-width: 1400px;                /* biar rapi */
+    background: #D8F1FF;
+    padding-left: 20px;              /* kecil & tipis */
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;                       /* jarak icon ke teks */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 0px;
+    z-index: 2;
+    height: 120px; 
+}
+
+.arsip-banner img {
+    width: 100px;
+    height: 100px;
+    border-radius: 25px;
+}
+
+.arsip-banner h1 {
+    font-size: 22px;                 
+    font-weight: bold;
+    margin: 0;
+}
+
+/* --- Area Daftar & Pencarian --- */
+.list-container {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-    flex-direction: column;
-    align-items: center;
 }
 
-/* Rectangle putih */
-.rectangle-white {
-    width: 802px;
-    height: 1648px;       /* Ubah sesuai kebutuhan */
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.list-header {
+    margin-top: 20px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#list-title{
+    font-weight: bold;
+}
+
+.list-header h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.search-box {
     position: relative;
-    z-index: 1;
 }
 
-/* Rectangle biru di depan */
-.rectangle-blue {
-    width: 1650px;
-    height: 220px;       /* Sesuaikan dengan desain */
-    background: #CCF0F7; /* warna biru muda seperti di gambar */
-    border-radius: 15px;
-    position: absolute;
-    top: 0;
-    z-index: 10;          /* supaya berada di belakang */
-    display: flex;
-    align-items: center;
-    padding-left: 40px;
-}
-
-.tb-title {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.tb-icon {
-    width: 80px;
-}
-
-.tb-text {
-    font-size: 36px;
-    font-weight: 700;
-}
-
-/* Cards */
-.cards {
-    display: flex;
-    justify-content: space-around;
-}
-
-.card {
-    width: 220px;
-    height: 220px;
-    background: white;
+.search-box input {
+    padding: 8px 35px 8px 15px;
     border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    text-align: center;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 200px;
 }
 
-.card img {
-    width: 80px;
+.search-box i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    cursor: pointer;
+}
+
+.list-container{
+    margin-top: -10px;
+    height: 390px;
+    background-color: #FFFFFF; 
+    padding: 20px;
+    border-radius: 0px 0px 15px 15px;
+    gap: 20px; 
+}
+
+/* --- Struktur Tabel Custom --- */
+.custom-table-container {
+    min-height: 190px;
+    background-color: #FFF1EB; 
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.table-header-row,
+.data-row {
+    display: grid !important;
+    grid-template-columns:10% 60% 30%;
+    padding: 10px;
+    align-items: center;
+    text-align: center;     
+    font-size: 14px;
+}
+
+.data-row {
+    background-color: #D1F1FA;
+    padding: 10px;        
+    border-radius: 20px;
     margin-bottom: 10px;
 }
 
-.card p {
-    font-size: 18px;
-    font-weight: 600;
+.table-header-row {
+    font-weight: bold;
+    text-align: center;
+    color: #000;
 }
+
+/* ================= PAGINASI (Tombol Geser) ================= */
+.pagination {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 20px;
+    gap: 10px;
+}
+
+.pagination .page-info {
+    padding: 5px 10px;
+    /* Background Biru Muda */
+    background: #c8eaff; 
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.pagination .page-arrow {
+    background: #ccc;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.pagination .page-arrow:hover:not(:disabled) {
+    background: #aaa;
+}
+
+.pagination .page-arrow:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.data-row-link {
+    color: black;          /* warna teks hitam */
+    text-decoration: none; /* hilangkan underline */
+}
+
+.data-row-link:hover {
+    color: black;          /* tetap hitam saat hover */
+    text-decoration: none; /* tetap tanpa underline */
+}
+
+
+
+
+
+   

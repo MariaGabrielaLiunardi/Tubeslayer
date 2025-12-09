@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Mata Kuliah - Tubeslayer</title>
+
+    <!-- CSS & JS -->
+    <link rel="stylesheet" th:href="@{/css/kelola-mata-kuliah.css}">
+    <script th:src="@{/js/kelola-mata-kuliah.js}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+
+    <style th:inline="text">
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .status-badge.active { background-color: #e7f7ef; color: #0ca678; }
+        .status-badge.inactive { background-color: #fff5f5; color: #fa5252; }
+
+        .suggestions {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+        .suggestions li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        .suggestions li:hover { background-color: #f5f5f5; }
+
+        /* Loading */
+        #global-loading {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .spinner {
+            width: 20px; height: 20px;
+            border: 3px solid #eee;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+
+<body>
+<nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img th:src="@{/logo/blue-logo.png}" alt="logo">
+            </span>
+            <div class="text header-text">
+                <span class="name">Tubeslayer</span>
+            </div>
+        </div>
+    </header>
+
+    <i class='bxr bx-chevron-right toggle'></i>
+
+    <div class="menu-bar">
+        <ul class="menu-links">
+            <li class="nav-link">
+                <a th:href="@{/admin/dashboard}">
+                    <img th:src="@{/icon/dashboard.png}" class="icon dashboard-icon">
+                    <span class="text nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-link active">
+                <a th:href="@{/admin/menu-awal-ad}">
+                    <img th:src="@{/icon/database.png}" class="icon database-icon">
+                    <span class="text nav-text">Data</span>
+                </a>
+            </li>
+            <li class="nav-link">
+                <a th:href="@{/admin/arsip-mata-kuliah}">
+                    <img th:src="@{/icon/archive.png}" class="icon archive-icon">
+                    <span class="text nav-text">Arsip Mata Kuliah</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<section class="home">
+    <div class="header">
+        <div class="left-section">
+            <span class="dashboard-title">Kelola Mata Kuliah</span>
+        </div>
+
+        <div class="right-section">
+            <div class="info">
+                <span class="name" th:text="${user.nama}">Nama</span>
+                <span class="role" th:text="${user.role}">Role</span>
+            </div>
+            <img th:src="@{/icon/pfp.png}" class="pfp">
+            <button class="logout" onclick="window.location.href='/logout'">
+                <img th:src="@{/icon/logout.png}" class="logout-btn">
+            </button>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="matkul-banner">
+            <img th:src="@{/icon/matkul-biru.png}">
+            <h1>Kelola Mata Kuliah</h1>
+        </div>
+
+        <div class="list-container">
+
+            <!-- HEADER -->
+            <div class="list-header">
+                <h3 id="list-title">
+                    Daftar Mata Kuliah
+                    <span id="sub-title"></span>
+                    <span id="sub-title-2"></span>
+                </h3>
+
+                <div class="search-box" id="search-bar">
+                    <input type="text" placeholder="Cari nama mata kuliah...">
+                    <i class='bx bx-search'></i>
+                </div>
+            </div>
+
+            <!-- LOADING -->
+            <div id="global-loading">
+                <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <div class="spinner"></div>
+                        <span>Memuat data...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 1: TABLE -->
+            <div class="custom-table-container" id="table-view">
+                <div class="table-header-row">
+                    <span>No</span>
+                    <span>Kode MK</span>
+                    <span>Nama Mata Kuliah</span>
+                    <span>SKS</span>
+                    <span>Status</span>
+                </div>
+
+                <div th:each="mk, iterStat : ${matkulList}">
+                    <div class="data-row">
+                        <span th:text="${iterStat.count}">1</span>
+                        <span th:text="${mk.kodeMatkul}">Kode</span>
+                        <span th:text="${mk.namaMatkul}">Nama</span>
+                        <span th:text="${mk.sks}">3</span>
+                        <span>
+                            <span th:classappend="${mk.active} ? 'status-badge active' : 'status-badge inactive'"
+                                  th:text="${mk.active} ? 'Aktif' : 'Nonaktif'">
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer-actions" id="footer-view">
+                <div class="button-group">
+                    <button class="btn btn-delete" id="btn-delete">Hapus Mahasiswa</button>
+                    <button class="btn btn-add" id="btn-add">Tambah Mahasiswa</button>
+                </div>
+            </div>
+
+            <!-- VIEW 2: PILIH CARA -->
+            <div class="pilih-cara" id="pilih-cara">
+                <div class="button-group">
+                    <button class="btn btn-import" id="btn-import">Import</button>
+                    <button class="btn btn-manual" id="btn-manual">Tambah Baru</button>
+                </div>
+            </div>
+
+            <!-- VIEW 3: IMPORT -->
+            <div class="import-matkul" id="import-matkul">
+                <div class ="import-matkul-content">
+                <input type="file" id="file-input"
+                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                <button class="btn btn-pilih-file" id="btn-pilih-file">Upload</button>
+                </div>
+            </div>
+
+            <!-- VIEW 4: TAMBAH -->
+            <div class="tambah-matkul" id="tambah-matkul">
+                <div class="tambah-matkul-content">
+                <form id="tambah-matkul-form">
+                    <label for="kode-mk">Kode Mata Kuliah:</label>
+                    <input type="text" id="kode-mk">
+
+                    <label for="nama-mk">Nama Mata Kuliah:</label>
+                    <input type="text" id="nama-mk">
+
+                    <label for="sks-mk">SKS:</label>
+                    <input type="number" id="sks-mk" min="1" max="6">
+
+                    <label for="status-mk">Status:</label>
+                    <select id="status-mk">
+                        <option value="1">Aktif</option>
+                        <option value="0">Nonaktif</option>
+                    </select>
+
+                    <button class="btn btn-submit" id="btn-submit">Tambah Mata Kuliah</button>
+                </form>
+                </div>
+            </div>
+
+            <!-- VIEW 5: HAPUS -->
+            <div class="hapus-matkul" id="hapus-matkul">
+                <div class="hapus-matkul-content">
+                <div class="input-wrapper">
+                    <input type="text" id="search-input" class="search-box" placeholder="Cari mata kuliah...">
+                    <ul class="suggestions" id="suggestions"></ul>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-cancel" id="btn-cancel-delete">Batal</button>
+                    <button class="btn btn-confirm-delete" id="btn-confirm-delete">Hapus</button>
+                </div>
+                </div>
+            </div>
+
+            <!-- VIEW 6: KONFIRMASI -->
+            <div class="konfirmasi-hapus" id="konfirmasi-hapus">
+                <span>Apakah Anda yakin ingin menghapus mata kuliah ini?</span>
+
+                <div class="button-group">
+                    <button class="btn btn-cancel" id="btn-cancel-confirm">Batal</button>
+                    <button class="btn btn-confirm-delete" id="btn-confirm-delete-final">Hapus</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script th:inline="javascript">
+    window.API_BASE_URL = window.location.origin;
+    window.API_MATKUL = window.API_BASE_URL + '/admin/api/mata-kuliah';
+
+    console.log("Kelola Mata Kuliah Loaded");
+    console.log("API:", window.API_MATKUL);
+</script>
+
+</body>
+</html>

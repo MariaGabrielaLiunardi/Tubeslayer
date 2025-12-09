@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - Tubeslayer</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/profil.css">
+
+    <!-- JS -->
+    <script src="/js/profil.js" defer></script>
+    <script src="/js/sidebar-hlmtubes.js" defer></script>
+
+    <!-- Icons -->
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bx bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="/admin/dashboard">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/admin/menu-awal-ad">
+                            <img src="/icon/database.png" class="icon">
+                            <span class="text nav-text">Data</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                            <span class="text nav-text">Arsip Mata Kuliah</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME CONTENT -->
+    <section class="home">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Profil</span>
+            </div>
+
+            <div class="right-section">
+                <button class="logout">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content-section contents">
+
+            <!-- FOTO PROFIL -->
+            <img src="/icon/pfp.svg" class="pfp" alt="Foto Profil">
+
+            <!-- NAMA & ROLE -->
+            <div class="info">
+                <span class="name" id="profil-nama" th:text="${user.nama}">Nama User</span>
+                <span class="role" id="profil-role" th:text="${user.role}">Role User</span>
+                <span class="email" id="profil-email" th:text="${user.email}">email@unpar.ac.id</span>
+            </div>
+
+        </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>
