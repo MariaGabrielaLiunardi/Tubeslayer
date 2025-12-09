@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Comparator; 
 
 @Controller
 public class DosenController {
@@ -71,6 +72,9 @@ public class DosenController {
         model.addAttribute("jumlahTb", jumlahTb);
 
         List<MataKuliahDosen> listMK = mataKuliahService.getTop4ActiveByUserAndTahunAkademik(user.getIdUser(), tahunAkademik);
+        
+        listMK.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
+        
         model.addAttribute("mataKuliahDosenList", listMK);
 
         return "dosen/dashboard";
@@ -81,38 +85,39 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     
     String idDosen = user.getIdUser(); 
     List<MataKuliahDosen> relasiMKDosen = mkDosenRepo.findById_IdUserAndIsActive(idDosen, true);
+
+    relasiMKDosen.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
     
     model.addAttribute("mataKuliahDosenList", relasiMKDosen);
     model.addAttribute("user", user);
 
     LocalDate today = LocalDate.now();
     int year = today.getYear();
-    
-    // --- KOREKSI LOGIC PENGIRIMAN SEMESTER ---
-    // Hitung string lengkap (misalnya, "Ganjil 2025/2026")
+
     String semesterPenuh = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) 
             ? "Ganjil " + year + "/" + (year + 1)
             : "Genap " + (year - 1) + "/" + year;
             
-    // Kirim string lengkap ini ke Model
     model.addAttribute("semesterTahunAjaran", semesterPenuh); 
     
-    // Kirim juga label Ganjil/Genap jika template membutuhkannya (meskipun sekarang tidak terpakai)
     String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
     model.addAttribute("semesterLabel", semesterLabel);
-    // ------------------------------------------
 
     return "dosen/mata-kuliah";
 }
 
     @GetMapping("/dosen/matkul-detail")
-    public String mkDetail(@RequestParam(required = false) String kodeMk, 
+    public String mkDetail(@RequestParam(required = false) String kodeMk,
+                            @RequestParam(required = false) Integer colorIndex,  
                            @AuthenticationPrincipal CustomUserDetails user, 
                            Model model) {
         if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
 
         MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
         if (mk == null) return "redirect:/dosen/mata-kuliah";
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        model.addAttribute("colorIndex", finalColorIndex);
 
         model.addAttribute("user", user); 
         List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
@@ -149,13 +154,17 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     }
 
     @GetMapping("/dosen/matkul-peserta")
-    public String peserta(@RequestParam(required = false) String kodeMk, 
+    public String peserta(@RequestParam(required = false) String kodeMk,
+                             @RequestParam(required = false) Integer colorIndex, 
                           @AuthenticationPrincipal CustomUserDetails user, 
                           Model model) {
         if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
 
         MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
         if (mk == null) return "redirect:/dosen/mata-kuliah";
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        model.addAttribute("colorIndex", finalColorIndex);
 
         List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
         if (mkMahasiswaRepo != null) {
@@ -429,7 +438,8 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
                 .map(user -> {
                     Map<String, String> userMap = new HashMap<>();
                     userMap.put("id_user", user.getIdUser());
-                    userMap.put("nama", user.getNama());
+                    // KOREKSI: Ini sepertinya salah, harusnya user.getNama()
+                    userMap.put("nama", user.getNama()); 
                     userMap.put("email", user.getEmail());
                     return userMap;
                 })

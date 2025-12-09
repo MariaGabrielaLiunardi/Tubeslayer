@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
-    <link rel="stylesheet" href="/css/matkul-peserta.css"> 
+    <link rel="stylesheet" href="/css/matkul-peserta.css">
     <link rel="icon" href="/logo/blue-logo.png" type="image/png">
-    
+
     <script src="/js/dash-user.js" defer></script>
-    <script src="/js/matkul-peserta-mhs.js" defer></script> <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <script src="/js/matkul-peserta-mhs.js" defer></script>
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -72,27 +73,28 @@
 
         <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
             <button class="tab" data-tab-target="kuliah"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK})}'|">
+                th:attr="data-target-url=@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')">
                 Kuliah
             </button>
-            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button> 
+            <button class="tab active" data-tab-target="peserta">Daftar Peserta</button>
             <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
         <div class="detail-wrapper">
 
             <div class="mk-header">
-                <div class="mk-img"></div>
+                <div class="mk-img" th:classappend="'gradient-' + (${colorIndex} + 1)"></div>
                 <div class="mk-info">
                     <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
-                    
+
                     <p>
-                        <b>Koordinator:</b> 
+                        <b>Koordinator:</b>
                         <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span>
                     </p>
-                    
+
                     <p>
-                        <b>NIP:</b> 
+                        <b>NIP:</b>
                         <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span>
                     </p>
                 </div>
@@ -101,7 +103,7 @@
             <div class="breadcrumb">
                 Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Mata Kuliah</span> > Daftar Peserta
             </div>
-            
+
             <div class="search-and-count">
                 <div class="search-box">
                     <input type="text" placeholder="Cari nama disini...">
@@ -111,7 +113,7 @@
             </div>
 
             <div class="peserta-content">
-                
+
                 <div class="peserta-table-wrapper">
                     <table id="peserta-table">
                         <thead>
@@ -119,25 +121,26 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>NIM</th>
-                                <th>Kelas</th> 
+                                <th>Kelas</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="pesertaRel, iStat : ${pesertaList}" class="page-item">
-                                
+
                                 <td th:text="${iStat.count} + '.'">1.</td>
-                                
+
                                 <td th:text="${pesertaRel.user.nama}">Nama</td>
-                                
+
                                 <td th:text="${pesertaRel.user.idUser}">XXXXX</td>
-                                
+
                                 <td th:text="${pesertaRel.kelas}">X</td>
                             </tr>
-                            
+
                             <tr th:if="${pesertaList.empty}">
-                                <td colspan="4" style="text-align: center;">Tidak ada peserta terdaftar dalam mata kuliah ini.</td>
+                                <td colspan="4" style="text-align: center;">Tidak ada peserta terdaftar dalam mata
+                                    kuliah ini.</td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -149,8 +152,8 @@
                 </div>
 
             </div>
-            
-        </div> 
+
+        </div>
     </section>
 
 </body>

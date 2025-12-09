@@ -42,6 +42,21 @@ body {
     position: relative; 
 }
 
+#toggle-tambah-tugas,
+#logoutButton {
+    position: relative;
+    z-index: 99;
+}
+
+.home {
+    position: relative;
+    z-index: 2;  /* pastikan konten di atas sidebar */
+}
+
+.sidebar {
+    z-index: 1;  /* sidebar harus lebih rendah */
+}
+
 /* header utama */
 .home .header {
     height: 80px; 
@@ -95,6 +110,8 @@ body {
 .logout-btn {
     width: 25px;
     height: 25px;
+    position: relative;
+    z-index: 99999;
 }
 
 .logout {
@@ -158,6 +175,31 @@ body {
     background-position: center;
 }
 
+/* background card */
+.gradient-1 {
+    background: linear-gradient(#31acef, white);
+}
+
+.gradient-2 {
+    background: url("/icon/matkul-2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.gradient-3 {
+    background: radial-gradient(circle at center,
+            #29ACEF 10%,
+            #9dd6f5 40%,
+            #eaf7ff 70%,
+            #ffffff 100%);
+}
+
+.gradient-4 {
+    background: url("/icon/matkul-4.png");
+    background-size: cover;
+    background-position: center;
+}
+
 .mk-info h1 {
     font-size: 40px;
     font-weight: bold;
@@ -184,6 +226,8 @@ body {
     width: 100%;
     margin-top: 40px;
     padding-bottom: 20px;
+    position: relative; 
+    z-index: 99998;
 }
 
 .btn-tambah-tugas {
@@ -196,6 +240,8 @@ body {
     font-weight: bold;
     font-size: 16px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 99999;
 }
 
 /* konten mata kuliah */
@@ -375,29 +421,4 @@ body {
     font-weight: bold;
     font-size: 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* background card */
-.gradient-1 {
-    background: linear-gradient(#31acef, white);
-}
-
-.gradient-2 {
-    background: url("/icon/matkul-2.png");
-    background-size: cover;
-    background-position: center;
-}
-
-.gradient-3 {
-    background: radial-gradient(circle at center,
-            #29ACEF 10%,
-            #9dd6f5 40%,
-            #eaf7ff 70%,
-            #ffffff 100%);
-}
-
-.gradient-4 {
-    background: url("/icon/matkul-4.png");
-    background-size: cover;
-    background-position: center;
 }

@@ -2,13 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".card");
 
     cards.forEach(card => {
-        const gradientId = card.getAttribute("data-gradient");
-        
-        // Cari div .mk-img di dalam card
-        const mkImg = card.querySelector(".mk-img");
-        if (mkImg && gradientId) {
-            mkImg.classList.add(`gradient-${gradientId}`);
-        }
 
         card.addEventListener("click", () => {
             const kodeMk = card.getAttribute("data-kode-mk");
