@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 
+import com.Tubeslayer.dto.PesertaMatkulDTO;
 import com.Tubeslayer.dto.TugasBesarRequest;
 import com.Tubeslayer.entity.*;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -155,32 +157,77 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
 
     @GetMapping("/dosen/matkul-peserta")
     public String peserta(@RequestParam(required = false) String kodeMk,
-                             @RequestParam(required = false) Integer colorIndex, 
-                          @AuthenticationPrincipal CustomUserDetails user, 
-                          Model model) {
-        if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
+                         @RequestParam(required = false) Integer colorIndex, 
+                      @AuthenticationPrincipal CustomUserDetails user, 
+                      Model model) {
+    if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
 
-        MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
-        if (mk == null) return "redirect:/dosen/mata-kuliah";
+    MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
+    if (mk == null) return "redirect:/dosen/mata-kuliah";
 
-        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
-        model.addAttribute("colorIndex", finalColorIndex);
+    // 1. Color Index (untuk gradien header)
+    int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+    model.addAttribute("colorIndex", finalColorIndex);
 
-        List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
-        if (mkMahasiswaRepo != null) {
-            try {
-                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
-            } catch (Exception e) {
-                System.err.println("Error saat mengambil data peserta: " + e.getMessage());
-            }
+    // 2. Ambil List Mahasiswa
+    List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
+    if (mkMahasiswaRepo != null) {
+        try {
+            listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
+        } catch (Exception e) {
+            System.err.println("Error saat mengambil data peserta: " + e.getMessage());
         }
-
-        model.addAttribute("mkDetail", mk);
-        model.addAttribute("user", user); 
-        model.addAttribute("pesertaList", listPeserta);
-
-        return "dosen/matkul-peserta";
     }
+    
+    // 3. Ambil Koordinator Dosen
+    User koordinator = user.getUser(); 
+
+    // --- 4. GABUNGKAN DOSEN DAN MAHASISWA MENGGUNAKAN DTO ---
+    List<PesertaMatkulDTO> combinedList = new ArrayList<>();
+    int counter = 1;
+
+    // 4.1. Tambahkan Dosen Koordinator (Selalu Baris Pertama)
+    combinedList.add(new PesertaMatkulDTO(
+        counter++, 
+        koordinator.getNama(), 
+        koordinator.getIdUser(), 
+        "Koordinator"
+    ));
+    
+    // 4.2. Konversi Mahasiswa ke DTO
+    List<PesertaMatkulDTO> mahasiswaDTOs = listPeserta.stream()
+        .map(rel -> new PesertaMatkulDTO(
+            0, // Index akan di-update setelah sorting
+            rel.getUser().getNama(),
+            rel.getUser().getIdUser(),
+            "Mahasiswa",
+            rel.getKelas()
+        ))
+        .collect(Collectors.toList());
+        
+    // 4.3. Urutkan Mahasiswa berdasarkan Nama
+    mahasiswaDTOs.sort(Comparator.comparing(PesertaMatkulDTO::getNama));
+
+    // 4.4. Gabungkan dan update nomor urut
+    combinedList.addAll(mahasiswaDTOs);
+    for (int i = 1; i < combinedList.size(); i++) {
+        combinedList.get(i).setNo(counter++);
+    }
+    // -------------------------------------------------------------
+
+    model.addAttribute("mkDetail", mk);
+    model.addAttribute("user", user); 
+
+    if (combinedList == null) {
+    combinedList = Collections.emptyList();
+    }
+
+    model.addAttribute("combinedPesertaList", combinedList);
+    model.addAttribute("combinedPesertaList", combinedList); // List baru untuk tabel
+    model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah HANYA Mahasiswa
+
+    return "dosen/matkul-peserta";
+}
 
     @PostMapping("/api/dosen/matakuliah/{kodeMk}/tugas")
     @ResponseBody 
