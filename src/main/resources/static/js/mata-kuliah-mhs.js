@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (kodeMk) {
                 window.location.href = "/mahasiswa/matkul-detail?mk=" + encodeURIComponent(kodeMk);
             } else {
-                 console.error("Error: Kode Mata Kuliah (data-kode-mk) tidak ditemukan pada kartu.");
+                 console.error("Error: Kode Mata Kuliah (data-kode-mk).");
             }
         });
     });

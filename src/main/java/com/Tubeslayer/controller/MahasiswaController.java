@@ -42,6 +42,7 @@ import java.util.List;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator; 
 
 @Controller
 public class MahasiswaController {
@@ -109,6 +110,9 @@ public class MahasiswaController {
         model.addAttribute("jumlahTb", jumlahTb);
 
         List<MataKuliah> listMK = mataKuliahService.getActiveByMahasiswaAndTahunAkademik(user.getIdUser(), tahunAkademik);
+
+        listMK.sort(Comparator.comparing(mk -> mk.getNama()));
+
         model.addAttribute("mataKuliahList", listMK);
 
         return "mahasiswa/dashboard";
@@ -122,6 +126,8 @@ public class MahasiswaController {
         
         List<MataKuliahMahasiswa> enrollList =
             mkmRepo.findByUser_IdUserAndIsActive(idMahasiswa, true);
+
+        enrollList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
 
         model.addAttribute("enrollList", enrollList);
         model.addAttribute("user", user);
@@ -153,6 +159,7 @@ public class MahasiswaController {
     @GetMapping("/mahasiswa/matkul-detail")
     public String detailMatkul(
             @RequestParam("mk") String kodeMk,
+            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
 
@@ -165,6 +172,9 @@ public class MahasiswaController {
         if (mkDetail == null) {
             return "redirect:/mahasiswa/mata-kuliah";
         }
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        model.addAttribute("colorIndex", finalColorIndex);
 
         // --- KOREKSI: LOGIC MENGAMBIL KOORDINATOR DOSEN ---
         MataKuliahDosen koordinator = null;
@@ -195,6 +205,7 @@ public class MahasiswaController {
 
     @GetMapping("/mahasiswa/matkul-peserta")
     public String peserta(@RequestParam(required = false) String kodeMk, 
+                        @RequestParam(required = false) Integer colorIndex,
                           @AuthenticationPrincipal CustomUserDetails user, 
                           Model model) {
          
@@ -207,6 +218,9 @@ public class MahasiswaController {
         if (mk == null) {
             return "redirect:/mahasiswa/mata-kuliah";
         }
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        model.addAttribute("colorIndex", finalColorIndex);
 
         // --- 1. MENGAMBIL DATA KOORDINATOR ---
         MataKuliahDosen koordinator = null;

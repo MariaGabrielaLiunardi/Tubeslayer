@@ -2,18 +2,18 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const mkTabDiv = document.querySelector('.mk-tab');
     const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
-
-    const tabs = document.querySelectorAll('.mk-tab button');
     
-    tabs.forEach(tab => {
-        const tabTarget = tab.getAttribute('data-tab-target');
+    const tabButtons = document.querySelectorAll('.mk-tab .tab');
 
-        if (tabTarget === 'peserta' && mataKuliahId) {
-            tab.addEventListener('click', () => {
-                window.location.href = `/mahasiswa/matkul-peserta?kodeMk=${encodeURIComponent(mataKuliahId)}`;
+    tabButtons.forEach(button => {
+        if (button.hasAttribute('data-target-url')) {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-target-url');
+                if (url) {
+                    window.location.href = url;
+                }
             });
         }
-        
     });
 
     // Logout
