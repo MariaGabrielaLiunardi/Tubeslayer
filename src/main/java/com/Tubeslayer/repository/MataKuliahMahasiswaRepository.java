@@ -17,4 +17,6 @@ public interface MataKuliahMahasiswaRepository extends JpaRepository<MataKuliahM
 
     // Hitung jumlah MK aktif untuk mahasiswa tertentu di tahun akademik tertentu
     int countById_IdUserAndTahunAkademikAndIsActive(String idUser, String tahunAkademik, boolean isActive);
+
+    List<MataKuliahMahasiswa> findByMataKuliah_KodeMK(String kodeMk);
 }

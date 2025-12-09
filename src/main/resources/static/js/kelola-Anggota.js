@@ -1,394 +1,543 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // ========== DATA & STATE ==========
-    
-    // TODO: AMBIL DATA USER DARI SESSION/DATABASE
-    let currentUser = {
-        nama: "",
-        nim: "",
-        isKetua: false
-    };
-    
-    // TODO: FUNGSI UNTUK LOAD CURRENT USER (Menggunakan .then())
-    function loadCurrentUser() {
-        // CARA INTEGRASI DENGAN DATABASE:
-        // fetch('/api/user/current', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Assign data dari database
-        //     currentUser = {
-        //         nama: data.nama,
-        //         nim: data.nim,
-        //         isKetua: data.isKetua
-        //     };
-        //     
-        //     // Update UI
-        //     const userNameElement = document.getElementById('current-user-name');
-        //     if (userNameElement) {
-        //         userNameElement.textContent = currentUser.nama;
-        //     }
-        //     
-        //     console.log('Current user loaded:', currentUser);
-        // })
-        // .catch(error => {
-        //     console.error('Error loading current user:', error);
-        //     alert('Gagal memuat data user. Silakan refresh halaman.');
-        // });
-        
-        // TEMPORARY: Untuk testing tanpa backend (HAPUS SAAT INTEGRASI)
-        currentUser = {
-            nama: "Keisha Neira Jocelyn",
-            nim: "6182301001",
-            isKetua: true // UBAH KE false UNTUK TEST NON-KETUA
-        };
-        console.log('Current user loaded:', currentUser);
+let currentMembers = [];
+let maxAnggota = 5;
+let minAnggota = 1;
+
+function getIdTugas() {
+    const hiddenInput = document.getElementById('idTugas');
+    if (hiddenInput && hiddenInput.value) {
+        return hiddenInput.value;
     }
     
-    // TODO: AMBIL DATA ANGGOTA KELOMPOK DARI DATABASE
-    let kelompokAnggota = [];
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('idTugas');
+}
+
+
+function getMaxAnggota() {
+    const hiddenInput = document.getElementById('maxAnggota');
+    if (hiddenInput && hiddenInput.value) {
+        return parseInt(hiddenInput.value);
+    }
+    return 5; 
+}
+
+
+function checkIsLeader() {
+    const hiddenInput = document.getElementById('isLeader');
+    if (hiddenInput && hiddenInput.value) {
+        return hiddenInput.value === 'true';
+    }
+    return false;
+}
+
+
+function checkCanManage() {
+    const hiddenInput = document.getElementById('canManageAnggota');
+    if (hiddenInput && hiddenInput.value) {
+        return hiddenInput.value === 'true';
+    }
+    return false;
+}
+
+
+function getModeKelompok() {
+    const hiddenInput = document.getElementById('modeKelompok');
+    if (hiddenInput && hiddenInput.value) {
+        return hiddenInput.value;
+    }
+    return 'Mahasiswa';
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const idTugas = getIdTugas();
     
-    // TODO: FUNGSI UNTUK LOAD ANGGOTA KELOMPOK (Menggunakan .then())
-    function loadKelompokAnggota() {
-        // CARA INTEGRASI DENGAN DATABASE:
-        // const kelompokId = 1; // Ambil dari currentUser atau URL
-        // fetch(`/api/kelompok/${kelompokId}/anggota`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Assign data dari database
-        //     kelompokAnggota = data; // atau data.anggota
-        //     
-        //     // Render setelah load
-        //     renderMemberList();
-        //     console.log('Kelompok anggota loaded:', kelompokAnggota);
-        // })
-        // .catch(error => {
-        //     console.error('Error loading kelompok anggota:', error);
-        //     alert('Gagal memuat data anggota kelompok.');
-        // });
+    if (!idTugas) {
+        console.error('ID Tugas tidak ditemukan');
+        return;
+    }
+
+ 
+    maxAnggota = getMaxAnggota();
+    
+
+    const isLeader = checkIsLeader();
+    const canManage = checkCanManage();
+    const modeKelompok = getModeKelompok();
+    
+    console.log('User Status:', {
+        isLeader: isLeader,
+        canManage: canManage,
+        modeKelompok: modeKelompok
+    });
+    
+
+    if (!canManage) {
+        const btnTambah = document.getElementById('btn-tambah-anggota');
+        const btnKelola = document.getElementById('btn-kelola-anggota');
         
-        // TEMPORARY: Untuk testing tanpa backend (HAPUS SAAT INTEGRASI)
-        kelompokAnggota = [
-            {
-                nama: currentUser.nama,
-                nim: currentUser.nim,
-                role: "Ketua"
-            }
-        ];
-        renderMemberList();
-        console.log('Kelompok anggota loaded:', kelompokAnggota);
+        if (btnTambah) {
+            btnTambah.disabled = true;
+            btnTambah.title = modeKelompok === 'Dosen' 
+                ? 'Kelompok diatur oleh Dosen' 
+                : 'Hanya ketua kelompok yang dapat mengelola anggota';
+        }
+        
+        if (btnKelola) {
+            btnKelola.disabled = true;
+            btnKelola.title = modeKelompok === 'Dosen' 
+                ? 'Kelompok diatur oleh Dosen' 
+                : 'Hanya ketua kelompok yang dapat mengelola anggota';
+        }
+        
+
+        const warning = document.getElementById('warning-non-ketua');
+        if (warning) {
+            warning.style.display = 'block';
+        }
+    }
+
+
+    loadAnggotaKelompok();
+
+
+    setupSearchFunctionality();
+    setupViewNavigation();
+});
+
+
+async function loadAnggotaKelompok() {
+    const idTugas = getIdTugas();
+    
+    if (!idTugas) {
+        console.error('ID Tugas tidak ditemukan');
+        return;
     }
     
-    // Selected member sementara dari search
-    let selectedMember = null;
-    
-    // ========== DOM ELEMENTS ==========
-    
-    // Views
-    const viewDeskripsi = document.getElementById('view-deskripsi');
-    const viewAnggota = document.getElementById('view-anggota');
-    const viewPilihAnggota = document.getElementById('view-pilih-anggota');
-    
-    // Buttons
-    const btnKelolaAnggota = document.getElementById('btn-kelola-anggota');
-    const btnKembaliAnggota = document.getElementById('btn-kembali-anggota');
-    const btnTambahAnggota = document.getElementById('btn-tambah-anggota');
-    const btnSelesaiAnggota = document.getElementById('btn-selesai-anggota');
-    const btnKembaliPilih = document.getElementById('btn-kembali-pilih');
-    const btnKonfirmasi = document.getElementById('btn-konfirmasi');
-    const btnSearch = document.getElementById('btn-search');
-    
-    // Other elements
-    const memberList = document.getElementById('member-list');
-    const memberCounter = document.getElementById('member-counter');
-    const memberCounterPilih = document.getElementById('member-counter-pilih');
-    const warningNonKetua = document.getElementById('warning-non-ketua');
-    const searchInput = document.getElementById('search-mahasiswa');
-    const searchResults = document.getElementById('search-results');
-    
-    // ========== FUNCTIONS ==========
-    
-    // Switch between views
-    function showView(viewToShow) {
-        viewDeskripsi.classList.remove('active');
-        viewAnggota.classList.remove('active');
-        viewPilihAnggota.classList.remove('active');
-        viewToShow.classList.add('active');
-    }
-    
-    // Render member list
-    function renderMemberList() {
-        memberList.innerHTML = '';
+    try {
+        console.log('Loading anggota for idTugas:', idTugas);
         
-        kelompokAnggota.forEach((member) => {
-            const memberItem = document.createElement('div');
-            memberItem.className = 'member-item';
-            
-            memberItem.innerHTML = `
-                <div class="member-info">
-                    <span class="member-name">${member.nama}</span>
-                    ${member.role ? `<span class="member-badge">${member.role}</span>` : ''}
+        const response = await fetch(`/mahasiswa/api/anggota-kelompok?idTugas=${idTugas}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Gagal memuat anggota');
+        }
+
+        console.log('API Response:', data);
+        console.log('Number of members:', data.length);
+        
+        if (data.length > 0) {
+            console.log('First member structure:', data[0]);
+        }
+
+        currentMembers = data;
+        updateMemberDisplay();
+        updateMemberCounter();
+
+    } catch (error) {
+        console.error('Error loading anggota:', error);
+        
+
+        const memberList = document.getElementById('member-list');
+        if (memberList) {
+            memberList.innerHTML = `
+                <div class="error-message">
+                    <i class='bx bx-error'></i>
+                    <p>Gagal memuat data anggota kelompok</p>
+                    <small>${error.message}</small>
                 </div>
             `;
-            
-            memberList.appendChild(memberItem);
+        }
+    }
+}
+
+
+function updateMemberDisplay() {
+    const memberList = document.getElementById('member-list');
+    if (!memberList) return;
+
+    memberList.innerHTML = '';
+
+    if (currentMembers.length === 0) {
+        memberList.innerHTML = '<p class="no-members">Belum ada anggota kelompok</p>';
+        return;
+    }
+
+    currentMembers.forEach(member => {
+        const memberItem = document.createElement('div');
+        memberItem.className = 'member-item';
+        
+
+        const isLeader = (member.role === 'leader') || (member.user && member.user.role === 'leader');
+        const memberName = member.nama || (member.user && member.user.nama) || 'Unknown';
+        const memberId = member.idUser || (member.user && member.user.idUser) || '';
+        
+        console.log('Member data:', {
+            name: memberName,
+            id: memberId,
+            role: member.role,
+            isLeader: isLeader
         });
         
-        updateCounter();
-    }
-    
-    // Update member counter
-    function updateCounter() {
-        const count = kelompokAnggota.length;
-        const counterText = `${count}/5 Anggota`;
-        memberCounter.textContent = counterText;
-        memberCounterPilih.textContent = counterText;
-    }
-    
-    // Setup view anggota based on user role
-    function setupViewAnggota() {
-        if (!currentUser.isKetua) {
-            btnTambahAnggota.disabled = true;
-            btnTambahAnggota.style.backgroundColor = '#9e9e9e';
-            btnSelesaiAnggota.disabled = true;
-            btnSelesaiAnggota.style.backgroundColor = '#9e9e9e';
-            warningNonKetua.style.display = 'block';
-        } else {
-            btnTambahAnggota.disabled = false;
-            btnTambahAnggota.style.backgroundColor = '#000';
-            btnSelesaiAnggota.disabled = false;
-            btnSelesaiAnggota.style.backgroundColor = '#000';
-            warningNonKetua.style.display = 'none';
+
+        memberItem.innerHTML = `
+            <div class="member-info">
+                <span class="member-name">${memberName}</span>
+                ${isLeader ? '<span class="member-role-badge">Ketua</span>' : ''}
+            </div>
+            ${!isLeader ? `
+                <button class="btn-remove-member" data-id="${memberId}" data-nama="${memberName}" title="Hapus anggota">
+                    <i class='bx bx-minus'></i>
+                </button>
+            ` : ''}
+        `;
+
+
+        if (!isLeader) {
+            const removeBtn = memberItem.querySelector('.btn-remove-member');
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function() {
+                    confirmRemoveMember(memberId, memberName);
+                });
+            }
         }
+
+        memberList.appendChild(memberItem);
+    });
+}
+
+
+function updateMemberCounter() {
+    const counters = document.querySelectorAll('.member-counter');
+    counters.forEach(counter => {
+        counter.textContent = `${currentMembers.length}/${maxAnggota} Anggota`;
+    });
+}
+
+function setupSearchFunctionality() {
+    const searchInput = document.getElementById('search-mahasiswa');
+    const searchButton = document.getElementById('btn-search');
+    const searchResults = document.getElementById('search-results');
+
+    if (!searchInput || !searchButton || !searchResults) {
+        console.error('Element pencarian tidak ditemukan');
+        return;
     }
-    
-    // TODO: SEARCH MAHASISWA DARI DATABASE (Menggunakan .then())
-    function searchMahasiswa(query) {
-        if (!query || query.trim() === '') {
-            searchResults.classList.remove('active');
-            return;
-        }
-        
-        // CARA INTEGRASI DENGAN DATABASE:
-        // fetch(`/api/mahasiswa/search?q=${encodeURIComponent(query)}`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Filter mahasiswa yang sudah jadi anggota
-        //     const existingNims = kelompokAnggota.map(m => m.nim);
-        //     const filtered = data.filter(mhs => !existingNims.includes(mhs.nim));
-        //     
-        //     renderSearchResults(filtered);
-        // })
-        // .catch(error => {
-        //     console.error('Error searching mahasiswa:', error);
-        //     searchResults.innerHTML = '<div class="no-results">Error saat mencari mahasiswa</div>';
-        //     searchResults.classList.add('active');
-        // });
-        
-        // TEMPORARY: Simulasi hasil search (HAPUS SAAT INTEGRASI)
-        const mahasiswaDatabase = [
-            { nama: "Marsella Moretta", nim: "6182301058" },
-            { nama: "Ahmad Rizki", nim: "6182301002" },
-            { nama: "Siti Nurhaliza", nim: "6182301003" },
-            { nama: "Budi Santoso", nim: "6182301004" },
-            { nama: "Dewi Lestari", nim: "6182301005" },
-            { nama: "Eko Prasetyo", nim: "6182301006" },
-            { nama: "Fitri Handayani", nim: "6182301007" },
-            { nama: "Gilang Ramadhan", nim: "6182301008" },
-        ];
-        
-        const lowerQuery = query.toLowerCase();
-        const existingNims = kelompokAnggota.map(m => m.nim);
-        const filtered = mahasiswaDatabase.filter(mhs => {
-            const matchName = mhs.nama.toLowerCase().includes(lowerQuery);
-            const matchNim = mhs.nim.includes(lowerQuery);
-            const notMember = !existingNims.includes(mhs.nim);
-            return (matchName || matchNim) && notMember;
-        });
-        
-        renderSearchResults(filtered);
-    }
-    
-    // Render search results
-    function renderSearchResults(results) {
-        searchResults.innerHTML = '';
-        
-        if (results.length === 0) {
-            searchResults.innerHTML = '<div class="no-results">Tidak ada hasil ditemukan</div>';
-            searchResults.classList.add('active');
-            return;
-        }
-        
-        results.forEach(mhs => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'search-result-item';
-            resultItem.innerHTML = `
-                <div class="search-result-name">${mhs.nama}</div>
-                <div class="search-result-nim">${mhs.nim}</div>
-            `;
-            
-            resultItem.addEventListener('click', () => {
-                selectMahasiswa(mhs);
-            });
-            
-            searchResults.appendChild(resultItem);
-        });
-        
-        searchResults.classList.add('active');
-    }
-    
-    // Select mahasiswa from search results
-    function selectMahasiswa(mahasiswa) {
-        selectedMember = mahasiswa;
-        searchInput.value = `${mahasiswa.nama} - ${mahasiswa.nim}`;
-        searchResults.classList.remove('active');
-    }
-    
-    // TODO: ADD MEMBER KE DATABASE (Menggunakan .then())
-    function addMember() {
-        if (!selectedMember) {
-            alert('Silakan pilih mahasiswa terlebih dahulu');
-            return;
-        }
-        
-        if (kelompokAnggota.length >= 5) {
-            alert('Kelompok sudah penuh (maksimal 5 anggota)');
-            return;
-        }
-        
-        const isAlreadyMember = kelompokAnggota.some(m => m.nim === selectedMember.nim);
-        if (isAlreadyMember) {
-            alert('Mahasiswa ini sudah menjadi anggota kelompok');
-            return;
-        }
-        
-        // CARA INTEGRASI DENGAN DATABASE:
-        // const kelompokId = 1; // Ambil dari currentUser atau state
-        // fetch(`/api/kelompok/${kelompokId}/anggota`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         nim: selectedMember.nim
-        //     })
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     if (!data.success) {
-        //         alert(data.message || 'Gagal menambahkan anggota');
-        //         return;
-        //     }
-        //     
-        //     // Reload data dari database setelah berhasil
-        //     loadKelompokAnggota();
-        //     
-        //     // Reset and go back
-        //     selectedMember = null;
-        //     searchInput.value = '';
-        //     showView(viewAnggota);
-        //     
-        //     console.log('Member added successfully');
-        // })
-        // .catch(error => {
-        //     console.error('Error adding member:', error);
-        //     alert('Gagal menambahkan anggota. Silakan coba lagi.');
-        // });
-        
-        // TEMPORARY: Add to local array (HAPUS SAAT INTEGRASI)
-        kelompokAnggota.push({
-            nama: selectedMember.nama,
-            nim: selectedMember.nim,
-            role: null
-        });
-        
-        selectedMember = null;
-        searchInput.value = '';
-        renderMemberList();
-        showView(viewAnggota);
-        console.log('Member added successfully');
-    }
-    
-    // ========== EVENT LISTENERS ==========
-    
-    // Button: Kelola Anggota
-    btnKelolaAnggota.addEventListener('click', () => {
-        loadKelompokAnggota();
-        setupViewAnggota();
-        showView(viewAnggota);
+
+    searchButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        performSearch();
     });
-    
-    // Button: Kembali (dari view anggota)
-    btnKembaliAnggota.addEventListener('click', () => {
-        showView(viewDeskripsi);
-    });
-    
-    // Button: Tambah
-    btnTambahAnggota.addEventListener('click', () => {
-        if (kelompokAnggota.length >= 5) {
-            alert('Kelompok sudah penuh (maksimal 5 anggota)');
-            return;
-        }
-        searchInput.value = '';
-        selectedMember = null;
-        searchResults.classList.remove('active');
-        showView(viewPilihAnggota);
-    });
-    
-    // Button: Selesai
-    btnSelesaiAnggota.addEventListener('click', () => {
-        showView(viewDeskripsi);
-    });
-    
-    // Button: Kembali (dari view pilih)
-    btnKembaliPilih.addEventListener('click', () => {
-        selectedMember = null;
-        searchInput.value = '';
-        searchResults.classList.remove('active');
-        showView(viewAnggota);
-    });
-    
-    // Button: Konfirmasi
-    btnKonfirmasi.addEventListener('click', () => {
-        addMember();
-    });
-    
-    // Button: Search
-    btnSearch.addEventListener('click', () => {
-        searchMahasiswa(searchInput.value);
-    });
-    
-    // Input: Search on Enter
-    searchInput.addEventListener('keyup', (e) => {
+
+
+    searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            searchMahasiswa(searchInput.value);
+            e.preventDefault();
+            performSearch();
         }
     });
+
     
-    // Click outside to close search results
-    document.addEventListener('click', (e) => {
-        if (!searchResults.contains(e.target) && 
-            !searchInput.contains(e.target) && 
-            !btnSearch.contains(e.target)) {
-            searchResults.classList.remove('active');
+    searchInput.addEventListener('input', function() {
+        if (searchInput.value.trim() === '') {
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
         }
     });
+
+   
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && 
+            !searchButton.contains(e.target) && 
+            !searchResults.contains(e.target)) {
+            searchResults.style.display = 'none';
+        }
+    });
+}
+
+async function performSearch() {
+    const searchInput = document.getElementById('search-mahasiswa');
+    const searchResults = document.getElementById('search-results');
+    const keyword = searchInput.value.trim();
+    const idTugas = getIdTugas();
+
+    if (!keyword) {
+        showSearchError('Masukkan nama mahasiswa untuk mencari');
+        return;
+    }
+
+
+    searchResults.innerHTML = '<div class="search-loading">Mencari...</div>';
+    searchResults.style.display = 'block';
+
+    try {
+        const response = await fetch('/mahasiswa/api/search-mahasiswa', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                idTugas: parseInt(idTugas),
+                keyword: keyword
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Terjadi kesalahan');
+        }
+
+        displaySearchResults(data);
+
+    } catch (error) {
+        console.error('Error:', error);
+        showSearchError(error.message || 'Gagal mencari mahasiswa');
+    }
+}
+
+
+function displaySearchResults(mahasiswaList) {
+    const searchResults = document.getElementById('search-results');
+    searchResults.innerHTML = '';
+
+    if (mahasiswaList.length === 0) {
+        searchResults.innerHTML = '<div class="search-no-result">Tidak ada mahasiswa yang ditemukan</div>';
+        searchResults.style.display = 'block';
+        return;
+    }
+
+    mahasiswaList.forEach(mhs => {
+        const resultItem = document.createElement('div');
+        resultItem.className = 'search-result-item';
+        resultItem.innerHTML = `
+            <div class="result-info">
+                <span class="result-name">${mhs.nama}</span>
+                <span class="result-npm">${mhs.npm}</span>
+            </div>
+            <button class="btn-add-member" data-id="${mhs.idUser}" data-nama="${mhs.nama}">
+                <i class='bx bx-plus'></i>
+            </button>
+        `;
+
+        const addButton = resultItem.querySelector('.btn-add-member');
+        addButton.addEventListener('click', function() {
+            addMemberToGroup(mhs);
+        });
+
+        searchResults.appendChild(resultItem);
+    });
+
+    searchResults.style.display = 'block';
+}
+
+async function addMemberToGroup(mahasiswa) {
+    const idTugas = getIdTugas();
+
+   
+    if (currentMembers.length >= maxAnggota) {
+        showError('Kelompok sudah penuh');
+        return;
+    }
+
+    try {
+        const response = await fetch('/mahasiswa/api/tambah-anggota', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                idTugas: parseInt(idTugas),
+                idAnggota: mahasiswa.idUser
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Gagal menambahkan anggota');
+        }
+
+   
+        document.getElementById('search-mahasiswa').value = '';
+        document.getElementById('search-results').style.display = 'none';
+
+  
+        await loadAnggotaKelompok();
+
+        showSuccess(`${mahasiswa.nama} berhasil ditambahkan`);
+
+    } catch (error) {
+        console.error('Error adding member:', error);
+        showError(error.message || 'Gagal menambahkan anggota');
+    }
+}
+
+
+function confirmRemoveMember(idUser, nama) {
+    if (confirm(`Apakah Anda yakin ingin menghapus ${nama} dari kelompok?`)) {
+        removeMemberFromGroup(idUser, nama);
+    }
+}
+
+async function removeMemberFromGroup(idUser, nama) {
+    const idTugas = getIdTugas();
+
+    try {
+        const response = await fetch('/mahasiswa/api/hapus-anggota', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                idTugas: parseInt(idTugas),
+                idAnggota: idUser
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Gagal menghapus anggota');
+        }
+
+
+        await loadAnggotaKelompok();
+
+        showSuccess(`${nama} berhasil dihapus dari kelompok`);
+
+    } catch (error) {
+        console.error('Error removing member:', error);
+        showError(error.message || 'Gagal menghapus anggota');
+    }
+}
+
+
+function setupViewNavigation() {
+
+    const btnKelolaAnggota = document.getElementById('btn-kelola-anggota');
+    if (btnKelolaAnggota) {
+        btnKelolaAnggota.addEventListener('click', function() {
+            showView('view-anggota');
+            loadAnggotaKelompok();
+        });
+    }
+
     
-    // ========== INITIALIZATION ==========
-    loadCurrentUser();
-    console.log('Kelola Anggota module loaded');
-});
+    const btnKembaliAnggota = document.getElementById('btn-kembali-anggota');
+    if (btnKembaliAnggota) {
+        btnKembaliAnggota.addEventListener('click', function() {
+            showView('view-deskripsi');
+        });
+    }
+
+    
+    const btnTambahAnggota = document.getElementById('btn-tambah-anggota');
+    if (btnTambahAnggota) {
+        btnTambahAnggota.addEventListener('click', function() {
+            showView('view-pilih-anggota');
+        });
+    }
+
+    
+    const btnSelesaiAnggota = document.getElementById('btn-selesai-anggota');
+    if (btnSelesaiAnggota) {
+        btnSelesaiAnggota.addEventListener('click', function() {
+            showView('view-deskripsi');
+        });
+    }
+
+    
+    const btnKembaliPilih = document.getElementById('btn-kembali-pilih');
+    if (btnKembaliPilih) {
+        btnKembaliPilih.addEventListener('click', function() {
+            showView('view-anggota');
+  
+            document.getElementById('search-mahasiswa').value = '';
+            document.getElementById('search-results').style.display = 'none';
+        });
+    }
+
+  
+    const btnKonfirmasi = document.getElementById('btn-konfirmasi');
+    if (btnKonfirmasi) {
+        btnKonfirmasi.addEventListener('click', function() {
+            showView('view-anggota');
+
+            document.getElementById('search-mahasiswa').value = '';
+            document.getElementById('search-results').style.display = 'none';
+        });
+    }
+}
+
+
+function showView(viewId) {
+
+    const allViews = document.querySelectorAll('.view-content');
+    allViews.forEach(view => {
+        view.classList.remove('active');
+    });
+
+
+    const selectedView = document.getElementById(viewId);
+    if (selectedView) {
+        selectedView.classList.add('active');
+    }
+}
+
+
+function showSuccess(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-success';
+    toast.innerHTML = `
+        <i class='bx bx-check-circle'></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function showError(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-error';
+    toast.innerHTML = `
+        <i class='bx bx-error-circle'></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function showSearchError(message) {
+    const searchResults = document.getElementById('search-results');
+    searchResults.innerHTML = `
+        <div class="search-error">
+            <i class='bx bx-error-circle'></i>
+            <span>${message}</span>
+        </div>
+    `;
+    searchResults.style.display = 'block';
+
+    setTimeout(() => {
+        searchResults.style.display = 'none';
+    }, 3000);
+}

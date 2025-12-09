@@ -35,6 +35,13 @@ public class MataKuliahService {
         );
     }
 
+    public List<MataKuliah> getMataKuliahNonAktif() {
+        return mataKuliahRepository.findByIsActive(false);
+    }
+
+
+    //@Autowired
+    //private MataKuliahRepository mataKuliahRepository;
 
     /* ============================
        BAGIAN UNTUK KELOLA MATKUL

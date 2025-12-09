@@ -2,6 +2,7 @@ package com.Tubeslayer.repository;
 
 import com.Tubeslayer.entity.MataKuliahDosen;
 import com.Tubeslayer.entity.id.MataKuliahDosenId;
+import com.Tubeslayer.dto.MKArchiveDTO;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -24,6 +25,19 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     // Hapus semua kode TugasBesar di repository ini
     // hitung jumlah mk aktif untuk dosen tertentu di tahun akademik tertentu
     int countById_IdUserAndTahunAkademikAndIsActive(String idUser, String tahunAkademik, boolean isActive);
+
+    @Query("""
+        SELECT new com.Tubeslayer.dto.MKArchiveDTO(
+            md.mataKuliah.kodeMK,
+            md.mataKuliah.nama,
+            md.tahunAkademik
+        )
+        FROM MataKuliahDosen md
+        WHERE md.mataKuliah.isActive = false
+        GROUP BY md.mataKuliah.kodeMK, md.mataKuliah.nama, md.tahunAkademik
+        ORDER BY md.mataKuliah.nama ASC
+    """)
+    List<MKArchiveDTO> getArchiveMK();
 
     // ambil list MK aktif untuk dosen tertentu di tahun akademik tertentu
     @Query("""

@@ -1,5 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap');
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow-y: auto;
+    overflow-x: auto;
+    
+    background: linear-gradient(
+        360deg, 
+        rgba(255, 241, 235, 1) 0%,
+        rgba(172, 224, 249, 1) 50%, 
+        rgba(172, 224, 249, 1) 100% 
+    ) !important;
+
+    min-height: 100vh;
+    background-attachment: scroll; 
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+}
+
+.bold{
+    font-weight: bold;
+}
+
 * {
     box-sizing: border-box;
     max-width: 100%;
@@ -9,19 +36,10 @@
 }
 
 :root{
-    /* Transition */
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
-}
-
-body{
-    height: 100vh;
-}
-
-.bold{
-    font-weight: bold;
 }
 
 /* === SIDEBAR === */
@@ -69,6 +87,17 @@ body{
     list-style: none;
     display: flex;
     align-items: center;
+}
+
+.sidebar li a.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
+}
+
+
+.sidebar li.active {
+    background-color: #C1EBFF;
+    border-radius: 10px;
 }
 
 .sidebar li .icon{
@@ -157,15 +186,13 @@ header .image-text .header-text{
     justify-content: space-between;
 }
 
-.sidebar li.active {
-    background-color: #C1EBFF;
-    border-radius: 10px;
+.sidebar li.active a {
+    background-color: #C1EBFF; 
 }
 
 .home{
-    position: absolute;
+    position: relative;
     height: 100vh;
-    top: 0; 
     left: 73px; 
     width: calc(100% - 73px);
     transition: var(--tran-05);
@@ -282,197 +309,176 @@ header .image-text .header-text{
     gap: 35px; 
 }
 
-.header-section{
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    width: 1360px;
-    height: 160px; 
-    background: url(../img/dashboard-header.png); 
-    background-size:cover;
-    border-radius: 15px; 
-    flex-direction: column;
-    gap: 10px; 
-    box-shadow: 2px 3px 1px grey;
+/* --- Reset & Font Dasar --- */
+.content-section {
+    padding: 20px;
 }
 
-.web-title{
-    font-weight: bold;
-    font-size: 30pt;
-}
+/* --- Header & Navigasi Atas --- */
 
-.welcome-message{
-    color: #757575;  
-    font-size: 14pt;    
-}
-
-.overview-section{
-    width: 1360px; 
-    display: flex; 
-    flex-direction: column;
-}
-
-.overview-title{
-    font-weight: bold;
-    font-size: 17pt; 
-}
-
-.overview-div{
-    margin-top: 10px;   
+.header .left-section {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
-.left-overview{
-    width: 660px; 
-    height: 150px; 
+.menu-toggle-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: #5BA4E6; /* Warna biru icon */
+}
+
+.arsip-banner {
+    position: relative;
+    width: 100%;                    
+    max-width: 1400px;                /* biar rapi */
+    background: #D8F1FF;
+    padding-left: 20px;              /* kecil & tipis */
     border-radius: 15px;
-    background-color: white;
-    display: flex; 
-    justify-content: center;
-    flex-direction: column;
-    box-shadow: 2px 3px 1px grey;
-    gap: 20px; 
+    display: flex;
+    align-items: center;
+    gap: 12px;                       /* jarak icon ke teks */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 0px;
+    z-index: 2;
+    height: 120px; 
 }
 
-.date{
+.arsip-banner img {
+    width: 100px;
+    height: 100px;
+    border-radius: 25px;
+}
+
+.arsip-banner h1 {
+    font-size: 22px;                 
     font-weight: bold;
-    font-size: 14pt; 
-    margin-left: 30px; 
+    margin: 0;
 }
 
-.semester{
-    font-weight: bold;
-    font-size: 14pt;  
-    margin-left: 30px;
+/* --- Area Daftar & Pencarian --- */
+.list-container {
+    width: 100%;
 }
 
-.right-overview{
-    width: 660px; 
-    height: 150px; 
-    border-radius: 15px; 
-    background-color: white;
-    display: flex; 
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: 2px 3px 1px grey;
-    gap: 20px; 
-}
-
-.mk{
-    font-weight: bold;
-    font-size: 14pt; 
-    margin-left: 30px; 
-}
-
-.tubes-aktif{
-    font-weight: bold;
-    font-size: 14pt;  
-    margin-left: 30px;
-}
-
-.mk, .tubes-aktif {
-    font-weight: bold;   /* label tetap bold */
-    font-size: 14pt;
-    margin-left: 30px;
-}
-
-.mk-value, .tb-value {
-    font-weight: normal; /* angka jadi normal */
-}
-
-.content-section{
-    width: 1360px; 
-    display: flex; 
-    flex-direction: column;
-    align-content: center;
-    gap: 20px; 
-}
-
-.content-title{  
+.list-header {
+    margin-top: 20px; 
     display: flex;
     justify-content: space-between;
-}
-
-.lihat-semua-btn{
-    text-decoration: none;
-    color:white;
-    background-color: black;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 5px; 
-    font-size: 10pt; 
-    padding-left: 10px; 
-    padding-right: 10px;
-    box-shadow: 2px 2px 3px grey;
+    margin-bottom: 15px;
 }
 
-.content-title{
+#list-title{
     font-weight: bold;
-    font-size: 17pt; 
 }
 
-.content-div {
-    display: flex;
-    flex-wrap: wrap;      /* biar bisa turun ke baris baru */
-    gap: 20px;            /* jarak antar box */
-    justify-content: flex-start; /* rata kiri */
+.list-header h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
 }
 
-.content-item {
-    width: 320px; 
-    height: 150px; 
-    background-color: white;
-    border-radius: 15px; 
-    box-shadow: 2px 3px 1px grey;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px; 
-    transition: var(--tran-03);
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding: 8px 35px 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 200px;
+}
+
+.search-box i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
     cursor: pointer;
 }
 
-/* .content-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 4px 6px 8px rgba(0,0,0,0.2);
-} */
+.list-container{
+    margin-top: -10px;
+    height: 390px;
+    background-color: #FFFFFF; 
+    padding: 20px;
+    border-radius: 0px 0px 15px 15px;
+    gap: 20px; 
+}
 
-.nama-mk{
+/* --- Struktur Tabel Custom --- */
+.custom-table-container {
+    min-height: 190px;
+    background-color: #FFF1EB; 
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.table-header-row,
+.data-row {
+    display: grid !important;
+    grid-template-columns:10% 60% 30%;
+    padding: 10px;
+    align-items: center;
+    text-align: center;     
+    font-size: 14px;
+}
+
+.data-row {
+    background-color: #D1F1FA;
+    padding: 10px;        
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.table-header-row {
     font-weight: bold;
-    font-size: 15pt; 
+    text-align: center;
+    color: #000;
 }
 
-.kelas{
-    font-size: 13pt; 
+/* ================= PAGINASI (Tombol Geser) ================= */
+.pagination {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 20px;
+    gap: 10px;
 }
 
-/* ================= BACKGROUND CARD ================= */
-.gradient-1 {
-    background: linear-gradient(#31acef, white);
+.pagination .page-info {
+    padding: 5px 10px;
+    /* Background Biru Muda */
+    background: #c8eaff; 
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-.gradient-2 {
-    background: url("/icon/matkul-2.png");
-    background-size: cover;
-    background-position: center;
+.pagination .page-arrow {
+    background: #ccc;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    transition: background-color 0.2s;
 }
 
-.gradient-3 {
-    background: radial-gradient(circle at center,
-            #29ACEF 10%,
-            #9dd6f5 40%,
-            #eaf7ff 70%,
-            #ffffff 100%);
+.pagination .page-arrow:hover:not(:disabled) {
+    background: #aaa;
 }
 
-.gradient-4 {
-    background: url("/icon/matkul-4.png");
-    background-size: cover;
-    background-position: center;
+.pagination .page-arrow:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 
@@ -480,6 +486,4 @@ header .image-text .header-text{
 
 
 
-
-
-
+   

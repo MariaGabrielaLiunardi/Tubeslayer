@@ -254,24 +254,32 @@ header .image-text .header-text {
 }
 
 /* Tabs */
-.tabs {
+.mk-tab {
+    background: #0078B5;
+    width: fit-content;
+    border-radius: 40px;
     display: flex;
-    gap: 10px;
-    margin: 0 30px 20px 30px;
+    gap: 5px;
+    margin-top: 60px;
+    margin-left: 30px;
+    margin-bottom: 10px;
 }
 
 .tab {
-    padding: 10px 25px;
-    background-color: #0288d1;
+    background: transparent;
     color: white;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 14px;
     border: none;
+    padding: 10px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-sizing: border-box; 
 }
 
-.tab:hover {
-    background-color: #0277bd;
+.tab.active {
+    background: #4CA6D3;
+    border-radius: 30px;
+    padding: 10px 30px; 
 }
 
 /* Card Container */
@@ -503,27 +511,48 @@ header .image-text .header-text {
 /* Action Buttons */
 .action-buttons {
     display: flex;
-    justify-content: flex-end;
-    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 25px;
+    gap: 10px;
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px;
 }
 
 .btn-secondary {
-    background-color: transparent;
-    color: #000;
+    background-color: #000;
+    color: white;
     padding: 12px 30px;
-    border: 2px solid #000;
+    border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
-    transition: var(--tran-03);
 }
 
 .btn-secondary:hover {
+    background-color: #333;
+}
+
+.btn-primary {
     background-color: #000;
     color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
 }
+
+.btn-primary:hover {
+    background-color: #333;
+}
+
+
 
 /* Form Styles */
 .form-title {
@@ -587,6 +616,10 @@ header .image-text .header-text {
     background-color: #333;
 }
 
+.search-results.active {
+    display: block;
+}
+
 .form-buttons {
     display: flex;
     justify-content: flex-end;
@@ -609,3 +642,132 @@ header .image-text .header-text {
 .content-card {
     animation: fadeIn 0.3s ease;
 }
+#detailAnggotaView .content-header {
+    justify-content: space-between;
+}
+
+.kelompok-name-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* List anggota */
+.member-list {
+    border-radius: 10px;
+    
+}
+.member-item {
+    background: #fff;
+    border-radius: 8px;
+    border :2px solid #e0e0e0;
+    padding: 12px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+}
+.member-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.member-name {
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+}
+
+.member-item .role {
+    font-size: 13px;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+/* Counter anggota */
+.member-counter {
+    text-align: right;
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+}
+
+
+.search-section {
+    margin: 20px 0;
+}
+
+.search-section label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#search-mahasiswa-dosen {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    font-size: 14px;
+}
+
+.btn-search {
+    background: #000;
+    padding: 11px 18px;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.btn-search:hover {
+    background: #333;
+}
+
+/* SEARCH RESULT DROPDOWN */
+.search-results {
+    background: white;
+    border: 1px solid #ddd;
+    margin-top: 8px;
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    max-height: 230px;
+    overflow-y: auto;
+}
+
+.search-item {
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.search-item:hover {
+    background: #E3F2FD;
+}
+
+/* Counter di view pilih */
+#pilihAnggotaView .member-counter {
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #444;
+    text-align: right;
+}
+

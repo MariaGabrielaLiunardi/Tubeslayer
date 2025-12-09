@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Tubeslayer - Detail Mata Kuliah</title>
+    <title>Tubeslayer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
@@ -73,18 +73,24 @@
         </div>
 
         <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
-            <button class="tab active" data-tab-target="kuliah">Kuliah</button>
-            <button class="tab" data-tab-target="peserta"
-                th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|">
-                Daftar Peserta
+
+            <button class="tab active" data-tab-target="kuliah"
+                th:attr="data-target-url=@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')"> Kuliah
             </button>
+
+            <button class="tab" data-tab-target="peserta"
+                th:attr="data-target-url=@{/mahasiswa/matkul-peserta(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')"> Daftar Peserta
+            </button>
+
             <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
         <div class="detail-wrapper">
 
             <div class="mk-header">
-                <div class="mk-img"></div>
+                <div class="mk-img" th:classappend="'gradient-' + (${colorIndex} + 1)"></div>
                 <div class="mk-info">
                     <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
 

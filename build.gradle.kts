@@ -32,6 +32,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.mysql:mysql-connector-j:8.3.0")
+	implementation("org.flywaydb:flyway-core:10.15.0")
 }
 
 tasks.withType<Test> {

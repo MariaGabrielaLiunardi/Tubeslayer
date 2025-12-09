@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Tubeslayer - Mata Kuliah</title>
+    <title>Tubeslayer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
@@ -76,13 +76,18 @@
 
             <section class="course-grid">
 
-                <div class="card" th:each="enroll : ${enrollList}" th:attr="data-kode-mk=${enroll.mataKuliah.kodeMK}">
+                <div class="card" th:each="enroll, iStat : ${enrollList}"
+                    th:attr="data-kode-mk=${enroll.mataKuliah.kodeMK}">
 
-                    <div class="card-img" th:classappend="'gradient-' + ${(enrollList.indexOf(enroll) % 4) + 1}"></div>
+                    <a th:href="@{/mahasiswa/matkul-detail(mk=${enroll.mataKuliah.kodeMK}, colorIndex=${iStat.index % 4})}"
+                        style="text-decoration: none; color: inherit;">
 
-                    <span class="badge" th:text="'Kelas ' + ${enroll.kelas}">Kelas X</span>
+                        <div class="card-img" th:classappend="'gradient-' + (${iStat.index % 4} + 1)"></div>
 
-                    <h3 th:text="${enroll.mataKuliah.nama}">Nama Mata Kuliah</h3>
+                        <span class="badge" th:text="'Kelas ' + ${enroll.kelas}">Kelas X</span>
+
+                        <h3 th:text="${enroll.mataKuliah.nama}">Nama Mata Kuliah</h3>
+                    </a>
                 </div>
 
             </section>

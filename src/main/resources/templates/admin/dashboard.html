@@ -37,7 +37,7 @@
                     </a>
                 </li>
                 <li class="nav-link">
-                    <a href="#">
+                    <a href="/admin/arsip-mata-kuliah">
                         <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
                         <span class="text nav-text">Arsip Mata Kuliah</span>
                     </a>
@@ -78,10 +78,13 @@
             <div class="overview-div">
                 <div class="left-overview">
                     <span class="date">
-                        📅 Tanggal: <span th:text="${tanggal}" style="font-weight: normal;"></span>
+                        🧑‍🏫 Dosen terdaftar: 
+                        <span th:text="${jumlahDosen}" style="font-weight: normal;"></span>
                     </span>
+
                     <span class="semester">
-                      🎓 Semester: <span th:text="${semester}" style="font-weight: normal;"></span>
+                        🧑‍🎓 Mahasiswa terdaftar: 
+                        <span th:text="${jumlahMahasiswa}" style="font-weight: normal;"></span>
                     </span>
                 </div>
                 <div class="right-overview">
@@ -99,8 +102,8 @@
         </div>
         <div class="content-section">
             <div class="content-title">
-                <span class="content-title">Mata Kuliah</span>
-                <a href="#" class="lihat-semua-btn">
+                <span class="content-title">Data</span>
+                <a href="/admin/menu-awal-ad" class="lihat-semua-btn">
                     Lihat Semua >
                 </a>
             </div>

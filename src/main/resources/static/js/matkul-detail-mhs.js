@@ -2,35 +2,32 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const mkTabDiv = document.querySelector('.mk-tab');
     const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
-
-    // --- Logika Tab Navigation (Navigasi ke Daftar Peserta) ---
-    const tabs = document.querySelectorAll('.mk-tab button');
     
-    tabs.forEach(tab => {
-        const tabTarget = tab.getAttribute('data-tab-target');
+    const tabButtons = document.querySelectorAll('.mk-tab .tab');
 
-        // Navigasi ke Daftar Peserta (endpoint Mahasiswa)
-        if (tabTarget === 'peserta' && mataKuliahId) {
-            tab.addEventListener('click', () => {
-                window.location.href = `/mahasiswa/matkul-peserta?kodeMk=${encodeURIComponent(mataKuliahId)}`;
+    tabButtons.forEach(button => {
+        if (button.hasAttribute('data-target-url')) {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-target-url');
+                if (url) {
+                    window.location.href = url;
+                }
             });
         }
-        // Navigasi ke halaman Nilai (jika endpoint sudah tersedia)
-        // if (tabTarget === 'nilai' && mataKuliahId) { ... }
     });
 
-    // --- Logika Logout ---
+    // Logout
+    
         const handleLogout = () => {
         console.log("Melakukan proses logout..."); 
-        // Menggunakan fetch POST untuk memicu logout Spring Security
         fetch('/logout', { method: 'POST' }) 
             .then(() => {
-                 // Setelah berhasil, redirect ke halaman utama
+                 // redirect ke halaman utama
                  window.location.href = '/'; 
             })
             .catch(error => {
                  console.error("Logout gagal:", error);
-                 // Fallback: tetap redirect meskipun fetch gagal
+                 // tetap redirect meskipun fetch gagal
                  window.location.href = '/'; 
             });
     };

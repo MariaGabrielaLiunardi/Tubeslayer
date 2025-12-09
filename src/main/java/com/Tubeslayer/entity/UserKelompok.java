@@ -23,6 +23,7 @@ public class UserKelompok {
     @Column(length = 8, nullable = false)
     private String role;
 
+    @Column(name = "is_active", nullable = false)
     private boolean is_active = true;
 }
 
