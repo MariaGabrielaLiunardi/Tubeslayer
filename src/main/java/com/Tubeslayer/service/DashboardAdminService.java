@@ -19,13 +19,11 @@ public class DashboardAdminService {
         this.tbRepo = tbRepo;
     }
 
-    // ⭐ Ubah method: Hapus parameter idUser dan semester
     public long getJumlahMkAktifUniversal() {
         // Panggil method repository yang menghitung semua MK aktif
         return mkRepo.countByIsActive(true);
     }
 
-    // ⭐ Ubah method: Hapus parameter idUser
     public long getJumlahTbAktifUniversal() {
         // Panggil method repository yang menghitung semua TB aktif
         return tbRepo.countByIsActive(true);

@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import java.util.Set;
 
+import org.springframework.data.repository.query.Param;
+
 @Entity
 @Table(name = "user_table")
 @Data
@@ -28,5 +30,7 @@ public class User {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true; // default true
+
+
     
 }

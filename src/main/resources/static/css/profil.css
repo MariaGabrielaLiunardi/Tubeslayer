@@ -255,6 +255,12 @@ header .image-text .header-text{
     padding-top: 5px;
 }
 
+.content-section {
+  margin-top: 40px;
+  align-items: center;
+  text-align: center;
+}
+
 .name{
     font-weight: bold;
     font-size: 14pt; 
@@ -264,9 +270,18 @@ header .image-text .header-text{
     font-size: 12pt; 
 }
 
+.email {
+  font-size: 12pt;
+  color: #555;
+}
+
+
 .pfp{
-    width: 45px;
-    height: 45px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    z-index: 2;
+
 }
 
 .logout-btn{
@@ -287,6 +302,7 @@ header .image-text .header-text{
     align-items: center;
 }
 
+/*----BAGIAN PROFIL----*/
 .contents{
     display: flex; 
     justify-content: center;
@@ -296,13 +312,25 @@ header .image-text .header-text{
     gap: 35px; 
 }
 
+.info{
+    background-color: #FFFFFF;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 300px;
+    margin: 60px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-top: -70px;
+}
 /* --- Reset & Font Dasar --- */
 .content-section {
     padding: 20px;
 }
 
 /* --- Header & Navigasi Atas --- */
-
 .header .left-section {
     display: flex;
     align-items: center;
