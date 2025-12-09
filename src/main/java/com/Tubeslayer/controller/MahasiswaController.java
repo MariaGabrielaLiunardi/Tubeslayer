@@ -134,7 +134,7 @@ public class MahasiswaController {
         model.addAttribute("enrollList", enrollList);
         model.addAttribute("user", user);
 
-        // --- LOGIC SEMESTER (SALINAN DARI DASHBOARD) ---
+        // --- LOGIC SEMESTER ---
         LocalDate today = LocalDate.now();
         int year = today.getYear();
         String semesterTahunAjaran; 
@@ -178,7 +178,7 @@ public class MahasiswaController {
         int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
         model.addAttribute("colorIndex", finalColorIndex);
 
-        // --- KOREKSI: LOGIC MENGAMBIL KOORDINATOR DOSEN ---
+        // --- LOGIC MENGAMBIL KOORDINATOR DOSEN ---
         MataKuliahDosen koordinator = null;
         
         try {
@@ -265,7 +265,7 @@ public class MahasiswaController {
         // 3.2. Konversi Mahasiswa ke DTO
         List<PesertaMatkulDTO> mahasiswaDTOs = listPeserta.stream()
             .map(rel -> new PesertaMatkulDTO(
-                0, // Index akan di-update setelah sorting
+                0, 
                 rel.getUser().getNama(),
                 rel.getUser().getIdUser(),
                 "Mahasiswa",

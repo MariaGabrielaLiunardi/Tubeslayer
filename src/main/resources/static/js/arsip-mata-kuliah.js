@@ -6,7 +6,6 @@ if (searchInput) {
     searchInput.addEventListener("input", () => {
         const query = searchInput.value.toLowerCase();
 
-        // Filter berdasar span ke-2 (nama) dan span ke-3 (kelas)
         filteredPageItems = masterPageItems.filter(row => {
             const spans = row.querySelectorAll("span");
 
@@ -16,7 +15,7 @@ if (searchInput) {
             return nama.includes(query) || kelas.includes(query);
         });
 
-        // Hitung ulang total halaman
+        
         totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
         currentPage = 1;
 

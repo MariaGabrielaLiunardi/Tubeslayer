@@ -15,17 +15,17 @@ public class MataKuliahController {
     private MataKuliahService service;
 
     /* ============================
-       TAMPILKAN HALAMAN KELOLA
+       HALAMAN KELOLA
     ============================ */
     @GetMapping("/kelola-mata-kuliah")
     public String kelolaMatkul(Model model) {
         //System.out.println("<<<<DEBUG" + service.getAll().size());
         model.addAttribute("listMatkul", service.getAll());
-        return "admin/kelola-mata-kuliah"; // HTML kamu
+        return "admin/kelola-mata-kuliah"; // HTML
     }
 
     /* ============================
-       TAMBAH MATA KULIAH (manual/import)
+       MATA KULIAH (manual/import)
     ============================ */
     @PostMapping("/tambah")
     @ResponseBody

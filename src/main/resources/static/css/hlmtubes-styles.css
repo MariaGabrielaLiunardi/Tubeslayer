@@ -18,7 +18,6 @@
 body {
     font-family: Sen;
     background-color: #f5f5f5;
-    /* Background gradient untuk seluruh halaman */
     background: linear-gradient(#fff1eb, #ACE0F9 );
     
     background-size: cover;
@@ -300,7 +299,7 @@ header .image-text .header-text {
     padding: 10px 30px; 
 }
 
-/* Card Container - Wrapper untuk semua bagian */
+/* Card Container  */
 .card-container {
     border-radius: 15px;
     overflow: visible;
@@ -308,7 +307,7 @@ header .image-text .header-text {
     margin: 0 30px 30px 30px;
 }
 
-/* Title Section - Background biru muda, lebar penuh */
+/* Title Section  */
 .title-section {
     background-color: #b3e5fc;
     padding: 25px 30px;
@@ -357,7 +356,7 @@ header .image-text .header-text {
     margin: 0 8px;
 }
 
-/* Content Card - Bagian putih di bawah title */
+/* Content Card */
 .content-card {
     background-color: white;
     padding: 30px;

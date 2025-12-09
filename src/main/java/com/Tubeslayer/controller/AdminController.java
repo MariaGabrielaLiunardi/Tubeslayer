@@ -1457,7 +1457,7 @@ public class AdminController {
                     maxNumber = number;
                 }
             } catch (NumberFormatException e) {
-                // Skip jika bukan angka
+                //  jika bukan angka maka dilewat
             }
         }
 

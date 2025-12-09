@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
 
-    // 1. Highlight sesuai URL aktif (jalan saat halaman dimuat)
+    // Highlight URL aktif 
     const currentPath = window.location.pathname;
     navLinks.forEach(li => {
         const anchor = li.querySelector('a');
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Highlight saat klik (opsional, biar langsung kelihatan sebelum pindah halaman)
+    // 2. Highlight saat klik 
     navLinks.forEach(li => {
         const anchor = li.querySelector('a');
         anchor.addEventListener('click', () => {

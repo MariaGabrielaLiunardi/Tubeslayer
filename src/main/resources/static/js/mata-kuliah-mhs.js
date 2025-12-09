@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch(error => {
                  console.error("Logout gagal:", error);
-                 // tetap redirect meskipun fetch gagal
+                 // tetap redirect kalaupun fetch gagal
                  window.location.href = '/'; 
             });
     };

@@ -27,9 +27,6 @@ public interface TugasBesarRepository extends JpaRepository<TugasBesar, Integer>
 
     long countByIsActive(boolean isActive);
 
-    // ==========================================================
-    // METODE BARU UNTUK ARSIP DETAIL ADMIN
-    // ==========================================================
 
     /**
      * Menghitung jumlah kelompok unik yang terdaftar pada TugasBesar tertentu.

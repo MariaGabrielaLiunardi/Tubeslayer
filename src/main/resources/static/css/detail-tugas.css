@@ -6,7 +6,7 @@
     background-color: white;
 }
 
-/* Title Section - Blue Background */
+/* Title Section*/
 .title-section-new {
     background: linear-gradient(135deg, #B3E5FC 0%, #81D4FA 100%);
     padding: 30px 40px;
@@ -40,7 +40,7 @@
     letter-spacing: -0.5px;
 }
 
-/* Content Card - White Background */
+/* Content Card*/
 .content-card-new {
     background-color: white;
     padding: 35px 40px;

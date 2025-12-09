@@ -10,7 +10,6 @@
     <script src="/js/sidebar-hlmtubes.js" defer></script>
     <script src="/js/management-kelompok.js" defer></script>
     <script th:inline="javascript">
-      // Pass data dari Thymeleaf ke JavaScript
       window.TUGAS_DATA = {
         idTugas: /*[[${tugas.idTugas}]]*/ 1,
         judulTugas: /*[[${tugas.judulTugas}]]*/ 'Tugas Besar',
@@ -264,7 +263,7 @@
             
             <!-- Search Results Dropdown -->
             <div class="search-results" id="search-results-dosen">
-              <!-- Results will be inserted here by JavaScript -->
+              <!-- Results akan diinject JavaScript -->
             </div>
           </div>
 

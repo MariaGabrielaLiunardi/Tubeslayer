@@ -8,5 +8,5 @@ public class TugasBesarRequest {
     private String deadline; // <--- Diterima sebagai String (YYYY-MM-DD)
     private String deskripsi;
     
-    // Tambahkan field lain yang dikirim oleh form jika ada
+   
 }

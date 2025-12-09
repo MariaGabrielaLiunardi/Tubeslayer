@@ -277,7 +277,7 @@ body {
     font-size: 16px;
 }
 
-/* style untuk card tugas mendatang baru */
+/* style untuk card tugas baru */
 .tugas-mendatang-card {
     background: #c8eaff;
     padding: 15px;
@@ -316,7 +316,6 @@ body {
     color: #888;
 }
 
-/* konten tugas besar kotak kuning */
 .tugas-besar {
     background: #fff4ec;
     padding: 35px 30px 35px 25px; 

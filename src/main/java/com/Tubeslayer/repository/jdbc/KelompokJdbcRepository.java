@@ -133,7 +133,7 @@ public class KelompokJdbcRepository {
     }
 
     /**
-     * Check jika user = leader
+     * jika user = leader
      */
     public boolean isLeader(Integer idTugas, String idUser) {
         String sql = 
