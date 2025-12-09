@@ -8,7 +8,7 @@
     <link rel="icon" href="/logo/blue-logo.png" type="image/png">
     
     <script src="/js/dash-user.js" defer></script>
-   <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
 <nav class="sidebar close">
@@ -23,7 +23,7 @@
             </div>
         </div>
     </header>
-    <i class='bxr bx-chevron-right toggle'></i> 
+    <i class='bx bx-chevron-right toggle'></i> 
     <div class="menu-bar">
         <div class="menu">
             <ul class="menu-links">
@@ -102,17 +102,19 @@
                 </a>
             </div>
             <div class="content-div">
-                <div th:each="mk, iterStat : ${mataKuliahList}"
-                    th:class="|content-item gradient-${(iterStat.index % 4) + 1}|">
+                <a th:each="mk, iterStat : ${mataKuliahList}"
+                    th:href="@{/mahasiswa/matkul-detail(mk=${mk.kodeMK})}"
+                    th:class="|content-item gradient-${(iterStat.index % 4) + 1}|"
+                    style="text-decoration: none; color: inherit;">
                     <span class="nama-mk" th:text="${mk.nama}">Nama MK</span>
-                    
-                    <!-- iterasi mahasiswaList, tapi hanya ambil yang sama dengan user login -->
-                    <span class="kelas" th:each="mm : ${mk.mahasiswaList}" 
+
+                    <span class="kelas"
+                        th:each="mm : ${mk.mahasiswaList}"
                         th:if="${mm.user.idUser == user.idUser}"
                         th:text="'Kelas ' + ${mm.kelas}">
                         Kelas
                     </span>
-                </div>
+                </a>
             </div>
         </div>
     </div>
