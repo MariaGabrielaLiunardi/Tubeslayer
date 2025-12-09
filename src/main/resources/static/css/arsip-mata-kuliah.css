@@ -481,6 +481,15 @@ header .image-text .header-text{
     opacity: 0.5;
 }
 
+.data-row-link {
+    color: black;          /* warna teks hitam */
+    text-decoration: none; /* hilangkan underline */
+}
+
+.data-row-link:hover {
+    color: black;          /* tetap hitam saat hover */
+    text-decoration: none; /* tetap tanpa underline */
+}
 
 
 
