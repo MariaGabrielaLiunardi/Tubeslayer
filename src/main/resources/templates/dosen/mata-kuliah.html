@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Tubeslayer - Mata Kuliah</title>
+    <title>Tubeslayer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
@@ -79,16 +79,20 @@
                 <div class="card" th:each="mkDosen, iStat : ${mataKuliahDosenList}"
                     th:attr="data-kode-mk=${mkDosen.mataKuliah.kodeMK}">
 
-                    <div class="card-img" th:classappend="'gradient-' + (${iStat.index % 4} + 1)"></div> <span
-                        class="badge" th:text="${mkDosen.kelas}">Kelas X</span>
-                    <h3 th:text="${mkDosen.mataKuliah.nama}">Nama Mata Kuliah</h3>
+                    <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDosen.mataKuliah.kodeMK}, colorIndex=${iStat.index % 4})}"
+                        style="text-decoration: none; color: inherit;">
+
+                        <div class="card-img" th:classappend="'gradient-' + (${iStat.index % 4} + 1)"></div>
+                        <span class="badge" th:text="|Kelas ${mkDosen.kelas}|">Kelas X</span>
+                        <h3 th:text="${mkDosen.mataKuliah.nama}">Nama Mata Kuliah</h3>
+                    </a>
                 </div>
 
             </section>
 
             <footer class="semester">
-                <span th:text="|Semester ${semesterLabel} Tahun Ajaran ${semester}|">
-                    Semester Ganjil Tahun Ajaran 2025/2026
+                <span th:text="|Semester ${semesterLabel} Tahun Ajaran ${semesterTahunAjaran}|">
+                    Semester x Tahun Ajaran xxxx/xxxx
                 </span>
             </footer>
 

@@ -6,11 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import java.util.Set;
 
+import org.springframework.data.repository.query.Param;
+
 @Entity
 @Table(name = "user_table")
 @Data
-@EqualsAndHashCode(exclude = {"tugasBesarList", "mataKuliahMahasiswaList"}) 
-@ToString(exclude = {"tugasBesarList", "mataKuliahMahasiswaList"})
 public class User {
     @Id
     @Column(name = "id_user", length = 30)
@@ -30,5 +30,7 @@ public class User {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true; // default true
+
+
     
 }

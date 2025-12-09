@@ -1,93 +1,95 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
-    // Asumsi kita tahu base path adalah '/dosen' di sini
-    const basePath = '/dosen'; 
-    
-    // Ambil kodeMK dari elemen header tab (atau dari form)
+
     const mkTabDiv = document.querySelector('.mk-tab');
     const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
     
-    if (!mataKuliahId) {
-        console.error("Kode Mata Kuliah tidak ditemukan.");
-    }
-    
-    // --- Logika Tab Navigation (sekarang handled by th:onclick di HTML) ---
-    // Logika di sini sekarang hanya perlu fokus pada tampilan di halaman ini 
-    // jika ada tab lain selain "Peserta" yang memicu pengalihan.
-    // Karena kita menggunakan th:onclick untuk Daftar Peserta, logika ini bisa dihapus/disederhanakan.
+    const tabButtons = document.querySelectorAll('.mk-tab .tab');
 
-    // ------------------------------------------------------------------
-    // --- Logika Form Toggle (Dosen) ---
-    // ------------------------------------------------------------------
+    tabButtons.forEach(button => {
+        if (button.hasAttribute('data-target-url')) {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-target-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        }
+    });
 
+    const handleLogout = () => {
+        fetch('/logout', { method: 'POST' }) 
+            .finally(() => { // Gunakan finally untuk menjamin redirect
+                 window.location.href = '/'; 
+            });
+    };
+    const logoutButton = document.getElementById('logoutButton'); 
+    if (logoutButton) {
+        console.log("DEBUG: Listener dipasang pada tombol Logout.");
+        logoutButton.addEventListener('click', handleLogout);
+    } 
+
+    const toggleButton = document.getElementById('toggle-tambah-tugas'); 
     const listTugasView = document.getElementById('list-tugas-view');
     const buatTugasView = document.getElementById('buat-tugas-view');
-    const toggleButton = document.getElementById('toggle-tambah-tugas'); 
     const breadcrumb = document.querySelector('.breadcrumb');
-    
-    let isListView = true;
-    const originalBreadcrumb = breadcrumb ? breadcrumb.innerHTML : '';
-    
-    // Fungsionalitas Dosen (Form Toggle)
-    if (toggleButton && buatTugasView) { 
+
+    if (toggleButton && listTugasView && buatTugasView) { 
         
-        const resetToListView = () => {
-            if (!isListView) {
-                isListView = true;
-                if (listTugasView) listTugasView.style.display = 'block';
-                if (buatTugasView) buatTugasView.style.display = 'none';
-                if (breadcrumb) {
-                     // Hilangkan teks tambahan "Tambah Tugas"
-                     breadcrumb.innerHTML = originalBreadcrumb.split(' > ')[0]; 
-                }
-            }
-        };
+        console.log("DEBUG: Listener dipasang pada tombol Tambah Tugas.");
+        
+
+        let isListView = true;
+        const mkTitleElement = document.getElementById('mk-title');
+        const originalBreadcrumb = breadcrumb ? breadcrumb.innerHTML : '';
+        
+        // Set tampilan awal
+        listTugasView.style.display = 'block';
+        buatTugasView.style.display = 'none';
 
         const toggleView = () => {
             isListView = !isListView;
             
             if (isListView) {
-                resetToListView();
+                // Kembali ke list view
+                listTugasView.style.display = 'block';
+                buatTugasView.style.display = 'none';
+                if (breadcrumb) {
+                     breadcrumb.innerHTML = originalBreadcrumb; 
+                }
             } else {
-                if (listTugasView) listTugasView.style.display = 'none';
-                if (buatTugasView) buatTugasView.style.display = 'block';
-                // Tambahkan teks tambahan "Tambah Tugas" ke breadcrumb
-                if (breadcrumb) breadcrumb.innerHTML = originalBreadcrumb + ` > <b>Tambah Tugas</b>`;
+                // Pindah ke form buat tugas
+                listTugasView.style.display = 'none';
+                buatTugasView.style.display = 'block';
+                if (breadcrumb) {
+                    const mkTitle = mkTitleElement ? mkTitleElement.textContent : 'Mata Kuliah';
+                    breadcrumb.innerHTML = `Daftar Mata Kuliah > ${mkTitle} > Tambah Tugas`;
+                }
             }
         };
 
         toggleButton.addEventListener('click', toggleView);
     }
     
-    // ------------------------------------------------------------------
-    // --- SUBMIT FORM TUGAS (INTEGRASI API) ---
-    // ------------------------------------------------------------------
-    
     const tugasForm = document.getElementById('tugas-form');
-
     if (tugasForm && mataKuliahId) {
-        // Endpoint yang menggunakan kodeMK sebagai path variable
         const url = `/api/dosen/matakuliah/${mataKuliahId}/tugas`; 
         
         tugasForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); 
+            event.preventDefault();
             
             const namaTugas = document.getElementById('nama-tugas').value;
             const deadline = document.getElementById('deadline').value;
             const deskripsi = document.getElementById('deskripsi-tugas').value;
             
-            // Logika validasi dan fetch API tetap sama
             if (!namaTugas || !deadline || !deskripsi) {
                 alert("Harap lengkapi semua field tugas!");
                 return;
             }
 
             const data = {
-                judulTugas: namaTugas, // Sesuaikan dengan nama field di Entitas TugasBesar
+                judulTugas: namaTugas, 
                 deadline: deadline, 
                 deskripsi: deskripsi,
-                // Anda mungkin perlu menambahkan status, mode_kel, min_anggota, max_anggota, dll.
-                // Jika data ini dihardcode atau diambil dari input tersembunyi.
             };
 
             try {
@@ -100,9 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 if (response.ok) {
-                    alert(`Tugas "${namaTugas}" berhasil ditambahkan!`);
                     tugasForm.reset();
-                    // Redirect kembali ke list view atau reload
                     window.location.reload(); 
                 } else {
                     const error = await response.json();
@@ -114,33 +114,5 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-
-    // --- Logika Logout (disederhanakan, ambil dari file dash-user.js jika ada) ---
-    // Asumsi logika logout ditangani oleh dash-user.js atau disematkan di sini.
-    // File: matkul-detail-dosen.js
-
-// ... (kode lainnya) ...
-
-    // --- Logika Logout ---
-    const handleLogout = () => {
-        console.log("Melakukan proses logout..."); 
-        // Menggunakan fetch POST untuk memicu logout Spring Security
-        fetch('/logout', { method: 'POST' }) 
-            .then(() => {
-                 // Setelah berhasil, redirect ke halaman utama
-                 window.location.href = '/'; 
-            })
-            .catch(error => {
-                 console.error("Logout gagal:", error);
-                 // Fallback: tetap redirect meskipun fetch gagal
-                 window.location.href = '/'; 
-            });
-    };
-
-    const logoutButton = document.getElementById('logoutButton'); 
-    if (logoutButton) {
-        logoutButton.addEventListener('click', handleLogout);
-    } 
     
-// ... (kode lainnya) ...
 });

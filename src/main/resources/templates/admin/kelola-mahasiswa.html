@@ -1,22 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Mahasiswa - Tubeslayer</title>
     
-    <link rel="stylesheet" href="/css/kelola-mahasiswa.css">
-    <script src="/js/kelola-mahasiswa.js" defer></script>
+    <!-- Thymeleaf URLs -->
+    <link rel="stylesheet" th:href="@{/css/kelola-mahasiswa.css}">
+    <script th:src="@{/js/kelola-mahasiswa.js}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- Custom CSS -->
+    <style th:inline="text">
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .status-badge.active {
+            background-color: #e7f7ef;
+            color: #0ca678;
+        }
+        .status-badge.inactive {
+            background-color: #fff5f5;
+            color: #fa5252;
+        }
+        
+        .suggestions {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+        .suggestions li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        .suggestions li:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Loading overlay */
+        #global-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+     
+    </style>
 </head>
 <body>
   <nav class="sidebar close">
     <header>
         <div class="image-text">
             <span class="image">
-                <img src="/logo/blue-logo.png" alt="logo">
+                <img th:src="@{/logo/blue-logo.png}" alt="logo">
             </span>
 
             <div class="text header-text">
@@ -28,22 +95,22 @@
     <div class="menu-bar">
         <div class="menu">
             <ul class="menu-links">
-                <li class="nav-link active">
-                    <a href="/admin/dashboard">
-                        <img src="/icon/dashboard.png" class="icon dashboard-icon">
+                <li class="nav-link">
+                    <a th:href="@{/admin/dashboard}">
+                        <img th:src="@{/icon/dashboard.png}" class="icon dashboard-icon">
                         <span class="text nav-text">Dashboard</span>
                     </a>
                 </li>
 
-                <li class="nav-link">
-                    <a href="/admin/menu-awal-ad">
-                        <img src="/icon/database.png" class="icon database-icon">
+                <li class="nav-link active">
+                    <a th:href="@{/admin/menu-awal-ad}">
+                        <img th:src="@{/icon/database.png}" class="icon database-icon">
                         <span class="text nav-text">Data</span>
                     </a>
                 </li>
                    <li class="nav-link">
                     <a href="#">
-                        <img src="/icon/archive.png" class="icon archive-icon">
+                        <img th:src="@{/icon/archive.png}" class="icon archive-icon">
                         <span class="text nav-text">Arsip Mata Kuliah</span>
                     </a>
                 </li>
@@ -63,14 +130,15 @@
 
         <div class="right-section">
             <div class="info">
-                <span class="name">Maria Gabriela</span>
-                <span class="role">Admin</span>
+                <!-- Thymeleaf untuk user data -->
+                <span class="name" th:text="${user.nama}">Nama</span>
+                <span class="role" th:text="${user.role}">Role</span>
             </div>
 
-            <img src="/icon/pfp.png" class="pfp" alt="pfp">
+            <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
 
-            <button type="button" class="logout">
-                <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
+            <button type="button" class="logout" onclick="window.location.href='/logout'">
+                <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logo-logout">
             </button>
         </div>
     </div>
@@ -78,7 +146,7 @@
     <div class="content-section">
 
         <div class="mahasiswa-banner">
-            <img src="/icon/mahasiswa-biru.png" alt="Icon Mahasiswa">
+            <img th:src="@{/icon/mahasiswa-biru.png}" alt="Icon Mahasiswa">
             <h1>Kelola Mahasiswa</h1>
         </div>
 
@@ -96,19 +164,41 @@
                 </div>
             </div>
 
+            <!-- Loading overlay -->
+            <div id="global-loading">
+                <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="spinner"></div>
+                        <span>Memuat data...</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- VIEW 1: Tabel -->
             <div class="custom-table-container" id="table-view">
                 <div class="table-header-row">
                     <span>No</span>
                     <span>NPM</span>
                     <span>Nama</span>
-                    <span>Semester</span>
+                    <span>Email</span>
                     <span>Status</span>
                 </div>
 
-                <div class="data-row"></div>
-                <div class="data-row"></div>
-                <div class="data-row"></div>
+                <div th:if="${mahasiswaList != null and !mahasiswaList.empty}" th:each="mhs, iterStat : ${mahasiswaList}">
+                    <div class="data-row">
+                        <span th:text="${iterStat.count}">1</span>
+                        <span th:text="${mhs.idUser}">NPM</span>
+                        <span th:text="${mhs.nama}">Nama Mahasiswa</span>
+                        <span th:text="${mhs.email}">Email</span>
+                        <span>
+                            <span th:classappend="${mhs.active} ? 'status-badge active' : 'status-badge inactive'"
+                                  th:text="${mhs.active} ? 'Aktif' : 'Nonaktif'">
+                                Status
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                
             </div>
 
             <!-- FOOTER -->
@@ -142,13 +232,10 @@
                 <div class="tambah-mahasiswa-content">
                     <form id="tambah-mahasiswa-form">
                         <label for="npm-mahasiswa">NPM:</label>
-                        <input type="text" id="npm-mahasiswa" name="npm-mahasiswa" required placeholder="Isi NPM mahasiswa...">
+                        <input type="text" id="npm-mahasiswa" name="npm-mahasiswa" placeholder="Isi NPM mahasiswa...">
 
                         <label for="nama-mahasiswa">Nama Mahasiswa:</label>
                         <input type="text" id="nama-mahasiswa" name="nama-mahasiswa" required placeholder="Isi nama mahasiswa...">
-
-                        <label for="sem-mahasiswa">Semester:</label>
-                        <input type="number" id="sem-mahasiswa" name="sem-mahasiswa" required placeholder="Semester saat ini...">
 
                         <label for="status-mahasiswa">Status:</label>
                         <select id="status-mahasiswa" name="status-mahasiswa" required>
@@ -191,5 +278,25 @@
         </div>
     </div>
 </section>
+
+<!-- Tambahkan inline JavaScript untuk konfigurasi -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    
+    // Debug info
+    console.log("Kelola Mahasiswa Thymeleaf Page Loaded");
+    console.log("User:", /*[[${user}]]*/);
+    console.log("Mahasiswa List Count:", /*[[${mahasiswaList != null ? mahasiswaList.size() : 0}]]*/);
+    
+    // API configuration
+    window.API_BASE_URL = window.location.origin;
+    window.API_MAHASISWA = window.API_BASE_URL + '/admin/api/mahasiswa';
+    
+    console.log("API Base URL:", window.API_BASE_URL);
+    console.log("API Mahasiswa:", window.API_MAHASISWA);
+    
+    /*]]>*/
+</script>
+
 </body>
 </html>

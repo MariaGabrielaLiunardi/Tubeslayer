@@ -1,27 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- Ambil KodeMK untuk Navigasi Tab ---
     const mkTabDiv = document.querySelector('.mk-tab');
     const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
 
-    // --- Logika Tab Navigation ---
-    const tabs = document.querySelectorAll('.mk-tab button');
-    
-    tabs.forEach(tab => {
-        const tabTarget = tab.getAttribute('data-tab-target');
-
-        // NAVIGASI KE TAB KULIAH (DETAIL MHS)
-        if (tabTarget === 'kuliah' && mataKuliahId) {
-            tab.addEventListener('click', () => {
-                // Menggunakan endpoint /mahasiswa/matkul-detail dan parameter 'mk'
-                window.location.href = `/mahasiswa/matkul-detail?mk=${encodeURIComponent(mataKuliahId)}`;
-            });
-        }
-    });
-
-    // ------------------------------------------------------------------
-    // --- Logika Logout (Untuk tombol di header) ---
-    // ------------------------------------------------------------------
+    // Logout
     
     const handleLogout = () => {
         fetch('/logout', { method: 'POST' }) 
@@ -38,9 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutButton.addEventListener('click', handleLogout);
     }
     
-    // ------------------------------------------------------------------
-    // --- Logika Pencarian & Pagination ---
-    // ------------------------------------------------------------------
+    // Search & Pagination
 
     const searchBox = document.querySelector('.search-box');
     const searchInput = searchBox ? searchBox.querySelector('input[type="text"]') : null;
@@ -48,13 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const pesertaCountSpan = document.querySelector('.peserta-count');
     const tableBody = document.querySelector('#peserta-table tbody');
     
-    // Dapatkan SEMUA TR dari tbody
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
     
-    // Baris DATA (yang memiliki 4 kolom, hasil render Thymeleaf)
     const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
     
-    // Baris pesan "Tidak ada peserta terdaftar..." (baris dengan colspan)
     const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null; 
     
     let filteredPageItems = masterDataRows;
@@ -63,22 +40,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextButton = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('current-page');
 
-    const itemsPerPage = 3; // Menggunakan 3 item per halaman (sesuai contoh Anda)
+    const itemsPerPage = 3; 
     let totalPages = 0;
     let currentPage = 1;
 
-    // --- FUNGSI UTAMA PAGINASI ---
+    // Pagination
 
     const showPage = (page) => {
         const start = (page - 1) * itemsPerPage;
         const end = page * itemsPerPage;
         
-        // Sembunyikan semua baris data awal (master list)
         masterDataRows.forEach(item => {
             item.style.display = 'none';
         });
-
-        // Tampilkan hanya baris yang difilter untuk halaman saat ini
         filteredPageItems.forEach((item, index) => {
             if (index >= start && index < end) {
                 item.style.display = 'table-row';
@@ -97,10 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Peserta: ${filteredPageItems.length} peserta`; 
         }
         
-        // --- HANDLE KETIKA HASIL PENCARIAN 0 ---
+        // Hasil pencarian 0
         if (filteredPageItems.length === 0) {
             
-            // Sembunyikan baris pesan default jika ada, karena tabel harus bersih
             if (noDataRow) {
                 noDataRow.style.display = 'none'; 
             }
@@ -108,15 +81,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (prevButton) prevButton.disabled = true;
             if (nextButton) nextButton.disabled = true;
             
-            // Penting: Pastikan semua baris tersembunyi
             masterDataRows.forEach(row => row.style.display = 'none');
             
             return;
         }
         
-        // --- HANDLE KETIKA HASIL PENCARIAN > 0 ---
+        // Hasil pencarian > 0
         if (noDataRow) {
-            noDataRow.style.display = 'none'; // Pastikan pesan default disembunyikan
+            noDataRow.style.display = 'none'; 
         }
 
         if (pageInfoSpan) pageInfoSpan.textContent = `${currentPage} dari ${totalPages}`;
@@ -127,17 +99,14 @@ document.addEventListener("DOMContentLoaded", () => {
         showPage(currentPage);
     };
 
-    // ------------------------------------------------------------------
-    // --- FUNGSI PENCARIAN ---
-    // ------------------------------------------------------------------
+    // Search 
 
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         
         if (query === "") {
-            filteredPageItems = masterDataRows; // Kembalikan ke master list penuh
+            filteredPageItems = masterDataRows;
         } else {
-            // Filter baris berdasarkan Nama (Cell index 1) atau NIM (Cell index 2)
             filteredPageItems = masterDataRows.filter(row => {
                 if (row.cells.length < 3) return false;
                 
@@ -154,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateUI(true); 
     };
 
-    // --- EVENT LISTENERS PENCARIAN ---
+    // Event Listeners Search
     
     if (searchButton) {
         searchButton.addEventListener('click', handleSearch);
@@ -168,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- EVENT LISTENERS PAGINATION ---
+    // Event Listeners Pagination
     
     if (prevButton) {
         prevButton.addEventListener('click', () => {
@@ -187,7 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-    
-    // --- INISIALISASI ---
+
     updateUI(); 
 });

@@ -254,26 +254,33 @@ header .image-text .header-text {
     height: 100%;
     object-fit: contain;
 }
-
-/* Tabs */
-.tabs {
+/*tabs*/
+.mk-tab {
+    background: #0078B5;
+    width: fit-content;
+    border-radius: 40px;
     display: flex;
-    gap: 10px;
-    margin: 0 30px 20px 30px;
+    gap: 5px;
+    margin-top: 60px;
+    margin-left: 30px;
+    margin-bottom: 10px;
 }
 
 .tab {
-    padding: 10px 25px;
-    background-color: #0288d1;
+    background: transparent;
     color: white;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 14px;
     border: none;
+    padding: 10px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-sizing: border-box; 
 }
 
-.tab:hover {
-    background-color: #0277bd;
+.tab.active {
+    background: #4CA6D3;
+    border-radius: 30px;
+    padding: 10px 30px; 
 }
 
 /* Card Container - Wrapper untuk semua bagian */

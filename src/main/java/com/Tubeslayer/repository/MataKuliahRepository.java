@@ -9,13 +9,14 @@ import org.springframework.data.domain.Pageable;
 import java.util.List; 
 
 @Repository
-// Warisi JpaRepository dengan Entitas MataKuliah dan tipe Primary Key (String)
 public interface MataKuliahRepository extends JpaRepository<MataKuliah, String> {
     
+    MataKuliah findByNama(String nama); 
     // Method untuk menghitung semua Mata Kuliah yang isActive = true
     long countByIsActive(boolean isActive); 
    // Ambil semua mata kuliah yang aktif
     List<MataKuliah> findByIsActiveTrue();
+
     // Ambil MK aktif berdasarkan mahasiswa dan semester
     @Query("""
     SELECT mk 
@@ -29,4 +30,5 @@ public interface MataKuliahRepository extends JpaRepository<MataKuliah, String> 
     List<MataKuliah> findActiveByMahasiswaAndTahunAkademik(@Param("idMahasiswa") String idMahasiswa,
                                                           @Param("tahunAkademik") String tahunAkademik,
                                                           Pageable pageable);
+    List<MataKuliah> findByIsActive(boolean b);
 }
