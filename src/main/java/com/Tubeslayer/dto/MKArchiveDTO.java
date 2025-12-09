@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.AllArgsConstructor;
 
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @Getter
 @Setter
 public class MKArchiveDTO {
@@ -14,9 +14,9 @@ public class MKArchiveDTO {
     private String nama;
     private String tahunAkademik;
 
-    public MKArchiveDTO(String kodeMK, String nama) {
+    public MKArchiveDTO(String kodeMK, String nama, String tahunAkademik) {
         this.kodeMK = kodeMK;
         this.nama = nama;
-        this.tahunAkademik = null;
+        this.tahunAkademik = tahunAkademik;
     }
 }
