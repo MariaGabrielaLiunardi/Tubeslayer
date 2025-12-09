@@ -357,9 +357,15 @@ header .image-text .header-text{
 }
 
 /* --- Area Daftar & Pencarian --- */
-.list-container {
-    width: 100%;
-    margin-bottom: -10px;
+.list-container{
+    margin-top: -10px;
+    height: auto;
+    background-color: #FFFFFF; 
+    padding: 20px;
+    border-radius: 0px 0px 15px 15px;
+    margin-top: -10px;
+    min-height: 390px;
+    overflow: visible; 
 }
 
 .list-header {

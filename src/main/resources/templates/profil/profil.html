@@ -39,23 +39,23 @@
                 <ul class="menu-links">
 
                     <li class="nav-link">
-                        <a href="/hlmn_tubes/dashboard.html">
+                        <a href="/admin/dashboard">
                             <img src="/icon/dashboard.png" class="icon">
                             <span class="text nav-text">Dashboard</span>
                         </a>
                     </li>
 
                     <li class="nav-link">
-                        <a href="/admin/menu-awal-ad.html">
+                        <a href="/admin/menu-awal-ad">
                             <img src="/icon/database.png" class="icon">
                             <span class="text nav-text">Data</span>
                         </a>
                     </li>
 
-                    <li class="nav-link active">
-                        <a href="/profil">
-                            <img src="/icon/pfp.png" class="icon">
-                            <span class="text nav-text">Profil</span>
+                    <li class="nav-link">
+                        <a href="#">
+                            <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                            <span class="text nav-text">Arsip Mata Kuliah</span>
                         </a>
                     </li>
 
@@ -81,21 +81,20 @@
         </div>
 
         <!-- CONTENT -->
-        <div class="content-section">
-            <div class="list-container">
+        <div class="content-section contents">
 
-                <img src="/icon/pfp.png" class="pfp">
+            <!-- FOTO PROFIL -->
+            <img src="/icon/pfp.svg" class="pfp" alt="Foto Profil">
 
-                <h2 id="profil-nama"></h2>
-                <p id="profil-role"></p>
-
-                <div class="profil-info">
-                    <p id="profil-id"></p>
-                    <p id="profil-email"></p>
-                    <p id="profil-extra"></p>
-                </div>
-
+            <!-- NAMA & ROLE -->
+            <div class="info">
+                <span class="name" id="profil-nama" th:text="${user.nama}">Nama User</span>
+                <span class="role" id="profil-role" th:text="${user.role}">Role User</span>
+                <span class="email" id="profil-email" th:text="${user.email}">email@unpar.ac.id</span>
             </div>
+
+        </div>
+
         </div>
 
     </section>
