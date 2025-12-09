@@ -137,6 +137,8 @@ INSERT INTO mata_kuliah_mahasiswa (id_user, kode_mk, kelas, semester, tahun_akad
 ('6182301025','AIF23005','A',2,'2025/2026',1);
 
 -- NOTE: inactive MKs intentionally have NO mahasiswa enrollments in this dummy set
+INSERT INTO mata_kuliah_mahasiswa (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES
+('6182301025','AIF23921','A',2,'2025/2026',1);
 
 -- === Kelompok & Tugas Besar for active MKs ===
 -- We'll create 2 tugas per active MK, each tugas has 3 kelompok.
