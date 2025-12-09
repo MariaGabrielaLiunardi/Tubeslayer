@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tubeslayer - Detail Mata Kuliah</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/dash-user.css">
+    <link rel="stylesheet" href="/css/matkul-detail.css">
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
+
+    <script src="/js/dash-user.js" defer></script>
+    <script src="/js/matkul-detail-mhs.js" defer></script>
+
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bxr bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a th:href="@{/mahasiswa/dashboard}">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a th:href="@{/mahasiswa/mata-kuliah}">
+                            <img src="/icon/open-book.png" class="icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Mata Kuliah</span>
+            </div>
+
+            <div class="right-section">
+                <div class="info">
+                    <span class="name" th:text="${user.nama}">Nama Mahasiswa</span>
+                    <span class="role" th:text="${user.role}">Mahasiswa</span>
+                </div>
+                <img src="/icon/pfp.png" class="pfp">
+                <button class="logout" id="logoutButton">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
+            <button class="tab active" data-tab-target="kuliah">Kuliah</button>
+            <button class="tab" data-tab-target="peserta"
+                th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|">
+                Daftar Peserta
+            </button>
+            <button class="tab" data-tab-target="nilai">Nilai</button>
+        </div>
+
+        <div class="detail-wrapper">
+
+            <div class="mk-header">
+                <div class="mk-img"></div>
+                <div class="mk-info">
+                    <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
+
+                    <p>
+                        <b>Koordinator:</b>
+                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span>
+                    </p>
+
+                    <p>
+                        <b>NIP:</b>
+                        <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="breadcrumb">
+                Daftar Mata Kuliah > <span id="mk-title" th:text="${mkDetail.nama}">Mata Kuliah</span>
+            </div>
+
+            <div id="list-tugas-view">
+                <div class="mk-content">
+
+                    <div class="tugas-box">
+                        <h3>Tugas Mendatang</h3>
+                        <div class="tugas-mendatang-list">
+
+                            <th:block th:each="tugas, iStat : ${tugasList}">
+                                <div class="tugas-mendatang-card" th:if="${iStat.index < 2}">
+                                    <div class="deadline-info">
+                                        <img src="/icon/kalender.png" class="kalender-icon">
+                                        <span
+                                            th:text="|Deadline: ${#temporals.format(tugas.deadline, 'dd/MM/yyyy')}|">Deadline:
+                                            DD/MM/YYYY</span>
+                                    </div>
+                                    <p th:text="${tugas.judulTugas}">Nama Tugas</p>
+                                </div>
+                            </th:block>
+
+                        </div>
+                    </div>
+
+                    <div class="tugas-besar-list" id="tugas-besar-list">
+
+                        <th:block th:each="tugas : ${tugasList}">
+                            <div class="tugas-besar">
+                                <div class="tugas-header">
+                                    <img src="/icon/blue-folder.png" class="folder-icon">
+                                    <h3 th:text="${tugas.judulTugas}">Nama Tugas</h3>
+                                </div>
+                                <p th:text="${tugas.deskripsi}">
+                                    Deskripsi tugas.
+                                </p>
+                                <a th:href="@{/mahasiswa/tugas-detail(idTugas=${tugas.idTugas})}">
+                                    <button class="btn-lihat">Lihat Tugas ></button>
+                                </a>
+                            </div>
+                        </th:block>
+
+                        <div th:if="${tugasList.empty}" class="tugas-besar">
+                            <p>Belum ada Tugas Besar yang tersedia untuk mata kuliah ini.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

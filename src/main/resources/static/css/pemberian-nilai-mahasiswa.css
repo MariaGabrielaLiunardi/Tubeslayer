@@ -578,7 +578,7 @@ header .image-text .header-text{
 
 .kembali {
     position: absolute;
-    bottom: 20px;
+    bottom: 48px;
     right: 20px;
 
     background-color: black;
@@ -601,36 +601,34 @@ header .image-text .header-text{
     background-color: #333;
     transform: translateY(-3px);
 }
-<<<<<<< Updated upstream:src/main/resources/static/css/pemberian-nilai-mahasiswa.css
 
+/* Nilai (kelompok / pribadi) container and cards */
 .nilai-container {
-    position: absolute;
     display: flex;
-    gap: 40px;
-    border-color: solid black 1px;
-    margin-top: 360px;
+    gap: 24px;
+    margin-top: 24px; /* spacing from previous content */
+    align-self: flex-start; /* place the group at the left edge of the yellow rectangle */
+    justify-content: flex-start;
 }
 
+.nilai-container > .nilai-card,
 .nilai-container > div {
     background: white;
-    
-    border-radius: 15px;
-    font-size: 25px;
+    border-radius: 12px;
+    font-size: 20px;
     font-weight: 700;
     box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding-left: 20px;
-    border-color: solid black 1px;
+    gap: 12px;
+    padding-left: 15px;
 }
 
-.value{
+.nilai-container .value{
     background-color: #CDE8F6;
-    padding: 20px 20px;
-    border-radius: 15px;
-    border-color: solid black 1px;
+    padding: 15px 14px;
+    border-radius: 10px;
+    min-width: 48px;
+    text-align: center;
 }
-=======
->>>>>>> Stashed changes:src/main/resources/static/css/rubrik-penilaian-mahasiswa.css
+

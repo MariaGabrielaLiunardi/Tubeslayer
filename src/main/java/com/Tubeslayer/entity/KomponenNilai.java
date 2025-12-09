@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.time.LocalDate; 
 
 @Entity
-@Table(name = "KomponenNilai")
+@Table(name = "komponen_nilai")
 @Data
 public class KomponenNilai {
 
@@ -14,10 +14,11 @@ public class KomponenNilai {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idKomponen;
 
-    @ManyToOne
-    @JoinColumn(name = "idRubrik")
+// Relasi RubrikNilai (WAJIB LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // <-- LAZY
+    @JoinColumn(name = "id_rubrik") // Foreign Key ke RubrikNilai
     private RubrikNilai rubrik;
-
+    
     @Column(length = 50, nullable = false)
     private String namaKomponen;
 

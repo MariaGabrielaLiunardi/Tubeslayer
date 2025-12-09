@@ -8,6 +8,9 @@
     padding: 0; 
 }
 
+    /* === Total Bobot Styling === */
+
+
 :root{
     /* Transition */
     --tran-02: all 0.2s ease; 
@@ -411,17 +414,16 @@ header .image-text .header-text{
     padding-right: 40px;
 }
 
-/* Rectangle Yellow (The Overlapping Content Area) === */
 .rectangle-yellow {
-    width: calc(100% - 80px); /* 100% minus padding of .rectangle-white (40px on each side) */
+    width: calc(100% - 80px); 
     position: absolute;
-    top: 100px; /* **CRUCIAL:** Move it 100px above the top edge of .rectangle-white */
-    height: 480px; /* Let content define height */
-    background: #FFF5F1; /* Light yellow color */
+    top: 100px; 
+    height: 480px; 
+    background: #FFF5F1; 
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 15; /* Ensure it is above the blue and white boxes */
-    padding: 30px; /* Internal padding for the content */
+    z-index: 15; 
+    padding: 30px; 
     display: flex;
     flex-direction: column;
     margin-top: 30px;
@@ -430,21 +432,17 @@ header .image-text .header-text{
 .title-rubrik {
     display: flex;
     margin-top: 40px;
-    /* Mengganti properti 'size' yang tidak valid */
     font-size: 36px; 
-    /* MENAMBAH INI: Meratakan elemen ini ke kiri (start) dalam container parent flex */
     align-self: flex-start; 
     margin-left: 20px;
 }
 
-
-/* === Assignment Table Header and Row (Moved into Yellow Rectangle) === */
 .assignment-table-wrapper {
     width: 100%;
-    padding: 0; /* Remove padding as .rectangle-yellow already has it */
+    padding: 0; 
     
-    max-height: 650px; /* Tentukan tinggi maksimum yang Anda inginkan sebelum scroll aktif */
-    overflow-y: auto;  /* Aktifkan scroll vertikal jika konten melebihi max-height */
+    max-height: 650px; 
+    overflow-y: auto;  
 }
 
 .assignment-header {
@@ -453,14 +451,14 @@ header .image-text .header-text{
     border-radius: 10px;
     padding: 0; 
     font-weight: bold;
-    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    font-size: 20px; 
     color: black;
     margin-bottom: 10px;
     justify-content: flex-start;
 }
 
 .col-komponen {
-    width: 42%; /* Diubah dari 50% */
+    width: 42%;
     text-align: left;
     background-color: #CDE8F6;
     border-radius: 15px;
@@ -468,16 +466,15 @@ header .image-text .header-text{
 }
 
 .col-bobot {
-    width: 10%; /* Tetap 10% */
-    /* Menghapus padding-left: 20px; yang duplikat */
-    text-align: center; /* Rata tengah untuk Bobot */
+    width: 10%; 
+    text-align: center;
     background-color: #CDE8F6;
     border-radius: 15px;
     padding: 15px 15px;
 }
 
 .col-keterangan {
-    width: 38%; /* Diubah dari 50% */
+    width: 38%;
     text-align: left;
     background-color: #CDE8F6;
     border-radius: 15px;
@@ -490,14 +487,14 @@ header .image-text .header-text{
     border-radius: 10px;
     padding: 0; 
     font-weight: bold;
-    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    font-size: 20px; 
     color: black;
     margin-bottom: 10px;
     justify-content: flex-start;
 }
 
 .col-isi-komponen{
-    width: 42%; /* Diubah dari 47% agar sama dengan header */
+    width: 42%; 
     text-align: left;
     background-color: white;
     border-radius: 15px;
@@ -506,7 +503,7 @@ header .image-text .header-text{
 }
 
 .col-isi-bobot{
-    width: 10%; /* Diubah dari 11% agar sama dengan header dan rata tengah */
+    width: 10%; 
     text-align: center; 
     background-color: white;
     border-radius: 15px;
@@ -515,7 +512,7 @@ header .image-text .header-text{
 }
 
 .col-isi-keterangan{
-    width: 38%; /* Diubah dari 46% agar sama dengan header */
+    width: 38%; 
     text-align: left;
     background-color: white;
     border-radius: 15px;
@@ -545,47 +542,6 @@ header .image-text .header-text{
     margin: 0;
     transition: color 0.2s;
 }
-
-.tilte-rubrik {
-    display: flex;
-    margin-top: 40px;
-    font-size: 36px; 
-    font-weight: 700; /* Ditambahkan agar judul lebih tebal */
-    align-self: flex-start; /* Meratakan ke kiri */
-    margin-left: 0; /* Mengganti 20px agar merata dengan padding parent */
-}
-
-.total-bobot {
-    display: flex; /* WAJIB: Agar anak-anaknya berada dalam satu baris */
-    gap: 25px;    /* WAJIB: Jarak antar kolom */
-    align-items: center; /* Pusatkan secara vertikal */
-    
-    margin-top: 30px; /* Jarak dari tabel di atas */
-    margin-bottom: 20px;
-    font-size: 25px; /* Ukuran font disesuaikan */
-    font-weight: 700;
-    color: black;
-}
-
-.total{
-    width: 12%; 
-    background-color: #CDE8F6;
-    border-radius: 15px;
-    padding: 15px 15px; /* Padding yang lebih besar untuk tinggi */
-    text-align: center; 
-    border: none;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.432);
-}
-
-.bobot{
-    width: 7%; 
-    background-color: #CDE8F6;
-    border-radius: 15px;
-    padding: 15px 15px;
-    text-align: center;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.432);
-}
-
 .tambah-komponen-penilainan{
     width: 42%; /* Diubah dari 47% agar sama dengan header */
     text-align: left;
@@ -633,53 +589,7 @@ header .image-text .header-text{
     font-weight: 700;
     color: black;
     
-    /* PENTING: Pindahkan kelompok total bobot ke ujung kanan parent flex (.rectangle-yellow) */
     align-self: flex-end; 
-    margin-right: 0; /* Pastikan tidak ada margin tambahan di kanan */
-}
-
-.total{
-    width: 12%; /* Tetap biarkan lebar ini, tetapi kita akan pakai min-width */
-    min-width: 180px; /* Lebar minimum yang pasti untuk "Total Bobot" */
-    background-color: #CDE8F6;
-    border-radius: 15px;
-    padding: 15px 5px;
-    text-align: center; 
-    border: none;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.432);
-}
-
-.bobot{
-    width: 70px; /* Lebar spesifik untuk angka bobot (misalnya 70px) */
-    min-width: 70px;
-    background-color: #CDE8F6;
-    border-radius: 15px;
-    padding: 15px 15px;
-    text-align: center;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.432);
-}
-
-.title-rubrik a {
-    color: black;  /* pilih warna yang kamu mau */
-    text-decoration: none; /* hilangkan underline */
-}
-
-
-.title-rubrik a:hover {
-    text-decoration: underline; /* biar tetap ada feedback */
-}
-
-/* Footer row: total di kiri, tombol di kanan */
-.total-bobot {
-    display: flex;
-    justify-content: space-between; /* Kunci: Kiri=Total, Kanan=Tombol */
-    align-items: center;
-    width: 100%; /* Ambil lebar penuh parent */
-    gap: 16px;
-    margin-top: 40px;
-    padding: 0 10px; 
-    box-sizing: border-box;
-    align-self: flex-start; /* Mengambil lebar penuh parent flex (rectangle-yellow) */
 }
 
 /* kelompok kiri: total + nilai */
@@ -687,6 +597,7 @@ header .image-text .header-text{
     display: flex;
     gap: 12px;
     align-items: center;
+    margin-left: auto; /* Push this group to the right */
 }
 
 /* styling label total */

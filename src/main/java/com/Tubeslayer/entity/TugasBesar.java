@@ -1,29 +1,36 @@
 package com.Tubeslayer.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import java.util.List; 
-import java.time.LocalDateTime;
+import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"rubrik", "mataKuliah", "tugasKelompok", "nilaiList"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "TugasBesar")
-@Data
+@Table(name = "tugas_besar")
 public class TugasBesar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Integer idTugas;
 
-    @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user", nullable = false)
     private User dosen;
 
-    @OneToOne
-    @JoinColumn(name = "idRubrik")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_rubrik", unique = true)
     private RubrikNilai rubrik;
 
-    @ManyToOne
-    @JoinColumn(name = "kodeMK", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kode_mk", nullable = false)
     private MataKuliah mataKuliah;
 
     @Column(length = 50, nullable = false)
@@ -45,9 +52,13 @@ public class TugasBesar {
     private int maxAnggota;
     private boolean isActive = true;
 
-    @OneToMany(mappedBy = "tugas")
-    private List<TugasBesarKelompok> tugasKelompok;
+    @OneToMany(mappedBy = "tugas", fetch = FetchType.LAZY)
+    private Set<TugasBesarKelompok> tugasKelompok;
 
-    @OneToMany(mappedBy = "tugas")
-    private List<Nilai> nilaiList;
+    @OneToMany(mappedBy = "tugas", fetch = FetchType.LAZY)
+    private Set<Nilai> nilaiList;
+
+    public void setDosen(User dosen) {
+        this.dosen = dosen;
+    }
 }

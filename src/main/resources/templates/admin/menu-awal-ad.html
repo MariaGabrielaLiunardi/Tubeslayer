@@ -4,8 +4,8 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Tubeslayer</title>
-   <link rel="stylesheet" href="/css/dash-admin.css">
-   <script src="/js/dash-admin.js" defer></script>
+   <link rel="stylesheet" href="/css/menu-awal-ad.css">
+   <script src="/js/menu-awal-ad.js" defer></script>
    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
@@ -21,18 +21,18 @@
             </div>
         </div>
     </header>
-    <i class='bxr bx-chevron-right toggle'></i> 
+    <i class='bx bx-chevron-right toggle'></i> 
     <div class="menu-bar">
         <div class="menu">
             <ul class="menu-links">
                 <li class="nav-link active">
-                    <a href="#">
+                    <a href="/admin/dashboard">
                         <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
                         <span class="text nav-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-link">
-                    <a href="#">
+                    <a href="/admin/menu-awal-ad">
                         <img src="/icon/database.png" alt="Database Icon" class="icon database-icon">
                         <span class="text nav-text">Data</span>
                     </a>
@@ -50,12 +50,14 @@
 <section class="home">
     <div class="header">
         <div class="left-section">
-            <span class="dashboard-title">Dashboard</span>
+            <div class ="judul">
+               <span class="dashboard-title">Data</span>
+            </div>
         </div>
         <div class="right-section">
             <div class="info">
-                <span class="name">Nama</span>
-                <span class="role">Role</span>
+                <span class="name">Maria Gabriela</span>
+                <span class="role">Admin</span>
             </div>
             <img src="/icon/pfp.png" class="pfp" alt="pfp">
             <button type="button" class="logout">
@@ -63,51 +65,27 @@
             </button>
         </div>
     </div>
-    <div class="contents">
-        <div class="header-section">
-            <span class="web-title">Tubeslayer</span>
-            <span class="welcome-message">Selamat datang nama!</span>
-        </div>
-        <div class="overview-section">
-            <span class="overview-title">Overview</span>
-            <div class="overview-div">
-                <div class="left-overview">
-                    <span class="date">Tanggal:</span>
-                    <span class="semester">Semester:</span>
-                </div>
-                <div class="right-overview">
-                    <span class="mk">Mata kuliah semester ini:</span>
-                    <span class="tubes-aktif">Tugas besar aktif:</span>
-                </div>
-            </div>
-        </div>
         <div class="content-section">
-            <div class="content-title">
-                <span class="content-title">Mata Kuliah</span>
-                <a href="#" class="lihat-semua-btn">
-                    Lihat Semua >
-                </a>
-            </div>
-            <div class="content-div">
-                <div class="content1">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
+            <div class="card mata-kuliah" id="btnMatkul">
+                <div class="icon-container">
+                    <img src="/icon/matkul-biru.png" alt="Icon Mata Kuliah">
                 </div>
-                <div class="content2">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
+                    <span class="title">Kelola Mata Kuliah</span>
                 </div>
-                <div class="content3">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
+            <div class="card dosen" id="btnDosen">
+                <div class="icon-container">
+                    <img src="/icon/dosen-biru.png" alt="Icon Dosen">
                 </div>
-                <div class="content4">
-                    <span class="nama-mk">Nama MK</span>
-                    <span class="kelas">Kelas</span>
+                    <span class="title">Kelola Dosen</span>
+                </div>
+            <div class="card mahasiswa" id="btnMaha">
+                <div class="icon-container">
+                    <img src="/icon/mahasiswa-biru.png" alt="Icon Mahasiswa">
+                    </div>
+                    <span class="title">Kelola Mahasiswa</span>
                 </div>
             </div>
         </div>
-    </div>
 </section>
 </body>
 </html>

@@ -1,0 +1,512 @@
+@import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+    max-width: 100%;
+    font-family: Sen;
+    margin: 0; 
+    padding: 0; 
+}
+
+:root{
+    /* Transition */
+    --tran-02: all 0.2s ease; 
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.4s ease;
+    --tran-05: all 0.5s ease;
+
+    --nav-primary-blue: #2269a3; /* Biru tua untuk inactive */
+    --nav-active-blue: #6da8ce;  /* Biru muda untuk active */
+    --nav-text-color: #ffffff;
+}
+
+body{
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* === SIDEBAR === */
+.sidebar .text{
+    font-size: 15px; 
+    font-weight: 500;
+    color: black;
+    transition: var(--tran-03);
+    white-space: nowrap;
+    opacity: 1;
+}
+
+.sidebar.close .text{
+    opacity: 0;
+}
+
+.sidebar .image{
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar{
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    height: 100%;
+    width: 230px;
+    padding: 10px 14px; 
+    background-color: white;
+    transition: var(--tran-05);
+    z-index: 100;
+}
+
+.sidebar.close{
+    width:73px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sidebar li{
+    height: 50px;
+    margin-top: 10px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar li .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: auto;
+    margin-right: 20px; 
+    margin-left: 10px
+}
+
+.sidebar li .icon,
+.sidebar li .text{
+    transition: var(--tran-02);
+}
+
+.sidebar header{
+    position: relative;
+}
+
+.sidebar .image-text img{
+    width: 55px;
+}
+
+.sidebar header .image-text{
+    display: flex;
+    align-items: center;
+}
+
+header .image-text .header-text{
+    display: flex;
+    flex-direction: column;
+}
+
+.header-text .name{
+    font-weight: bold;
+    color: #0078B5;
+    font-size:15pt;
+}
+
+.sidebar .toggle{
+    position: absolute; 
+    top: 50%; 
+    right: -40px; 
+    transform: translateY(-50%) rotate(180deg);
+    height: 35px;
+    width: 35px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: black; 
+    font-size: 25px;
+    cursor: pointer;
+    transition: var(--tran-03);
+}
+
+.sidebar.close .toggle{
+    transform: translateY(-50%); 
+}
+
+.sidebar li a{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: var(--tran-04); 
+    border-radius: 10px;
+}
+
+.sidebar li a:hover{
+    background-color: #C1EBFF;
+}
+
+.sidebar .menu{
+    margin-top: 50px;
+}
+
+.sidebar .menu-bar{
+    height: calc(100% - 50px);
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar li.active a {
+    background-color: #C1EBFF; 
+}
+
+.home{
+    position: relative;
+    height: 100vh;
+    left: 73px; 
+    width: calc(100% - 73px);
+    transition: var(--tran-05);
+    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.close ~ .home{
+    filter: blur(0px);
+    pointer-events: auto;
+} 
+
+.sidebar:not(.close) ~ .home {
+    filter: blur(3px) brightness(0.7); 
+    transition: var(--tran-05); 
+    pointer-events: none; 
+}
+
+.sidebar.close ~ .home {
+    filter: blur(0px); 
+    pointer-events: auto;
+}
+
+.sidebar:not(.close) ~ .home {
+    filter: blur(3px) brightness(0.7); 
+    transition: var(--tran-05); 
+    pointer-events: none; 
+}
+
+.sidebar:not(.close) ~ .home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); 
+    z-index: 5;
+}
+
+.home .header{
+    height: 80px; 
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home .header .left-section{
+    margin-left: 48px; 
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px; 
+}
+
+.home .header .left-section .dashboard-title{
+    font-weight: bold;
+    font-size: 20pt; 
+}
+
+.home .header .right-section{
+    margin-right: 30px; 
+    gap: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.home .header .right-section .info{
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+}
+
+.name{
+    font-weight: bold;
+    font-size: 14pt; 
+}
+
+.role{
+    font-size: 12pt; 
+    color: #757575;
+}
+
+.pfp{
+    width: 45px;
+    height: 45px;
+}
+
+.logout-btn{
+    width: 25px;
+    height: 25px;
+}
+
+.logout{
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: #C1EBFF; 
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 3px 1px grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rectangle-wrapper{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Kontainer Utama Navigasi */
+.nav-segmented-control {
+    display: flex;
+    width: 100%;
+    max-width: 800px; /* Lebar maksimal */
+    height: 80px;
+    background-color: var(--nav-primary-blue);
+    border-radius: 40px; /* Sudut membulat penuh (setengah dari tinggi) */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Penting agar sudut melengkung sempurna */
+    font-family: Sen;
+    margin-top: 30px; /* Contoh margin agar tidak menempel ke header */
+    margin-left: 100px;
+}
+
+/* Style untuk setiap Segmen */
+.nav-segmented-control > div {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--nav-text-color);
+    font-size: 30px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 0 10px; /* Padding horizontal */
+}
+
+/* Hover effect untuk segmen inactive */
+.nav-segmented-control > div:hover:not(.nav-active) {
+    background-color: rgba(255, 255, 255, 0.1); /* Sedikit gelap/terang saat di-hover */
+}
+
+/* Style untuk Segmen Aktif */
+.nav-segmented-control .nav-active {
+    background-color: var(--nav-active-blue);
+    font-weight: 700;
+    border-radius: 40px;
+}
+
+/* Memastikan sudut kanan segmen terakhir (jika aktif) tetap bulat sempurna */
+.nav-segmented-control > div:last-child {
+    border-top-right-radius: 40px; 
+    border-bottom-right-radius: 40px;
+}
+
+/* Move blue active/background from the Dashboard item to the Open Book item
+   without changing HTML: override the original active anchor and apply
+   the blue background to the second menu item (Open Book). */
+.menu-links li.nav-link.active a {
+    background-color: transparent; /* neutralize existing active rule */
+}
+
+/* Sidebar Active State Override: Move blue background to the 3rd child ('Arsip Mata Kuliah') */
+.menu-links li.nav-link.active a {
+    background-color: transparent; /* Neutralize the blue on the 1st child (Dashboard) */
+}
+
+/* Apply blue background and bold text to the 3rd child (Arsip Mata Kuliah) */
+.menu-links li:nth-child(3) a {
+    background-color: #C1EBFF !important;
+    border-radius: 10px;
+}
+
+.menu-links li:nth-child(3) a .text {
+    color: black;
+    font-weight: 600;
+}
+
+/* Ensure the 2nd child (Data) remains inactive */
+.menu-links li:nth-child(2) a {
+    background-color: transparent; 
+    border-radius: 10px;
+}
+.menu-links li:nth-child(2) a .text {
+    font-weight: 500;
+}
+
+/* Ensure hover works correctly on all links */
+.menu-links li:nth-child(1) a:hover,
+.menu-links li:nth-child(2) a:hover,
+.menu-links li:nth-child(3) a:hover {
+    background-color: #C1EBFF;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Rectangle putih */
+.rectangle-white {
+    width: 90%; /* Mengganti 802px menjadi lebih fleksibel */
+    max-width: 1648px; /* Batasan lebar maksimum */
+    height: 710px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;        /* center horizontally */
+    justify-content: center;     /* center vertically */
+    margin-top: 100px;
+}
+
+/* Rectangle biru di depan */
+.rectangle-blue {
+    width: 1650px;
+    height: 220px;       /* Sesuaikan dengan desain */
+    background: #CCF0F7; /* warna biru muda seperti di gambar */
+    border-radius: 15px;
+    position: absolute;
+    top: 0;
+    z-index: 10;          /* supaya berada di belakang */
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+}
+
+.tb-title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.tb-icon {
+    width: 120px;
+}
+
+.tb-text {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+/* Cards Container - arrange cards horizontally and centered */
+.card-container {
+    display: flex;
+    flex-direction: row;      /* layout cards in a horizontal row */
+    gap: 100px;               /* spacing between cards */
+    align-items: center;     /* vertically center cards */
+    justify-content: center; /* horizontally center all cards in the middle */
+    flex-wrap: wrap;         /* allow wrapping on small screens */
+    padding: 20px;           /* padding inside container */
+    margin-top: 150px;
+}
+
+
+.card {
+    width: 400px;
+    height: 400px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;    /* push icon area to top, title to bottom */
+    align-items: center;
+    margin: 0;
+    overflow: hidden;                  /* clip content to card border */
+    position: relative;
+    text-decoration: none;
+    color: black;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;                       /* full card width */
+    height: 320px;                     /* overlay height, leaves ~80px for title */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, rgba(100, 180, 220, 0.8) 100%);
+    border-radius: 20px 20px 0 0;
+    z-index: 1;
+}
+
+.card img {
+    width: 200px;
+    height: auto;
+    margin: 0;
+    padding-top: 50px;                /* space from top of overlay */
+    position: relative;
+    z-index: 2;                        /* icon sits on top of overlay */
+}
+
+.card p {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    padding: 10px 16px 12px 16px;
+    position: relative;
+    z-index: 3;                        /* title on top of everything */                /* ensure title area is white */
+}
+
+.card {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+}
+
+.card::before {
+    pointer-events: none; /* WAJIB supaya hover ketemu card */
+}
+
+/* === Breadcrumb Text within White Rectangle === */
+.breadcrumb-text {
+    position: absolute; 
+    top: 150px;         /* Positions it below the blue rectangle */
+    left: 130px;         
+    font-size: 28px;
+    font-weight: 500;
+    color: #555555;     
+    z-index: 11;      
+    font-weight: bold;  
+}

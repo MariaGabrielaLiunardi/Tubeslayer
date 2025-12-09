@@ -2,13 +2,18 @@ package com.Tubeslayer.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_table")
 @Data
+@EqualsAndHashCode(exclude = {"tugasBesarList", "mataKuliahMahasiswaList"}) 
+@ToString(exclude = {"tugasBesarList", "mataKuliahMahasiswaList"})
 public class User {
     @Id
-    @Column(name = "idUser", length = 30)
+    @Column(name = "id_user", length = 30)
     private String idUser;
 
     @Column(name = "email", length = 50, nullable = false, unique = true)
@@ -23,6 +28,7 @@ public class User {
     @Column(name = "role", length = 12, nullable = false)
     private String role;
 
-    @Column(name = "isActive", nullable = false)
+    @Column(name = "is_active", nullable = false)
     private boolean isActive = true; // default true
+    
 }

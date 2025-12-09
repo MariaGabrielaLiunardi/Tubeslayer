@@ -184,11 +184,6 @@ header .image-text .header-text{
     pointer-events: none; 
 }
 
-.sidebar.close ~ .home {
-    filter: blur(0px); 
-    pointer-events: auto;
-}
-
 .sidebar:not(.close) ~ .home {
     filter: blur(3px) brightness(0.7); 
     transition: var(--tran-05); 
@@ -350,11 +345,6 @@ header .image-text .header-text{
     background-color: #C1EBFF;
 }
 
-.container .rectangle-white{
-    width: 1648px;
-    height: 802px;
-}
-
 .container {
     position: relative;
     width: 100%;
@@ -365,29 +355,22 @@ header .image-text .header-text{
     align-items: center;
 }
 
-/* Rectangle putih */
-.rectangle-white {
-    width: 802px;
-    height: 1648px;       /* Ubah sesuai kebutuhan */
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 1;
-}
-
 /* Rectangle biru di depan */
 .rectangle-blue {
-    width: 1650px;
-    height: 220px;       /* Sesuaikan dengan desain */
-    background: #CCF0F7; /* warna biru muda seperti di gambar */
-    border-radius: 15px;
-    position: absolute;
-    top: 0;
-    z-index: 10;          /* supaya berada di belakang */
+    width: 90%; 
+    max-width: 1648px;
+    height: 220px;       
+    background: #CCF0F7; 
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    position: relative;
+    z-index: 10;          
     display: flex;
     align-items: center;
     padding-left: 40px;
+    margin-top: 10px; /* Move it down from the segmented control */
 }
 
 .tb-title {
@@ -397,68 +380,187 @@ header .image-text .header-text{
 }
 
 .tb-icon {
-    width: 80px;
+    width: 150px;
+    border-radius: 30px;
 }
 
 .tb-text {
     font-size: 36px;
     font-weight: 700;
+    
 }
 
-/* Cards */
-
-.card {
-    width: 220px;
-    height: 220px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    text-align: center;
-<<<<<<< Updated upstream:dashboard-nilai-dosen.css
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-=======
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    overflow: hidden;
+/* Rectangle putih */
+.rectangle-white {
+    width: 90%; 
+    max-width: 1648px; 
+    min-height: 610px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     position: relative;
-
-    text-decoration: none;  /* hilangkan underline */
-    color: inherit;
-
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-12px);       /* naik sedikit */
-    box-shadow: 0 18px 45px rgba(0,0,0,0.3); /* tambah glow */
-    cursor: pointer;
-}
-
-/* Overlay square behind the icon - full width, leaves space for title */
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;                       /* full card width */
-    height: 320px;                     /* overlay height, leaves ~80px for title */
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, rgba(100, 180, 220, 0.8) 100%);
-    border-radius: 20px 20px 0 0;
     z-index: 1;
->>>>>>> Stashed changes:src/main/resources/static/css/dashboard-nilai-mahasiswa.css
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the top */
+    margin-top: -15px; /* Adjust this negative margin to create a small overlap with blue */
+    padding-top: 15px; /* Compensate for the negative margin */
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
-.card img {
-    width: 80px;
+.rectangle-yellow {
+    width: calc(100% - 80px);
+    position: absolute;
+    top: 100px; /* **CRUCIAL:** Move it 100px above the top edge of .rectangle-white */
+    height: 480px; /* Let content define height */
+    background: #FFF5F1; /* Light yellow color */
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 15; /* Ensure it is above the blue and white boxes */
+    padding: 30px; /* Internal padding for the content */
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.assignment-table-wrapper {
+    width: 100%;
+    padding: 0; /* Remove padding as .rectangle-yellow already has it */
+}
+
+.assignment-header {
+    display: flex;
+    gap: 25px;
+    border-radius: 10px;
+    padding: 0; 
+    font-weight: bold;
+    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    color: black;
     margin-bottom: 10px;
+    justify-content: flex-start;
 }
 
-.card p {
-    font-size: 18px;
+.col-kel {
+    width: 65%; /* Diubah dari 50% */
+    text-align: left;
+    background-color: #CDE8F6;
+    border-radius: 15px;
+    padding: 15px 15px;
+}
+
+.col-edit{
+    width: 20%;
+}
+
+.assignment-row{
+    display: flex;
+    gap: 25px;
+    border-radius: 10px;
+    padding: 0; 
+    font-weight: bold;
+    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    color: black;
+    margin-bottom: 10px;
+    justify-content: flex-start;
+}
+
+.col-isi-kel{
+    width: 65%; 
+    text-align: left;
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px 15px;
+    border: solid black 1px;
+}
+
+.col-tanggal {
+    width: 20%; 
+    text-align: left;
+    background-color: #CDE8F6;
+    border-radius: 15px;
+    padding: 15px 15px;
+}
+
+.col-isi-nilai{
+    width: 20%; /* Diubah dari 11% agar sama dengan header dan rata tengah */
+    text-align: center; 
+    background-color: white;
+    border-radius: 15px;
+    padding: 3px 15px;
+    border: solid black 1px;
+}
+
+.col-jam {
+    width: 20%; 
+    text-align: left; /* Rata tengah untuk Bobot */
+    background-color: #CDE8F6;
+    border-radius: 15px;
+    padding: 15px 15px;
+}
+
+.col-isi-jam {
+    width: 20%; 
+    text-align: center; /* Rata tengah untuk Bobot */
+    background-color: white;
+    border-radius: 15px;
+    padding: 3px 15px;
+    border: solid black 1px;
+}
+
+.col-isi-lihat {
+    width: 40%;
+    padding: 12px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 5, 2, 0.4);
+    font-family: Sen;
+}
+
+.col-isi-lihat:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 2, 0.4);
+    transform: translateY(-2px);
+}
+
+.col-isi-lihat:active {
+    transform: translateY(0);
+}
+
+.col-isi-lihat-link {
+    width: 20%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;          
+    font-size: 28px;   
+    text-align: left;  
+    margin-top: 50px;
+    margin-right: 1275px;
+}
+
+.breadcrumb .crumb {
+    color: #333;
+    text-decoration: none;
+}
+
+.breadcrumb .crumb:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .current {
+    color: #000;
 }
