@@ -100,11 +100,14 @@
                 </a>
             </div>
             <div class="content-div">
-                <div th:each="md, iterStat : ${mataKuliahDosenList}"
-                    th:class="'content-item gradient-' + ${iterStat.index % 4 + 1}">
+                <a th:each="md, iterStat : ${mataKuliahDosenList}"
+                    th:href="@{/dosen/matkul-detail(kodeMk=${md.mataKuliah.kodeMK})}"
+                    th:class="'content-item gradient-' + ${iterStat.index % 4 + 1}"
+                    style="text-decoration: none; color: inherit;">
+                    
                     <span class="nama-mk" th:text="${md.mataKuliah.nama}">Nama MK</span>
                     <span class="kelas" th:text="'Kelas ' + ${md.kelas}">Kelas</span>
-                </div>
+                </a>
             </div>
         </div>
     </div>

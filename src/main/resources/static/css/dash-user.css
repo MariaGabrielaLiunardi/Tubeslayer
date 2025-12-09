@@ -433,6 +433,7 @@ header .image-text .header-text{
     justify-content: center;
     gap: 10px; 
     transition: var(--tran-03);
+    cursor: pointer;
 }
 
 /* .content-item:hover {
