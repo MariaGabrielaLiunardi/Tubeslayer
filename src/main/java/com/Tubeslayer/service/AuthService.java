@@ -25,7 +25,7 @@ public class AuthService {
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new RuntimeException("Password salah");
         }
-        return user; // login sukses
+        return user; // jika login sukses
     }
 
     public User getLoggedUser() {

@@ -14,9 +14,9 @@ public class KomponenNilai {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idKomponen;
 
-// Relasi RubrikNilai (WAJIB LAZY)
-    @ManyToOne(fetch = FetchType.LAZY) // <-- LAZY
-    @JoinColumn(name = "id_rubrik") // Foreign Key ke RubrikNilai
+// Relasi RubrikNilai 
+    @ManyToOne(fetch = FetchType.LAZY) 
+    @JoinColumn(name = "id_rubrik") 
     private RubrikNilai rubrik;
     
     @Column(length = 50, nullable = false)

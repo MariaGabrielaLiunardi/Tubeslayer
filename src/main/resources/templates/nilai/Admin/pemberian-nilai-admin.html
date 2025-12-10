@@ -3,9 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pemberian Nilai Mahasiswa</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/pemberian-nilai-mahasiswa.css">
-        <script src="../../../static/js/pemberian-nilai-mahasiswa.js" defer></script>
+        <title>Pemberian Nilai Dosen</title>
+        <link rel="stylesheet" href="../../../../resources/static/css/pemberian-nilai-admin.css">
+        <script src="../../../static/js/pemberian-nilai-admin.js" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
 
@@ -33,9 +33,15 @@
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="nilai-mahasiswa.html">
-                                <img src="../../../static/icon/open-book.png" class="icon open-book-icon">
-                                <span class="text nav-text">Mata Kuliah</span>
+                            <a href="#">
+                                <img src="../../../static/icon/database.png" alt="Database Icon" class="icon database-icon">
+                                <span class="text nav-text">Data</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">
+                                <img src="../../../static/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                                <span class="text nav-text">Arsip Mata Kuliah</span>
                             </a>
                         </li>
                     </ul>
@@ -50,8 +56,8 @@
                 </div>
                 <div class="right-section">
                     <div class="info">
-                        <span class="name">Keisha Neira Jocelyn</span>
-                        <span class="role">Mahasiswa</span>
+                        <span class="name">Clara Joycelyne Siauttara</span>
+                        <span class="role">Dosen</span>
                     </div>
                     <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
                     <button type="button" class="logout">
@@ -83,56 +89,49 @@
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="tilte-rubrik">Pemberian Nilai</div>
+                    <div class="breadcrumb">
+                        <a href="jadwal-penilaian-dosen.html" class="crumb">Daftar Mata Kuliah </a>
+                        <span class="crumb"> > </span>
+                        <a href="jadwal-penilaian-dosen.html" class="crumb">Dasar Pemrograman</a>
+                        <span class="crumb"> > </span>
+                        <a href="jadwal-penilaian-dosen.html" class="crumb">Tugas Besar Tahap 1</a>
+                        <span class="crumb"> > </span>
+                        <span class="crumb current">Daftar Nilai</span>
+                    </div>
+
                     <div class="rectangle-yellow">
                         <div class="assignment-table-wrapper">
                             <div class="assignment-header">
-                                <div class="col-rubrik">Rubrik Penilaian</div>
-                                <div class="col-bobot">Bobot(%)</div>
-                                <div class="col-nilai">Nilai</div>
-                                <div class="col-catatan">Catatan</div>
+                                <div class="col-kel">Kelompok</div>
+                                <div class="col-bobot">Nilai</div>
                             </div>
 
                             <div class="assignment-row">
-                                <div class="col-isi-rubrik"></div>
-                                <div class="col-isi-bobot"></div>
-                                <div class="col-isi-jam"></div>
-                                <div class="col-isi-catatan"></div>
+                                <div class="col-isi-kel"></div>
+                                <div class="col-isi-nilai"></div>
+                                <a href="pemberian-nilai-individu-admin.html" class="col-isi-lihat-link"><button class="col-isi-lihat">Lihat Detail</button></a>
                             </div>
 
                             <div class="assignment-row">
-                                <div class="col-isi-rubrik"></div>
-                                <div class="col-isi-bobot"></div>
-                                <div class="col-isi-jam"></div>
-                                <div class="col-isi-catatan"></div>
+                                <div class="col-isi-kel"></div>
+                                <div class="col-isi-nilai"></div>
+                                <a href="pemberian-nilai-individu-admin.html" class="col-isi-lihat-link"><button class="col-isi-lihat">Lihat Detail</button></a>
                             </div>
 
                             <div class="assignment-row">
-                                <div class="col-isi-rubrik"></div>
-                                <div class="col-isi-bobot"></div>
-                                <div class="col-isi-jam"></div>
-                                <div class="col-isi-catatan"></div>
+                                <div class="col-isi-kel"></div>
+                                <div class="col-isi-nilai"></div>
+                                <a href="pemberian-nilai-individu-admin.html" class="col-isi-lihat-link"><button class="col-isi-lihat">Lihat Detail</button></a>
                             </div>
 
                             <div class="assignment-row">
-                                <div class="col-isi-rubrik"></div>
-                                <div class="col-isi-bobot"></div>
-                                <div class="col-isi-jam"></div>
-                                <div class="col-isi-catatan"></div>
-                            </div>
-                        </div>
-
-                        <a href="dashboard-nilai-mahasiswa.html"> <div class="kembali">Kembali</div> </a>
-
-                        <div class="nilai-container">
-                            <div class="nilai-card nilai-kelompok">
-                                <span class="label">Nilai Kelompok</span>
-                                <span class="value">-</span>
+                                <div class="col-isi-kel"></div>
+                                <div class="col-isi-nilai"></div>
+                                <a href="pemberian-nilai-individu-admin.html" class="col-isi-lihat-link"><button class="col-isi-lihat">Lihat Detail</button></a>
                             </div>
 
-                            <div class="nilai-card nilai-pribadi">
-                                <span class="label">Nilai Pribadi</span>
-                                <span class="value">-</span>
+                            <div class="tombol-aksi">
+                                <a href="dashboard-nilai-admin.html"><button class="btn-kembali">Kembali</button></a>
                             </div>
                         </div>
                     </div>

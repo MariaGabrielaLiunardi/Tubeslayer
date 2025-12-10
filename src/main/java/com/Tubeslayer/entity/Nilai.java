@@ -18,7 +18,6 @@ public class Nilai {
 
 // Relasi Tugas (ManyToOne)
 @ManyToOne(fetch = FetchType.LAZY)
-// TAMBAHKAN unique=true di sini jika satu Tugas hanya boleh memiliki satu Nilai.
 @JoinColumn(name = "id_tugas", unique = true) 
 private TugasBesar tugas;
 

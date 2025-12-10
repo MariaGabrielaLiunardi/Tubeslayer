@@ -175,13 +175,29 @@ header .image-text .header-text {
     display: flex;
     flex-direction: column;
     padding: 0;
+    filter: blur(0px); 
+    pointer-events: auto; 
 }
 
 .sidebar:not(.close) ~ .main-content {
-    left: 230px;
-    width: calc(100% - 230px);
+    filter: blur(3px) brightness(0.7);
+    transition: var(--tran-05);
+    pointer-events: none;
 }
-
+.sidebar.close ~ .main-content {
+    filter: blur(0px);
+    pointer-events: auto;
+}
+.sidebar:not(.close) ~ .main-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 5;
+}
 /* Header */
 .header {
     background-color: transparent;

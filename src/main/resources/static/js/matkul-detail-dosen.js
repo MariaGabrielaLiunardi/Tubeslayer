@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const handleLogout = () => {
         fetch('/logout', { method: 'POST' }) 
-            .finally(() => { // Gunakan finally untuk menjamin redirect
+            .finally(() => { //redirect
                  window.location.href = '/'; 
             });
     };
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const mkTitleElement = document.getElementById('mk-title');
         const originalBreadcrumb = breadcrumb ? breadcrumb.innerHTML : '';
         
-        // Set tampilan awal
+        // Tampilan awal
         listTugasView.style.display = 'block';
         buatTugasView.style.display = 'none';
 
@@ -50,14 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
             isListView = !isListView;
             
             if (isListView) {
-                // Kembali ke list view
+                // Kembali ke bagian list view
                 listTugasView.style.display = 'block';
                 buatTugasView.style.display = 'none';
                 if (breadcrumb) {
                      breadcrumb.innerHTML = originalBreadcrumb; 
                 }
             } else {
-                // Pindah ke form buat tugas
+                // Pindah ke bagian form membuat tugas
                 listTugasView.style.display = 'none';
                 buatTugasView.style.display = 'block';
                 if (breadcrumb) {

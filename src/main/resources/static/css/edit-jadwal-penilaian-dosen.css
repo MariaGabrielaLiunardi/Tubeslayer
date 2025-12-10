@@ -542,7 +542,7 @@ header .image-text .header-text{
 
 /* Kolom Input */
 .input-wrapper {
-    flex: 1;                 /* lebar sama dengan kolom kiri */
+    flex: 1;               
 }
 
 .date-picker,

@@ -1,15 +1,14 @@
 package com.Tubeslayer.service;
 
 import org.springframework.stereotype.Service; 
-// ⬅ supaya class dikenali sebagai service oleh Spring
+
 
 import com.Tubeslayer.repository.MataKuliahMahasiswaRepository; 
-// ⬅ repository untuk hitung jumlah MK aktif
+
 
 import com.Tubeslayer.repository.TugasBesarRepository; 
-// ⬅ repository untuk hitung jumlah tugas besar aktif
 
-// kalau kamu butuh entity (misalnya User), bisa tambahkan:
+
 // import com.Tubeslayer.entity.User;
 
 @Service

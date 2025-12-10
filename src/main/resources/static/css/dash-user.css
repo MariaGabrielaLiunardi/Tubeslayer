@@ -372,13 +372,13 @@ header .image-text .header-text{
 }
 
 .mk, .tubes-aktif {
-    font-weight: bold;   /* label tetap bold */
+    font-weight: bold;  
     font-size: 14pt;
     margin-left: 30px;
 }
 
 .mk-value, .tb-value {
-    font-weight: normal; /* angka jadi normal */
+    font-weight: normal; 
 }
 
 .content-section{
@@ -416,9 +416,9 @@ header .image-text .header-text{
 
 .content-div {
     display: flex;
-    flex-wrap: wrap;      /* biar bisa turun ke baris baru */
-    gap: 20px;            /* jarak antar box */
-    justify-content: flex-start; /* rata kiri */
+    flex-wrap: wrap;      
+    gap: 20px;            
+    justify-content: flex-start; 
 }
 
 .content-item {
@@ -475,6 +475,11 @@ header .image-text .header-text{
     background-position: center;
 }
 
+
+.task-link{
+    text-decoration: none !important;
+    color: black !important;
+}
 
 
 

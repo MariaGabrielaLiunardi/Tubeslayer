@@ -67,63 +67,86 @@ public class DosenController {
                 year + "/" + (year + 1) :
                 (year - 1) + "/" + year;
         model.addAttribute("semester", tahunAkademik);
-      
+    
         int jumlahMk = dashboardService.getJumlahMkAktif(user.getIdUser(), tahunAkademik);
         int jumlahTb = dashboardService.getJumlahTbAktif(user.getIdUser());
         model.addAttribute("jumlahMk", jumlahMk);
         model.addAttribute("jumlahTb", jumlahTb);
 
-        List<MataKuliahDosen> listMK = mataKuliahService.getTop4ActiveByUserAndTahunAkademik(user.getIdUser(), tahunAkademik);
-        
-        listMK.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
-        
-        model.addAttribute("mataKuliahDosenList", listMK);
+        List<MataKuliahDosen> mataKuliahDosenList = mkDosenRepo.findById_IdUserAndIsActive(user.getIdUser(), true);
+
+        // 2. LOGIKA WARNA KONSISTEN (Tambahkan ini!)
+        int gradientCount = 4;
+        for (MataKuliahDosen mkd : mataKuliahDosenList) {
+            String kodeMK = mkd.getMataKuliah().getKodeMK();
+            // Rumus Hash Code yang sama persis dengan halaman Mata Kuliah
+            int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
+            mkd.setColorIndex(colorIndex);
+        }
+
+        model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
 
         return "dosen/dashboard";
     }
 
- @GetMapping("/dosen/mata-kuliah")
-public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model model) {
-    
-    String idDosen = user.getIdUser(); 
-    List<MataKuliahDosen> relasiMKDosen = mkDosenRepo.findById_IdUserAndIsActive(idDosen, true);
+    @GetMapping("/dosen/mata-kuliah")
+    public String mataKuliah(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+        
+        // 1. Ambil data menggunakan method yang ada di Repository kamu
+        // Perhatikan: Gunakan findById_IdUserAndIsActive sesuai file repo yang kamu kirim
+        List<MataKuliahDosen> mataKuliahDosenList = mkDosenRepo.findById_IdUserAndIsActive(user.getIdUser(), true);
 
-    relasiMKDosen.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
-    
-    model.addAttribute("mataKuliahDosenList", relasiMKDosen);
-    model.addAttribute("user", user);
-
-    LocalDate today = LocalDate.now();
-    int year = today.getYear();
-
-    String semesterPenuh = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) 
-            ? "Ganjil " + year + "/" + (year + 1)
-            : "Genap " + (year - 1) + "/" + year;
+        // 2. --- LOGIKA WARNA KONSISTEN (HASH CODE) ---
+        int gradientCount = 4;
+        for (MataKuliahDosen mkd : mataKuliahDosenList) {
+            String kodeMK = mkd.getMataKuliah().getKodeMK();
             
-    model.addAttribute("semesterTahunAjaran", semesterPenuh); 
-    
-    String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
-    model.addAttribute("semesterLabel", semesterLabel);
+            // Hitung index warna berdasarkan Kode MK (misal: "IF123" selalu menghasilkan angka yang sama)
+            int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
+            
+            // Set ke dalam objek (pastikan ada setter/field transient di entity MataKuliahDosen)
+            mkd.setColorIndex(colorIndex);
+        }
+        // ---------------------------------------------
 
-    return "dosen/mata-kuliah";
-}
+        // 3. Sort agar rapi berdasarkan nama (Opsional)
+        mataKuliahDosenList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
+
+        model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
+        model.addAttribute("user", user);
+
+        // Logic tanggal & semester (Biarkan seperti semula)
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        String semesterTahunAjaran = (today.getMonthValue() >= 7) ? year + "/" + (year + 1) : (year - 1) + "/" + year;
+        String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
+        
+        model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
+        model.addAttribute("semesterLabel", semesterLabel);
+
+        return "dosen/mata-kuliah";
+    }
 
     @GetMapping("/dosen/matkul-detail")
-    public String mkDetail(@RequestParam(required = false) String kodeMk,
-                            @RequestParam(required = false) Integer colorIndex,  
-                           @AuthenticationPrincipal CustomUserDetails user, 
-                           Model model) {
-        if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
+    public String matkulDetail(@RequestParam String kodeMk,
+                            @AuthenticationPrincipal CustomUserDetails user,
+                            Model model) {
 
-        MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
-        if (mk == null) return "redirect:/dosen/mata-kuliah";
+        model.addAttribute("user", user);
 
-        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
-        model.addAttribute("colorIndex", finalColorIndex);
+        // Ambil data mata kuliah
+        MataKuliah mkDetail = mataKuliahRepo.findById(kodeMk)
+                .orElseThrow(() -> new IllegalArgumentException("Mata Kuliah tidak ditemukan"));
 
-        model.addAttribute("user", user); 
-        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
-        model.addAttribute("mkDetail", mk);
+        // Gradient konsisten berdasarkan kodeMK
+        int gradientCount = 4; // jumlah gradient yang kamu punya
+        int colorIndex = Math.abs(kodeMk.hashCode()) % gradientCount;
+
+        model.addAttribute("mkDetail", mkDetail);
+        model.addAttribute("colorIndex", colorIndex);
+
+        // Ambil list tugas dsb...
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
         model.addAttribute("tugasList", tugasList);
 
         return "dosen/matkul-detail";
@@ -165,7 +188,7 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
     if (mk == null) return "redirect:/dosen/mata-kuliah";
 
-    // 1. Color Index (untuk gradien header)
+    // 1. Color Index 
     int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
     model.addAttribute("colorIndex", finalColorIndex);
 
@@ -186,7 +209,7 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     List<PesertaMatkulDTO> combinedList = new ArrayList<>();
     int counter = 1;
 
-    // 4.1. Tambahkan Dosen Koordinator (Selalu Baris Pertama)
+    // 4.1. Tambahkan Dosen Koordinator 
     combinedList.add(new PesertaMatkulDTO(
         counter++, 
         koordinator.getNama(), 
@@ -197,7 +220,7 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     // 4.2. Konversi Mahasiswa ke DTO
     List<PesertaMatkulDTO> mahasiswaDTOs = listPeserta.stream()
         .map(rel -> new PesertaMatkulDTO(
-            0, // Index akan di-update setelah sorting
+            0, // Index akan diupdate setelah sorting
             rel.getUser().getNama(),
             rel.getUser().getIdUser(),
             "Mahasiswa",
@@ -224,7 +247,7 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
 
     model.addAttribute("combinedPesertaList", combinedList);
     model.addAttribute("combinedPesertaList", combinedList); // List baru untuk tabel
-    model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah HANYA Mahasiswa
+    model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah yang hanya Mahasiswa
 
     return "dosen/matkul-peserta";
 }

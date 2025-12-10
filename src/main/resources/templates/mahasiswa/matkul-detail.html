@@ -93,16 +93,8 @@
                 <div class="mk-img" th:classappend="'gradient-' + (${colorIndex} + 1)"></div>
                 <div class="mk-info">
                     <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
-
-                    <p>
-                        <b>Koordinator:</b>
-                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span>
-                    </p>
-
-                    <p>
-                        <b>NIP:</b>
-                        <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span>
-                    </p>
+                    <p><b>Koordinator:</b> <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span></p>
+                    <p><b>NIP:</b> <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span></p>
                 </div>
             </div>
 

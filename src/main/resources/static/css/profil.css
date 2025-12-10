@@ -14,12 +14,12 @@ body {
         360deg, 
         rgba(255, 241, 235, 1) 0%,
         rgba(172, 224, 249, 1) 50%, 
-        rgba(172, 224, 249, 1) 100% /* area scroll */
+        rgba(172, 224, 249, 1) 100% 
     ) !important;
 
     min-height: 100vh;
     background-attachment: scroll; 
-    background-size: 100% 100%; /* gradien seluruh bagian */
+    background-size: 100% 100%; 
     background-repeat: no-repeat;
 }
 
@@ -340,6 +340,6 @@ header .image-text .header-text{
 .menu-toggle-btn {
     font-size: 24px;
     cursor: pointer;
-    color: #5BA4E6; /* Warna biru icon */
+    color: #5BA4E6; 
 }
 

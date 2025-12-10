@@ -1,11 +1,13 @@
 package com.Tubeslayer.controller;
 
 import com.Tubeslayer.dto.MKArchiveDTO;
+import com.Tubeslayer.entity.Kelompok;
 import com.Tubeslayer.entity.MataKuliah;
 import com.Tubeslayer.entity.MataKuliahDosen;
 import com.Tubeslayer.entity.MataKuliahMahasiswa;
 import com.Tubeslayer.entity.TugasBesar;
 import com.Tubeslayer.entity.User;
+import com.Tubeslayer.repository.KelompokRepository;
 import com.Tubeslayer.repository.MataKuliahDosenRepository;
 import com.Tubeslayer.repository.MataKuliahMahasiswaRepository;
 import com.Tubeslayer.repository.MataKuliahRepository;
@@ -16,6 +18,7 @@ import com.Tubeslayer.service.CustomUserDetails;
 import com.Tubeslayer.service.DashboardAdminService;
 import com.Tubeslayer.service.MataKuliahService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 @Controller
 @RequestMapping("/admin")
@@ -56,6 +61,9 @@ public class AdminController {
 
     @Autowired
     private MataKuliahMahasiswaRepository mkMahasiswaRepo;
+
+    @Autowired
+    private KelompokRepository kelompokRepository;
 
     public AdminController(
             DashboardAdminService dashboardService,
@@ -126,8 +134,8 @@ public class AdminController {
     public String kelolaDosen(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
 
-        // Ambil data dosen untuk ditampilkan di view
-        List<User> dosenList = userRepository.findByRole("Dosen");
+        // Ambil data dosen aktif untuk ditampilkan di view
+        List<User> dosenList = userRepository.findByRoleAndIsActiveTrue("Dosen");
         model.addAttribute("dosenList", dosenList);
         model.addAttribute("dosenCount", dosenList.size());
 
@@ -137,6 +145,10 @@ public class AdminController {
     @GetMapping("/kelola-mahasiswa")
     public String kelolaMahasiswa(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
+        // Ambil data mahasiswa aktif untuk ditampilkan di view
+        List<User> mahasiswaList = userRepository.findByRoleAndIsActiveTrue("Mahasiswa");
+        model.addAttribute("mahasiswaList", mahasiswaList);
+        model.addAttribute("mahasiswaCount", mahasiswaList.size());
         return "admin/kelola-mahasiswa";
     }
 
@@ -144,15 +156,25 @@ public class AdminController {
     // VIEWS UNTUK ARSIP
     // ============================
     @GetMapping("/arsip-mata-kuliah")
-    public String getArsip(Model model) {
-        List<MKArchiveDTO> list = mataKuliahDosenRepo.getArchiveMK();
-        model.addAttribute("arsipMK", list);
+    public String getArsip(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MKArchiveDTO> pageMK = mataKuliahRepository.getArchiveMK(pageable);
+
+        model.addAttribute("arsipMK", pageMK.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pageMK.getTotalPages());
+        model.addAttribute("totalItems", pageMK.getTotalElements());
+
         return "admin/arsip-mata-kuliah";
     }
 
     @GetMapping("/arsip-matkul-detail")
     public String kelolaArsipMatkulDetail(@RequestParam(required = false) String kodeMk,
-                                          @AuthenticationPrincipal CustomUserDetails user, Model model) {
+            @AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
 
         if (kodeMk == null || kodeMk.isEmpty()) {
@@ -196,7 +218,7 @@ public class AdminController {
 
             return map;
         }).collect(Collectors.toList());
-
+        
         model.addAttribute("mkDetail", mkDetail);
         model.addAttribute("tugasDataList", tugasData);
 
@@ -253,18 +275,31 @@ public class AdminController {
     }
 
     // ============================
-    // API ENDPOINTS - KELOLA DOSEN
+    // API ENDPOINTS - KELOLA DOSEN (AKTIF SAJA)
     // ============================
 
     /**
-     * API: Ambil semua dosen (JSON)
+     * API: Ambil semua dosen AKTIF (JSON)
      */
     @GetMapping("/api/dosen")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> getAllDosenApi() {
+    public ResponseEntity<Map<String, Object>> getAllDosenApi(
+            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
-            List<User> dosenList = userRepository.findByRole("Dosen");
+            List<User> dosenList;
+            
+            if ("semua".equalsIgnoreCase(status)) {
+                dosenList = userRepository.findByRole("Dosen");
+            } else if ("nonaktif".equalsIgnoreCase(status)) {
+                // Mengambil dosen nonaktif dengan custom query
+                dosenList = userRepository.findByRole("Dosen").stream()
+                        .filter(dosen -> !dosen.isActive())
+                        .collect(Collectors.toList());
+            } else {
+                // Default: ambil hanya yang aktif
+                dosenList = userRepository.findByRoleAndIsActiveTrue("Dosen");
+            }
 
             List<Map<String, Object>> formattedList = dosenList.stream()
                     .map(dosen -> {
@@ -284,6 +319,7 @@ public class AdminController {
             response.put("success", true);
             response.put("data", formattedList);
             response.put("count", formattedList.size());
+            response.put("filter", status);
             response.put("timestamp", System.currentTimeMillis());
 
             return ResponseEntity.ok(response);
@@ -295,25 +331,40 @@ public class AdminController {
     }
 
     /**
-     * API: Cari dosen berdasarkan nama atau NIP
+     * API: Cari dosen AKTIF berdasarkan nama atau NIP
      */
     @GetMapping("/api/dosen/search")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> searchDosenApi(@RequestParam String keyword) {
+    public ResponseEntity<Map<String, Object>> searchDosenApi(
+            @RequestParam String keyword,
+            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
             if (keyword == null || keyword.trim().isEmpty()) {
-                return getAllDosenApi();
+                return getAllDosenApi(status);
             }
 
-            List<User> results = userRepository.findByRoleAndNamaContainingIgnoreCase("Dosen", keyword.trim());
-
-            if (results.isEmpty()) {
-                Optional<User> byId = userRepository.findById(keyword);
-                if (byId.isPresent() && "Dosen".equals(byId.get().getRole())) {
-                    results.add(byId.get());
-                }
+            String searchKeyword = keyword.trim().toLowerCase();
+            
+            // Ambil data berdasarkan filter status
+            List<User> baseList;
+            if ("semua".equalsIgnoreCase(status)) {
+                baseList = userRepository.findByRole("Dosen");
+            } else if ("nonaktif".equalsIgnoreCase(status)) {
+                baseList = userRepository.findByRole("Dosen").stream()
+                        .filter(dosen -> !dosen.isActive())
+                        .collect(Collectors.toList());
+            } else {
+                baseList = userRepository.findByRoleAndIsActiveTrue("Dosen");
             }
+
+            // Filter berdasarkan keyword
+            List<User> results = baseList.stream()
+                    .filter(dosen -> 
+                        dosen.getNama().toLowerCase().contains(searchKeyword) ||
+                        dosen.getIdUser().toLowerCase().contains(searchKeyword) ||
+                        dosen.getEmail().toLowerCase().contains(searchKeyword))
+                    .collect(Collectors.toList());
 
             List<Map<String, Object>> formattedResults = results.stream()
                     .map(dosen -> {
@@ -323,6 +374,7 @@ public class AdminController {
                         dosenMap.put("nama", dosen.getNama());
                         dosenMap.put("email", dosen.getEmail());
                         dosenMap.put("status", dosen.isActive() ? "Aktif" : "Nonaktif");
+                        dosenMap.put("isActive", dosen.isActive());
                         return dosenMap;
                     })
                     .collect(Collectors.toList());
@@ -331,6 +383,7 @@ public class AdminController {
             response.put("success", true);
             response.put("data", formattedResults);
             response.put("count", formattedResults.size());
+            response.put("filter", status);
 
             return ResponseEntity.ok(response);
 
@@ -341,7 +394,7 @@ public class AdminController {
     }
 
     /**
-     * API: Tambah dosen baru
+     * API: Tambah dosen baru (default aktif)
      */
     @PostMapping("/api/dosen")
     @ResponseBody
@@ -378,8 +431,9 @@ public class AdminController {
             dosen.setPassword(defaultPassword);
             dosen.setRole("Dosen");
 
-            String status = dosenData.getOrDefault("status", "1");
-            dosen.setActive("1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
+            // Default status adalah aktif
+            String status = dosenData.getOrDefault("status", "aktif");
+            dosen.setActive("aktif".equalsIgnoreCase(status) || "1".equals(status) || "true".equalsIgnoreCase(status));
 
             User savedDosen = userRepository.save(dosen);
 
@@ -397,7 +451,7 @@ public class AdminController {
     }
 
     /**
-     * API: Hapus dosen
+     * API: Hapus dosen (soft delete - nonaktifkan)
      */
     @DeleteMapping("/api/dosen/{id}")
     @ResponseBody
@@ -418,11 +472,13 @@ public class AdminController {
                         HttpStatus.BAD_REQUEST);
             }
 
-            userRepository.delete(dosen);
+            // Soft delete: nonaktifkan dosen
+            dosen.setActive(false);
+            userRepository.save(dosen);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", "Dosen " + dosen.getNama() + " berhasil dihapus");
+            response.put("message", "Dosen " + dosen.getNama() + " berhasil dinonaktifkan");
 
             return ResponseEntity.ok(response);
 
@@ -460,7 +516,7 @@ public class AdminController {
                 return buildErrorResponse("Status tidak boleh kosong", HttpStatus.BAD_REQUEST);
             }
 
-            boolean newStatus = "1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status);
+            boolean newStatus = "aktif".equalsIgnoreCase(status) || "1".equals(status) || "true".equalsIgnoreCase(status);
             dosen.setActive(newStatus);
 
             userRepository.save(dosen);
@@ -512,7 +568,7 @@ public class AdminController {
 
             if (dosenData.containsKey("status")) {
                 String status = dosenData.get("status");
-                dosen.setActive("1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
+                dosen.setActive("aktif".equalsIgnoreCase(status) || "1".equals(status) || "true".equalsIgnoreCase(status));
             }
 
             userRepository.save(dosen);
@@ -531,7 +587,7 @@ public class AdminController {
     }
 
     /**
-     * API: Import dosen dari file Excel/CSV
+     * API: Import dosen dari file Excel/CSV (default aktif)
      */
     @PostMapping("/api/dosen/import")
     @ResponseBody
@@ -599,33 +655,32 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Test endpoint untuk debugging
-     */
-    @GetMapping("/api/dosen/test")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> testDosenApi() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "Admin Dosen API is working!");
-        response.put("timestamp", System.currentTimeMillis());
-        response.put("totalDosen", userRepository.findByRole("Dosen").size());
-        return ResponseEntity.ok(response);
-    }
-
     // ============================
-    // API ENDPOINTS - KELOLA MAHASISWA
+    // API ENDPOINTS - KELOLA MAHASISWA (AKTIF SAJA)
     // ============================
 
     /**
-     * API: Ambil semua mahasiswa (JSON)
+     * API: Ambil semua mahasiswa AKTIF (JSON)
      */
     @GetMapping("/api/mahasiswa")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> getAllMahasiswaApi() {
+    public ResponseEntity<Map<String, Object>> getAllMahasiswaApi(
+            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
-            List<User> mahasiswaList = userRepository.findByRole("Mahasiswa");
+            List<User> mahasiswaList;
+            
+            if ("semua".equalsIgnoreCase(status)) {
+                mahasiswaList = userRepository.findByRole("Mahasiswa");
+            } else if ("nonaktif".equalsIgnoreCase(status)) {
+                // Mengambil mahasiswa nonaktif dengan custom query
+                mahasiswaList = userRepository.findByRole("Mahasiswa").stream()
+                        .filter(mahasiswa -> !mahasiswa.isActive())
+                        .collect(Collectors.toList());
+            } else {
+                // Default: ambil hanya yang aktif
+                mahasiswaList = userRepository.findByRoleAndIsActiveTrue("Mahasiswa");
+            }
 
             List<Map<String, Object>> formattedList = mahasiswaList.stream()
                     .map(mahasiswa -> {
@@ -645,6 +700,7 @@ public class AdminController {
             response.put("success", true);
             response.put("data", formattedList);
             response.put("count", formattedList.size());
+            response.put("filter", status);
             response.put("timestamp", System.currentTimeMillis());
 
             return ResponseEntity.ok(response);
@@ -656,25 +712,40 @@ public class AdminController {
     }
 
     /**
-     * API: Cari mahasiswa berdasarkan nama atau NPM
+     * API: Cari mahasiswa AKTIF berdasarkan nama atau NPM
      */
     @GetMapping("/api/mahasiswa/search")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> searchMahasiswaApi(@RequestParam String keyword) {
+    public ResponseEntity<Map<String, Object>> searchMahasiswaApi(
+            @RequestParam String keyword,
+            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
             if (keyword == null || keyword.trim().isEmpty()) {
-                return getAllMahasiswaApi();
+                return getAllMahasiswaApi(status);
             }
 
-            List<User> results = userRepository.findByRoleAndNamaContainingIgnoreCase("Mahasiswa", keyword.trim());
-
-            if (results.isEmpty()) {
-                Optional<User> byId = userRepository.findById(keyword);
-                if (byId.isPresent() && "Mahasiswa".equals(byId.get().getRole())) {
-                    results.add(byId.get());
-                }
+            String searchKeyword = keyword.trim().toLowerCase();
+            
+            // Ambil data berdasarkan filter status
+            List<User> baseList;
+            if ("semua".equalsIgnoreCase(status)) {
+                baseList = userRepository.findByRole("Mahasiswa");
+            } else if ("nonaktif".equalsIgnoreCase(status)) {
+                baseList = userRepository.findByRole("Mahasiswa").stream()
+                        .filter(mahasiswa -> !mahasiswa.isActive())
+                        .collect(Collectors.toList());
+            } else {
+                baseList = userRepository.findByRoleAndIsActiveTrue("Mahasiswa");
             }
+
+            // Filter berdasarkan keyword
+            List<User> results = baseList.stream()
+                    .filter(mahasiswa -> 
+                        mahasiswa.getNama().toLowerCase().contains(searchKeyword) ||
+                        mahasiswa.getIdUser().toLowerCase().contains(searchKeyword) ||
+                        mahasiswa.getEmail().toLowerCase().contains(searchKeyword))
+                    .collect(Collectors.toList());
 
             List<Map<String, Object>> formattedResults = results.stream()
                     .map(mahasiswa -> {
@@ -684,6 +755,7 @@ public class AdminController {
                         mahasiswaMap.put("nama", mahasiswa.getNama());
                         mahasiswaMap.put("email", mahasiswa.getEmail());
                         mahasiswaMap.put("status", mahasiswa.isActive() ? "Aktif" : "Nonaktif");
+                        mahasiswaMap.put("isActive", mahasiswa.isActive());
                         return mahasiswaMap;
                     })
                     .collect(Collectors.toList());
@@ -692,6 +764,7 @@ public class AdminController {
             response.put("success", true);
             response.put("data", formattedResults);
             response.put("count", formattedResults.size());
+            response.put("filter", status);
 
             return ResponseEntity.ok(response);
 
@@ -702,7 +775,7 @@ public class AdminController {
     }
 
     /**
-     * API: Tambah mahasiswa baru
+     * API: Tambah mahasiswa baru (default aktif)
      */
     @PostMapping("/api/mahasiswa")
     @ResponseBody
@@ -739,8 +812,9 @@ public class AdminController {
             mahasiswa.setPassword(defaultPassword);
             mahasiswa.setRole("Mahasiswa");
 
-            String status = mahasiswaData.getOrDefault("status", "1");
-            mahasiswa.setActive("1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
+            // Default status adalah aktif
+            String status = mahasiswaData.getOrDefault("status", "aktif");
+            mahasiswa.setActive("aktif".equalsIgnoreCase(status) || "1".equals(status) || "true".equalsIgnoreCase(status));
 
             User savedMahasiswa = userRepository.save(mahasiswa);
 
@@ -758,7 +832,7 @@ public class AdminController {
     }
 
     /**
-     * API: Hapus mahasiswa
+     * API: Hapus mahasiswa (soft delete - nonaktifkan)
      */
     @DeleteMapping("/api/mahasiswa/{id}")
     @ResponseBody
@@ -779,11 +853,13 @@ public class AdminController {
                         HttpStatus.BAD_REQUEST);
             }
 
-            userRepository.delete(mahasiswa);
+            // Soft delete: nonaktifkan mahasiswa
+            mahasiswa.setActive(false);
+            userRepository.save(mahasiswa);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", "Mahasiswa " + mahasiswa.getNama() + " berhasil dihapus");
+            response.put("message", "Mahasiswa " + mahasiswa.getNama() + " berhasil dinonaktifkan");
 
             return ResponseEntity.ok(response);
 
@@ -821,7 +897,7 @@ public class AdminController {
                 return buildErrorResponse("Status tidak boleh kosong", HttpStatus.BAD_REQUEST);
             }
 
-            boolean newStatus = "1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status);
+            boolean newStatus = "aktif".equalsIgnoreCase(status) || "1".equals(status) || "true".equalsIgnoreCase(status);
             mahasiswa.setActive(newStatus);
 
             userRepository.save(mahasiswa);
@@ -873,7 +949,7 @@ public class AdminController {
 
             if (mahasiswaData.containsKey("status")) {
                 String status = mahasiswaData.get("status");
-                mahasiswa.setActive("1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
+                mahasiswa.setActive("aktif".equalsIgnoreCase(status) || "1".equals(status) || "true".equalsIgnoreCase(status));
             }
 
             userRepository.save(mahasiswa);
@@ -892,7 +968,7 @@ public class AdminController {
     }
 
     /**
-     * API: Import mahasiswa dari file Excel/CSV
+     * API: Import mahasiswa dari file Excel/CSV (default aktif)
      */
     @PostMapping("/api/mahasiswa/import")
     @ResponseBody
@@ -960,33 +1036,32 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Test endpoint untuk debugging mahasiswa
-     */
-    @GetMapping("/api/mahasiswa/test")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> testMahasiswaApi() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "Admin Mahasiswa API is working!");
-        response.put("timestamp", System.currentTimeMillis());
-        response.put("totalMahasiswa", userRepository.findByRole("Mahasiswa").size());
-        return ResponseEntity.ok(response);
-    }
-
     // ============================
-    // API ENDPOINTS - KELOLA MATA KULIAH
+    // API ENDPOINTS - KELOLA MATA KULIAH (AKTIF SAJA)
     // ============================
 
     /**
-     * API: Ambil semua mata kuliah (JSON)
+     * API: Ambil semua mata kuliah AKTIF (JSON)
      */
     @GetMapping("/api/mata-kuliah")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> getAllMataKuliahApi() {
+    public ResponseEntity<Map<String, Object>> getAllMataKuliahApi(
+            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
-            List<MataKuliah> mataKuliahList = mataKuliahRepository.findAll();
+            List<MataKuliah> mataKuliahList;
+            
+            if ("semua".equalsIgnoreCase(status)) {
+                mataKuliahList = mataKuliahRepository.findAll();
+            } else if ("nonaktif".equalsIgnoreCase(status)) {
+                // Mengambil mata kuliah nonaktif
+                mataKuliahList = mataKuliahRepository.findAll().stream()
+                        .filter(mk -> !mk.isActive())
+                        .collect(Collectors.toList());
+            } else {
+                // Default: ambil hanya yang aktif
+                mataKuliahList = mataKuliahRepository.findByIsActiveTrue();
+            }
 
             List<Map<String, Object>> formattedList = mataKuliahList.stream()
                     .map(mk -> {
@@ -995,7 +1070,7 @@ public class AdminController {
                         mkMap.put("kode", mk.getKodeMK());
                         mkMap.put("nama", mk.getNama());
                         mkMap.put("sks", mk.getSks());
-                        mkMap.put("semester", "-");
+                        mkMap.put("semester", getSemesterFromKode(mk.getKodeMK()));
                         mkMap.put("status", mk.isActive() ? "Aktif" : "Nonaktif");
                         mkMap.put("isActive", mk.isActive());
                         return mkMap;
@@ -1006,6 +1081,7 @@ public class AdminController {
             response.put("success", true);
             response.put("data", formattedList);
             response.put("count", formattedList.size());
+            response.put("filter", status);
             response.put("timestamp", System.currentTimeMillis());
 
             return ResponseEntity.ok(response);
@@ -1017,25 +1093,38 @@ public class AdminController {
     }
 
     /**
-     * API: Cari mata kuliah berdasarkan kode atau nama
+     * API: Cari mata kuliah AKTIF berdasarkan kode atau nama
      */
     @GetMapping("/api/mata-kuliah/search")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> searchMataKuliahApi(@RequestParam String keyword) {
+    public ResponseEntity<Map<String, Object>> searchMataKuliahApi(
+            @RequestParam String keyword,
+            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
             if (keyword == null || keyword.trim().isEmpty()) {
-                return getAllMataKuliahApi();
+                return getAllMataKuliahApi(status);
             }
 
-            String searchKeyword = keyword.trim();
+            String searchKeyword = keyword.trim().toLowerCase();
+            
+            // Ambil data berdasarkan filter status
+            List<MataKuliah> baseList;
+            if ("semua".equalsIgnoreCase(status)) {
+                baseList = mataKuliahRepository.findAll();
+            } else if ("nonaktif".equalsIgnoreCase(status)) {
+                baseList = mataKuliahRepository.findAll().stream()
+                        .filter(mk -> !mk.isActive())
+                        .collect(Collectors.toList());
+            } else {
+                baseList = mataKuliahRepository.findByIsActiveTrue();
+            }
 
-            List<MataKuliah> allMk = mataKuliahRepository.findAll();
-            List<MataKuliah> results = allMk.stream()
+            // Filter berdasarkan keyword
+            List<MataKuliah> results = baseList.stream()
                     .filter(mk ->
-                            mk.getKodeMK().toLowerCase().contains(searchKeyword.toLowerCase()) ||
-                                    mk.getNama().toLowerCase().contains(searchKeyword.toLowerCase())
-                    )
+                            mk.getKodeMK().toLowerCase().contains(searchKeyword) ||
+                            mk.getNama().toLowerCase().contains(searchKeyword))
                     .collect(Collectors.toList());
 
             List<Map<String, Object>> formattedResults = results.stream()
@@ -1045,7 +1134,7 @@ public class AdminController {
                         mkMap.put("kode", mk.getKodeMK());
                         mkMap.put("nama", mk.getNama());
                         mkMap.put("sks", mk.getSks());
-                        mkMap.put("semester", "-");
+                        mkMap.put("semester", getSemesterFromKode(mk.getKodeMK()));
                         mkMap.put("status", mk.isActive() ? "Aktif" : "Nonaktif");
                         mkMap.put("isActive", mk.isActive());
                         return mkMap;
@@ -1056,6 +1145,7 @@ public class AdminController {
             response.put("success", true);
             response.put("data", formattedResults);
             response.put("count", formattedResults.size());
+            response.put("filter", status);
 
             return ResponseEntity.ok(response);
 
@@ -1066,7 +1156,7 @@ public class AdminController {
     }
 
     /**
-     * API: Tambah mata kuliah baru
+     * API: Tambah mata kuliah baru (default aktif)
      */
     @PostMapping("/api/mata-kuliah")
     @ResponseBody
@@ -1108,6 +1198,7 @@ public class AdminController {
                 return buildErrorResponse("SKS harus berupa angka", HttpStatus.BAD_REQUEST);
             }
 
+            // Default status adalah aktif
             boolean isActive = true;
             if (mkData.containsKey("status") && mkData.get("status") != null) {
                 String status = mkData.get("status").toString();
@@ -1134,7 +1225,7 @@ public class AdminController {
             savedData.put("kode", savedMk.getKodeMK());
             savedData.put("nama", savedMk.getNama());
             savedData.put("sks", savedMk.getSks());
-            savedData.put("semester", "-");
+            savedData.put("semester", getSemesterFromKode(savedMk.getKodeMK()));
             savedData.put("status", savedMk.isActive() ? "Aktif" : "Nonaktif");
             savedData.put("isActive", savedMk.isActive());
 
@@ -1149,7 +1240,7 @@ public class AdminController {
     }
 
     /**
-     * API: Hapus mata kuliah
+     * API: Hapus mata kuliah (soft delete - nonaktifkan)
      */
     @DeleteMapping("/api/mata-kuliah/{kode}")
     @ResponseBody
@@ -1166,11 +1257,13 @@ public class AdminController {
             MataKuliah mataKuliah = mkOpt.get();
             String namaMk = mataKuliah.getNama();
 
-            mataKuliahRepository.delete(mataKuliah);
+            // Soft delete: nonaktifkan mata kuliah
+            mataKuliah.setActive(false);
+            mataKuliahRepository.save(mataKuliah);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", "Mata kuliah " + namaMk + " berhasil dihapus");
+            response.put("message", "Mata kuliah " + namaMk + " berhasil dinonaktifkan");
 
             return ResponseEntity.ok(response);
 
@@ -1224,7 +1317,7 @@ public class AdminController {
             updatedData.put("kode", mataKuliah.getKodeMK());
             updatedData.put("nama", mataKuliah.getNama());
             updatedData.put("sks", mataKuliah.getSks());
-            updatedData.put("semester", "-");
+            updatedData.put("semester", getSemesterFromKode(mataKuliah.getKodeMK()));
             updatedData.put("status", mataKuliah.isActive() ? "Aktif" : "Nonaktif");
             updatedData.put("isActive", mataKuliah.isActive());
 
@@ -1323,7 +1416,7 @@ public class AdminController {
             updatedData.put("kode", mataKuliah.getKodeMK());
             updatedData.put("nama", mataKuliah.getNama());
             updatedData.put("sks", mataKuliah.getSks());
-            updatedData.put("semester", "-");
+            updatedData.put("semester", getSemesterFromKode(mataKuliah.getKodeMK()));
             updatedData.put("status", mataKuliah.isActive() ? "Aktif" : "Nonaktif");
             updatedData.put("isActive", mataKuliah.isActive());
 
@@ -1358,7 +1451,7 @@ public class AdminController {
             mkData.put("kode", mataKuliah.getKodeMK());
             mkData.put("nama", mataKuliah.getNama());
             mkData.put("sks", mataKuliah.getSks());
-            mkData.put("semester", "-");
+            mkData.put("semester", getSemesterFromKode(mataKuliah.getKodeMK()));
             mkData.put("status", mataKuliah.isActive() ? "Aktif" : "Nonaktif");
             mkData.put("isActive", mataKuliah.isActive());
 
@@ -1375,21 +1468,7 @@ public class AdminController {
     }
 
     /**
-     * API: Test endpoint untuk debugging
-     */
-    @GetMapping("/api/mata-kuliah/test")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> testMataKuliahApi() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "Admin Mata Kuliah API is working!");
-        response.put("timestamp", System.currentTimeMillis());
-        response.put("totalMataKuliah", mataKuliahRepository.count());
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * API: Import mata kuliah dari file Excel/CSV
+     * API: Import mata kuliah dari file Excel/CSV (default aktif)
      */
     @PostMapping("/api/mata-kuliah/import")
     @ResponseBody
@@ -1441,7 +1520,7 @@ public class AdminController {
                     maxNumber = number;
                 }
             } catch (NumberFormatException e) {
-                // Skip jika bukan angka
+                //  jika bukan angka maka dilewat
             }
         }
 
@@ -1533,6 +1612,24 @@ public class AdminController {
         return mahasiswaMap;
     }
 
+    private String getSemesterFromKode(String kodeMk) {
+        if (kodeMk == null || kodeMk.length() < 2) {
+            return "-";
+        }
+        
+        try {
+            char semesterChar = kodeMk.charAt(1);
+            if (Character.isDigit(semesterChar)) {
+                int semester = Character.getNumericValue(semesterChar);
+                return "Semester " + semester;
+            }
+        } catch (Exception e) {
+            // Ignore error
+        }
+        
+        return "-";
+    }
+
     private boolean isValidFileType(String contentType, String fileName) {
         if (contentType == null) {
             return fileName != null &&
@@ -1553,5 +1650,54 @@ public class AdminController {
         error.put("timestamp", System.currentTimeMillis());
         error.put("status", status.value());
         return ResponseEntity.status(status).body(error);
+    }
+
+    /**
+     * API: Test endpoint untuk debugging
+     */
+    @GetMapping("/api/dosen/test")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> testDosenApi() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Admin Dosen API is working!");
+        response.put("timestamp", System.currentTimeMillis());
+        response.put("totalDosen", userRepository.findByRole("Dosen").size());
+        response.put("dosenAktif", userRepository.findByRoleAndIsActiveTrue("Dosen").size());
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * API: Test endpoint untuk debugging mahasiswa
+     */
+    @GetMapping("/api/mahasiswa/test")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> testMahasiswaApi() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Admin Mahasiswa API is working!");
+        response.put("timestamp", System.currentTimeMillis());
+        response.put("totalMahasiswa", userRepository.findByRole("Mahasiswa").size());
+        response.put("mahasiswaAktif", userRepository.findByRoleAndIsActiveTrue("Mahasiswa").size());
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * API: Test endpoint untuk debugging
+     */
+    @GetMapping("/api/mata-kuliah/test")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> testMataKuliahApi() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Admin Mata Kuliah API is working!");
+        response.put("timestamp", System.currentTimeMillis());
+        response.put("totalMataKuliah", mataKuliahRepository.count());
+        try {
+            response.put("mataKuliahAktif", mataKuliahRepository.findByIsActiveTrue().size());
+        } catch (Exception e) {
+            response.put("mataKuliahAktif", "Method not available");
+        }
+        return ResponseEntity.ok(response);
     }
 }

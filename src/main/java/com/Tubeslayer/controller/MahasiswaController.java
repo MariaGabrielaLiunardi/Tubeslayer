@@ -82,28 +82,14 @@ public class MahasiswaController {
         model.addAttribute("tanggal", today.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
 
         int year = today.getYear();
-        String semesterTahunAjaran;
-        String semesterLabel;
-
-        semesterTahunAjaran = (today.getMonthValue() >= 7) ?
-                year + "/" + (year + 1) :
-                (year - 1) + "/" + year;
-        
-        if (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) { 
-            semesterLabel = "Ganjil"; 
-        } else {
-            semesterLabel = "Genap";
-        }
+        String semesterTahunAjaran = (today.getMonthValue() >= 7) ? year + "/" + (year + 1) : (year - 1) + "/" + year;
+        String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
         
         model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
         model.addAttribute("semesterLabel", semesterLabel);
-        int month = today.getMonthValue();
-        String tahunAkademik;
-        if (month >= 7) {
-            tahunAkademik = year + "/" + (year + 1);
-        } else {
-            tahunAkademik = (year - 1) + "/" + year;
-        }
+
+        // Logic semester untuk query (tetap sama)
+        String tahunAkademik = (today.getMonthValue() >= 7) ? year + "/" + (year + 1) : (year - 1) + "/" + year;
         model.addAttribute("semester", tahunAkademik);
 
         int jumlahMk = dashboardService.getJumlahMkAktif(user.getIdUser(), tahunAkademik);
@@ -111,11 +97,37 @@ public class MahasiswaController {
         model.addAttribute("jumlahMk", jumlahMk);
         model.addAttribute("jumlahTb", jumlahTb);
 
-        List<MataKuliah> listMK = mataKuliahService.getActiveByMahasiswaAndTahunAkademik(user.getIdUser(), tahunAkademik);
+        // --- PERBAIKAN UTAMA DI SINI ---
+        
+        // 1. Ambil data sebagai enrollList (MataKuliahMahasiswa), BUKAN MataKuliah biasa
+        // Agar sesuai dengan dashboard.html yang memanggil enroll.mataKuliah.nama
+        List<MataKuliahMahasiswa> enrollList = mkmRepo.findByUser_IdUserAndIsActive(user.getIdUser(), true);
 
-        listMK.sort(Comparator.comparing(mk -> mk.getNama()));
+        // 2. Filter manual agar hanya mata kuliah semester ini yang muncul di dashboard (Opsional, tergantung kebutuhan)
+        // Jika ingin menampilkan semua yang aktif, filter ini bisa dihapus.
+        List<MataKuliahMahasiswa> filteredEnrollList = enrollList.stream()
+            .filter(e -> {
+                 // Cek null safety jika diperlukan
+                 return e.getMataKuliah() != null; 
+                 // Tambahkan logika filter semester di sini jika perlu, misal:
+                 // && e.getMataKuliah().getSemester().equals(tahunAkademik)
+            })
+            .collect(Collectors.toList());
 
-        model.addAttribute("mataKuliahList", listMK);
+        // 3. Set Color Index KONSISTEN menggunakan HashCode Kode MK
+        int gradientCount = 4;
+        for (MataKuliahMahasiswa enroll : filteredEnrollList) {
+            String kodeMK = enroll.getMataKuliah().getKodeMK();
+            // Math.abs untuk menghindari angka negatif
+            int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
+            enroll.setColorIndex(colorIndex);
+        }
+
+        // Sort berdasarkan nama
+        filteredEnrollList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
+
+        // Kirim dengan nama variabel 'enrollList' agar cocok dengan HTML
+        model.addAttribute("enrollList", filteredEnrollList); 
 
         return "mahasiswa/dashboard";
     }
@@ -124,17 +136,25 @@ public class MahasiswaController {
     @GetMapping("/mahasiswa/mata-kuliah")
     public String mataKuliah(@AuthenticationPrincipal CustomUserDetails user, Model model) {
 
-        String idMahasiswa = user.getIdUser(); 
-        
-        List<MataKuliahMahasiswa> enrollList =
-            mkmRepo.findByUser_IdUserAndIsActive(idMahasiswa, true);
+        String idMahasiswa = user.getIdUser();  
+
+        List<MataKuliahMahasiswa> enrollList = mkmRepo.findByUser_IdUserAndIsActive(idMahasiswa, true);
+
+        // --- PERBAIKAN KONSISTENSI WARNA ---
+        int gradientCount = 4;
+        enrollList.forEach(enroll -> {
+            // Gunakan HashCode Kode MK (KONSISTEN)
+            String kodeMK = enroll.getMataKuliah().getKodeMK();
+            int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
+            enroll.setColorIndex(colorIndex);
+        });
 
         enrollList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
 
         model.addAttribute("enrollList", enrollList);
         model.addAttribute("user", user);
 
-        // --- LOGIC SEMESTER (SALINAN DARI DASHBOARD) ---
+        // --- LOGIC SEMESTER ---
         LocalDate today = LocalDate.now();
         int year = today.getYear();
         String semesterTahunAjaran; 
@@ -143,13 +163,13 @@ public class MahasiswaController {
         semesterTahunAjaran = (today.getMonthValue() >= 7) ?
                 year + "/" + (year + 1) :
                 (year - 1) + "/" + year;
-        
+
         if (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) { 
             semesterLabel = "Ganjil"; 
         } else {
             semesterLabel = "Genap";
         }
-        
+
         model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
         model.addAttribute("semesterLabel", semesterLabel);
         // --------------------------------------------------------
@@ -157,11 +177,9 @@ public class MahasiswaController {
         return "mahasiswa/mata-kuliah";
     }
 
-
     @GetMapping("/mahasiswa/matkul-detail")
     public String detailMatkul(
             @RequestParam("mk") String kodeMk,
-            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
 
@@ -169,40 +187,32 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        MataKuliah mkDetail = mataKuliahRepo.findById(kodeMk).orElse(null); 
-        
+        MataKuliah mkDetail = mataKuliahRepo.findById(kodeMk).orElse(null);
         if (mkDetail == null) {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
-        model.addAttribute("colorIndex", finalColorIndex);
+        // Gradient konsisten berdasarkan kodeMK
+        int gradientCount = 4; // jumlah gradient
+        int colorIndex = Math.abs(kodeMk.hashCode()) % gradientCount;
+        model.addAttribute("colorIndex", colorIndex);
 
-        // --- KOREKSI: LOGIC MENGAMBIL KOORDINATOR DOSEN ---
+        // Koordinator dosen
         MataKuliahDosen koordinator = null;
-        
-        try {
-            // Ambil semua dosen yang mengajar MK ini
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
-            if (!dosenList.isEmpty()) {
-                // Ambil dosen pertama sebagai koordinator
-                koordinator = dosenList.get(0); 
-            }
-        } catch (Exception e) {
-            System.err.println("Error fetching coordinator: " + e.getMessage());
+        List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        if (!dosenList.isEmpty()) {
+            koordinator = dosenList.get(0);
         }
+        model.addAttribute("koordinator", koordinator);
 
-        model.addAttribute("koordinator", koordinator); 
-        // ----------------------------------------------------
-
-        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mkDetail.getKodeMK(), true);
-
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
         model.addAttribute("mkDetail", mkDetail);
         model.addAttribute("tugasList", tugasList);
-        model.addAttribute("user", user); 
+        model.addAttribute("user", user);
 
         return "mahasiswa/matkul-detail";
     }
+
 
 
     @GetMapping("/mahasiswa/matkul-peserta")
@@ -265,7 +275,7 @@ public class MahasiswaController {
         // 3.2. Konversi Mahasiswa ke DTO
         List<PesertaMatkulDTO> mahasiswaDTOs = listPeserta.stream()
             .map(rel -> new PesertaMatkulDTO(
-                0, // Index akan di-update setelah sorting
+                0, 
                 rel.getUser().getNama(),
                 rel.getUser().getIdUser(),
                 "Mahasiswa",

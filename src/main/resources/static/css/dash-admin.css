@@ -177,7 +177,7 @@ header .image-text .header-text{
 }
 
 .home .header {
-    flex-shrink: 0; /* jangan biarkan header mengecil */
+    flex-shrink: 0; 
     height: 80px;
 }
 
@@ -314,7 +314,7 @@ header .image-text .header-text{
 .web-title{
     font-weight: bold;
     font-size: 30pt;
-    line-height: 1; /* Mengatur tinggi baris sama dengan ukuran font */
+    line-height: 1; 
 }
 
 .welcome-message{
@@ -388,13 +388,13 @@ header .image-text .header-text{
 }
 
 .mk, .tubes-aktif {
-    font-weight: bold;   /* label tetap bold */
+    font-weight: bold;   
     font-size: 14pt;
     margin-left: 30px;
 }
 
 .mk-value, .tb-value {
-    font-weight: normal; /* angka jadi normal */
+    font-weight: normal; 
 }
 
 .content-section{
@@ -471,8 +471,8 @@ header .image-text .header-text{
 
 /* Card Base */
 .card {
-    width: 380px;   /* lebih kecil dari menu-awal */
-    height: 250px;  /* disesuaikan agar compact */
+    width: 380px;   
+    height: 250px; 
     border-radius: 20px;
     text-align: center;
     cursor: pointer;
@@ -516,28 +516,28 @@ header .image-text .header-text{
     width: 100%;
     height: 70%; 
     z-index: 2;
-    /* Properti Flexbox untuk Pemusatan */
+    
     display: flex;
-    justify-content: center; /* Pusat Horizontal */
-    align-items: center; /* Pusat Vertikal */
+    justify-content: center; 
+    align-items: center; 
 }
 
 .icon-container img {
-    position: relative; /* Ganti ke relative/tetap absolute, tapi pemusatan dilakukan oleh parent */
-    width: 75%; /* Sesuaikan ukuran ikon (misalnya 60% dari container) */
+    position: relative; 
+    width: 75%; 
     height: auto;
-    top: -15px; /* Hapus offset yang tidak perlu */
-    right: 0; /* Hapus offset yang tidak perlu */
+    top: -15px; 
+    right: 0; 
     opacity: 0.8;
-    /* Hapus properti top, right, yang sebelumnya menyebabkan pergeseran */
+    
 }
 
 .icon-container-dosen{
-    position: relative; /* Ganti ke relative/tetap absolute, tapi pemusatan dilakukan oleh parent */
-    width: 75%; /* Sesuaikan ukuran ikon (misalnya 60% dari container) */
+    position: relative; 
+    width: 75%; 
     height: auto;
-    top: -15px; /* Hapus offset yang tidak perlu */
-    right: 0; /* Hapus offset yang tidak perlu */
+    top: -15px; 
+    right: 0; 
     opacity: 0.8;
 }
 
