@@ -1,11 +1,13 @@
 package com.Tubeslayer.repository;
 
+import com.Tubeslayer.dto.MKArchiveDTO;
 import com.Tubeslayer.entity.MataKuliah;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page; 
 import java.util.List; 
 
 @Repository
@@ -18,7 +20,6 @@ public interface MataKuliahRepository extends JpaRepository<MataKuliah, String> 
     List<MataKuliah> findByIsActiveTrue();
     List<MataKuliah> findByIsActiveFalse();
 
-    // Ambil MK aktif berdasarkan mahasiswa dan semester
     @Query("""
     SELECT mk 
     FROM MataKuliah mk 
@@ -32,4 +33,26 @@ public interface MataKuliahRepository extends JpaRepository<MataKuliah, String> 
                                                           @Param("tahunAkademik") String tahunAkademik,
                                                           Pageable pageable);
     List<MataKuliah> findByIsActive(boolean b);
+
+@Query(value = """
+    SELECT DISTINCT new com.Tubeslayer.dto.MKArchiveDTO(
+        mk.kodeMK,
+        mk.nama,
+        mkm.tahunAkademik
+    )
+    FROM MataKuliah mk
+    JOIN mk.mahasiswaList mkm
+    WHERE mk.isActive = false
+""",
+countQuery = """
+    SELECT COUNT(DISTINCT mk.kodeMK, mkm.tahunAkademik)
+    FROM MataKuliah mk
+    JOIN mk.mahasiswaList mkm
+    WHERE mk.isActive = false
+""")
+Page<MKArchiveDTO> getArchiveMK(Pageable pageable);
+
+
+
+
 }

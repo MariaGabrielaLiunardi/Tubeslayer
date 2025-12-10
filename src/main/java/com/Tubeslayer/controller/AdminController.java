@@ -1,11 +1,13 @@
 package com.Tubeslayer.controller;
 
 import com.Tubeslayer.dto.MKArchiveDTO;
+import com.Tubeslayer.entity.Kelompok;
 import com.Tubeslayer.entity.MataKuliah;
 import com.Tubeslayer.entity.MataKuliahDosen;
 import com.Tubeslayer.entity.MataKuliahMahasiswa;
 import com.Tubeslayer.entity.TugasBesar;
 import com.Tubeslayer.entity.User;
+import com.Tubeslayer.repository.KelompokRepository;
 import com.Tubeslayer.repository.MataKuliahDosenRepository;
 import com.Tubeslayer.repository.MataKuliahMahasiswaRepository;
 import com.Tubeslayer.repository.MataKuliahRepository;
@@ -16,6 +18,7 @@ import com.Tubeslayer.service.CustomUserDetails;
 import com.Tubeslayer.service.DashboardAdminService;
 import com.Tubeslayer.service.MataKuliahService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 @Controller
 @RequestMapping("/admin")
@@ -56,6 +61,9 @@ public class AdminController {
 
     @Autowired
     private MataKuliahMahasiswaRepository mkMahasiswaRepo;
+
+    @Autowired
+    private KelompokRepository kelompokRepository;
 
     public AdminController(
             DashboardAdminService dashboardService,
@@ -148,15 +156,25 @@ public class AdminController {
     // VIEWS UNTUK ARSIP
     // ============================
     @GetMapping("/arsip-mata-kuliah")
-    public String getArsip(Model model) {
-        List<MKArchiveDTO> list = mataKuliahDosenRepo.getArchiveMK();
-        model.addAttribute("arsipMK", list);
+    public String getArsip(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MKArchiveDTO> pageMK = mataKuliahRepository.getArchiveMK(pageable);
+
+        model.addAttribute("arsipMK", pageMK.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pageMK.getTotalPages());
+        model.addAttribute("totalItems", pageMK.getTotalElements());
+
         return "admin/arsip-mata-kuliah";
     }
 
     @GetMapping("/arsip-matkul-detail")
     public String kelolaArsipMatkulDetail(@RequestParam(required = false) String kodeMk,
-                                          @AuthenticationPrincipal CustomUserDetails user, Model model) {
+            @AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
 
         if (kodeMk == null || kodeMk.isEmpty()) {
@@ -1502,7 +1520,7 @@ public class AdminController {
                     maxNumber = number;
                 }
             } catch (NumberFormatException e) {
-                // Skip jika bukan angka
+                //  jika bukan angka maka dilewat
             }
         }
 

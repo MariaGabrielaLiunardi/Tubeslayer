@@ -22,12 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Melakukan proses logout..."); 
         fetch('/logout', { method: 'POST' }) 
             .then(() => {
-                 // redirect ke halaman utama
+                 // redirect kembali ke halaman utama
                  window.location.href = '/'; 
             })
             .catch(error => {
                  console.error("Logout gagal:", error);
-                 // tetap redirect meskipun fetch gagal
+                 // tetap redirect kalau fetch gagal
                  window.location.href = '/'; 
             });
     };

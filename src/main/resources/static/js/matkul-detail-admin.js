@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutButton.addEventListener('click', handleLogout);
     }
     
-    // Pencarian & Pagination 
+    // Pencarian dan Pagination 
 
     const searchBox = document.querySelector('.search-box');
     const searchInput = searchBox ? searchBox.querySelector('input[type="text"]') : null;
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Event Listener Pagination
+    // Event Listener pagination
     
     if (prevButton) {
         prevButton.addEventListener('click', () => {

@@ -28,7 +28,7 @@ public interface UserKelompokRepository extends JpaRepository<UserKelompok, User
     
     /**
      * @param idKelompok ID kelompok
-     * @param role role (biasanya "leader")
+     * @param role role ("leader")
      * @return UserKelompok ketua
      */
     @Query("SELECT uk FROM UserKelompok uk WHERE uk.kelompok.idKelompok = :idKelompok AND uk.role = :role")

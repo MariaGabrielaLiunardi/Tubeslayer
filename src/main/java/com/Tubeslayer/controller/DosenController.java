@@ -165,7 +165,7 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
     if (mk == null) return "redirect:/dosen/mata-kuliah";
 
-    // 1. Color Index (untuk gradien header)
+    // 1. Color Index 
     int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
     model.addAttribute("colorIndex", finalColorIndex);
 
@@ -186,7 +186,7 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     List<PesertaMatkulDTO> combinedList = new ArrayList<>();
     int counter = 1;
 
-    // 4.1. Tambahkan Dosen Koordinator (Selalu Baris Pertama)
+    // 4.1. Tambahkan Dosen Koordinator 
     combinedList.add(new PesertaMatkulDTO(
         counter++, 
         koordinator.getNama(), 
@@ -197,7 +197,7 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     // 4.2. Konversi Mahasiswa ke DTO
     List<PesertaMatkulDTO> mahasiswaDTOs = listPeserta.stream()
         .map(rel -> new PesertaMatkulDTO(
-            0, // Index akan di-update setelah sorting
+            0, // Index akan diupdate setelah sorting
             rel.getUser().getNama(),
             rel.getUser().getIdUser(),
             "Mahasiswa",
@@ -224,7 +224,7 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
 
     model.addAttribute("combinedPesertaList", combinedList);
     model.addAttribute("combinedPesertaList", combinedList); // List baru untuk tabel
-    model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah HANYA Mahasiswa
+    model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah yang hanya Mahasiswa
 
     return "dosen/matkul-peserta";
 }

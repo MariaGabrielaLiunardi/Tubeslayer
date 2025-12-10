@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Peserta: ${filteredPageItems.length} peserta`; 
         }
         
-        // Hasil pencarian 0
+        // Jika Hasil pencarian 0
         if (filteredPageItems.length === 0) {
        
             if (noDataRow) {
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Hasil pencarian > 0
+        // Jika Hasil pencarian > 0
         if (noDataRow) {
             noDataRow.style.display = 'none'; 
         }

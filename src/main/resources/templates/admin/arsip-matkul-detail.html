@@ -134,18 +134,15 @@
                         </thead>
                         <tbody>
                             <tr th:each="data, iStat : ${tugasDataList}" class="page-item">
-
                                 <td th:text="${iStat.count} + '.'">1.</td>
-
-                                <td th:text="${data.judulTugas}">Tugas Besar Tahap 1</td>
-
-                            </tr>
-
-                            <tr th:if="${tugasDataList.empty}">
-                                <td colspan="2" style="text-align: center;">Tidak ada Tugas Besar terarsip untuk mata
-                                    kuliah ini.</td>
-                            </tr>
-
+                                <td>
+                                    <a th:href="@{/admin/tugas-detail(idTugas=${data.idTugas})}" 
+                                    class="task-link" 
+                                    th:text="${data.judulTugas}">
+                                    Tugas Besar Tahap 1
+                                    </a>
+                                </td>
+                                </tr>
                         </tbody>
                     </table>
                 </div>

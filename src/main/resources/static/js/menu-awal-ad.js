@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Highlight sidebar sesuai URL aktif
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
-    const currentPath = window.location.pathname; // contoh: "/admin/dashboard"
+    const currentPath = window.location.pathname; 
 
     navLinks.forEach(li => {
         const anchor = li.querySelector('a');

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String> {
     
     
-    // WAJIB: Method untuk search dosen by nama (case-insensitive)
+    // Method untuk search dosen by nama (case-insensitive)
     List<User> findByRoleAndNamaContainingIgnoreCase(String role, String nama);
     
     // Opsional: Cek email sudah terdaftar

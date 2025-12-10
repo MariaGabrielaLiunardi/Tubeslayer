@@ -18,7 +18,6 @@
 body {
     font-family: Sen;
     background-color: #f5f5f5;
-    /* Background gradient untuk seluruh halaman */
     background: linear-gradient(#fff1eb, #ACE0F9 );
     
     background-size: cover;
@@ -177,11 +176,28 @@ header .image-text .header-text {
     display: flex;
     flex-direction: column;
     padding: 0;
+    filter: blur(0px); 
+    pointer-events: auto; 
 }
 
 .sidebar:not(.close) ~ .main-content {
-    left: 230px;
-    width: calc(100% - 230px);
+    filter: blur(3px) brightness(0.7);
+    transition: var(--tran-05);
+    pointer-events: none;
+}
+.sidebar.close ~ .main-content {
+    filter: blur(0px);
+    pointer-events: auto;
+}
+.sidebar:not(.close) ~ .main-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 5;
 }
 
 /* Header */
@@ -283,7 +299,7 @@ header .image-text .header-text {
     padding: 10px 30px; 
 }
 
-/* Card Container - Wrapper untuk semua bagian */
+/* Card Container  */
 .card-container {
     border-radius: 15px;
     overflow: visible;
@@ -291,7 +307,7 @@ header .image-text .header-text {
     margin: 0 30px 30px 30px;
 }
 
-/* Title Section - Background biru muda, lebar penuh */
+/* Title Section  */
 .title-section {
     background-color: #b3e5fc;
     padding: 25px 30px;
@@ -340,7 +356,7 @@ header .image-text .header-text {
     margin: 0 8px;
 }
 
-/* Content Card - Bagian putih di bawah title */
+/* Content Card */
 .content-card {
     background-color: white;
     padding: 30px;

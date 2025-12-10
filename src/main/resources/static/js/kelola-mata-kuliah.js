@@ -238,12 +238,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentPage = 1;
                 renderMataKuliahTable();
                 updateCount(daftarMataKuliah.length);
-                console.log(`✅ Loaded ${daftarMataKuliah.length} mata kuliah`);
+                console.log(`Loaded ${daftarMataKuliah.length} mata kuliah`);
             } else {
                 throw new Error(result.message || "Failed to load data");
             }
         } catch (error) {
-            console.error("❌ Error loading data:", error);
+            console.error("Error loading data:", error);
             showMessage("Gagal memuat data mata kuliah: " + error.message, "error");
             
             // Fallback: show empty state

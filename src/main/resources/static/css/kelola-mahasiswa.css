@@ -14,12 +14,12 @@ body {
         360deg, 
         rgba(255, 241, 235, 1) 0%,
         rgba(172, 224, 249, 1) 50%, 
-        rgba(172, 224, 249, 1) 100% /* area scroll */
+        rgba(172, 224, 249, 1) 100% 
     ) !important;
 
     min-height: 100vh;
     background-attachment: scroll; 
-    background-size: 100% 100%; /* gradien seluruh bagian */
+    background-size: 100% 100%; 
     background-repeat: no-repeat;
 }
 
@@ -544,7 +544,7 @@ header .image-text .header-text{
     transform: translateY(-1px);
 }
 
-/* --- Untuk yang View 2: Pilih Cara --- */
+/* --- View 2: Pilih Cara --- */
 .pilih-cara {
     display: none; 
     position: relative;
@@ -578,7 +578,7 @@ header .image-text .header-text{
     margin: 0;
 }
 
-/* --- Untuk yang View 3: Import Mata Kuliah --- */
+/* --- View 3: Import Mata Kuliah --- */
 #import-mahasiswa {
     display: none;
 
@@ -608,8 +608,8 @@ header .image-text .header-text{
 /* Card container */
 .tambah-mahasiswa {
     display: flex;
-    justify-content: center;   /* center horizontal */
-    align-items: center;       /* center vertical */
+    justify-content: center;   
+    align-items: center;       
 }
 
 .tambah-mahasiswa-content {
@@ -630,7 +630,7 @@ header .image-text .header-text{
 #tambah-mahasiswa-form {
     display: flex;
     flex-direction: column;
-    gap: 5px; /* jarak antar elemen */
+    gap: 5px; 
    
 }
 

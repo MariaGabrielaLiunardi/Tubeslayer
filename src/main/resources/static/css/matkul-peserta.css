@@ -377,3 +377,8 @@ body {
     background-size: cover;
     background-position: center;
 }
+
+.task-link{
+    text-decoration: none;
+    color: black;
+}

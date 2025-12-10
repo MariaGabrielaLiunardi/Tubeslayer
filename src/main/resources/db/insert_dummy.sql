@@ -1,8 +1,9 @@
+-- === USERS (admin, dosen, mahasiswa) ===
 INSERT INTO user_table (id_user, email, password, nama, role, is_active) VALUES
 ('20250199','admin@unpar.ac.id','$2a$12$JVCmMGpDmD1yd7d7eOmDAe1oSRUD13rNu4L7VNBUW2IDX3GDGZ1Bi','Admin Sistem','Admin',1),
 ('20250101','agus@unpar.ac.id','$2a$12$jsq4xkNTSQQKF6O5f3ctsuxSuxXSEgu1ULt5ugH.xKBHTmDxllum2','Agus Santoso','Dosen',1),
 ('20250102','maria@unpar.ac.id','$2a$12$jsq4xkNTSQQKF6O5f3ctsuxSuxXSEgu1ULt5ugH.xKBHTmDxllum2','Maria Lestari','Dosen',1),
-('20250103','budi@unpar.ac.id','$2a$12$jsq4xkNTSQQKF6O5f3ctsuxSuxXSEgu1ULt5ugH.xKBHTmDxllum2','Budi Pranoto','Dosen',0),
+('20250103','budi@unpar.ac.id','$2a$12$jsq4xkNTSQQKF6O5f3ctsuxSuxXSEgu1ULt5ugH.xKBHTmDxllum2','Budi Pranoto','Dosen',1),
 
 ('6182301001','adi@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Aditya Putra','Mahasiswa',1),
 ('6182301002','bella@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Bella Anggraini','Mahasiswa',1),
@@ -25,273 +26,251 @@ INSERT INTO user_table (id_user, email, password, nama, role, is_active) VALUES
 ('6182301019','sandi@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Sandi Permana','Mahasiswa',1),
 ('6182301020','tika@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Tika Lestari','Mahasiswa',1),
 ('6182301021','udin@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Udin Santoso','Mahasiswa',1),
-('6182301022','vika@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Vika Amelia','Mahasiswa',0), -- nonaktif
+('6182301022','vika@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Vika Amelia','Mahasiswa',0),
 ('6182301023','wawan@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Wawan Kurnia','Mahasiswa',1),
 ('6182301024','xenia@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Xenia Putri','Mahasiswa',1),
 ('6182301025','yoga@student.unpar.ac.id','$2a$12$77JXn7V/zlNdSPHj1Nx6huH6OsDvlyDFzkIPebs7KdrTUdCmXvNf6','Yoga Pratama','Mahasiswa',1);
 
-INSERT INTO rubrik_nilai (id_rubrik) VALUES
-(1),(2),(3),(4),(5),(6),(7),(8),(9),(10),
-(11),(12),(13),(14),(15),(16),(17),(18),(19),(20),
-(21),(22),(23),(24),(25),(26),(27),(28),(29),(30);
+-- === Rubrik (create 20 rubrik id's) ===
+INSERT INTO rubrik_nilai (id_rubrik) VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10),(11),(12),(13),(14),(15),(16),(17),(18),(19),(20);
 
+-- === Mata Kuliah (5 active, 5 inactive) ===
 INSERT INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
 ('AIF23001','Algoritma dan Pemrograman',3,1),
 ('AIF23002','Struktur Data',3,1),
 ('AIF23003','Basis Data',3,1),
 ('AIF23004','Pemrograman Web',3,1),
 ('AIF23005','Pemrograman Mobile',3,1),
-('AIF23006','Sistem Operasi',3,1),
-('AIF23007','Jaringan Komputer',3,1),
-('AIF23008','Rekayasa Perangkat Lunak',3,1),
-('AIF23009','Kecerdasan Buatan',3,1),
-('AIF23010','Machine Learning',3,1),
-('AIF23011','Sistem Basis Data Lanjut',3,1),
-('AIF23012','Keamanan Jaringan',3,1),
-('AIF23013','Interaksi Manusia Komputer',2,1),
-('AIF23014','Basis Data Terdistribusi',3,1),
-('AIF23015','Pemrograman Berorientasi Objek',3,1),
-('AIF23016','Grafika Komputer',2,1),
-('AIF23017','Computer Vision',3,1),
-('AIF23018','Data Mining',3,1),
-('AIF23019','Sistem Informasi',3,1),
-('AIF23020','Cloud Computing',3,1),
+-- inactive
 ('AIF23921','Matematika Diskrit',3,0),
 ('AIF23922','Kalkulus',3,0),
 ('AIF23923','Etika Profesi',2,0),
 ('AIF23924','Sejarah Teknologi',2,0),
-('AIF23925','Bahasa Indonesia Teknis',2,0),
-('AIF23926','Sistem Digital',3,0),
-('AIF23927','Pemrograman Fungsional',3,0),
-('AIF23928','Statistika Dasar',3,0),
-('AIF23929','Probabilitas',3,0),
-('AIF23930','Riset Operasi',3,0);
+('AIF23925','Bahasa Indonesia Teknis',2,0);
 
-INSERT INTO kelompok (id_kelompok, nama_kelompok) VALUES
-(1,'Kelompok A'),(2,'Kelompok B'),(3,'Kelompok C'),(4,'Kelompok D'),(5,'Kelompok E'),
-(6,'Kelompok F'),(7,'Kelompok G'),(8,'Kelompok H'),(9,'Kelompok I'),(10,'Kelompok J'),
-(11,'Kelompok K'),(12,'Kelompok L'),(13,'Kelompok M'),(14,'Kelompok N'),(15,'Kelompok O'),
-(16,'Kelompok P'),(17,'Kelompok Q'),(18,'Kelompok R'),(19,'Kelompok S'),(20,'Kelompok T'),
-(21,'Kelompok U'),(22,'Kelompok V'),(23,'Kelompok W'),(24,'Kelompok X'),(25,'Kelompok Y'),
-(26,'Kelompok Z'),(27,'Kelompok AA'),(28,'Kelompok AB'),(29,'Kelompok AC'),(30,'Kelompok AD');
-
-INSERT INTO tugas_besar
-(id_tugas, id_user, id_rubrik, kode_mk, judul_tugas, deskripsi, deadline, status, mode_kel, min_anggota, max_anggota, is_active)
-VALUES
-(1,'20250101',1,'AIF23001','TB Sorting','Analisis dan perbandingan algoritma sorting','2025-01-20 23:59:00','Open','Dosen',3,5,1),
-(2,'20250101',2,'AIF23002','TB Graph','Implementasi dan analisis BFS & DFS','2025-01-22 23:59:00','Open','Mahasiswa',2,4,1),
-(3,'20250102',3,'AIF23003','TB ERD','Desain ERD dan normalisasi','2025-01-25 23:59:00','Open','Dosen',1,1,1),
-(4,'20250102',4,'AIF23004','TB Web','Pembuatan website portofolio','2025-02-01 23:59:00','Open','Dosen',1,1,1),
-(5,'20250101',5,'AIF23005','TB Mobile','Aplikasi mobile catatan keuangan','2025-01-28 23:59:00','Open','Dosen',2,5,1),
-(6,'20250102',6,'AIF23006','TB OS','Simulasi scheduler CPU','2025-01-30 23:59:00','Open','Mahasiswa',1,1,1),
-(7,'20250101',7,'AIF23007','TB Network','Analisis paket dan capture','2025-02-02 23:59:00','Open','Dosen',3,6,1),
-(8,'20250101',8,'AIF23008','TB RPL','Dokumentasi SRS & UML','2025-02-05 23:59:00','Open','Mahasiswa',3,5,1),
-(9,'20250102',9,'AIF23009','TB AI','Sistem pakar sederhana','2025-02-07 23:59:00','Open','Mahasiswa',2,4,1),
-(10,'20250101',10,'AIF23010','TB ML','Implementasi regresi linier','2025-02-10 23:59:00','Open','Dosen',2,4,1),
-(11,'20250102',11,'AIF23011','TB DB Lanjut','Optimisasi query','2025-02-12 23:59:00','Open','Dosen',1,2,1),
-(12,'20250101',12,'AIF23012','TB Keamanan','Analisis celah keamanan','2025-02-15 23:59:00','Open','Dosen',2,4,1),
-(13,'20250101',13,'AIF23013','TB HCI','Studi UX & prototipe','2025-02-18 23:59:00','Open','Mahasiswa',2,3,1),
-(14,'20250102',14,'AIF23014','TB DB Terdistribusi','Replikasi & konsistensi','2025-02-20 23:59:00','Open','Dosen',2,4,1),
-(15,'20250101',15,'AIF23015','TB OOP','Desain kelas & pattern','2025-02-22 23:59:00','Open','Mahasiswa',1,1,1),
-(16,'20250102',16,'AIF23016','TB Grafika','Rendering sederhana','2025-02-25 23:59:00','Open','Mahasiswa',1,1,1),
-(17,'20250101',17,'AIF23017','TB CV','Deteksi objek sederhana','2025-02-27 23:59:00','Open','Dosen',2,4,1),
-(18,'20250102',18,'AIF23018','TB Data Mining','Clustering dataset besar','2025-03-01 23:59:00','Open','Dosen',3,6,1),
-(19,'20250101',19,'AIF23019','TB SI','Implementasi modul SI','2025-03-03 23:59:00','Open','Mahasiswa',2,4,1),
-(20,'20250102',20,'AIF23020','TB Cloud','Deploy aplikasi di cloud','2025-03-05 23:59:00','Open','Dosen',1,3,1),
-(21,'20250101',21,'AIF23921','TB Matematika','Soal & pembuktian','2024-12-01 23:59:00','Closed','Dosen',1,1,0),
-(22,'20250102',22,'AIF23922','TB Kalkulus','Analisis integral','2024-12-05 23:59:00','Closed','Mahasiswa',1,1,0),
-(23,'20250101',23,'AIF23923','TB Etika','Studi kasus etika profesi','2024-11-30 23:59:00','Closed','Dosen',1,1,0),
-(24,'20250102',24,'AIF23924','TB Sejarah','Timeline teknologi','2024-11-25 23:59:00','Closed','Mahasiswa',1,1,0),
-(25,'20250101',25,'AIF23925','TB Bahasa','Penulisan teknis bahasa Indonesia','2024-11-28 23:59:00','Closed','Dosen',1,1,0),
-(26,'20250102',26,'AIF23926','TB Sistem Digital','Desain rangkaian','2024-11-20 23:59:00','Closed','Mahasiswa',1,1,0),
-(27,'20250101',27,'AIF23927','TB Fungsional','Paradigma fungsional','2024-12-10 23:59:00','Closed','Dosen',1,1,0),
-(28,'20250102',28,'AIF23928','TB Statistika','Analisis statistik','2024-12-12 23:59:00','Closed','Mahasiswa',1,1,0),
-(29,'20250101',29,'AIF23929','TB Probabilitas','Soal peluang','2024-12-15 23:59:00','Closed','Dosen',1,1,0),
-(30,'20250102',30,'AIF23930','TB Riset Operasi','Optimisasi model','2024-12-18 23:59:00','Closed','Mahasiswa',1,1,0);
-
-INSERT INTO tugas_besar_kelompok (id_kelompok, id_tugas) VALUES
-(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),
-(11,11),(12,12),(13,13),(14,14),(15,15),(16,16),(17,17),(18,18),(19,19),(20,20),
-(21,21),(22,22),(23,23),(24,24),(25,25),(26,26),(27,27),(28,28),(29,29),(30,30);
-
+-- === Mata Kuliah Dosen (which dosen teaches which MK) ===
 INSERT INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES
 ('20250101','AIF23001','A',1,'2025/2026',1),
 ('20250101','AIF23002','A',1,'2025/2026',1),
-('20250101','AIF23003','B',1,'2025/2026',1),
-('20250102','AIF23004','A',1,'2025/2026',1),
-('20250102','AIF23005','B',1,'2025/2026',1),
-('20250102','AIF23006','C',2,'2025/2026',1),
-('20250101','AIF23007','A',2,'2025/2026',1),
-('20250102','AIF23008','B',2,'2025/2026',1),
-('20250101','AIF23009','A',3,'2025/2026',1),
-('20250102','AIF23010','A',3,'2025/2026',1),
-('20250101','AIF23011','B',3,'2025/2026',1),
-('20250102','AIF23012','C',3,'2025/2026',1),
-('20250101','AIF23014','A',2,'2024/2025',1),
-('20250102','AIF23921','A',1,'2023/2024',0),
-('20250101','AIF23922','B',1,'2023/2024',0),
-('20250102','AIF23923','C',1,'2023/2024',0),
-('20250101','AIF23015','A',2,'2025/2026',1),
-('20250102','AIF23016','B',2,'2025/2026',1),
-('20250101','AIF23017','A',3,'2025/2026',1),
-('20250102','AIF23018','A',3,'2025/2026',1);
+('20250102','AIF23003','A',1,'2025/2026',1),
+('20250102','AIF23004','B',1,'2025/2026',1),
+('20250103','AIF23005','A',1,'2025/2026',1);
+
+-- === Enroll mahasiswa ke mata_kuliah (ensure many participants in active MK)
+-- We'll enroll each mahasiswa into 2 active MKs (balanced) so each active MK has many participants
+
+-- helper mapping (manually balanced):
+-- AIF23001: students 1001-1012 (12 students)
+-- AIF23002: students 1003-1014 (12 students, overlap allowed)
+-- AIF23003: students 1005-1016 (12 students)
+-- AIF23004: students 1007-1018 (12 students)
+-- AIF23005: students 1009-1025 (17 students)
 
 INSERT INTO mata_kuliah_mahasiswa (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES
 ('6182301001','AIF23001','A',1,'2025/2026',1),
 ('6182301002','AIF23001','A',1,'2025/2026',1),
 ('6182301003','AIF23001','A',1,'2025/2026',1),
+('6182301004','AIF23001','A',1,'2025/2026',1),
+('6182301005','AIF23001','A',1,'2025/2026',1),
+('6182301006','AIF23001','A',1,'2025/2026',1),
+('6182301007','AIF23001','A',1,'2025/2026',1),
+('6182301008','AIF23001','A',1,'2025/2026',1),
+('6182301009','AIF23001','A',1,'2025/2026',1),
+('6182301010','AIF23001','A',1,'2025/2026',1),
+('6182301011','AIF23001','A',1,'2025/2026',1),
+('6182301012','AIF23001','A',1,'2025/2026',1),
+
+('6182301003','AIF23002','A',1,'2025/2026',1),
 ('6182301004','AIF23002','A',1,'2025/2026',1),
 ('6182301005','AIF23002','A',1,'2025/2026',1),
+('6182301006','AIF23002','A',1,'2025/2026',1),
+('6182301007','AIF23002','A',1,'2025/2026',1),
+('6182301008','AIF23002','A',1,'2025/2026',1),
+('6182301009','AIF23002','A',1,'2025/2026',1),
+('6182301010','AIF23002','A',1,'2025/2026',1),
+('6182301011','AIF23002','A',1,'2025/2026',1),
+('6182301012','AIF23002','A',1,'2025/2026',1),
+('6182301013','AIF23002','A',1,'2025/2026',1),
+('6182301014','AIF23002','A',1,'2025/2026',1),
+
+('6182301005','AIF23003','B',1,'2025/2026',1),
 ('6182301006','AIF23003','B',1,'2025/2026',1),
 ('6182301007','AIF23003','B',1,'2025/2026',1),
+('6182301008','AIF23003','B',1,'2025/2026',1),
+('6182301009','AIF23003','B',1,'2025/2026',1),
+('6182301010','AIF23003','B',1,'2025/2026',1),
+('6182301011','AIF23003','B',1,'2025/2026',1),
+('6182301012','AIF23003','B',1,'2025/2026',1),
+('6182301013','AIF23003','B',1,'2025/2026',1),
+('6182301014','AIF23003','B',1,'2025/2026',1),
+('6182301015','AIF23003','B',1,'2025/2026',1),
+('6182301016','AIF23003','B',1,'2025/2026',1),
+
+('6182301007','AIF23004','B',2,'2025/2026',1),
 ('6182301008','AIF23004','B',2,'2025/2026',1),
 ('6182301009','AIF23004','B',2,'2025/2026',1),
+('6182301010','AIF23004','B',2,'2025/2026',1),
+('6182301011','AIF23004','B',2,'2025/2026',1),
+('6182301012','AIF23004','B',2,'2025/2026',1),
+('6182301013','AIF23004','B',2,'2025/2026',1),
+('6182301014','AIF23004','B',2,'2025/2026',1),
+('6182301015','AIF23004','B',2,'2025/2026',1),
+('6182301016','AIF23004','B',2,'2025/2026',1),
+('6182301017','AIF23004','B',2,'2025/2026',1),
+('6182301018','AIF23004','B',2,'2025/2026',1),
+
+('6182301009','AIF23005','A',2,'2025/2026',1),
 ('6182301010','AIF23005','A',2,'2025/2026',1),
 ('6182301011','AIF23005','A',2,'2025/2026',1),
-('6182301012','AIF23006','C',2,'2025/2026',1),
-('6182301013','AIF23006','C',2,'2025/2026',1),
-('6182301014','AIF23007','A',3,'2025/2026',1),
-('6182301015','AIF23007','A',3,'2025/2026',1),
-('6182301016','AIF23008','B',3,'2025/2026',1),
-('6182301017','AIF23008','B',3,'2025/2026',1),
-('6182301018','AIF23009','C',3,'2025/2026',1),
-('6182301019','AIF23010','A',3,'2025/2026',1),
-('6182301020','AIF23011','B',3,'2025/2026',1),
-('6182301021','AIF23012','A',3,'2025/2026',1),
-('6182301022','AIF23013','A',3,'2025/2026',0),
-('6182301023','AIF23014','A',2,'2024/2025',1),
-('6182301024','AIF23015','A',2,'2025/2026',1),
-('6182301025','AIF23016','B',2,'2025/2026',1);
+('6182301012','AIF23005','A',2,'2025/2026',1),
+('6182301013','AIF23005','A',2,'2025/2026',1),
+('6182301014','AIF23005','A',2,'2025/2026',1),
+('6182301015','AIF23005','A',2,'2025/2026',1),
+('6182301016','AIF23005','A',2,'2025/2026',1),
+('6182301017','AIF23005','A',2,'2025/2026',1),
+('6182301018','AIF23005','A',2,'2025/2026',1),
+('6182301019','AIF23005','A',2,'2025/2026',1),
+('6182301020','AIF23005','A',2,'2025/2026',1),
+('6182301021','AIF23005','A',2,'2025/2026',1),
+('6182301023','AIF23005','A',2,'2025/2026',1),
+('6182301024','AIF23005','A',2,'2025/2026',1),
+('6182301025','AIF23005','A',2,'2025/2026',1);
 
+-- === Kelompok & Tugas Besar for active MKs ===
+-- We'll create 2 tugas per active MK, each tugas has 3 kelompok.
+
+-- Tugas IDs will start from 1 and increment.
+INSERT INTO tugas_besar (id_user, id_rubrik, kode_mk, judul_tugas, deskripsi, deadline, status, mode_kel, min_anggota, max_anggota, is_active) VALUES
+-- AIF23001 (dosen 20250101) two tugas
+('20250101',1,'AIF23001','TB Sorting','Analisis dan perbandingan algoritma sorting','2025-01-20 23:59:00','Open','Dosen',3,5,1),
+('20250101',2,'AIF23001','TB Searching','Analisis linear vs binary search','2025-02-01 23:59:00','Open','Mahasiswa',2,4,1),
+
+-- AIF23002 (dosen 20250101)
+('20250101',3,'AIF23002','TB Graph','Implementasi BFS & DFS','2025-01-22 23:59:00','Open','Mahasiswa',2,4,1),
+('20250101',4,'AIF23002','TB Tree','Analisis pohon AVL & red-black','2025-02-05 23:59:00','Open','Dosen',3,5,1),
+
+-- AIF23003 (dosen 20250102)
+('20250102',5,'AIF23003','TB ERD','Desain ERD & normalisasi','2025-01-25 23:59:00','Open','Dosen',1,2,1),
+('20250102',6,'AIF23003','TB Normalisasi','Kasus normalisasi sampai 3NF','2025-02-10 23:59:00','Open','Mahasiswa',1,3,1),
+
+-- AIF23004 (dosen 20250102)
+('20250102',7,'AIF23004','TB Web','Pembuatan website portofolio','2025-02-01 23:59:00','Open','Dosen',2,4,1),
+('20250102',8,'AIF23004','TB API','Desain & dokumentasi REST API','2025-02-20 23:59:00','Open','Mahasiswa',2,4,1),
+
+-- AIF23005 (dosen 20250103)
+('20250103',9,'AIF23005','TB Mobile','Aplikasi mobile catatan keuangan','2025-01-28 23:59:00','Open','Dosen',2,5,1),
+('20250103',10,'AIF23005','TB UX Mobile','Studi UX & prototipe mobile','2025-02-15 23:59:00','Open','Mahasiswa',1,3,1);
+
+-- create kelompok entries (3 per tugas x 10 tugas = 30 kelompok)
+INSERT INTO kelompok (nama_kelompok) VALUES
+('Kelompok A1'),('Kelompok A2'),('Kelompok A3'),
+('Kelompok B1'),('Kelompok B2'),('Kelompok B3'),
+('Kelompok C1'),('Kelompok C2'),('Kelompok C3'),
+('Kelompok D1'),('Kelompok D2'),('Kelompok D3'),
+('Kelompok E1'),('Kelompok E2'),('Kelompok E3'),
+('Kelompok F1'),('Kelompok F2'),('Kelompok F3'),
+('Kelompok G1'),('Kelompok G2'),('Kelompok G3'),
+('Kelompok H1'),('Kelompok H2'),('Kelompok H3'),
+('Kelompok I1'),('Kelompok I2'),('Kelompok I3'),
+('Kelompok J1'),('Kelompok J2'),('Kelompok J3');
+
+-- Map kelompok to tugas_besar (order-preserving). kelompok.id_kelompok 1..30, tugas ids 1..10
+INSERT INTO tugas_besar_kelompok (id_kelompok, id_tugas) VALUES
+(1,1),(2,1),(3,1),    -- tugas 1 (AIF23001 TB Sorting)
+(4,2),(5,2),(6,2),    -- tugas 2 (AIF23001 TB Searching)
+(7,3),(8,3),(9,3),    -- tugas 3 (AIF23002 TB Graph)
+(10,4),(11,4),(12,4), -- tugas 4 (AIF23002 TB Tree)
+(13,5),(14,5),(15,5), -- tugas 5 (AIF23003 TB ERD)
+(16,6),(17,6),(18,6), -- tugas 6 (AIF23003 Normalisasi)
+(19,7),(20,7),(21,7), -- tugas 7 (AIF23004 TB Web)
+(22,8),(23,8),(24,8), -- tugas 8 (AIF23004 TB API)
+(25,9),(26,9),(27,9), -- tugas 9 (AIF23005 TB Mobile)
+(28,10),(29,10),(30,10);-- tugas 10 (AIF23005 UX Mobile)
+
+-- === user_kelompok (members) ===
+-- We must ensure every anggota is enrolled in the MK of the tugas.
+-- We'll assign members consistent with enrollment lists above.
+
+-- For brevity we assign reasonable groups respecting min/max of each tugas.
+-- Tugas 1 (id 1) min 3 max 5 -> kelompok 1..3
 INSERT INTO user_kelompok (id_user, id_kelompok, role, is_active) VALUES
-('6182301001',1,'leader',1),
-('6182301002',1,'member',1),
-('6182301003',1,'member',1),
+-- kelompok 1 (tugas 1): students 1001,1002,1003 (leader 1001)
+('6182301001',1,'leader',1),('6182301002',1,'member',1),('6182301003',1,'member',1),
+-- kelompok 2 (tugas 1): students 1004,1005,1006,1007
+('6182301004',2,'leader',1),('6182301005',2,'member',1),('6182301006',2,'member',1),('6182301007',2,'member',1),
+-- kelompok 3 (tugas 1): students 1008,1009,1010
+('6182301008',3,'leader',1),('6182301009',3,'member',1),('6182301010',3,'member',1),
 
-('6182301004',2,'leader',1),
-('6182301005',2,'member',1),
-('6182301006',2,'member',1),
+-- Tugas 2 (id 2) min 2 max 4 -> kelompok 4..6
+('6182301011',4,'leader',1),('6182301012',4,'member',1),
+('6182301013',5,'leader',1),('6182301014',5,'member',1),('6182301015',5,'member',1),
+('6182301016',6,'leader',1),('6182301017',6,'member',1),('6182301018',6,'member',1),
 
-('6182301007',3,'leader',1),
-('6182301008',3,'member',1),
-('6182301009',3,'member',1),
+-- Tugas 3 (id 3) AIF23002 min 2 max 4 kelompok 7..9
+('6182301003',7,'leader',1),('6182301004',7,'member',1),
+('6182301005',8,'leader',1),('6182301006',8,'member',1),('6182301007',8,'member',1),
+('6182301008',9,'leader',1),('6182301009',9,'member',1),('6182301010',9,'member',1),
 
-('6182301010',4,'leader',1),
-('6182301011',4,'member',1),
-('6182301012',4,'member',1),
+-- Tugas 4 (id 4) AIF23002 min 3 max 5 kelompok 10..12
+('6182301011',10,'leader',1),('6182301012',10,'member',1),('6182301013',10,'member',1),
+('6182301014',11,'leader',1),('6182301015',11,'member',1),('6182301016',11,'member',1),('6182301017',11,'member',1),
+('6182301018',12,'leader',1),('6182301019',12,'member',1),('6182301020',12,'member',1),
 
-('6182301013',5,'leader',1),
-('6182301014',5,'member',1),
-('6182301015',5,'member',1),
+-- Tugas 5 (id 5) AIF23003 min1 max2 kelompok 13..15
+('6182301005',13,'leader',1),
+('6182301006',14,'leader',1),('6182301007',14,'member',1),
+('6182301008',15,'leader',1),('6182301009',15,'member',1),
 
-('6182301016',6,'leader',1),
-('6182301017',6,'member',1),
-('6182301018',6,'member',1),
+-- Tugas 6 (id 6) AIF23003 min1 max3 kelompok 16..18
+('6182301010',16,'leader',1),('6182301011',16,'member',1),
+('6182301012',17,'leader',1),('6182301013',17,'member',1),('6182301014',17,'member',1),
+('6182301015',18,'leader',1),
 
-('6182301019',7,'leader',1),
-('6182301020',7,'member',1),
-('6182301021',7,'member',1),
+-- Tugas 7 (id 7) AIF23004 min2 max4 kelompok 19..21
+('6182301007',19,'leader',1),('6182301008',19,'member',1),('6182301009',19,'member',1),
+('6182301010',20,'leader',1),('6182301011',20,'member',1),
+('6182301012',21,'leader',1),('6182301013',21,'member',1),('6182301014',21,'member',1),
 
-('6182301022',8,'leader',1),
-('6182301023',8,'member',1),
-('6182301024',8,'member',1),
+-- Tugas 8 (id 8) AIF23004 min2 max4 kelompok 22..24
+('6182301015',22,'leader',1),('6182301016',22,'member',1),
+('6182301017',23,'leader',1),('6182301018',23,'member',1),('6182301019',23,'member',1),
+('6182301020',24,'leader',1),('6182301021',24,'member',1),
 
-('6182301025',9,'leader',1),
-('6182301001',9,'member',1),
-('6182301002',9,'member',1);
+-- Tugas 9 (id 9) AIF23005 min2 max5 kelompok 25..27
+('6182301009',25,'leader',1),('6182301010',25,'member',1),('6182301011',25,'member',1),('6182301012',25,'member',1),
+('6182301013',26,'leader',1),('6182301014',26,'member',1),('6182301015',26,'member',1),
+('6182301016',27,'leader',1),('6182301017',27,'member',1),('6182301018',27,'member',1),
 
-INSERT INTO komponen_nilai (id_komponen, id_rubrik, nama_komponen, bobot, catatan, jam, tanggal) VALUES
-(1,1,'Laporan',40,'Laporan lengkap','10:00:00','2025-01-15'),
-(2,1,'Presentasi',30,'Presentasi 10 menit','13:00:00','2025-01-15'),
-(3,2,'Koding',50,'Implementasi sesuai standar','09:00:00','2025-01-18'),
-(4,2,'Dokumentasi',20,'Dokumentasi API','11:00:00','2025-01-18'),
-(5,3,'ERD',40,'ERD lengkap','14:00:00','2025-01-20'),
-(6,4,'Frontend',30,'Tampilan responsif','15:00:00','2025-01-22'),
-(7,5,'Backend',40,'API & DB','16:00:00','2025-01-25'),
-(8,6,'Simulasi',50,'Simulasi scheduler','09:30:00','2025-01-26'),
-(9,7,'Capture Analysis',60,'Analisis trafik','10:30:00','2025-01-28'),
-(10,8,'UAT',30,'User acceptance test','13:30:00','2025-02-01'),
-(11,9,'Modeling',40,'Model AI','09:00:00','2025-02-03'),
-(12,10,'Regression',50,'Hasil regresi','10:00:00','2025-02-04'),
-(13,11,'Query Tune',40,'Optimisasi query','12:00:00','2025-02-06'),
-(14,12,'Pentest',60,'Laporan pentest','14:00:00','2025-02-08'),
-(15,13,'Prototype',30,'Prototype UI','15:00:00','2025-02-09'),
-(16,14,'Replication',50,'Skema replikasi','09:00:00','2025-02-11'),
-(17,15,'Design Pattern',40,'Penerapan pattern','11:00:00','2025-02-13'),
-(18,16,'Rendering',30,'Gambar 3D','10:30:00','2025-02-14'),
-(19,17,'Detection',50,'Akurasi deteksi','13:30:00','2025-02-16'),
-(20,18,'Clustering',50,'Evaluasi cluster','09:30:00','2025-02-18'),
-(21,19,'Module',40,'Implementasi modul SI','11:00:00','2025-02-20'),
-(22,20,'Deployment',40,'Deploy di cloud','15:00:00','2025-02-22'),
-(23,21,'Soal',20,'Pengumpulan soal','10:00:00','2024-11-20'),
-(24,22,'Pembuktian',30,'Pembuktian teorema','09:00:00','2024-11-22'),
-(25,23,'Case Study',30,'Analisa kasus','08:00:00','2024-11-25'),
-(26,24,'Timeline',20,'Timeline lengkap','11:00:00','2024-11-27'),
-(27,25,'Penulisan',30,'Artikel teknis','14:00:00','2024-11-28'),
-(28,26,'Rangkaian',40,'Rangkaian digital','16:00:00','2024-11-30'),
-(29,27,'FP Paradigm',30,'Fungsional programming','10:00:00','2024-12-02'),
-(30,28,'Stat Anal',40,'Analisis statistik','12:00:00','2024-12-04');
+-- Tugas 10 (id 10) AIF23005 min1 max3 kelompok 28..30
+('6182301019',28,'leader',1),('6182301020',28,'member',1),
+('6182301021',29,'leader',1),('6182301023',29,'member',1),
+('6182301024',30,'leader',1),('6182301025',30,'member',1);
 
-INSERT INTO nilai (id_nilai, id_user, id_tugas, nilai_pribadi, nilai_kelompok) VALUES
-(1,'6182301001',1,88,90),
-(2,'6182301002',1,85,90),
-(3,'6182301003',1,80,90),
-(4,'6182301004',2,92,88),
-(5,'6182301005',2,87,88),
-(6,'6182301006',3,90,0),
-(7,'6182301007',4,95,0),
-(8,'6182301008',5,78,85),
-(9,'6182301009',6,82,80),
-(10,'6182301010',7,88,92),
-(11,'6182301011',8,75,80),
-(12,'6182301012',9,70,78),
-(13,'6182301013',10,93,95),
-(14,'6182301014',11,85,88),
-(15,'6182301015',12,80,82),
-(16,'6182301016',13,77,79),
-(17,'6182301017',14,84,86),
-(18,'6182301018',15,91,0),
-(19,'6182301019',16,73,75),
-(20,'6182301020',17,89,90),
-(21,'6182301021',18,68,70),
-(22,'6182301022',19,0,0),
-(23,'6182301023',20,92,93),
-(24,'6182301024',21,85,0),
-(25,'6182301025',22,88,0),
-(26,'6182301001',23,78,0),
-(27,'6182301002',24,81,0),
-(28,'6182301003',25,79,0),
-(29,'6182301004',26,86,0),
-(30,'6182301005',27,83,0);
+-- === nilai (sample) ===
+INSERT INTO nilai (id_user, id_tugas, nilai_pribadi, nilai_kelompok) VALUES
+-- some sample nilai consistent with group membership
+('6182301001',1,88,90),
+('6182301002',1,85,90),
+('6182301003',1,80,90),
+('6182301004',2,92,88),
+('6182301005',2,87,88),
+('6182301006',3,90,0),
+('6182301007',4,95,0),
+('6182301008',5,78,85),
+('6182301009',6,82,80),
+('6182301010',7,88,92),
+('6182301011',8,75,80),
+('6182301012',9,70,78),
+('6182301013',10,93,95);
 
+-- === komponen_nilai examples for some rubriks ===
+INSERT INTO komponen_nilai (id_rubrik, nama_komponen, bobot, catatan, jam, tanggal) VALUES
+(1,'Laporan',40,'Laporan lengkap','10:00:00','2025-01-15'),
+(1,'Presentasi',30,'Presentasi 10 menit','13:00:00','2025-01-15'),
+(2,'Koding',50,'Implementasi sesuai standar','09:00:00','2025-01-18');
+
+-- === jadwal_penilaian examples ===
 INSERT INTO jadwal_penilaian (id_rubrik, tanggal, jam, ruangan) VALUES
-(1,'2025-01-15','10:00:00','R101'),
-(1,'2025-01-15','13:00:00','R101'),
-(2,'2025-01-18','09:00:00','Lab 1'),
-(2,'2025-01-18','11:00:00','Lab 1'),
-(3,'2025-01-20','14:00:00','R102'),
-(4,'2025-01-22','15:00:00','R103'),
-(5,'2025-01-25','16:00:00','R104'),
-(6,'2025-01-26','09:30:00','Lab 2'),
-(7,'2025-01-28','10:30:00','Lab 3'),
-(8,'2025-02-01','13:30:00','R201'),
-(9,'2025-02-03','09:00:00','Lab 4'),
-(10,'2025-02-04','10:00:00','R202'),
-(11,'2025-02-06','12:00:00','R203'),
-(12,'2025-02-08','14:00:00','R204'),
-(13,'2025-02-09','15:00:00','R205'),
-(14,'2025-02-11','09:00:00','Lab 5'),
-(15,'2025-02-13','11:00:00','R301'),
-(16,'2025-02-14','10:30:00','R302'),
-(17,'2025-02-16','13:30:00','Lab CV'),
-(18,'2025-02-18','09:30:00','R303'),
-(19,'2025-02-20','11:00:00','R304'),
-(20,'2025-02-22','15:00:00','Cloud Lab'),
-(21,'2024-11-20','10:00:00','R401'),
-(22,'2024-11-22','09:00:00','R402'),
-(23,'2024-11-25','08:00:00','R403'),
-(24,'2024-11-27','11:00:00','R404'),
-(25,'2024-11-28','14:00:00','R405'),
-(26,'2024-11-30','16:00:00','R406'),
-(27,'2024-12-02','10:00:00','R407'),
-(28,'2024-12-04','12:00:00','R408'); 
+(1,'2025-01-15','10:00:00','R101'),(2,'2025-01-18','09:00:00','Lab 1');
+
+-- EOF 

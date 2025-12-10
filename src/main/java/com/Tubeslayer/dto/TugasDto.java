@@ -12,7 +12,7 @@ public class TugasDto {
     private String nama;
 
     @NotNull(message = "Deadline wajib diisi")
-    private LocalDate deadline; // Spring Boot akan mengkonversi String YYYY-MM-DD
+    private LocalDate deadline; // Spring Boot konversi ke String YYYY-MM-DD
 
     @NotBlank(message = "Deskripsi tugas wajib diisi")
     private String deskripsi;
