@@ -72,7 +72,9 @@
                     <span class="role" th:text="${user.role}">Peran Admin</span>
                 </div>
 
-                <img src="/icon/pfp.png" class="pfp">
+                <a th:href="@{/profil}">
+                    <img src="/icon/pfp.png" class="pfp" alt="pfp">
+                </a>
 
                 <button class="logout" id="logoutButton">
                     <img src="/icon/logout.png" class="logout-btn">
@@ -136,13 +138,12 @@
                             <tr th:each="data, iStat : ${tugasDataList}" class="page-item">
                                 <td th:text="${iStat.count} + '.'">1.</td>
                                 <td>
-                                    <a th:href="@{/admin/tugas-detail(idTugas=${data.idTugas})}" 
-                                    class="task-link" 
-                                    th:text="${data.judulTugas}">
-                                    Tugas Besar Tahap 1
+                                    <a th:href="@{/admin/tugas-detail(idTugas=${data.idTugas})}" class="task-link"
+                                        th:text="${data.judulTugas}">
+                                        Tugas Besar Tahap 1
                                     </a>
                                 </td>
-                                </tr>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

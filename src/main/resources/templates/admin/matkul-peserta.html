@@ -71,7 +71,9 @@
                     <span class="name" th:text="${user.nama}">Nama</span>
                     <span class="role" th:text="${user.role}">Role</span>
                 </div>
-                <img src="/icon/pfp.png" class="pfp">
+                <a th:href="@{/profil}">
+                    <img src="/icon/pfp.png" class="pfp" alt="pfp">
+                </a>
                 <button class="logout" id="logoutButton">
                     <img src="/icon/logout.png" class="logout-btn">
                 </button>
@@ -79,7 +81,7 @@
         </div>
 
         <div class="mk-tab" th:data-mk-kode="${mkDetail?.kodeMK}">
-             <button class="tab" data-tab-target="kuliah"
+            <button class="tab" data-tab-target="kuliah"
                 th:attr="data-target-url=@{/admin/arsip-matkul-detail(kodeMk=${mkDetail.kodeMK})}"
                 onclick="window.location.href=this.getAttribute('data-target-url')"> Kuliah
             </button>
