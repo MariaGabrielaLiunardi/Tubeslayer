@@ -1,11 +1,13 @@
 package com.Tubeslayer.controller;
 
 import com.Tubeslayer.dto.MKArchiveDTO;
+import com.Tubeslayer.entity.Kelompok;
 import com.Tubeslayer.entity.MataKuliah;
 import com.Tubeslayer.entity.MataKuliahDosen;
 import com.Tubeslayer.entity.MataKuliahMahasiswa;
 import com.Tubeslayer.entity.TugasBesar;
 import com.Tubeslayer.entity.User;
+import com.Tubeslayer.repository.KelompokRepository;
 import com.Tubeslayer.repository.MataKuliahDosenRepository;
 import com.Tubeslayer.repository.MataKuliahMahasiswaRepository;
 import com.Tubeslayer.repository.MataKuliahRepository;
@@ -59,6 +61,9 @@ public class AdminController {
 
     @Autowired
     private MataKuliahMahasiswaRepository mkMahasiswaRepo;
+
+    @Autowired
+    private KelompokRepository kelompokRepository;
 
     public AdminController(
             DashboardAdminService dashboardService,
@@ -1572,41 +1577,33 @@ public class AdminController {
     }
     // buat halaman halaman tubes detail tugas yang udh di archive
     @GetMapping("/tugas-detail")
-    public String tugasDetail(
-            @RequestParam("idTugas") Integer idTugas,
-            @AuthenticationPrincipal CustomUserDetails user,
-            Model model) {
+    public String tugasDetailAdmin(@RequestParam("idTugas") Integer idTugas, Model model) {
 
-        if (idTugas == null) {
-            return "redirect:/admin/dashboard";
-        }
+        // Ambil data tugas
+        TugasBesar tugas = tugasRepo.findById(idTugas)
+                .orElseThrow(() -> new IllegalArgumentException("Tugas tidak ditemukan: " + idTugas));
 
-        Optional<TugasBesar> tugasOpt = tugasRepo.findById(idTugas);
-
-        if (!tugasOpt.isPresent()) {
-            return "redirect:/admin/dashboard";
-        }
-
-        TugasBesar tugas = tugasOpt.get();
         MataKuliah mkDetail = tugas.getMataKuliah();
 
-        // Ambil koordinator dosen
-        MataKuliahDosen koordinator = null;
-        try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(
-                    mkDetail.getKodeMK(), true);
-            if (!dosenList.isEmpty()) {
-                koordinator = dosenList.get(0);
-            }
-        } catch (Exception e) {
-            System.err.println("Error fetching coordinator: " + e.getMessage());
-        }
+        // Ambil jumlah kelompok
+        Long jumlahKelompok = tugasRepo.getKelompokCount(idTugas);
 
-        model.addAttribute("user", user.getUser());
+        // Ambil jumlah submission (opsional)
+        Long jumlahSubmission = tugasRepo.getSubmissionCount(idTugas);
+
+        // Ambil semua kelompok dan anggota jika mau ditampilkan
+        List<Kelompok> kelompokList = kelompokRepository.findByTugas(tugas.getIdTugas());
+
+        // Tambahkan ke model
         model.addAttribute("tugas", tugas);
         model.addAttribute("mkDetail", mkDetail);
-        model.addAttribute("koordinator", koordinator);
+        model.addAttribute("kelompokList", kelompokList);
+        model.addAttribute("jumlahKelompok", jumlahKelompok);
+        model.addAttribute("jumlahSubmission", jumlahSubmission);
+        model.addAttribute("maxAnggota", tugas.getMaxAnggota());
+        model.addAttribute("modeKelompok", tugas.getStatus()); // "Dosen" / "Mahasiswa"
 
-        return "admin/arsip-hlmanTubes";
+        return "admin/tugas-detail"; // nama thymeleaf HTML
     }
+
 }

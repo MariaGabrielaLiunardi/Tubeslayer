@@ -59,10 +59,14 @@
                 <span class="name" th:text="${user.nama}">Nama</span>
                 <span class="role" th:text="${user.role}">Role</span>
             </div>
-            <img src="/icon/pfp.png" class="pfp" alt="pfp">
-            <button type="button" class="logout">
-                <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
-            </button>
+            <a th:href="@{/profil}">
+                <img src="/icon/pfp.png" class="pfp" alt="pfp">
+            </a>
+            <a th:href="@{/logout}" class="logout-link">
+                <button type="button" class="logout">
+                    <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
+                </button>
+            </a>
         </div>
     </div>
         <div class="content-section">

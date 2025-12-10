@@ -476,6 +476,11 @@ header .image-text .header-text{
 }
 
 
+.task-link{
+    text-decoration: none !important;
+    color: black !important;
+}
+
 
 
 
