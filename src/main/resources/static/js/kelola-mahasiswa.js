@@ -769,8 +769,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
-
 const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
 const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null;
 
