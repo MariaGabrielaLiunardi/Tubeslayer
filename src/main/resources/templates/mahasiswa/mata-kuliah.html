@@ -62,7 +62,9 @@
                     <span class="role" th:text="${user.role}">Mahasiswa</span>
                 </div>
 
-                <img src="/icon/pfp.png" class="pfp">
+                <a th:href="@{/profil}">
+                    <img src="/icon/pfp.png" class="pfp" alt="pfp">
+                </a>
 
                 <button class="logout" id="logoutButton">
                     <img src="/icon/logout.png" class="logout-btn">
@@ -79,7 +81,7 @@
                 <div class="card" th:each="enroll, iStat : ${enrollList}"
                     th:attr="data-kode-mk=${enroll.mataKuliah.kodeMK}">
                     <a th:href="@{/mahasiswa/matkul-detail(mk=${enroll.mataKuliah.kodeMK}, colorIndex=${enroll.colorIndex})}"
-                    style="text-decoration: none; color: inherit;">
+                        style="text-decoration: none; color: inherit;">
 
                         <div class="card-img" th:classappend="'gradient-' + (${enroll.colorIndex} + 1)"></div>
 
