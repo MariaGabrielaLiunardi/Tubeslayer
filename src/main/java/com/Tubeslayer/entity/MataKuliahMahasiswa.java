@@ -53,4 +53,15 @@ public class MataKuliahMahasiswa {
         MataKuliahMahasiswa mk = (MataKuliahMahasiswa) o;
         return id != null && id.equals(mk.id);
     }
+
+    @Transient
+    private int colorIndex; // untuk frontend, tidak disimpan ke DB
+
+    public int getColorIndex() {
+        return colorIndex;
+    }
+
+    public void setColorIndex(int colorIndex) {
+        this.colorIndex = colorIndex;
+    }
 }
