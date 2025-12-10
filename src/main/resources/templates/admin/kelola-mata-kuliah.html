@@ -152,27 +152,39 @@
 
             <!-- VIEW 1: TABLE -->
             <div class="custom-table-container" id="table-view">
-                <div class="table-header-row">
-                    <span>No</span>
-                    <span>Kode MK</span>
-                    <span>Nama Mata Kuliah</span>
-                    <span>SKS</span>
-                    <span>Status</span>
-                </div>
+             <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode MK</th>
+                        <th>Nama Mata Kuliah</th>
+                        <th>SKS</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
 
-                <div th:each="mk, iterStat : ${matkulList}">
-                    <div class="data-row">
-                        <span th:text="${iterStat.count}">1</span>
-                        <span th:text="${mk.kodeMatkul}">Kode</span>
-                        <span th:text="${mk.namaMatkul}">Nama</span>
-                        <span th:text="${mk.sks}">3</span>
-                        <span>
+                <tbody id="table-body">
+                    <tr th:each="mk, iterStat : ${matkulList}" 
+                        th:data-id="${mk.kodeMK}"
+                        class="data-row">
+                        <td th:text="${iterStat.index + 1}">1</td>
+                        <td th:text="${mk.kodeMK}">Kode</td>
+                        <td th:text="${mk.nama}">Nama</td>
+                        <td th:text="${mk.sks}">3</td>
+                        <td>
                             <span th:classappend="${mk.active} ? 'status-badge active' : 'status-badge inactive'"
-                                  th:text="${mk.active} ? 'Aktif' : 'Nonaktif'">
+                                th:text="${mk.active} ? 'Aktif' : 'Nonaktif'">
                             </span>
-                        </span>
-                    </div>
-                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+            <div class="pagination-container">
+                <button id="prev-page" class="page-btn">‹</button>
+                <span id="page-info" class="page-info">1 / 1</span>
+                <button id="next-page" class="page-btn">›</button>
             </div>
 
             <!-- FOOTER -->
@@ -181,7 +193,9 @@
                     <button class="btn btn-delete" id="btn-delete">Hapus Mahasiswa</button>
                     <button class="btn btn-add" id="btn-add">Tambah Mahasiswa</button>
                 </div>
+
             </div>
+
 
             <!-- VIEW 2: PILIH CARA -->
             <div class="pilih-cara" id="pilih-cara">

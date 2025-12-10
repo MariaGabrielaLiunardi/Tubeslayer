@@ -19,6 +19,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     
     // Opsional: Cari by email
     Optional<User> findByEmail(String email);
+    List<User> findByRoleAndIsActiveTrue(String role);
+    List<User> findByRoleAndIsActiveFalse(String role);
 
     long countByRoleAndIsActive(String role, boolean isActive);
     
