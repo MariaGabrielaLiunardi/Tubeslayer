@@ -104,9 +104,7 @@
             <div class="content-div">
                 <a th:each="enroll : ${enrollList}"
                 th:href="@{/mahasiswa/matkul-detail(mk=${enroll.mataKuliah.kodeMK})}"
-                
                 th:class="'content-item gradient-' + (${enroll.colorIndex} + 1)"
-                
                 style="text-decoration: none; color: inherit;">
                     <span class="nama-mk" th:text="${enroll.mataKuliah.nama}">Nama MK</span>
                     <span class="kelas" th:text="'Kelas ' + ${enroll.kelas}">Kelas</span>

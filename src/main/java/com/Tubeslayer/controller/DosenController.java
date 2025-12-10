@@ -88,31 +88,43 @@ public class DosenController {
         return "dosen/dashboard";
     }
 
- @GetMapping("/dosen/mata-kuliah")
-public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model model) {
-    
-    String idDosen = user.getIdUser(); 
-    List<MataKuliahDosen> relasiMKDosen = mkDosenRepo.findById_IdUserAndIsActive(idDosen, true);
+    @GetMapping("/dosen/mata-kuliah")
+    public String mataKuliah(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+        
+        // 1. Ambil data menggunakan method yang ada di Repository kamu
+        // Perhatikan: Gunakan findById_IdUserAndIsActive sesuai file repo yang kamu kirim
+        List<MataKuliahDosen> mataKuliahDosenList = mkDosenRepo.findById_IdUserAndIsActive(user.getIdUser(), true);
 
-    relasiMKDosen.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
-    
-    model.addAttribute("mataKuliahDosenList", relasiMKDosen);
-    model.addAttribute("user", user);
-
-    LocalDate today = LocalDate.now();
-    int year = today.getYear();
-
-    String semesterPenuh = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) 
-            ? "Ganjil " + year + "/" + (year + 1)
-            : "Genap " + (year - 1) + "/" + year;
+        // 2. --- LOGIKA WARNA KONSISTEN (HASH CODE) ---
+        int gradientCount = 4;
+        for (MataKuliahDosen mkd : mataKuliahDosenList) {
+            String kodeMK = mkd.getMataKuliah().getKodeMK();
             
-    model.addAttribute("semesterTahunAjaran", semesterPenuh); 
-    
-    String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
-    model.addAttribute("semesterLabel", semesterLabel);
+            // Hitung index warna berdasarkan Kode MK (misal: "IF123" selalu menghasilkan angka yang sama)
+            int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
+            
+            // Set ke dalam objek (pastikan ada setter/field transient di entity MataKuliahDosen)
+            mkd.setColorIndex(colorIndex);
+        }
+        // ---------------------------------------------
 
-    return "dosen/mata-kuliah";
-}
+        // 3. Sort agar rapi berdasarkan nama (Opsional)
+        mataKuliahDosenList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
+
+        model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
+        model.addAttribute("user", user);
+
+        // Logic tanggal & semester (Biarkan seperti semula)
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        String semesterTahunAjaran = (today.getMonthValue() >= 7) ? year + "/" + (year + 1) : (year - 1) + "/" + year;
+        String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
+        
+        model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
+        model.addAttribute("semesterLabel", semesterLabel);
+
+        return "dosen/mata-kuliah";
+    }
 
     @GetMapping("/dosen/matkul-detail")
     public String matkulDetail(@RequestParam String kodeMk,
