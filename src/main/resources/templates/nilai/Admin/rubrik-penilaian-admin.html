@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rubrik Penilaian Admin</title>
+        <link rel="stylesheet" href="../../../../resources/static/css/rubrik-penilaian-admin.css">
+        <script src="../../../static/js/rubrik-penilaian-admin.js" defer></script>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
+    </head>
+
+    <body>
+        <nav class="sidebar close">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img src="../../../static/logo/blue-logo.png" alt="logo">
+                    </span>
+
+                    <div class ="text header-text">
+                        <span class="name">Tubeslayer</span>
+                    </div>
+                </div>
+            </header>
+            <i class='bx bx-chevron-right toggle'></i> 
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link active">
+                            <a href="#">
+                                <img src="../../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                                <span class="text nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">
+                                <img src="../../../static/icon/database.png" alt="Database Icon" class="icon database-icon">
+                                <span class="text nav-text">Data</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">
+                                <img src="../../../static/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                                <span class="text nav-text">Arsip Mata Kuliah</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="home">
+            <div class="header">
+                <div class="left-section">
+                    <span class="dashboard-title"></span>
+                </div>
+                <div class="right-section">
+                    <div class="info">
+                        <span class="name">Maria Gabriela</span>
+                        <span class="role">Admin</span>
+                    </div>
+                    <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
+                    <button type="button" class="logout">
+                        <img src="../../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-segmented-control">
+                <div class="kuliah-segment">
+                    Kuliah
+                </div>
+
+                <div class="Daftar-Peserta-segment">
+                    Daftar Peserta
+                </div>
+
+                <div class="nav-active">
+                    Nilai
+                </div>
+            </div>
+            
+            <div class="container">
+                <div class="rectangle-blue">
+                    <div class="tb-title">
+                        <img src="../../../static/icon/bookj ver4.png" class="tb-icon">
+                        <span class="tb-text">Tugas Besar Tahap 1</span>
+                    </div>
+                </div>
+                
+                <div class="rectangle-white">
+                    <div class="breadcrumb">
+                        <a href="jadwal-penilaian-dosen.html" class="crumb">Jadwal Penilaian</a>
+                        <span class="crumb"> > </span>
+                        <span class="crumb current">Edit Jadwal Penilaian</span>
+                        <span class="crumb"> > </span>
+                        <a href="jadwal-penilaian-dosen.html" class="crumb">Jadwal Penilaian</a>
+                        <span class="crumb"> > </span>
+                        <span class="crumb current">Rubrik Penilaian</span>
+                    </div>
+
+                    <div class="rectangle-yellow">
+                        <div class="assignment-table-wrapper">
+                            <div class="assignment-header">
+                                <div class="col-komponen">Komponen Penilaian</div>
+                                <div class="col-bobot">Bobot (%)</div>
+                                <div class="col-keterangan">Keterangan</div>
+                            </div>
+
+                            <div class="assignment-row">
+                                <div class="col-isi-komponen"></div>
+                                <div class="col-isi-bobot"></div>
+                                <div class="col-isi-keterangan"></div>
+                            </div>
+
+                            <div class="assignment-row">
+                                <div class="col-isi-komponen"></div>
+                                <div class="col-isi-bobot"></div>
+                                <div class="col-isi-keterangan"></div>
+                            </div>
+
+                            <div class="assignment-row">
+                                <div class="col-isi-komponen"></div>
+                                <div class="col-isi-bobot"></div>
+                                <div class="col-isi-keterangan"></div>
+                            </div>
+
+                            <div class="assignment-row">
+                                <div class="col-isi-komponen"></div>
+                                <div class="col-isi-bobot"></div>
+                                <div class="col-isi-keterangan"></div>
+                            </div>
+                        </div>
+
+                        <div class="total-bobot">
+                                <div class="total">Total Bobot</div>
+                                <div class="bobot">-</div> 
+                        </div>
+
+                        <div class="tombol-aksi">
+                                <a href="dashboard-nilai-admin.html"><button class="btn-kembali">Kembali</button></a>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

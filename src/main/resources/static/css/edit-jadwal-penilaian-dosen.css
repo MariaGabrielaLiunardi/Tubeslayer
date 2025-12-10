@@ -15,8 +15,8 @@
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 
-    --nav-primary-blue: #2269a3; 
-    --nav-active-blue: #6da8ce;  
+    --nav-primary-blue: #2269a3; /* Biru tua untuk inactive */
+    --nav-active-blue: #6da8ce;  /* Biru muda untuk active */
     --nav-text-color: #ffffff;
 }
 
@@ -184,11 +184,6 @@ header .image-text .header-text{
     pointer-events: none; 
 }
 
-.sidebar.close ~ .home {
-    filter: blur(0px); 
-    pointer-events: auto;
-}
-
 .sidebar:not(.close) ~ .home {
     filter: blur(3px) brightness(0.7); 
     transition: var(--tran-05); 
@@ -274,21 +269,25 @@ header .image-text .header-text{
 }
 
 .rectangle-wrapper{
-    /* removed: not used on dashboard-nilai-dosen.html; kept as placeholder in other files */
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
 /* Kontainer Utama Navigasi */
 .nav-segmented-control {
     display: flex;
     width: 100%;
-    max-width: 800px; 
+    max-width: 800px; /* Lebar maksimal */
     height: 80px;
     background-color: var(--nav-primary-blue);
-    border-radius: 40px; 
+    border-radius: 40px; /* Sudut membulat penuh (setengah dari tinggi) */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden; 
+    overflow: hidden; /* Penting agar sudut melengkung sempurna */
     font-family: Sen;
-    margin-top: 30px; 
+    margin-top: 30px; /* Contoh margin agar tidak menempel ke header */
     margin-left: 100px;
 }
 
@@ -303,12 +302,12 @@ header .image-text .header-text{
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s;
-    padding: 0 10px; 
+    padding: 0 10px; /* Padding horizontal */
 }
 
 /* Hover effect untuk segmen inactive */
 .nav-segmented-control > div:hover:not(.nav-active) {
-    background-color: rgba(255, 255, 255, 0.1); 
+    background-color: rgba(255, 255, 255, 0.1); /* Sedikit gelap/terang saat di-hover */
 }
 
 /* Style untuk Segmen Aktif */
@@ -318,27 +317,30 @@ header .image-text .header-text{
     border-radius: 40px;
 }
 
+/* Memastikan sudut kanan segmen terakhir (jika aktif) tetap bulat sempurna */
 .nav-segmented-control > div:last-child {
     border-top-right-radius: 40px; 
     border-bottom-right-radius: 40px;
 }
 
-
+/* Move blue active/background from the Dashboard item to the Open Book item
+   without changing HTML: override the original active anchor and apply
+   the blue background to the second menu item (Open Book). */
 .menu-links li.nav-link.active a {
-    background-color: transparent; 
+    background-color: transparent; /* neutralize existing active rule */
 }
 
 .menu-links li:nth-child(2) a {
-    background-color: #C1EBFF; 
-    border-radius: 10px; 
+    background-color: #C1EBFF; /* same blue as active */
+    border-radius: 10px; /* match anchor rounding used elsewhere */
 }
 
 .menu-links li:nth-child(2) a .text {
-    color: black; 
+    color: black; /* keep text readable on blue */
     font-weight: 600;
 }
 
-
+/* Hover effect on Dashboard icon (first menu item) */
 .menu-links li:nth-child(1) a:hover {
     background-color: #C1EBFF;
 }
@@ -353,35 +355,22 @@ header .image-text .header-text{
     align-items: center;
 }
 
-/* Rectangle putih */
-.rectangle-white {
-    width: 90%; /* Mengganti 802px menjadi lebih fleksibel */
-    max-width: 1648px; /* Batasan lebar maksimum */
-    height: 710px;
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;        /* center horizontally */
-    justify-content: center;     /* center vertically */
-    margin-top: 100px;
-}
-
-/* Rectangle biru */
+/* Rectangle biru di depan */
 .rectangle-blue {
-    width: 1650px;
+    width: 90%; 
+    max-width: 1648px;
     height: 220px;       
     background: #CCF0F7; 
-    border-radius: 15px;
-    position: absolute;
-    top: 0;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    position: relative;
     z-index: 10;          
     display: flex;
     align-items: center;
     padding-left: 40px;
+    margin-top: 10px; /* Move it down from the segmented control */
 }
 
 .tb-title {
@@ -391,85 +380,177 @@ header .image-text .header-text{
 }
 
 .tb-icon {
-    width: 120px;
+    width: 150px;
+    border-radius: 30px;
 }
 
 .tb-text {
     font-size: 36px;
     font-weight: 700;
+    
 }
 
-/* Cards Container - arrange cards horizontally and centered */
-.card-container {
-    display: flex;
-    flex-direction: row;      /* layout cards in a horizontal row */
-    gap: 100px;               /* spacing between cards */
-    align-items: center;     /* vertically center cards */
-    justify-content: center; /* horizontally center all cards in the middle */
-    flex-wrap: wrap;         /* allow wrapping on small screens */
-    padding: 20px;           /* padding inside container */
-    margin-top: 150px;
-}
-
-.card {
-    width: 400px;
-    height: 400px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 12px 35px rgba(0,0,0,0.2);
-    text-align: center;
-    padding: 0;
+/* Rectangle putih */
+.rectangle-white {
+    width: 90%; 
+    max-width: 1648px; 
+    min-height: 610px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;    /* push icon area to top, title to bottom */
     align-items: center;
-    margin: 0;
-    overflow: hidden;                  /* clip content to card border */
-    position: relative;
-    text-decoration: none;
-    color: black;
+    justify-content: flex-start; /* Align content to the top */
+    margin-top: -15px; /* Adjust this negative margin to create a small overlap with blue */
+    padding-top: 15px; /* Compensate for the negative margin */
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
-.card::before {
-    content: '';
+.rectangle-yellow {
+    width: calc(100% - 80px);
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;                       /* full card width */
-    height: 320px;                     /* overlay height, leaves ~80px for title */
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, rgba(100, 180, 220, 0.8) 100%);
-    border-radius: 20px 20px 0 0;
-    z-index: 1;
+    top: 100px; /* **CRUCIAL:** Move it 100px above the top edge of .rectangle-white */
+    height: 480px; /* Let content define height */
+    background: #FFF5F1; /* Light yellow color */
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 15; /* Ensure it is above the blue and white boxes */
+    padding: 30px; /* Internal padding for the content */
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
 }
 
-.card img {
-    width: 200px;
-    height: auto;
-    margin: 0;
-    padding-top: 50px;                /* space from top of overlay */
-    position: relative;
-    z-index: 2;                        /* icon sits on top of overlay */
+.assignment-table-wrapper {
+    width: 100%;
+    padding: 0; /* Remove padding as .rectangle-yellow already has it */
 }
 
-.card p {
-    font-size: 28px;
-    font-weight: 600;
-    margin: 0;
-    padding: 10px 16px 12px 16px;
-    position: relative;
-    z-index: 3;                        /* title on top of everything */                /* ensure title area is white */
+.assignment-header {
+    display: flex;
+    gap: 25px;
+    border-radius: 10px;
+    padding: 0; 
+    font-weight: bold;
+    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    color: black;
+    margin-bottom: 10px;
+    justify-content: flex-start;
 }
 
-.card {
+.col-komponen {
+    width: 100%; /* Diubah dari 50% */
+    text-align: left;
+    background-color: #CDE8F6;
+    border-radius: 15px;
+    padding: 15px 15px;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;          /* jarak antar item */
+    font-size: 28px;   /* perbesar font */
+    text-align: left;  /* memastikan tetap ke kiri */
+    margin-top: 50px;
+    margin-right: 1000px;
+}
+
+.breadcrumb .crumb {
+    color: #333;
+    text-decoration: none; /* hilangkan underline link */
+}
+
+.breadcrumb .crumb:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .current {
+    color: #000;
+}
+
+.btn-simpan, .btn-rilis {
+    padding: 20px 20px;
+    border: none;
+    border-radius: 15px;
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    font-weight: 600;
+    font-size: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
 }
 
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+.btn-simpan {
+    background-color: black;
+    color: white;
+    transition: background-color 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
 }
 
-.card::before {
-    pointer-events: none; /* WAJIB supaya hover ketemu card */
+.btn-simpan:hover {
+    background-color: #222; 
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
+
+.btn-rilis {
+    background-color: black;
+    color: white;
+}
+
+.btn-rilis:hover {
+    background-color: #222; /* slightly lighter than pure black */
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.tombol-aksi {
+    position: absolute;
+    left: 30px; 
+    bottom: 30px; 
+    display: flex;
+    gap: 10px;
+    z-index: 25;
+}
+
+.assignment-row{
+    display: flex;
+    gap: 25px;
+    border-radius: 10px;
+    padding: 0; 
+    font-weight: bold;
+    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    color: black;
+    margin-bottom: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.col-isi-kel {
+    flex: 1;                 /* semua label punya lebar seragam */
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px 20px;
+    border: 1px solid black;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Kolom Input */
+.input-wrapper {
+    flex: 1;               
+}
+
+.date-picker,
+.time-picker {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: 1px solid #888;
+}
+
