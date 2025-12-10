@@ -27,3 +27,15 @@
 //     localStorage.removeItem("currentUser");
 //     window.location.href = "/login";
 // });
+
+const role = document.getElementById("profil-role").textContent.trim();
+
+document.getElementById("sidebar-admin").style.display = 
+    role === "Admin" ? "block" : "none";
+
+document.getElementById("sidebar-dosen").style.display = 
+    role === "Dosen" ? "block" : "none";
+
+document.getElementById("sidebar-mahasiswa").style.display = 
+    role === "Mahasiswa" ? "block" : "none";
+
