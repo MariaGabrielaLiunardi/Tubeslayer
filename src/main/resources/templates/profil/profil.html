@@ -53,7 +53,7 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="/admin/arsip-mata-kuliah">
                             <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
                             <span class="text nav-text">Arsip Mata Kuliah</span>
                         </a>
@@ -74,9 +74,11 @@
             </div>
 
             <div class="right-section">
-                <button class="logout">
-                    <img src="/icon/logout.png" class="logout-btn">
+            <a th:href="@{/logout}" class="logout-link">
+                <button type="button" class="logout">
+                    <img src="/icon/logout.png" class="logout-btn" alt="logo-logout">
                 </button>
+            </a>
             </div>
         </div>
 

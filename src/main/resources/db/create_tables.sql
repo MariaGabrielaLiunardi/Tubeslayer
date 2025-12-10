@@ -124,3 +124,11 @@ CREATE TABLE IF NOT EXISTS jadwal_penilaian (
     ruangan VARCHAR(50),
     FOREIGN KEY (id_rubrik) REFERENCES rubrik_nilai(id_rubrik)
 );
+
+ALTER TABLE mata_kuliah_dosen
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (id_user, kode_mk, kelas, semester, tahun_akademik);
+
+ALTER TABLE mata_kuliah_mahasiswa
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (id_user, kode_mk, kelas, semester, tahun_akademik);

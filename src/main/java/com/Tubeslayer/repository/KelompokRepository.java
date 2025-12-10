@@ -7,6 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface KelompokRepository extends JpaRepository<Kelompok, Integer>{
-    
+public interface KelompokRepository extends JpaRepository<Kelompok, Integer> {
+
+    // Ambil semua kelompok yang terkait dengan TugasBesar tertentu
+    @Query("SELECT tk.kelompok FROM TugasBesarKelompok tk WHERE tk.idTugas = :idTugas")
+    List<Kelompok> findByTugas(@Param("idTugas") Integer idTugas);
 }
