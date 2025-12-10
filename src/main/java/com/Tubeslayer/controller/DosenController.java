@@ -83,8 +83,11 @@ public class DosenController {
             int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
             mkd.setColorIndex(colorIndex);
         }
-        
-        model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
+        List<MataKuliahDosen> limitedList = mataKuliahDosenList.stream()
+            .limit(3) // Batasi hasilnya hanya 3
+            .collect(Collectors.toList());
+
+        model.addAttribute("mataKuliahDosenList", limitedList);
 
         return "dosen/dashboard";
     }
