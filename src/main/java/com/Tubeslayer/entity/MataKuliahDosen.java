@@ -31,4 +31,15 @@ public class MataKuliahDosen {
     private String tahunAkademik;
 
     private boolean isActive = true;
+
+    @Transient
+    private int colorIndex; // untuk frontend, tidak disimpan ke DB
+
+    public int getColorIndex() {
+        return colorIndex;
+    }
+
+    public void setColorIndex(int colorIndex) {
+        this.colorIndex = colorIndex;
+    }
 }

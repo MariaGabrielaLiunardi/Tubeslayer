@@ -67,16 +67,22 @@ public class DosenController {
                 year + "/" + (year + 1) :
                 (year - 1) + "/" + year;
         model.addAttribute("semester", tahunAkademik);
-      
+    
         int jumlahMk = dashboardService.getJumlahMkAktif(user.getIdUser(), tahunAkademik);
         int jumlahTb = dashboardService.getJumlahTbAktif(user.getIdUser());
         model.addAttribute("jumlahMk", jumlahMk);
         model.addAttribute("jumlahTb", jumlahTb);
 
         List<MataKuliahDosen> listMK = mataKuliahService.getTop4ActiveByUserAndTahunAkademik(user.getIdUser(), tahunAkademik);
-        
+
         listMK.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
-        
+
+        int gradientCount = 4; // misal ada 4 gradient
+        for (MataKuliahDosen mkDosen : listMK) {
+            int colorIndex = Math.abs(mkDosen.getMataKuliah().getKodeMK().hashCode()) % gradientCount;
+            mkDosen.setColorIndex(colorIndex); // ini menentukan gradient konsisten
+        }
+
         model.addAttribute("mataKuliahDosenList", listMK);
 
         return "dosen/dashboard";
@@ -109,21 +115,25 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
 }
 
     @GetMapping("/dosen/matkul-detail")
-    public String mkDetail(@RequestParam(required = false) String kodeMk,
-                            @RequestParam(required = false) Integer colorIndex,  
-                           @AuthenticationPrincipal CustomUserDetails user, 
-                           Model model) {
-        if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
+    public String matkulDetail(@RequestParam String kodeMk,
+                            @AuthenticationPrincipal CustomUserDetails user,
+                            Model model) {
 
-        MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
-        if (mk == null) return "redirect:/dosen/mata-kuliah";
+        model.addAttribute("user", user);
 
-        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
-        model.addAttribute("colorIndex", finalColorIndex);
+        // Ambil data mata kuliah
+        MataKuliah mkDetail = mataKuliahRepo.findById(kodeMk)
+                .orElseThrow(() -> new IllegalArgumentException("Mata Kuliah tidak ditemukan"));
 
-        model.addAttribute("user", user); 
-        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
-        model.addAttribute("mkDetail", mk);
+        // Gradient konsisten berdasarkan kodeMK
+        int gradientCount = 4; // jumlah gradient yang kamu punya
+        int colorIndex = Math.abs(kodeMk.hashCode()) % gradientCount;
+
+        model.addAttribute("mkDetail", mkDetail);
+        model.addAttribute("colorIndex", colorIndex);
+
+        // Ambil list tugas dsb...
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
         model.addAttribute("tugasList", tugasList);
 
         return "dosen/matkul-detail";
