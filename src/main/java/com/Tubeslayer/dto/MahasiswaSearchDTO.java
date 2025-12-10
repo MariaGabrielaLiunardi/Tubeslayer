@@ -6,7 +6,7 @@ package com.Tubeslayer.dto;
 public class MahasiswaSearchDTO {
     private String idUser;
     private String nama;
-    private String npm; // Sama dengan idUser
+    private String npm; // adalah idUser
     private String kelas;
 
     // Constructors
@@ -16,7 +16,7 @@ public class MahasiswaSearchDTO {
     public MahasiswaSearchDTO(String idUser, String nama, String kelas) {
         this.idUser = idUser;
         this.nama = nama;
-        this.npm = idUser; // NPM sama dengan ID User
+        this.npm = idUser; // NPM = ID User
         this.kelas = kelas;
     }
 

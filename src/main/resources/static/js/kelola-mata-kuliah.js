@@ -220,12 +220,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 daftarMataKuliah = result.data || [];
                 renderMataKuliahTable();
                 updateCount(daftarMataKuliah.length);
-                console.log(`✅ Loaded ${daftarMataKuliah.length} mata kuliah`);
+                console.log(`Loaded ${daftarMataKuliah.length} mata kuliah`);
             } else {
                 throw new Error(result.message || "Failed to load data");
             }
         } catch (error) {
-            console.error("❌ Error loading data:", error);
+            console.error("Error loading data:", error);
             showMessage("Gagal memuat data mata kuliah: " + error.message, "error");
             
             // Fallback: show empty state
@@ -358,7 +358,6 @@ function renderMataKuliahTable() {
 function renderFilteredTable(filteredData) {
     if (!elements.tableView) return;
     
-    // Simpan header terlebih dahulu
     let headerRow = elements.tableView.querySelector('.table-header-row');
     
     // Jika header tidak ditemukan, buat baru
@@ -404,7 +403,6 @@ function renderFilteredTable(filteredData) {
         elements.tableView.appendChild(headerRow);
     }
     
-    // Tambahkan data yang difilter
     filteredData.forEach((mk, index) => {
         const row = document.createElement('div');
         row.className = 'data-row';

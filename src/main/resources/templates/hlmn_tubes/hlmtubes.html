@@ -154,7 +154,7 @@
                             </span>
                         </div>
                         
-                        <!-- Tombol Kelola Anggota - Hanya untuk mode Mahasiswa -->
+                        <!-- Tombol Kelola Anggota jika dalam mode Mahasiswa -->
                         <button class="manage-btn" 
                                 id="btn-kelola-anggota" 
                                 th:if="${modeKelompok == 'Mahasiswa'}"
@@ -172,21 +172,21 @@
 
                     <!-- Warning Messages -->
                     <div class="warning-messages">
-                        <!-- Warning: Bukan Leader -->
+                        <!--  Jika Bukan Leader -->
                         <p class="warning-text warning-leader" 
                            th:if="${modeKelompok == 'Mahasiswa' && hasKelompok && !isLeader}">
                             <i class='bx bx-info-circle'></i>
                             Hanya ketua kelompok yang dapat mengelola anggota!
                         </p>
 
-                        <!-- Warning: Mode Dosen -->
+                        <!-- Jika Mode Dosen -->
                         <p class="warning-text warning-mode" 
                            th:if="${modeKelompok == 'Dosen'}">
                             <i class='bx bx-info-circle'></i>
                             Kelompok untuk tugas ini ditentukan oleh Dosen. Mahasiswa tidak dapat mengelola anggota kelompok.
                         </p>
 
-                        <!-- Info: Belum ada kelompok & mode Mahasiswa -->
+                        <!-- Jika Belum ada kelompok & mode Mahasiswa -->
                         <p class="info-text" 
                            th:if="${modeKelompok == 'Mahasiswa' && !hasKelompok}">
                             <i class='bx bx-info-circle'></i>
@@ -286,10 +286,12 @@
                             <i class='bx bx-arrow-back'></i>
                             Kembali
                         </button>
+                        <!-- matiin button
                         <button class="btn-primary" id="btn-konfirmasi">
                             <i class='bx bx-check'></i>
                             Konfirmasi
                         </button>
+                        -->
                     </div>
                 </div>
 

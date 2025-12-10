@@ -44,7 +44,7 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .successHandler(customSuccessHandler)   // ⬅ pakai custom success handler
+                .successHandler(customSuccessHandler)   
                 .failureUrl("/login?error=true")
                 .permitAll()
             )

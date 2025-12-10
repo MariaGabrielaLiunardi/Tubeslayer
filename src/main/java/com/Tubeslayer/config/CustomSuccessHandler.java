@@ -3,7 +3,7 @@ package com.Tubeslayer.config;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession; // ⬅️ IMPORT INI
+import jakarta.servlet.http.HttpSession; 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Set;
-import java.util.stream.Collectors; // ⬅️ IMPORT INI
+import java.util.stream.Collectors; 
 
 @Component
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
@@ -31,12 +31,10 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         // 3. Ambil dan Proses Roles
         Set<String> rolesWithPrefix = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         
-        // Konversi roles menjadi set tanpa prefix "ROLE_" untuk disimpan di session
         Set<String> rolesWithoutPrefix = rolesWithPrefix.stream()
             .map(role -> role.startsWith("ROLE_") ? role.substring(5) : role)
             .collect(Collectors.toSet());
         
-        // Kita asumsikan hanya ada satu peran utama untuk redirect, ambil saja yang pertama
         String primaryRole = rolesWithoutPrefix.isEmpty() ? null : rolesWithoutPrefix.iterator().next();
 
         // 4. SET LOGIC SESSION DI SINI
@@ -46,7 +44,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("Roles user setelah login: " + rolesWithPrefix);
         System.out.println("Session di-set: username=" + username + ", role=" + primaryRole);
 
-        // 5. Logic Redirect Berbasis Peran (TETAP SAMA)
+        // 5. Logic Redirect Berbasis Peran 
         if (rolesWithPrefix.contains("ROLE_ADMIN")) {
             response.sendRedirect("/admin/dashboard");
         } else if (rolesWithPrefix.contains("ROLE_DOSEN")) {

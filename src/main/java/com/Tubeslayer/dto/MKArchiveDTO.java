@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.AllArgsConstructor;
 
 @Data
-//@AllArgsConstructor
 @Getter
 @Setter
 public class MKArchiveDTO {

@@ -7,9 +7,9 @@ package com.Tubeslayer.dto;
 public class PesertaMatkulDTO {
     private int no;
     private String nama;
-    private String nomorPokok; // Bisa berupa NPM (Mahasiswa) atau NIP (Dosen)
+    private String nomorPokok; // NPM (Mahasiswa) atau NIP (Dosen)
     private String role; // Role: "Koordinator" atau "Mahasiswa"
-    private String kelas; // Hanya relevan untuk Mahasiswa
+    private String kelas; // Hanya untuk Mahasiswa
     
     // Konstruktor untuk Mahasiswa
     public PesertaMatkulDTO(int no, String nama, String nomorPokok, String role, String kelas) {
@@ -20,7 +20,7 @@ public class PesertaMatkulDTO {
         this.kelas = kelas;
     }
     
-    // Konstruktor untuk Dosen/Koordinator (tanpa Kelas)
+    // Konstruktor untuk Dosen/Koordinator 
     public PesertaMatkulDTO(int no, String nama, String nomorPokok, String role) {
         this.no = no;
         this.nama = nama;

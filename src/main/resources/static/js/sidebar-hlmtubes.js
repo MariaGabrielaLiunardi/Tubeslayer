@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Logic untuk Mengubah Highlight (Kelas 'active') Saat Link Diklik
+    // 2. Logic untuk Mengubah Highlight (Kelas 'active') 
 
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
 
@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.addEventListener('click', (e) => {
             //e.preventDefault(); 
             
-            // a. Hapus kelas 'active' dari semua tautan navigasi
+            // a. Hapus kelas 'active' dari semua bagian navigasi
             navLinks.forEach(link => {
                 link.classList.remove('active');
             });
 
-            // b. Tambahkan kelas 'active' hanya ke elemen <li> yang baru diklik
+            // b. Tambahkan kelas 'active' hanya ke bagian <li> yang diklik
             li.classList.add('active');
         });
     });

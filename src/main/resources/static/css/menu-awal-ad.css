@@ -431,27 +431,26 @@ header .image-text .header-text{
 /* --- Variabel Warna Khusus untuk Card --- */
 :root {
     /* Gradien Card: Biru ke Cyan */
-    --card-gradient-start-1: #4A98F7; /* Biru Primer (untuk Mata Kuliah/Mahasiswa) */
-    --card-gradient-end-1: #66B5FF; /* Biru lebih terang */
-    --card-gradient-start-2: #00BFFF; /* Cyan untuk Dosen (sesuai gambar) */
-    --card-gradient-end-2: #87CEEB; /* Cyan lebih terang */
-    --card-bg-bottom: #FFFFFF; /* Putih bersih untuk bagian teks */
-    --card-icon-color: #2A4890; /* Biru tua untuk ikon */
+    --card-gradient-start-1: #4A98F7; 
+    --card-gradient-end-1: #66B5FF; 
+    --card-gradient-start-2: #00BFFF; 
+    --card-gradient-end-2: #87CEEB; 
+    --card-bg-bottom: #FFFFFF; 
+    --card-icon-color: #2A4890; 
     --card-text-color: #333333;
     --transition-03: all 0.3s ease;
 }
 
 
-/* 1. Kontainer Utama (content-section) - MENGGUNAKAN FLEXBOX UNTUK LAYOUT LURUS */
+/* 1. Kontainer Utama (content-section) */
 .content-section {
     display: flex;
-    /* Menyusun item secara horizontal */
+
     flex-direction: row; 
-    /* Pusatkan item di tengah kontainer */
     justify-content: center; 
     align-items: center; 
     
-    gap: 40px; /* Jarak antar kartu (sesuai gambar) */
+    gap: 40px; 
     padding: 50px 30px;
     flex-wrap: wrap; 
     min-height: calc(100vh - 70px); 
@@ -459,15 +458,13 @@ header .image-text .header-text{
 }
 /* --- Variabel Warna Card --- */
 :root {
-    /* 1. Warna Mata Kuliah (Blue/Primary) */
     --card-gradient-start-1: #FFFFFF; 
     --card-gradient-end-1: #0077B6; 
     
-    /* 2. Warna Dosen (Cyan/Secondary) */
     --card-gradient-start-2: #FFFFFF; 
     --card-gradient-end-2: #00B4D8; 
     
-    /* 3. Warna Mahasiswa (Ketiga/Tertiary - Menggunakan #90E0EF) */
+
     --card-gradient-start-3: #FFFFFF; 
     --card-gradient-end-3: #90E0EF; 
 
@@ -477,9 +474,8 @@ header .image-text .header-text{
     --transition-03: all 0.3s ease;
 }
 
-/* 2. Gaya Dasar Kartu (.card) - Dimensi dan Visual Split */
+/* 2. Gaya Dasar Kartu (.card) */
 .card {
-    /* Dimensi yang Proporsional dengan Gambar */
     width: 320px; 
     height: 350px; 
     border-radius: 20px; 
@@ -506,7 +502,7 @@ header .image-text .header-text{
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); 
 }
 
-/* Bagian Gradien Atas (Menggunakan Pseudo-element ::before) */
+/* Bagian Gradien Atas */
 .card::before {
     content: '';
     position: absolute;
@@ -517,29 +513,23 @@ header .image-text .header-text{
     z-index: 1;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    /* Gradien Default (Mata Kuliah) */
     background: linear-gradient(to bottom, var(--card-gradient-start-1), var(--card-gradient-end-1));
 }
 
-/* Penyesuaian Gradien untuk Card Dosen (Cyan) */
 .card.dosen::before {
     background: linear-gradient(to bottom, var(--card-gradient-start-2), var(--card-gradient-end-2));
 }
 
-/* Penyesuaian Gradien untuk Card Mahasiswa (Warna Ketiga) */
-.card.mahasiswa::before { /* Menggunakan .mahasiswa yang benar, bukan .mahasisawa */
+.card.mahasiswa::before { 
     background: linear-gradient(to bottom, var(--card-gradient-start-3), var(--card-gradient-end-3));
 }
 
-/* 3. Kontainer Ikon (.icon-container) */
+/* 3. Kontainer Ikon */
 .icon-container {
     width: 100%;
     height: 75%; 
     
-    /* PENTING: Hapus pemusatan Flexbox agar ikon bisa diposisikan absolut */
-    /* display: flex; 
-    align-items: center;
-    justify-content: center; */
+   
 
     position: absolute; 
     top: 0;
@@ -547,9 +537,9 @@ header .image-text .header-text{
 }
 
 
-/* 4. Gaya Ikon Gambar (Menggunakan Ukuran Besar Anda: 420px) */
+/* 4. Gaya Ikon Gambar */
 .icon-container img {
-    /* Ukuran yang Anda berikan (Ikon akan terlihat terpotong/meluap) */
+ 
     width: 420px; 
     height: 420px;
     
@@ -557,13 +547,9 @@ header .image-text .header-text{
     
     position: absolute; 
     
-    top: -40px;     /* Angka negatif atau kecil untuk membuat ikon meluap ke atas/kiri */
-    right: -50px;  /* Angka negatif atau kecil untuk membuat ikon meluap ke kiri/bawah */
+    top: -40px;    
+    right: -50px;  
     
-    /* CATATAN: Karena width 420px lebih besar dari card 320px, kita perlu
-       menggeser ikon agar bagian kanan/atasnya terlihat di sudut. */
-    /* Dengan top: -50px dan right: -100px, ikon akan menjorok keluar
-       sehingga hanya sebagian besar dari ikon yang terlihat di area gradien. */
        
     opacity: 0.8; 
 }
@@ -572,7 +558,7 @@ header .image-text .header-text{
     top: -60px; 
 }
 
-/* 5. Judul (.title) - Bagian Teks Bawah */
+/* 5. Judul (.title) */
 .title {
     font-size: 20px; 
     font-weight: 600;
@@ -581,5 +567,5 @@ header .image-text .header-text{
     z-index: 3;
     padding-bottom: 25px; 
     
-    text-align: center; /* Membuat teks di dalam elemen sejajar ke tengah */
+    text-align: center; 
 }

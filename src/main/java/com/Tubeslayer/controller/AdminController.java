@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page; 
+import org.springframework.data.domain.Page;
 
 @Controller
 @RequestMapping("/admin")
@@ -161,11 +161,11 @@ public class AdminController {
         model.addAttribute("totalItems", pageMK.getTotalElements());
 
         return "admin/arsip-mata-kuliah";
-}
+    }
 
     @GetMapping("/arsip-matkul-detail")
     public String kelolaArsipMatkulDetail(@RequestParam(required = false) String kodeMk,
-                                          @AuthenticationPrincipal CustomUserDetails user, Model model) {
+            @AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
 
         if (kodeMk == null || kodeMk.isEmpty()) {
@@ -473,7 +473,8 @@ public class AdminController {
                 return buildErrorResponse("Status tidak boleh kosong", HttpStatus.BAD_REQUEST);
             }
 
-            boolean newStatus = "1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status);
+            boolean newStatus = "1".equals(status) || "aktif".equalsIgnoreCase(status)
+                    || "true".equalsIgnoreCase(status);
             dosen.setActive(newStatus);
 
             userRepository.save(dosen);
@@ -525,7 +526,8 @@ public class AdminController {
 
             if (dosenData.containsKey("status")) {
                 String status = dosenData.get("status");
-                dosen.setActive("1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
+                dosen.setActive(
+                        "1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
             }
 
             userRepository.save(dosen);
@@ -753,7 +755,8 @@ public class AdminController {
             mahasiswa.setRole("Mahasiswa");
 
             String status = mahasiswaData.getOrDefault("status", "1");
-            mahasiswa.setActive("1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
+            mahasiswa.setActive(
+                    "1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
 
             User savedMahasiswa = userRepository.save(mahasiswa);
 
@@ -834,7 +837,8 @@ public class AdminController {
                 return buildErrorResponse("Status tidak boleh kosong", HttpStatus.BAD_REQUEST);
             }
 
-            boolean newStatus = "1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status);
+            boolean newStatus = "1".equals(status) || "aktif".equalsIgnoreCase(status)
+                    || "true".equalsIgnoreCase(status);
             mahasiswa.setActive(newStatus);
 
             userRepository.save(mahasiswa);
@@ -886,7 +890,8 @@ public class AdminController {
 
             if (mahasiswaData.containsKey("status")) {
                 String status = mahasiswaData.get("status");
-                mahasiswa.setActive("1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
+                mahasiswa.setActive(
+                        "1".equals(status) || "aktif".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status));
             }
 
             userRepository.save(mahasiswa);
@@ -1045,10 +1050,8 @@ public class AdminController {
 
             List<MataKuliah> allMk = mataKuliahRepository.findAll();
             List<MataKuliah> results = allMk.stream()
-                    .filter(mk ->
-                            mk.getKodeMK().toLowerCase().contains(searchKeyword.toLowerCase()) ||
-                                    mk.getNama().toLowerCase().contains(searchKeyword.toLowerCase())
-                    )
+                    .filter(mk -> mk.getKodeMK().toLowerCase().contains(searchKeyword.toLowerCase()) ||
+                            mk.getNama().toLowerCase().contains(searchKeyword.toLowerCase()))
                     .collect(Collectors.toList());
 
             List<Map<String, Object>> formattedResults = results.stream()
@@ -1454,7 +1457,7 @@ public class AdminController {
                     maxNumber = number;
                 }
             } catch (NumberFormatException e) {
-                // Skip jika bukan angka
+                //  jika bukan angka maka dilewat
             }
         }
 
@@ -1566,5 +1569,44 @@ public class AdminController {
         error.put("timestamp", System.currentTimeMillis());
         error.put("status", status.value());
         return ResponseEntity.status(status).body(error);
+    }
+    // buat halaman halaman tubes detail tugas yang udh di archive
+    @GetMapping("/tugas-detail")
+    public String tugasDetail(
+            @RequestParam("idTugas") Integer idTugas,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+
+        if (idTugas == null) {
+            return "redirect:/admin/dashboard";
+        }
+
+        Optional<TugasBesar> tugasOpt = tugasRepo.findById(idTugas);
+
+        if (!tugasOpt.isPresent()) {
+            return "redirect:/admin/dashboard";
+        }
+
+        TugasBesar tugas = tugasOpt.get();
+        MataKuliah mkDetail = tugas.getMataKuliah();
+
+        // Ambil koordinator dosen
+        MataKuliahDosen koordinator = null;
+        try {
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(
+                    mkDetail.getKodeMK(), true);
+            if (!dosenList.isEmpty()) {
+                koordinator = dosenList.get(0);
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching coordinator: " + e.getMessage());
+        }
+
+        model.addAttribute("user", user.getUser());
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("mkDetail", mkDetail);
+        model.addAttribute("koordinator", koordinator);
+
+        return "admin/arsip-hlmanTubes";
     }
 }

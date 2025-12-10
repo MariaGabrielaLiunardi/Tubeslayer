@@ -15,8 +15,8 @@
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 
-    --nav-primary-blue: #2269a3; /* Biru tua untuk inactive */
-    --nav-active-blue: #6da8ce;  /* Biru muda untuk active */
+    --nav-primary-blue: #2269a3; 
+    --nav-active-blue: #6da8ce;  
     --nav-text-color: #ffffff;
 }
 
@@ -286,14 +286,14 @@ header .image-text .header-text{
 .nav-segmented-control {
     display: flex;
     width: 100%;
-    max-width: 800px; /* Lebar maksimal */
+    max-width: 800px; 
     height: 80px;
     background-color: var(--nav-primary-blue);
-    border-radius: 40px; /* Sudut membulat penuh (setengah dari tinggi) */
+    border-radius: 40px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Penting agar sudut melengkung sempurna */
+    overflow: hidden; 
     font-family: Sen;
-    margin-top: 30px; /* Contoh margin agar tidak menempel ke header */
+    margin-top: 30px; 
     margin-left: 100px;
 }
 
@@ -308,12 +308,12 @@ header .image-text .header-text{
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s;
-    padding: 0 10px; /* Padding horizontal */
+    padding: 0 10px; 
 }
 
 /* Hover effect untuk segmen inactive */
 .nav-segmented-control > div:hover:not(.nav-active) {
-    background-color: rgba(255, 255, 255, 0.1); /* Sedikit gelap/terang saat di-hover */
+    background-color: rgba(255, 255, 255, 0.1); 
 }
 
 /* Style untuk Segmen Aktif */
@@ -323,30 +323,27 @@ header .image-text .header-text{
     border-radius: 40px;
 }
 
-/* Memastikan sudut kanan segmen terakhir (jika aktif) tetap bulat sempurna */
 .nav-segmented-control > div:last-child {
     border-top-right-radius: 40px; 
     border-bottom-right-radius: 40px;
 }
 
-/* Move blue active/background from the Dashboard item to the Open Book item
-   without changing HTML: override the original active anchor and apply
-   the blue background to the second menu item (Open Book). */
+
 .menu-links li.nav-link.active a {
-    background-color: transparent; /* neutralize existing active rule */
+    background-color: transparent; 
 }
 
 .menu-links li:nth-child(2) a {
-    background-color: #C1EBFF; /* same blue as active */
-    border-radius: 10px; /* match anchor rounding used elsewhere */
+    background-color: #C1EBFF; 
+    border-radius: 10px; 
 }
 
 .menu-links li:nth-child(2) a .text {
-    color: black; /* keep text readable on blue */
+    color: black; 
     font-weight: 600;
 }
 
-/* Hover effect on Dashboard icon (first menu item) */
+
 .menu-links li:nth-child(1) a:hover {
     background-color: #C1EBFF;
 }
@@ -369,7 +366,7 @@ header .image-text .header-text{
 /* Rectangle putih */
 .rectangle-white {
     width: 802px;
-    height: 1648px;       /* Ubah sesuai kebutuhan */
+    height: 1648px;       
     background: #ffffff;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -377,15 +374,15 @@ header .image-text .header-text{
     z-index: 1;
 }
 
-/* Rectangle biru di depan */
+/* Rectangle biru */
 .rectangle-blue {
     width: 1650px;
-    height: 220px;       /* Sesuaikan dengan desain */
-    background: #CCF0F7; /* warna biru muda seperti di gambar */
+    height: 220px;       
+    background: #CCF0F7; 
     border-radius: 15px;
     position: absolute;
     top: 0;
-    z-index: 10;          /* supaya berada di belakang */
+    z-index: 10;          
     display: flex;
     align-items: center;
     padding-left: 40px;
