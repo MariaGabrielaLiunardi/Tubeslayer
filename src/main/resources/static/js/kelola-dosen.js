@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnDelete: document.getElementById("btn-delete"),
         btnImport: document.getElementById("btn-import"),
         btnManual: document.getElementById("btn-manual"),
+        buttonPage: document.getElementById("pagination"),
         
         // Forms
         tambahForm: document.getElementById("tambah-dosen-form"),
@@ -122,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.searchbar) {
             elements.searchbar.style.display = 'block';
         }
-        
+        elements.buttonPage.style.display = 'flex';
         // Reset titles
         if (elements.subTitle) elements.subTitle.textContent = '';
         if (elements.subTitle2) elements.subTitle2.textContent = '';
@@ -146,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (elements.subTitle) elements.subTitle.textContent = " > Tambah Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = "";
+        elements.buttonPage.style.display = 'none';
     }
 
     function showImportView() {
@@ -156,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (elements.subTitle) elements.subTitle.textContent = " > Tambah Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = " > Import";
+        elements.buttonPage.style.display = 'none';
     }
 
     function showManualView() {
@@ -166,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (elements.subTitle) elements.subTitle.textContent = " > Tambah Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = " > Tambah Baru";
+        elements.buttonPage.style.display = 'none';
     }
 
     function showHapusView() {
@@ -176,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (elements.subTitle) elements.subTitle.textContent = " > Hapus Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = "";
+        elements.buttonPage.style.display = 'none';
         
         // Setup search for delete
         setupDeleteSearch();
@@ -187,6 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.konfirmasiHapus) {
             elements.konfirmasiHapus.style.display = 'flex';
         }
+        elements.buttonPage.style.display = 'none';
     }
 
     // ==================== API FUNCTIONS ====================
@@ -691,3 +697,93 @@ document.addEventListener("DOMContentLoaded", () => {
         document.head.appendChild(style);
     }
 });
+
+const masterPageItems = Array.from(document.querySelectorAll("#table-view .data-row"));
+
+// Jika tidak ada data, stop script
+if (masterPageItems.length === 0) {
+    console.warn("Tidak ada .data-row ditemukan.");
+}
+
+// Variabel untuk menyimpan item yang sedang difilter
+let filteredPageItems = masterPageItems;
+
+// Elemen Pagination
+const prevButton = document.getElementById('prev-page');
+const nextButton = document.getElementById('next-page');
+const pageInfoSpan = document.getElementById('current-page');
+
+const itemsPerPage = 3;
+let currentPage = 1;
+
+let totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
+
+// Fungsi Menampilkan Halaman 
+const showPage = (page) => {
+
+    const start = (page - 1) * itemsPerPage;
+    const end = page * itemsPerPage;
+
+    masterPageItems.forEach(item => {
+        item.style.display = "none";
+    });
+
+    // Show item filter only untuk halaman ini
+    filteredPageItems.forEach((item, index) => {
+        if (index >= start && index < end) {
+            item.style.display = "block";
+        }
+    });
+
+    // Update info halaman
+    pageInfoSpan.textContent = `${currentPage} / ${totalPages}`;
+
+    // Disable prev/next kalau mentok
+    prevButton.disabled = currentPage === 1;
+    nextButton.disabled = currentPage === totalPages;
+};
+
+// Tombol Prev
+prevButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+    }
+});
+
+// Tombol Next
+nextButton.addEventListener("click", () => {
+    if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+    }
+});
+
+
+showPage(currentPage);
+
+// Search dan Filter
+
+const searchInput = document.getElementById("search-input");
+
+if (searchInput) {
+    searchInput.addEventListener("input", () => {
+        const query = searchInput.value.toLowerCase();
+
+        // Filter berdasar span ke-2 (nama) dan span ke-3 (kelas)
+        filteredPageItems = masterPageItems.filter(row => {
+            const spans = row.querySelectorAll("span");
+
+            const nama = (spans[1]?.textContent || "").toLowerCase();
+            const kelas = (spans[2]?.textContent || "").toLowerCase();
+
+            return nama.includes(query) || kelas.includes(query);
+        });
+
+        // Hitung ulang total halaman
+        totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
+        currentPage = 1;
+
+        showPage(currentPage);
+    });
+}

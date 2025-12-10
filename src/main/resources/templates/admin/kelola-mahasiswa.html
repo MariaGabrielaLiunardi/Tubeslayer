@@ -176,30 +176,36 @@
 
             <!-- VIEW 1: Tabel -->
             <div class="custom-table-container" id="table-view">
-                <div class="table-header-row">
-                    <span>No</span>
-                    <span>NPM</span>
-                    <span>Nama</span>
-                    <span>Email</span>
-                    <span>Status</span>
-                </div>
 
-                <div th:if="${mahasiswaList != null and !mahasiswaList.empty}" th:each="mhs, iterStat : ${mahasiswaList}">
-                    <div class="data-row">
-                        <span th:text="${iterStat.count}">1</span>
-                        <span th:text="${mhs.idUser}">NPM</span>
-                        <span th:text="${mhs.nama}">Nama Mahasiswa</span>
-                        <span th:text="${mhs.email}">Email</span>
-                        <span>
-                            <span th:classappend="${mhs.active} ? 'status-badge active' : 'status-badge inactive'"
-                                  th:text="${mhs.active} ? 'Aktif' : 'Nonaktif'">
-                                Status
-                            </span>
-                        </span>
+                        <div class="table-header-row">
+                            <span>No</span>
+                            <span>NPM</span>
+                            <span>Nama</span>
+                            <span>Email</span>
+                            <span>Status</span>
+                        </div>
+            
+                        <div th:each="mhs, iterStat : ${mahasiswaList}">
+                            <div class="data-row">
+                                <span th:text="${iterStat.count}"></span>
+                                <span th:text="${mhs.idUser}"></span>
+                                <span th:text="${mhs.nama}"></span>
+                                <span th:text="${mhs.email}"></span>
+                                <span>
+                                    <span th:classappend="${mhs.active} ? 'status-badge active' : 'status-badge inactive'"
+                                        th:text="${mhs.active} ? 'Aktif' : 'Nonaktif'">
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                
-            </div>
+            
+
+            <div class="pagination-container" id="pagination">
+                <button id="prev-page" class="page-btn">‹</button>
+                <span id="current-page" class="page-info">1 / 1</span>
+                <button id="next-page" class="page-btn">›</button>
+            </div>         
 
             <!-- FOOTER -->
             <div class="footer-actions" id="footer-view">
@@ -274,7 +280,7 @@
                     </div>  
                 </div>
             </div>
-
+            </div>
         </div>
     </div>
 </section>
