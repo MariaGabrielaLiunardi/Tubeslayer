@@ -99,16 +99,18 @@
                     Lihat Semua >
                 </a>
             </div>
-            <div class="content-div">
-                <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDosen.mataKuliah.kodeMK}, colorIndex=${mkDosen.colorIndex})}"
-                    style="text-decoration: none; color: inherit;">
-
-                    <div class="card-img" th:classappend="'gradient-' + (${mkDosen.colorIndex} + 1)"></div>
+                <div class="content-div">
+                    <a th:each="md : ${mataKuliahDosenList}"
+                    th:href="@{/dosen/matkul-detail(kodeMk=${md.mataKuliah.kodeMK}, colorIndex=${md.colorIndex})}"
                     
-                    <span class="badge" th:text="|Kelas ${mkDosen.kelas}|">Kelas X</span>
-                    <h3 th:text="${mkDosen.mataKuliah.nama}">Nama Mata Kuliah</h3>
-                </a>
-            </div>
+                    th:class="'content-item gradient-' + (${md.colorIndex} + 1)"
+                    
+                    style="text-decoration: none; color: inherit;">
+                    
+                    <span class="nama-mk" th:text="${md.mataKuliah.nama}">Nama MK</span>
+                    <span class="kelas" th:text="'Kelas ' + ${md.kelas}">Kelas</span>
+                    </a>
+                </div>
         </div>
     </div>
 </section>

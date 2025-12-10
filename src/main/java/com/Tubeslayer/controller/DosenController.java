@@ -73,17 +73,18 @@ public class DosenController {
         model.addAttribute("jumlahMk", jumlahMk);
         model.addAttribute("jumlahTb", jumlahTb);
 
-        List<MataKuliahDosen> listMK = mataKuliahService.getTop4ActiveByUserAndTahunAkademik(user.getIdUser(), tahunAkademik);
+        List<MataKuliahDosen> mataKuliahDosenList = mkDosenRepo.findById_IdUserAndIsActive(user.getIdUser(), true);
 
-        listMK.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
-
-        int gradientCount = 4; // misal ada 4 gradient
-        for (MataKuliahDosen mkDosen : listMK) {
-            int colorIndex = Math.abs(mkDosen.getMataKuliah().getKodeMK().hashCode()) % gradientCount;
-            mkDosen.setColorIndex(colorIndex); // ini menentukan gradient konsisten
+        // 2. LOGIKA WARNA KONSISTEN (Tambahkan ini!)
+        int gradientCount = 4;
+        for (MataKuliahDosen mkd : mataKuliahDosenList) {
+            String kodeMK = mkd.getMataKuliah().getKodeMK();
+            // Rumus Hash Code yang sama persis dengan halaman Mata Kuliah
+            int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
+            mkd.setColorIndex(colorIndex);
         }
 
-        model.addAttribute("mataKuliahDosenList", listMK);
+        model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
 
         return "dosen/dashboard";
     }
