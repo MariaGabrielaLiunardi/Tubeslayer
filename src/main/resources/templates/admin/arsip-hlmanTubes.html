@@ -73,9 +73,9 @@
             </div>
             <div class="user-role" th:text="${user.role}">Admin</div>
           </div>
-          <div class="user-avatar">
-            <img src="/icon/pfp.png" alt="useravtr" />
-          </div>
+          <a th:href="@{/profil}">
+            <img src="/icon/pfp.png" class="pfp" alt="pfp" />
+          </a>
           <a th:href="@{/logout}" class="logout-link">
             <div class="notification-icon">
               <img src="/icon/logout.png" alt="logouticon" />
