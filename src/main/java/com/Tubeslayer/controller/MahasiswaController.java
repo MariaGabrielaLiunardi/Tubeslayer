@@ -114,6 +114,10 @@ public class MahasiswaController {
             })
             .collect(Collectors.toList());
 
+        List<MataKuliahMahasiswa> limitedList = filteredEnrollList.stream()
+            .limit(4)
+            .collect(Collectors.toList());
+
         // 3. Set Color Index KONSISTEN menggunakan HashCode Kode MK
         int gradientCount = 4;
         for (MataKuliahMahasiswa enroll : filteredEnrollList) {
@@ -127,7 +131,7 @@ public class MahasiswaController {
         filteredEnrollList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
 
         // Kirim dengan nama variabel 'enrollList' agar cocok dengan HTML
-        model.addAttribute("enrollList", filteredEnrollList); 
+        model.addAttribute("enrollList", limitedList); 
 
         return "mahasiswa/dashboard";
     }
