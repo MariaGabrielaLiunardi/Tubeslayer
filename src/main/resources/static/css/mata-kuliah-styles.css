@@ -26,9 +26,6 @@ body {
     background-repeat: no-repeat;
 }
 
-.home{
-    padding-top: 18px;
-}
 
 /* main */
 .main-content {
@@ -40,6 +37,7 @@ body {
     text-align: center;
     font-size: 48px;
     font-weight: bold;
+    margin-bottom: 30px; 
 }
 
 .home .header .right-section{

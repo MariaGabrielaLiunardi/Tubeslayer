@@ -102,18 +102,12 @@
                 </a>
             </div>
             <div class="content-div">
-                <a th:each="mk, iterStat : ${mataKuliahList}"
-                    th:href="@{/mahasiswa/matkul-detail(mk=${mk.kodeMK})}"
-                    th:class="|content-item gradient-${(iterStat.index % 4) + 1}|"
-                    style="text-decoration: none; color: inherit;">
-                    <span class="nama-mk" th:text="${mk.nama}">Nama MK</span>
-
-                    <span class="kelas"
-                        th:each="mm : ${mk.mahasiswaList}"
-                        th:if="${mm.user.idUser == user.idUser}"
-                        th:text="'Kelas ' + ${mm.kelas}">
-                        Kelas
-                    </span>
+                <a th:each="enroll : ${enrollList}"
+                th:href="@{/mahasiswa/matkul-detail(mk=${enroll.mataKuliah.kodeMK})}"
+                th:class="'content-item gradient-' + (${enroll.colorIndex} + 1)"
+                style="text-decoration: none; color: inherit;">
+                    <span class="nama-mk" th:text="${enroll.mataKuliah.nama}">Nama MK</span>
+                    <span class="kelas" th:text="'Kelas ' + ${enroll.kelas}">Kelas</span>
                 </a>
             </div>
         </div>

@@ -73,57 +73,80 @@ public class DosenController {
         model.addAttribute("jumlahMk", jumlahMk);
         model.addAttribute("jumlahTb", jumlahTb);
 
-        List<MataKuliahDosen> listMK = mataKuliahService.getTop4ActiveByUserAndTahunAkademik(user.getIdUser(), tahunAkademik);
+        List<MataKuliahDosen> mataKuliahDosenList = mkDosenRepo.findById_IdUserAndIsActive(user.getIdUser(), true);
+
+        // 2. LOGIKA WARNA KONSISTEN (Tambahkan ini!)
+        int gradientCount = 4;
+        for (MataKuliahDosen mkd : mataKuliahDosenList) {
+            String kodeMK = mkd.getMataKuliah().getKodeMK();
+            // Rumus Hash Code yang sama persis dengan halaman Mata Kuliah
+            int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
+            mkd.setColorIndex(colorIndex);
+        }
         
-        listMK.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
-        
-        model.addAttribute("mataKuliahDosenList", listMK);
+        model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
 
         return "dosen/dashboard";
     }
 
  @GetMapping("/dosen/mata-kuliah")
-public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+    public String mataKuliah(@AuthenticationPrincipal CustomUserDetails user, Model model) {
     
-    String idDosen = user.getIdUser(); 
-    List<MataKuliahDosen> relasiMKDosen = mkDosenRepo.findById_IdUserAndIsActive(idDosen, true);
+        // 1. Ambil data menggunakan method yang ada di Repository kamu
+        // Perhatikan: Gunakan findById_IdUserAndIsActive sesuai file repo yang kamu kirim
+        List<MataKuliahDosen> mataKuliahDosenList = mkDosenRepo.findById_IdUserAndIsActive(user.getIdUser(), true);
 
-    relasiMKDosen.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
+        // 2. --- LOGIKA WARNA KONSISTEN (HASH CODE) ---
+        int gradientCount = 4;
+        for (MataKuliahDosen mkd : mataKuliahDosenList) {
+            String kodeMK = mkd.getMataKuliah().getKodeMK();
+            
+            // Hitung index warna berdasarkan Kode MK (misal: "IF123" selalu menghasilkan angka yang sama)
+            int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
+            
+            // Set ke dalam objek (pastikan ada setter/field transient di entity MataKuliahDosen)
+            mkd.setColorIndex(colorIndex);
+        }
+        // ---------------------------------------------
+
+        // 3. Sort agar rapi berdasarkan nama (Opsional)
+        mataKuliahDosenList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
     
-    model.addAttribute("mataKuliahDosenList", relasiMKDosen);
+        model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
     model.addAttribute("user", user);
 
+        // Logic tanggal & semester (Biarkan seperti semula)
     LocalDate today = LocalDate.now();
     int year = today.getYear();
-
-    String semesterPenuh = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) 
-            ? "Ganjil " + year + "/" + (year + 1)
-            : "Genap " + (year - 1) + "/" + year;
-            
-    model.addAttribute("semesterTahunAjaran", semesterPenuh); 
-    
+        String semesterTahunAjaran = (today.getMonthValue() >= 7) ? year + "/" + (year + 1) : (year - 1) + "/" + year;
     String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
+        
+        model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
     model.addAttribute("semesterLabel", semesterLabel);
 
     return "dosen/mata-kuliah";
 }
 
     @GetMapping("/dosen/matkul-detail")
-    public String mkDetail(@RequestParam(required = false) String kodeMk,
-                            @RequestParam(required = false) Integer colorIndex,  
+    public String matkulDetail(@RequestParam String kodeMk,
                            @AuthenticationPrincipal CustomUserDetails user, 
                            Model model) {
-        if (kodeMk == null || kodeMk.isEmpty()) return "redirect:/dosen/mata-kuliah";
-
-        MataKuliah mk = mataKuliahRepo.findById(kodeMk).orElse(null);
-        if (mk == null) return "redirect:/dosen/mata-kuliah";
-
-        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
-        model.addAttribute("colorIndex", finalColorIndex);
 
         model.addAttribute("user", user); 
-        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true); 
-        model.addAttribute("mkDetail", mk);
+
+        // Ambil data mata kuliah
+        MataKuliah mkDetail = mataKuliahRepo.findById(kodeMk)
+                .orElseThrow(() -> new IllegalArgumentException("Mata Kuliah tidak ditemukan"));
+
+        // Gradient konsisten berdasarkan kodeMK
+        int gradientCount = 4; // jumlah gradient yang kamu punya
+        int colorIndex = Math.abs(kodeMk.hashCode()) % gradientCount;
+
+        model.addAttribute("mkDetail", mkDetail);
+        model.addAttribute("colorIndex", colorIndex);
+
+        // Ambil list tugas dsb...
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
         model.addAttribute("tugasList", tugasList);
 
         return "dosen/matkul-detail";
@@ -227,58 +250,9 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
     model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah yang hanya Mahasiswa
 
     return "dosen/matkul-peserta";
-}
-
-    @PostMapping("/api/dosen/matakuliah/{kodeMk}/tugas")
-    @ResponseBody 
-    public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk, 
-                                          @RequestBody TugasBesarRequest request,
-                                          @AuthenticationPrincipal CustomUserDetails user) {
-        try {
-            User dosen = user.getUser(); 
-            MataKuliah mk = mataKuliahRepo.findById(kodeMk)
-                            .orElseThrow(() -> new Exception("Mata Kuliah tidak ditemukan."));
-
-            TugasBesar tugasBaru = new TugasBesar();
-            tugasBaru.setJudulTugas(request.getJudulTugas()); 
-            tugasBaru.setDeskripsi(request.getDeskripsi());
-            
-            if (request.getDeadline() != null && !request.getDeadline().isEmpty()) {
-                LocalDate date = LocalDate.parse(request.getDeadline(), DateTimeFormatter.ISO_DATE); 
-                tugasBaru.setDeadline(LocalDateTime.of(date, LocalTime.MAX)); 
-            } else {
-                 throw new Exception("Deadline tidak boleh kosong.");
-            }
-        
-            tugasBaru.setMataKuliah(mk);         
-            tugasBaru.setDosen(dosen); 
-            tugasBaru.setMinAnggota(2);
-            tugasBaru.setMaxAnggota(4);
-            tugasBaru.setModeKel("Kelompok");
-            tugasBaru.setStatus("Open"); 
-            tugasBaru.setActive(true); 
-            
-            if (rubrikNilaiRepo == null) throw new Exception("Rubrik Nilai Repository tidak di-inject.");
-            
-            RubrikNilai newRubrik = new RubrikNilai();
-            rubrikNilaiRepo.save(newRubrik);
-            tugasBaru.setRubrik(newRubrik);
-
-            tugasRepo.save(tugasBaru);
-
-            return ResponseEntity.ok().body(Map.of(
-                "message", "Tugas berhasil ditambahkan!", 
-                "idTugas", tugasBaru.getIdTugas()
-            ));
-            
-        } catch (Exception e) {
-            System.err.println("Error saat menambah tugas: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("message", "Gagal menambahkan tugas: " + e.getMessage()));
-        }
     }
 
-     @GetMapping("/api/kelompok/tugas/{idTugas}")
+    @GetMapping("/api/kelompok/tugas/{idTugas}")
     @ResponseBody
     public ResponseEntity<?> getKelompokByTugas(@PathVariable Integer idTugas) {
         try {
@@ -564,6 +538,74 @@ public String listMK(@AuthenticationPrincipal CustomUserDetails user, Model mode
                 .body(Map.of("error", e.getMessage()));
         }
     }
+
+    @PostMapping("/api/dosen/matakuliah/{kodeMk}/tugas")
+@ResponseBody 
+public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk, 
+                                      @RequestBody TugasBesarRequest request,
+                                      @AuthenticationPrincipal CustomUserDetails user) {
+    try {
+        User dosen = user.getUser(); 
+        MataKuliah mk = mataKuliahRepo.findById(kodeMk)
+                        .orElseThrow(() -> new Exception("Mata Kuliah tidak ditemukan."));
+
+        TugasBesar tugasBaru = new TugasBesar();
+        tugasBaru.setJudulTugas(request.getJudulTugas()); 
+        tugasBaru.setDeskripsi(request.getDeskripsi());
+        
+        // 1. VALIDASI DAN SET DEADLINE
+        if (request.getDeadline() != null && !request.getDeadline().isEmpty()) {
+            LocalDate date = LocalDate.parse(request.getDeadline(), DateTimeFormatter.ISO_DATE); 
+            tugasBaru.setDeadline(LocalDateTime.of(date, LocalTime.MAX)); 
+        } else {
+             throw new Exception("Deadline tidak boleh kosong.");
+        }
+    
+        tugasBaru.setMataKuliah(mk);         
+        tugasBaru.setDosen(dosen); 
+        tugasBaru.setMinAnggota(2);
+        tugasBaru.setMaxAnggota(4);
+        
+        // 2. PERBAIKAN KRITIS: MENGAMBIL MODE KELOMPOK DARI REQUEST
+        String modeKelRequest = request.getModeKel(); 
+        
+        // Validasi dan set modeKel
+        if (modeKelRequest == null || modeKelRequest.isEmpty()) {
+            // Jika FE tidak mengirimkan, tetapkan default (Walaupun FE sudah divalidasi)
+            tugasBaru.setModeKel("Kelompok"); 
+        } else if (modeKelRequest.equalsIgnoreCase("dosen") || 
+                   modeKelRequest.equalsIgnoreCase("mahasiswa")) {
+            
+            // Set modeKel sesuai input FE (dosen/mahasiswa)
+            tugasBaru.setModeKel(modeKelRequest); 
+        } else {
+            // Jika ada nilai yang tidak valid (misalnya 'Kelompok' atau lainnya)
+            throw new Exception("Mode penentuan anggota tidak valid.");
+        }
+        
+        tugasBaru.setStatus("Open"); 
+        tugasBaru.setActive(true); 
+        
+        // ... (Logika Rubrik Nilai) ...
+        if (rubrikNilaiRepo == null) throw new Exception("Rubrik Nilai Repository tidak di-inject.");
+        
+        RubrikNilai newRubrik = new RubrikNilai();
+        rubrikNilaiRepo.save(newRubrik);
+        tugasBaru.setRubrik(newRubrik);
+
+        tugasRepo.save(tugasBaru);
+
+        return ResponseEntity.ok().body(Map.of(
+            "message", "Tugas berhasil ditambahkan!", 
+            "idTugas", tugasBaru.getIdTugas()
+        ));
+        
+    } catch (Exception e) {
+        System.err.println("Error saat menambah tugas: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Gagal menambahkan tugas: " + e.getMessage()));
+    }
+}
 
     /**
      * POST - Tambah anggota ke kelompok

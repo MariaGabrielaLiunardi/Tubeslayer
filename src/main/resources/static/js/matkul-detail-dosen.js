@@ -79,9 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
             
             const namaTugas = document.getElementById('nama-tugas').value;
             const deadline = document.getElementById('deadline').value;
+            const penentuanAnggota = document.getElementById('penentuan-anggota').value;
             const deskripsi = document.getElementById('deskripsi-tugas').value;
             
-            if (!namaTugas || !deadline || !deskripsi) {
+            if (!namaTugas || !deadline || !deskripsi || (penentuanAnggota === "")){
                 alert("Harap lengkapi semua field tugas!");
                 return;
             }
@@ -89,7 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = {
                 judulTugas: namaTugas, 
                 deadline: deadline, 
-                deskripsi: deskripsi,
+                modeKel: penentuanAnggota, 
+                deskripsi: deskripsi
             };
 
             try {

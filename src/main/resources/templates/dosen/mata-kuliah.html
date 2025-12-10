@@ -62,7 +62,9 @@
                     <span class="role" th:text="${user.role}">Peran Dosen</span>
                 </div>
 
-                <img src="/icon/pfp.png" class="pfp">
+                <a th:href="@{/profil}">
+                    <img src="/icon/pfp.png" class="pfp" alt="pfp">
+                </a>
 
                 <button class="logout" id="logoutButton">
                     <img src="/icon/logout.png" class="logout-btn">
@@ -75,19 +77,18 @@
             <h2 class="page-title">Mata Kuliah</h2>
 
             <section class="course-grid">
-
-                <div class="card" th:each="mkDosen, iStat : ${mataKuliahDosenList}"
+                <div class="card" th:each="mkDosen : ${mataKuliahDosenList}"
                     th:attr="data-kode-mk=${mkDosen.mataKuliah.kodeMK}">
 
-                    <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDosen.mataKuliah.kodeMK}, colorIndex=${iStat.index % 4})}"
-                        style="text-decoration: none; color: inherit;">
+                    <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDosen.mataKuliah.kodeMK}, colorIndex=${mkDosen.colorIndex})}"
+                    style="text-decoration: none; color: inherit;">
 
-                        <div class="card-img" th:classappend="'gradient-' + (${iStat.index % 4} + 1)"></div>
+                        <div class="card-img" th:classappend="'gradient-' + (${mkDosen.colorIndex} + 1)"></div>
+
                         <span class="badge" th:text="|Kelas ${mkDosen.kelas}|">Kelas X</span>
                         <h3 th:text="${mkDosen.mataKuliah.nama}">Nama Mata Kuliah</h3>
                     </a>
                 </div>
-
             </section>
 
             <footer class="semester">

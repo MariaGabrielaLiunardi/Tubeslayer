@@ -218,7 +218,7 @@ public class AdminController {
 
             return map;
         }).collect(Collectors.toList());
-
+        
         model.addAttribute("mkDetail", mkDetail);
         model.addAttribute("tugasDataList", tugasData);
 
