@@ -771,7 +771,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-const masterPageItems = Array.from(document.querySelectorAll(".data-row"));
+const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
+const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null;
 
 // Jika tidak ada data, stop script
 if (masterPageItems.length === 0) {

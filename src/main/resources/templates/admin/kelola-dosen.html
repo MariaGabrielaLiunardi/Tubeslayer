@@ -181,12 +181,7 @@
                     <span>Mata Kuliah</span>
                     <span>Status</span>
                 </div>
-
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 8a45c66061f8250219f377a1d88a1b99dc8caf3b
+                
                 <div th:if="${dosenList != null and !dosenList.empty}" th:each="dosen, iterStat : ${dosenList}">
                     <div class="data-row">
                         <span th:text="${iterStat.count}">1</span>
@@ -201,7 +196,6 @@
                         </span>
                     </div>
                 </div>
-<<<<<<< HEAD
 
             </div>
 
@@ -209,13 +203,6 @@
                 <button id="prev-page" class="page-btn">‹</button>
                 <span id="current-page" class="page-info">1 / 1</span>
                 <button id="next-page" class="page-btn">›</button>
-=======
-                
-                <!-- Message jika tidak ada data -->
-                <div th:if="${dosenList == null or dosenList.empty}" class="no-data">
-                    Tidak ada data dosen
-                </div>
->>>>>>> 8a45c66061f8250219f377a1d88a1b99dc8caf3b
             </div>
 
             <!-- FOOTER -->
