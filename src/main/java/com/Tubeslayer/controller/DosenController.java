@@ -147,6 +147,8 @@ public class DosenController {
 
         // Ambil list tugas dsb...
         List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline)); 
+
         model.addAttribute("tugasList", tugasList);
 
         return "dosen/matkul-detail";

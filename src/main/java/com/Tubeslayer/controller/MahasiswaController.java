@@ -206,6 +206,7 @@ public class MahasiswaController {
         model.addAttribute("koordinator", koordinator);
 
         List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline)); 
         model.addAttribute("mkDetail", mkDetail);
         model.addAttribute("tugasList", tugasList);
         model.addAttribute("user", user);
