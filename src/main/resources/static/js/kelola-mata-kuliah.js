@@ -29,16 +29,18 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Kelola Mata Kuliah JS Loaded");
 
     // ==================== CONFIGURATION ====================
-    const API_BASE_URL = window.API_BASE_URL || "http://localhost:8080";
-    const API_MATA_KULIAH = window.API_MATA_KULIAH || `${API_BASE_URL}/admin/api/mata-kuliah`;
+    const API_BASE_URL = window.API_BASE_URL || window.location.origin || "http://localhost:8080";
+    const API_MATA_KULIAH = window.API_MATKUL || window.API_MATA_KULIAH || `${API_BASE_URL}/admin/api/mata-kuliah`;
     console.log("API Mata Kuliah:", API_MATA_KULIAH);
 
     // ==================== ELEMENTS ====================
     const elements = {
         // Main views
         tableView: document.getElementById("table-view"),
+        tableBody: document.getElementById("table-body"),
         footerView: document.getElementById("footer-view"),
         searchbar: document.getElementById("search-bar"),
+        paginationContainer: document.querySelector(".pagination-container"),
         
         // Add mata kuliah flow
         pilihCara: document.getElementById("pilih-cara"),
@@ -73,12 +75,20 @@ document.addEventListener("DOMContentLoaded", () => {
         btnCancelConfirm: document.getElementById("btn-cancel-confirm"),
         btnConfirmDeleteFinal: document.getElementById("btn-confirm-delete-final"),
         btnPilihFile: document.getElementById("btn-pilih-file"),
-        fileInput: document.getElementById("file-input")
+        fileInput: document.getElementById("file-input"),
+
+        // Pagination
+        prevPageBtn: document.getElementById("prev-page"),
+        nextPageBtn: document.getElementById("next-page"),
+        pageInfo: document.getElementById("page-info")
     };
 
     // ==================== STATE ====================
     let daftarMataKuliah = [];
     let selectedMataKuliah = null;
+    let filteredData = null;
+    let currentPage = 1;
+    const pageSize = 10;
 
     // ==================== INITIALIZATION ====================
     init();
@@ -119,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.tableView) elements.tableView.style.display = 'block';
         if (elements.footerView) elements.footerView.style.display = 'flex';
         if (elements.searchbar) elements.searchbar.style.display = 'block';
+        if (elements.paginationContainer) elements.paginationContainer.style.display = 'flex';
         
         // Clear titles
         if (elements.subTitle) elements.subTitle.textContent = '';
@@ -147,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.tableView.style.display = 'none';
         elements.footerView.style.display = 'none';
         elements.searchbar.style.display = 'none';
+        if (elements.paginationContainer) elements.paginationContainer.style.display = 'none';
     }
 
     function showImportView() {
@@ -158,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.tableView.style.display = 'none';
         elements.footerView.style.display = 'none';
         elements.searchbar.style.display = 'none';
+        if (elements.paginationContainer) elements.paginationContainer.style.display = 'none';
     }
 
     function showManualView() {
@@ -169,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.tableView.style.display = 'none';
         elements.footerView.style.display = 'none';
         elements.searchbar.style.display = 'none';
+        if (elements.paginationContainer) elements.paginationContainer.style.display = 'none';
     }
 
     function showHapusView() {
@@ -182,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.tableView.style.display = 'none';
         elements.footerView.style.display = 'none';
         elements.searchbar.style.display = 'none';
+        if (elements.paginationContainer) elements.paginationContainer.style.display = 'none';
     }
 
     function showKonfirmasiHapusView() {
@@ -191,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.tableView.style.display = 'none';
         elements.footerView.style.display = 'none';
         elements.searchbar.style.display = 'none';
+        if (elements.paginationContainer) elements.paginationContainer.style.display = 'none';
     }
 
     // ==================== API FUNCTIONS ====================
@@ -218,6 +234,8 @@ document.addEventListener("DOMContentLoaded", () => {
             
             if (result.status === "success" || result.success) {
                 daftarMataKuliah = result.data || [];
+                filteredData = null;
+                currentPage = 1;
                 renderMataKuliahTable();
                 updateCount(daftarMataKuliah.length);
                 console.log(`✅ Loaded ${daftarMataKuliah.length} mata kuliah`);
@@ -306,126 +324,63 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ==================== RENDER FUNCTIONS ====================
 // ==================== RENDER FUNCTIONS ====================
-function renderMataKuliahTable() {
-    if (!elements.tableView) {
-        console.error("Table view element not found!");
-        return;
-    }
-    
-    // Clear existing data rows
-    elements.tableView.innerHTML = '';
-    
-    console.log("Rendering", daftarMataKuliah.length, "mata kuliah");
-    
-    if (daftarMataKuliah.length === 0) {
-        const emptyState = document.createElement('div');
-        emptyState.className = 'empty-state';
-        emptyState.innerHTML = `
-            <i class="fas fa-book"></i>
-            <p>Tidak ada data mata kuliah</p>
-        `;
-        elements.tableView.appendChild(emptyState);
-        return;
-    }
-    
-    // Add new rows (5 KOLOM SAMA DENGAN MAHASISWA)
-    daftarMataKuliah.forEach((mataKuliah, index) => {
-        const row = document.createElement('div');
-        row.className = 'data-row';
-        
-        const statusText = mataKuliah.status || 'Aktif';
-        const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
-        
-        // HANYA 5 KOLOM: No, Kode, Nama, SKS, Status
-        row.innerHTML = `
-            <span>${index + 1}</span>
-            <span>${mataKuliah.kode || '-'}</span>
-            <span>${mataKuliah.nama || '-'}</span>
-            <span>${mataKuliah.sks || '-'} SKS</span>
-            <span>
-                <span class="status-badge ${statusClass}">
-                    ${statusText}
-                </span>
-            </span>
-        `;
-        
-        elements.tableView.appendChild(row);
-    });
+function getActiveData() {
+    return filteredData ?? daftarMataKuliah;
 }
 
-function renderFilteredTable(filteredData) {
-    if (!elements.tableView) return;
-    
-    // Simpan header terlebih dahulu
-    let headerRow = elements.tableView.querySelector('.table-header-row');
-    
-    // Jika header tidak ditemukan, buat baru
-    if (!headerRow) {
-        headerRow = document.createElement('div');
-        headerRow.className = 'table-header-row';
-        headerRow.innerHTML = `
-            <span>No</span>
-            <span>Kode MK</span>
-            <span>Nama Mata Kuliah</span>
-            <span>SKS</span>
-            <span>Status</span>
-        `;
+function updatePaginationInfo(totalPages) {
+    if (elements.pageInfo) {
+        elements.pageInfo.textContent = `${totalPages === 0 ? 0 : currentPage} / ${Math.max(totalPages, 1)}`;
     }
-    
-    // Clear existing data rows saja (jaga header)
-    const dataRows = elements.tableView.querySelectorAll('.data-row, .empty-state');
-    dataRows.forEach(row => {
-        if (row.parentNode) {
-            row.parentNode.removeChild(row);
-        }
-    });
-    
-    if (filteredData.length === 0) {
-        // Tampilkan pesan "data tidak ditemukan"
-        const emptyRow = document.createElement('div');
-        emptyRow.className = 'empty-state';
-        emptyRow.innerHTML = `
-            <i class="fas fa-search"></i>
-            <p>Tidak ditemukan data mata kuliah</p>
-        `;
-        
-        // Pastikan header ada sebelum menambahkan empty state
-        if (!elements.tableView.querySelector('.table-header-row')) {
-            elements.tableView.appendChild(headerRow);
-        }
-        elements.tableView.appendChild(emptyRow);
+}
+
+function renderMataKuliahTable() {
+    if (!elements.tableBody) {
+        console.error("Table body element not found!");
         return;
     }
-    
-    // Pastikan header ada
-    if (!elements.tableView.querySelector('.table-header-row')) {
-        elements.tableView.appendChild(headerRow);
+
+    const data = getActiveData();
+    const totalPages = Math.ceil(data.length / pageSize) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const start = (currentPage - 1) * pageSize;
+    const pageItems = data.slice(start, start + pageSize);
+
+    elements.tableBody.innerHTML = "";
+
+    if (pageItems.length === 0) {
+        const emptyRow = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 5;
+        td.style.textAlign = "center";
+        td.textContent = "Tidak ada data mata kuliah";
+        emptyRow.appendChild(td);
+        elements.tableBody.appendChild(emptyRow);
+        updatePaginationInfo(0);
+        return;
     }
-    
-    // Tambahkan data yang difilter
-    filteredData.forEach((mk, index) => {
-        const row = document.createElement('div');
-        row.className = 'data-row';
-        
-        const statusText = mk.status || (mk.isActive ? 'Aktif' : 'Nonaktif');
+
+    pageItems.forEach((mk, idx) => {
+        const tr = document.createElement("tr");
+        tr.className = "data-row";
+
+        const statusText = mk.status || (mk.active ? 'Aktif' : 'Nonaktif') || 'Aktif';
         const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
-        
-        row.innerHTML = `
-            <span>${index + 1}</span>
-            <span>${mk.kode || mk.id}</span>
-            <span>${mk.nama}</span>
-            <span>${mk.sks || '-'}</span>
-            <span>
-                <span class="status-badge ${statusClass}">
-                    ${statusText}
-                </span>
-            </span>
+
+        tr.innerHTML = `
+            <td>${start + idx + 1}</td>
+            <td>${mk.kodeMatkul || mk.kodeMK || mk.kode || mk.id || '-'}</td>
+            <td>${mk.namaMatkul || mk.nama || '-'}</td>
+            <td>${mk.sks ?? '-'}</td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
         `;
-        
-        elements.tableView.appendChild(row);
+        elements.tableBody.appendChild(tr);
     });
+
+    updatePaginationInfo(totalPages);
 }
        
 
@@ -508,6 +463,25 @@ function renderFilteredTable(filteredData) {
         if (elements.searchInput) {
             elements.searchInput.addEventListener('input', handleDeleteSearch);
         }
+
+        // Pagination
+        if (elements.prevPageBtn) {
+            elements.prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage -= 1;
+                    renderMataKuliahTable();
+                }
+            });
+        }
+        if (elements.nextPageBtn) {
+            elements.nextPageBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(getActiveData().length / pageSize) || 1;
+                if (currentPage < totalPages) {
+                    currentPage += 1;
+                    renderMataKuliahTable();
+                }
+            });
+        }
         
         // Close suggestions when clicking outside
         document.addEventListener('click', (e) => {
@@ -521,30 +495,23 @@ function renderFilteredTable(filteredData) {
     async function handleFormSubmit(e) {
         e.preventDefault();
         
-        const kode = document.getElementById("kode-mata-kuliah")?.value.trim();
-        const nama = document.getElementById("nama-mata-kuliah")?.value.trim();
-        const sks = document.getElementById("sks-mata-kuliah")?.value;
-        const semester = document.getElementById("semester-mata-kuliah")?.value;
+        const kode = document.getElementById("kode-mk")?.value.trim();
+        const nama = document.getElementById("nama-mk")?.value.trim();
+        const sks = document.getElementById("sks-mk")?.value;
+        const statusVal = document.getElementById("status-mk")?.value;
         
-        if (!kode) {
-            showMessage("Kode mata kuliah harus diisi", "error");
-            return;
-        }
-        
-        if (!nama) {
-            showMessage("Nama mata kuliah harus diisi", "error");
-            return;
-        }
+        if (!kode) return showMessage("Kode mata kuliah harus diisi", "error");
+        if (!nama) return showMessage("Nama mata kuliah harus diisi", "error");
         
         try {
             showLoading(true);
             
             const mataKuliahData = {
-                kode: kode,
-                nama: nama,
+                kodeMatkul: kode,
+                namaMatkul: nama,
                 sks: parseInt(sks) || 3,
-                semester: parseInt(semester) || 1,
-                status: "Aktif"
+                active: statusVal !== "0",
+                status: statusVal === "0" ? "Nonaktif" : "Aktif"
             };
             
             console.log("Sending data:", mataKuliahData);
@@ -580,8 +547,8 @@ function renderFilteredTable(filteredData) {
         if (!keyword) return;
         
         const filtered = daftarMataKuliah.filter(mk => 
-            mk.nama.toLowerCase().includes(keyword) || 
-            (mk.kode && mk.kode.toLowerCase().includes(keyword))
+            (mk.namaMatkul || mk.nama || '').toLowerCase().includes(keyword) || 
+            (mk.kodeMatkul || mk.kode || '').toLowerCase().includes(keyword)
         );
         
         if (filtered.length === 0) return;
@@ -590,19 +557,21 @@ function renderFilteredTable(filteredData) {
         
         filtered.forEach(mk => {
             const li = document.createElement('li');
-            li.textContent = `${mk.kode || mk.id} - ${mk.nama}`;
+            const kode = mk.kodeMatkul || mk.kode || mk.id;
+            const nama = mk.namaMatkul || mk.nama;
+            li.textContent = `${kode} - ${nama}`;
             li.dataset.id = mk.id;
-            li.dataset.nama = mk.nama;
-            li.dataset.kode = mk.kode;
+            li.dataset.nama = nama;
+            li.dataset.kode = kode;
             
             li.addEventListener('click', () => {
                 if (elements.searchInput) {
-                    elements.searchInput.value = `${mk.kode || mk.id} - ${mk.nama}`;
+                    elements.searchInput.value = `${kode} - ${nama}`;
                 }
                 selectedMataKuliah = {
                     id: mk.id,
-                    kode: mk.kode,
-                    nama: mk.nama
+                    kode: kode,
+                    nama: nama
                 };
                 elements.suggestionsBox.style.display = 'none';
             });
@@ -619,19 +588,21 @@ function renderFilteredTable(filteredData) {
         
         daftarMataKuliah.forEach(mk => {
             const li = document.createElement('li');
-            li.textContent = `${mk.kode || mk.id} - ${mk.nama}`;
+            const kode = mk.kodeMatkul || mk.kode || mk.id;
+            const nama = mk.namaMatkul || mk.nama;
+            li.textContent = `${kode} - ${nama}`;
             li.dataset.id = mk.id;
-            li.dataset.nama = mk.nama;
-            li.dataset.kode = mk.kode;
+            li.dataset.nama = nama;
+            li.dataset.kode = kode;
             
             li.addEventListener('click', () => {
                 if (elements.searchInput) {
-                    elements.searchInput.value = `${mk.kode || mk.id} - ${mk.nama}`;
+                    elements.searchInput.value = `${kode} - ${nama}`;
                 }
                 selectedMataKuliah = {
                     id: mk.id,
-                    kode: mk.kode,
-                    nama: mk.nama
+                    kode: kode,
+                    nama: nama
                 };
                 elements.suggestionsBox.style.display = 'none';
             });
@@ -733,59 +704,18 @@ function renderFilteredTable(filteredData) {
             const keyword = e.target.value.toLowerCase().trim();
             
             if (!keyword) {
+                filteredData = null;
+                currentPage = 1;
                 renderMataKuliahTable();
                 return;
             }
             
-            const filtered = daftarMataKuliah.filter(mk => 
-                mk.nama.toLowerCase().includes(keyword) || 
-                (mk.kode && mk.kode.toLowerCase().includes(keyword))
+            filteredData = daftarMataKuliah.filter(mk => 
+                (mk.namaMatkul || mk.nama || '').toLowerCase().includes(keyword) || 
+                (mk.kodeMatkul || mk.kode || '').toLowerCase().includes(keyword)
             );
-            
-            // Render filtered results
-            renderFilteredTable(filtered);
-        });
-    }
-
-    function renderFilteredTable(filteredData) {
-        if (!elements.tableView) return;
-        
-        // Clear existing data rows
-        elements.tableView.innerHTML = '';
-        
-        if (filteredData.length === 0) {
-            const emptyRow = document.createElement('div');
-            emptyRow.className = 'empty-state';
-            emptyRow.innerHTML = `
-                <i class="fas fa-search"></i>
-                <p>Tidak ditemukan data mata kuliah</p>
-            `;
-            elements.tableView.appendChild(emptyRow);
-            return;
-        }
-        
-        // Add filtered rows
-        filteredData.forEach((mk, index) => {
-            const row = document.createElement('div');
-            row.className = 'data-row';
-            
-            const statusText = mk.status || 'Aktif';
-            const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
-            
-            row.innerHTML = `
-                <span>${index + 1}</span>
-                <span>${mk.kode || '-'}</span>
-                <span>${mk.nama || '-'}</span>
-                <span>${mk.sks || '-'} SKS</span>
-                <span>Semester ${mk.semester || '-'}</span>
-                <span>
-                    <span class="status-badge ${statusClass}">
-                        ${statusText}
-                    </span>
-                </span>
-            `;
-            
-            elements.tableView.appendChild(row);
+            currentPage = 1;
+            renderMataKuliahTable();
         });
     }
 
@@ -829,3 +759,253 @@ function renderFilteredTable(filteredData) {
         }, 3000);
     }
 });
+
+
+// PAGINATION SYSTEM
+let currentPage = 1;
+let pageSize = 3; // jumlah data per halaman
+let totalPages = 0;
+let allData = []; // Menyimpan semua data asli
+let filteredData = []; // Data setelah filter/search
+let masterDataRows = []; // Array untuk menyimpan semua row DOM elements
+let filteredPageItems = []; // Array untuk row yang akan ditampilkan
+
+// DOM Elements
+const pesertaCountSpan = document.getElementById("peserta-count");
+const prevButton = document.getElementById("prev-page");
+const nextButton = document.getElementById("next-page");
+const pageInfoSpan = document.getElementById("page-info");
+const noDataRow = document.querySelector(".no-data-row"); // Pastikan ada di HTML
+
+// Initialize data
+function initializeData(data) {
+    try {
+        allData = Array.isArray(data) ? data : [];
+        filteredData = [...allData];
+        
+        // Inisialisasi masterDataRows dari tabel yang sudah ada
+        initializeTableRows();
+        
+        // Update pagination
+        updateFilteredItems();
+        updateUI(true);
+        
+        console.log(`Data initialized: ${allData.length} items`);
+    } catch (error) {
+        console.error("Error initializing data:", error);
+    }
+}
+
+// Inisialisasi rows dari tabel
+function initializeTableRows() {
+    const tableBody = document.querySelector(".custom-table-container");
+    if (!tableBody) {
+        console.error("Table container not found!");
+        return;
+    }
+    
+    // Ambil semua data rows (kecuali header dan no-data row)
+    const allRows = tableBody.querySelectorAll(".data-row");
+    masterDataRows = Array.from(allRows);
+    
+    // Cari no-data row jika ada
+    noDataRow = tableBody.querySelector(".no-data-row") || 
+                 document.querySelector(".no-data-row");
+    
+    console.log(`Found ${masterDataRows.length} data rows`);
+}
+
+// Update filtered items berdasarkan data yang difilter
+function updateFilteredItems() {
+    if (!masterDataRows.length) {
+        console.warn("No master data rows available");
+        filteredPageItems = [];
+        return;
+    }
+    
+    // Jika ada filteredData, sesuaikan rows yang ditampilkan
+    if (filteredData.length > 0 && filteredData.length <= masterDataRows.length) {
+        // Sembunyikan semua rows terlebih dahulu
+        masterDataRows.forEach(row => {
+            if (row.style) row.style.display = "none";
+        });
+        
+        // Tampilkan hanya rows sesuai dengan filteredData
+        filteredPageItems = [];
+        filteredData.forEach((item, index) => {
+            if (index < masterDataRows.length) {
+                filteredPageItems.push(masterDataRows[index]);
+            }
+        });
+    } else {
+        // Jika tidak ada filter, gunakan semua rows
+        filteredPageItems = [...masterDataRows];
+    }
+    
+    console.log(`Filtered items: ${filteredPageItems.length} rows`);
+}
+
+// Setup event listeners untuk pagination
+function setupPaginationListeners() {
+    if (prevButton) {
+        prevButton.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updateUI();
+            }
+        });
+    }
+    
+    if (nextButton) {
+        nextButton.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateUI();
+            }
+        });
+    }
+}
+
+// Tampilkan halaman tertentu
+function showPage(page) {
+    const start = (page - 1) * pageSize;
+    const end = page * pageSize;
+    
+    // Sembunyikan semua rows terlebih dahulu
+    masterDataRows.forEach(row => {
+        if (row && row.style) {
+            row.style.display = "none";
+        }
+    });
+    
+    // Tampilkan rows untuk halaman ini
+    filteredPageItems.forEach((row, index) => {
+        if (index >= start && index < end && row && row.style) {
+            row.style.display = "table-row";
+        }
+    });
+    
+    // Jika tidak ada data, tampilkan no-data row
+    if (filteredPageItems.length === 0 && noDataRow) {
+        noDataRow.style.display = "table-row";
+    } else if (noDataRow) {
+        noDataRow.style.display = "none";
+    }
+}
+
+// Update UI pagination
+function updateUI(resetPage = false) {
+    if (resetPage) {
+        currentPage = 1;
+    }
+    
+    // Hitung total pages
+    totalPages = Math.max(1, Math.ceil(filteredPageItems.length / pageSize));
+    
+    // Pastikan currentPage tidak melebihi totalPages
+    if (currentPage > totalPages) {
+        currentPage = totalPages;
+    }
+    
+    // Update page info
+    if (pageInfoSpan) {
+        pageInfoSpan.textContent = `${currentPage} dari ${totalPages}`;
+    }
+    
+    // Update peserta count
+    if (pesertaCountSpan) {
+        pesertaCountSpan.textContent = `Peserta: ${filteredData.length} peserta`;
+    }
+    
+    // Update button states
+    updatePaginationButtons();
+    
+    // Tampilkan halaman saat ini
+    showPage(currentPage);
+}
+
+// Update state pagination buttons
+function updatePaginationButtons() {
+    if (prevButton) {
+        const isDisabled = currentPage <= 1;
+        prevButton.disabled = isDisabled;
+        prevButton.classList.toggle("disabled", isDisabled);
+    }
+    
+    if (nextButton) {
+        const isDisabled = currentPage >= totalPages;
+        nextButton.disabled = isDisabled;
+        nextButton.classList.toggle("disabled", isDisabled);
+    }
+}
+
+// Filter data berdasarkan keyword
+function filterData(keyword) {
+    if (!keyword || keyword.trim() === "") {
+        // Reset ke semua data
+        filteredData = [...allData];
+    } else {
+        const searchTerm = keyword.toLowerCase().trim();
+        filteredData = allData.filter(item => {
+            // Sesuaikan dengan struktur data Anda
+            const nama = (item.nama || "").toLowerCase();
+            const npm = (item.npm || item.id || "").toLowerCase();
+            return nama.includes(searchTerm) || npm.includes(searchTerm);
+        });
+    }
+    
+    updateFilteredItems();
+    updateUI(true);
+    
+    console.log(`Filtered to ${filteredData.length} items`);
+}
+
+// Change page size
+function changePageSize(newSize) {
+    pageSize = parseInt(newSize) || 3;
+    updateUI(true);
+}
+
+// Inisialisasi pagination system
+function initPagination() {
+    setupPaginationListeners();
+    initializeTableRows();
+    updateUI(true);
+    
+    console.log("Pagination system initialized");
+}
+
+// Panggil init saat halaman dimuat
+document.addEventListener("DOMContentLoaded", () => {
+    initPagination();
+    
+    // Contoh data dummy jika belum ada data
+    if (allData.length === 0) {
+        // Coba ekstrak data dari tabel yang sudah ada
+        extractDataFromTable();
+    }
+});
+
+// Fungsi untuk mengekstrak data dari tabel yang sudah ada
+function extractDataFromTable() {
+    if (!masterDataRows.length) {
+        initializeTableRows();
+    }
+    
+    // Ekstrak data dari setiap row
+    allData = masterDataRows.map((row, index) => {
+        const cells = row.querySelectorAll("td, span");
+        return {
+            id: index + 1,
+            nama: cells[0]?.textContent || `Peserta ${index + 1}`,
+            npm: cells[1]?.textContent || `NPM${index + 1}`,
+            // tambahkan properti lain sesuai kebutuhan
+        };
+    });
+    
+    filteredData = [...allData];
+    updateFilteredItems();
+    updateUI(true);
+    
+    console.log(`Extracted ${allData.length} items from table`);
+}

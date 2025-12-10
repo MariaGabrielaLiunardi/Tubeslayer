@@ -182,8 +182,7 @@
                     <span>Status</span>
                 </div>
 
-                <!-- Data rows akan diisi oleh JavaScript -->
-                <!-- Fallback: Tampilkan data dari controller jika JS tidak load -->
+    
                 <div th:if="${dosenList != null and !dosenList.empty}" th:each="dosen, iterStat : ${dosenList}">
                     <div class="data-row">
                         <span th:text="${iterStat.count}">1</span>
@@ -198,11 +197,13 @@
                         </span>
                     </div>
                 </div>
-                
-                <!-- Fallback message jika tidak ada data -->
-                <div th:if="${dosenList == null or dosenList.empty}" class="no-data">
-                    Tidak ada data dosen
-                </div>
+
+            </div>
+
+              <div class="pagination-container" id="pagination">
+                <button id="prev-page" class="page-btn">‹</button>
+                <span id="current-page" class="page-info">1 / 1</span>
+                <button id="next-page" class="page-btn">›</button>
             </div>
 
             <!-- FOOTER -->

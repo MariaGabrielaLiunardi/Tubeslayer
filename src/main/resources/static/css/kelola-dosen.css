@@ -357,15 +357,15 @@ header .image-text .header-text{
 }
 
 /* --- Area Daftar & Pencarian --- */
-.list-container{
+.list-container {
+    width: 100%;
+    margin-bottom: -10px;
     margin-top: -10px;
     height: auto;
+    min-height: 390px;
     background-color: #FFFFFF; 
     padding: 20px;
     border-radius: 0px 0px 15px 15px;
-    margin-top: -10px;
-    min-height: 390px;
-    overflow: visible; 
 }
 
 .list-header {
@@ -400,14 +400,6 @@ header .image-text .header-text{
     transform: translateY(-50%);
     color: #888;
     cursor: pointer;
-}
-
-.list-container{
-    margin-top: -10px;
-    height: 390px;
-    background-color: #FFFFFF; 
-    padding: 20px;
-    border-radius: 0px 0px 15px 15px;
 }
 
 /* --- Struktur Tabel Custom --- */
@@ -501,6 +493,7 @@ header .image-text .header-text{
     justify-content: center;
     align-items: center;
     z-index: 10;
+    margin-top: 100px;
 }
 
 .pilih-cara .button-group {
@@ -659,4 +652,123 @@ header .image-text .header-text{
     border-radius: 10px;
     border: 1.5px solid #cfcfcf;
     background: #fff;
+}
+
+
+
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.page-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #e6e6e6;
+    color: #000;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.page-btn:hover{
+    background: #888;
+}
+.page-btn:disabled {
+    background: #a9a9a9;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 15px;
+    font-weight: 600;
+    background: #D1F1FA;
+    border-radius: 8px;
+    padding: 6px 14px;
+    border: none;
+}
+
+.custom-table-container {
+    min-height: 190px;
+    background-color: #fff4ec; 
+    padding: 20px;
+    border-radius: 15px;
+    overflow-x: auto; /* Untuk scroll horizontal jika perlu */
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: separate; /* Ini penting! */
+    border-spacing: 0 10px; /* Spacing vertikal antar rows */
+}
+
+.custom-table thead {
+    background-color: transparent;
+}
+
+.custom-table th {
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    padding: 12px 8px;
+    font-size: 14px;
+}
+
+.custom-table td {
+    text-align: center;
+    padding: 12px 8px;
+    font-size: 14px;
+}
+
+.custom-table tbody tr {
+    background-color: #D1F1FA;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    overflow-x: auto;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #b3e9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Atur lebar kolom spesifik */
+.custom-table th:nth-child(1), /* No */
+.custom-table td:nth-child(1) {
+    width: 8%;
+    min-width: 50px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.custom-table th:nth-child(2), /* Kode MK */
+.custom-table td:nth-child(2) {
+    width: 15%;
+    min-width: 100px;
+}
+
+.custom-table th:nth-child(3), /* Nama Mata Kuliah */
+.custom-table td:nth-child(3) {
+    width: 42%;
+    min-width: 250px;
+    padding-left: 15px;
+}
+
+.custom-table th:nth-child(4), /* SKS */
+.custom-table td:nth-child(4) {
+    width: 10%;
+    min-width: 70px;
+}
+
+.custom-table th:nth-child(5), /* Status */
+.custom-table td:nth-child(5) {
+    width: 25%;
+    min-width: 120px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }

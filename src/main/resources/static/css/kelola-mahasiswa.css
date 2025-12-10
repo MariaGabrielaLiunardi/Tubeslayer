@@ -411,7 +411,7 @@ header .image-text .header-text{
 
 .table-header-row,
 .data-row {
-    display: grid;
+    display: grid !important;
     grid-template-columns:10% 20% 30% 20% 20%;
     padding: 10px;
     align-items: center;
@@ -428,9 +428,51 @@ header .image-text .header-text{
 
 .table-header-row {
     font-weight: bold;
-    text-align: center;
     color: #000;
+    text-align: center;
 }
+
+/* ==== Width & Corner Radius Per Kolom (Layout Kelola Mahasiswa) ==== */
+/* Kolom 1 — No */
+.custom-table th:nth-child(1),
+.custom-table td:nth-child(1) {
+    width: 8%;
+    min-width: 50px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+/* Kolom 2 — NPM */
+.custom-table th:nth-child(2),
+.custom-table td:nth-child(2) {
+    width: 18%;
+    min-width: 110px;
+}
+
+/* Kolom 3 — Nama */
+.custom-table th:nth-child(3),
+.custom-table td:nth-child(3) {
+    width: 34%;
+    min-width: 220px;
+    padding-left: 15px;
+}
+
+/* Kolom 4 — Email */
+.custom-table th:nth-child(4),
+.custom-table td:nth-child(4) {
+    width: 22%;
+    min-width: 180px;
+}
+
+/* Kolom 5 — Status */
+.custom-table th:nth-child(5),
+.custom-table td:nth-child(5) {
+    width: 18%;
+    min-width: 110px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
 
 /* --- Footer (Pagination & Buttons) --- */
 .footer-actions {
@@ -442,20 +484,41 @@ header .image-text .header-text{
     margin-top: 15px;
 }
 
-.pagination {
-    background: #ccc; /* Abu-abu pagination */
-    padding: 4px 12px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-flex;
+
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
-    gap: 5px;
-    color: #333;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
 
-.pagination i {
+.page-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #e6e6e6;
+    color: #000;
+    font-size: 16px;
     cursor: pointer;
+    transition: 0.2s ease;
+}
+.page-btn:hover{
+    background: #888;
+}
+.page-btn:disabled {
+    background: #a9a9a9;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 15px;
+    font-weight: 600;
+    background: #D1F1FA;
+    border-radius: 8px;
+    padding: 6px 14px;
+    border: none;
 }
 
 .button-group {

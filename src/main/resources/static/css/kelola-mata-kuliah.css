@@ -9,6 +9,8 @@ html, body {
 body {
     overflow-y: auto;
     overflow-x: auto;
+
+    background-color: rgba(172, 224, 249, 1);
     
     background: linear-gradient(
         360deg, 
@@ -18,8 +20,9 @@ body {
     ) !important;
 
     min-height: 100vh;
+    height: auto;
     background-attachment: scroll; 
-    background-size: 100% 100%; /* gradien seluruh bagian */
+    background-size: 100% 100vh; /* gradien seluruh bagian */
     background-repeat: no-repeat;
 }
 
@@ -406,32 +409,124 @@ header .image-text .header-text{
 /* --- Struktur Tabel Custom --- */
 .custom-table-container {
     min-height: 190px;
-    background-color: #FFF1EB; 
+    background-color: #fff4ec; 
     padding: 20px;
     border-radius: 15px;
+    overflow-x: auto; /* Untuk scroll horizontal jika perlu */
 }
 
-.table-header-row,
-.data-row {
-    display: grid;
-    grid-template-columns:10% 20% 30% 20% 20%;
-    padding: 10px;
-    align-items: center;
-    text-align: center;     
+.custom-table {
+    width: 100%;
+    border-collapse: separate; /* Ini penting! */
+    border-spacing: 0 10px; /* Spacing vertikal antar rows */
+}
+
+.custom-table thead {
+    background-color: transparent;
+}
+
+.custom-table th {
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    padding: 12px 8px;
     font-size: 14px;
 }
 
-.data-row {
-    background-color: #D1F1FA;
-    padding: 10px;        
-    border-radius: 20px;
-    margin-bottom: 10px;
+.custom-table td {
+    text-align: center;
+    padding: 12px 8px;
+    font-size: 14px;
 }
 
-.table-header-row {
-    font-weight: bold;
-    text-align: center;
-    color: #000;
+.custom-table tbody tr {
+    background-color: #D1F1FA;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    overflow-x: auto;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #b3e9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Atur lebar kolom spesifik */
+.custom-table th:nth-child(1), /* No */
+.custom-table td:nth-child(1) {
+    width: 8%;
+    min-width: 50px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.custom-table th:nth-child(2), /* Kode MK */
+.custom-table td:nth-child(2) {
+    width: 15%;
+    min-width: 100px;
+}
+
+.custom-table th:nth-child(3), /* Nama Mata Kuliah */
+.custom-table td:nth-child(3) {
+    width: 42%;
+    min-width: 250px;
+    padding-left: 15px;
+}
+
+.custom-table th:nth-child(4), /* SKS */
+.custom-table td:nth-child(4) {
+    width: 10%;
+    min-width: 70px;
+}
+
+.custom-table th:nth-child(5), /* Status */
+.custom-table td:nth-child(5) {
+    width: 25%;
+    min-width: 120px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+/* Status badge styling */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-badge.inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .custom-table-container {
+        padding: 10px;
+    }
+    
+    .custom-table th,
+    .custom-table td {
+        padding: 8px 4px;
+        font-size: 13px;
+    }
+    
+    .custom-table th:nth-child(3),
+    .custom-table td:nth-child(3) {
+        min-width: 150px;
+    }
 }
 
 /* --- Footer (Pagination & Buttons) --- */
@@ -444,21 +539,44 @@ header .image-text .header-text{
     margin-top: 15px;
 }
 
-.pagination {
-    background: #ccc; /* Abu-abu pagination */
-    padding: 4px 12px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-flex;
+
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
-    gap: 5px;
-    color: #333;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
 
-.pagination i {
+.page-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #e6e6e6;
+    color: #000;
+    font-size: 16px;
     cursor: pointer;
+    transition: 0.2s ease;
 }
+.page-btn:hover{
+    background: #888;
+}
+.page-btn:disabled {
+    background: #a9a9a9;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 15px;
+    font-weight: 600;
+    background: #D1F1FA;
+    border-radius: 8px;
+    padding: 6px 14px;
+    border: none;
+}
+
+
 
 .button-group {
     display: flex;
@@ -494,6 +612,7 @@ header .image-text .header-text{
     justify-content: center;
     align-items: center;
     z-index: 10;
+    margin-top: 100px;
 }
 
 .pilih-cara .button-group {
