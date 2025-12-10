@@ -62,7 +62,9 @@
                     <span class="role" th:text="${user.role}">Peran Dosen</span>
                 </div>
 
-                <img src="/icon/pfp.png" class="pfp">
+                <a th:href="@{/profil}">
+                    <img src="/icon/pfp.png" class="pfp" alt="pfp">
+                </a>
 
                 <button class="logout" id="logoutButton">
                     <img src="/icon/logout.png" class="logout-btn">
