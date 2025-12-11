@@ -578,8 +578,8 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         if (modeKelRequest == null || modeKelRequest.isEmpty()) {
             // Jika FE tidak mengirimkan, tetapkan default (Walaupun FE sudah divalidasi)
             tugasBaru.setModeKel("Kelompok"); 
-        } else if (modeKelRequest.equalsIgnoreCase("dosen") || 
-                   modeKelRequest.equalsIgnoreCase("mahasiswa")) {
+        } else if (modeKelRequest.equalsIgnoreCase("Dosen") || 
+                   modeKelRequest.equalsIgnoreCase("Mahasiswa")) {
             
             // Set modeKel sesuai input FE (dosen/mahasiswa)
             tugasBaru.setModeKel(modeKelRequest); 
