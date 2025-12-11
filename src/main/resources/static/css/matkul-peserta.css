@@ -223,6 +223,7 @@ body {
     justify-content: center;
     align-items: center;
     margin-right: 2px;
+    background: none;
 }
 
 .search-box img {
