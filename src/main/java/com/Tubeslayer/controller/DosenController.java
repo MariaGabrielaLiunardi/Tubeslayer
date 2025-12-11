@@ -83,8 +83,11 @@ public class DosenController {
             int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
             mkd.setColorIndex(colorIndex);
         }
-        
-        model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
+        List<MataKuliahDosen> limitedList = mataKuliahDosenList.stream()
+            .limit(3) // Batasi hasilnya hanya 3
+            .collect(Collectors.toList());
+
+        model.addAttribute("mataKuliahDosenList", limitedList);
 
         return "dosen/dashboard";
     }
@@ -147,6 +150,8 @@ public class DosenController {
 
         // Ambil list tugas dsb...
         List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline)); 
+
         model.addAttribute("tugasList", tugasList);
 
         return "dosen/matkul-detail";
@@ -573,8 +578,8 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         if (modeKelRequest == null || modeKelRequest.isEmpty()) {
             // Jika FE tidak mengirimkan, tetapkan default (Walaupun FE sudah divalidasi)
             tugasBaru.setModeKel("Kelompok"); 
-        } else if (modeKelRequest.equalsIgnoreCase("dosen") || 
-                   modeKelRequest.equalsIgnoreCase("mahasiswa")) {
+        } else if (modeKelRequest.equalsIgnoreCase("Dosen") || 
+                   modeKelRequest.equalsIgnoreCase("Mahasiswa")) {
             
             // Set modeKel sesuai input FE (dosen/mahasiswa)
             tugasBaru.setModeKel(modeKelRequest); 
