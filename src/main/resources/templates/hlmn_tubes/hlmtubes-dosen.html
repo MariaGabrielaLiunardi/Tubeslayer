@@ -5,92 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</title>
     <link rel="stylesheet" href="/css/hlmtubes-Dosen-styles.css" />
-    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" href="/logo/blue-logo.png" type="image/png"> 
+    <link
+      href="https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png" />
     <script src="/js/sidebar-hlmtubes.js" defer></script>
     <script src="/js/management-kelompok.js" defer></script>
     <script th:inline="javascript">
       window.TUGAS_DATA = {
         idTugas: /*[[${tugas.idTugas}]]*/ 1,
-        judulTugas: /*[[${tugas.judulTugas}]]*/ 'Tugas Besar',
-        deskripsi: /*[[${tugas.deskripsi}]]*/ 'Deskripsi',
+        judulTugas: /*[[${tugas.judulTugas}]]*/ "Tugas Besar",
+        deskripsi: /*[[${tugas.deskripsi}]]*/ "Deskripsi",
         maxAnggota: /*[[${tugas.maxAnggota}]]*/ 5,
         minAnggota: /*[[${tugas.minAnggota}]]*/ 3,
-        modeKel: /*[[${tugas.modeKel}]]*/ 'Kelompok',
-        deadline: /*[[${deadlineFormatted}]]*/ 'Senin, 27 November 2025'
+        modeKel: /*[[${tugas.modeKel}]]*/ "Kelompok",
+        deadline: /*[[${deadlineFormatted}]]*/ "Senin, 27 November 2025",
       };
     </script>
   </head>
   <body>
-   <!-- Header -->
-<div class="header">
-    <div class="header-left">
-    </div>
-    <div class="header-right">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left"></div>
+      <div class="header-right">
         <div class="user-info">
-            <div class="user-name" th:text="${user.nama}">Clara Joycelyne Siauttara</div>
-            <div class="user-role" th:text="${user.role}">Dosen</div>
+          <div class="user-name" th:text="${user.nama}">
+            Clara Joycelyne Siauttara
+          </div>
+          <div class="user-role" th:text="${user.role}">Dosen</div>
         </div>
-        <div class="user-avatar">
-            <img src="/icon/pfp.png" alt="useravtr">
-        </div>
+        <a th:href="@{/profil}">
+          <img src="/icon/pfp.png" class="pfp" alt="pfp" />
+        </a>
         <a th:href="@{/logout}" class="logout-link">
           <div class="logout-icon">
-              <img src="/icon/logout.png" alt="logouticon">
+            <img src="/icon/logout.png" alt="logouticon" />
           </div>
         </a>
+      </div>
     </div>
-</div>
 
-   <!-- Sidebar -->
- <nav class="sidebar close">
-        <header>
-            <div class="image-text">
-                <span class="image">
-                    <img src="/logo/blue-logo.png" alt="logo">
-                </span>
+    <!-- Sidebar -->
+    <nav class="sidebar close">
+      <header>
+        <div class="image-text">
+          <span class="image">
+            <img src="/logo/blue-logo.png" alt="logo" />
+          </span>
 
-                <div class="text header-text">
-                    <span class="name">Tubeslayer</span>
-                </div>
-            </div>
-            <i class='bx bx-chevron-right toggle'></i>
-        </header>
-
-        <div class="menu-bar">
-            <div class="menu">
-                <ul class="menu-links">
-                    <li class="nav-link">
-                        <a th:href="@{/dosen/dashboard}">
-                            <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
-                            <span class="text nav-text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-link active">
-                        <a th:href="@{/dosen/mata-kuliah}">
-                            <img src="/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
-                            <span class="text nav-text">Mata Kuliah</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+          <div class="text header-text">
+            <span class="name">Tubeslayer</span>
+          </div>
         </div>
+        <i class="bx bx-chevron-right toggle"></i>
+      </header>
+
+      <div class="menu-bar">
+        <div class="menu">
+          <ul class="menu-links">
+            <li class="nav-link">
+              <a th:href="@{/dosen/dashboard}">
+                <img
+                  src="/icon/dashboard.png"
+                  alt="Dashboard Icon"
+                  class="icon dashboard-icon"
+                />
+                <span class="text nav-text">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-link active">
+              <a th:href="@{/dosen/mata-kuliah}">
+                <img
+                  src="/icon/open-book.png"
+                  alt="Open book Icon"
+                  class="icon open-book-icon"
+                />
+                <span class="text nav-text">Mata Kuliah</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
 
     <!-- Main Content -->
     <div class="main-content">
       <!-- Tabs -->
-      <div class="mk-tab" th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}">
-            <button class="tab active" data-tab-target="kuliah" 
-                    th:onclick="|window.location.href='@{/dosen/matkul-detail(mk=${mkDetail.kodeMK})}'|">
-                Kuliah
-            </button>
-            <button class="tab" data-tab-target="peserta" 
-                    th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|">
-                Daftar Peserta
-            </button>
-            <button class="tab" data-tab-target="nilai">Nilai</button>
-        </div>
+      <div
+        class="mk-tab"
+        th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}"
+      >
+        <button
+          class="tab active"
+          data-tab-target="kuliah"
+          th:onclick="|window.location.href='@{/dosen/matkul-detail(mk=${mkDetail.kodeMK})}'|"
+        >
+          Kuliah
+        </button>
+        <button
+          class="tab"
+          data-tab-target="peserta"
+          th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|"
+        >
+          Daftar Peserta
+        </button>
+        <button class="tab" data-tab-target="nilai">Nilai</button>
+      </div>
 
       <!-- Card Container -->
       <div class="card-container">
@@ -105,8 +126,10 @@
         <!-- Content Card Default-->
         <div class="content-card" id="defaultView">
           <div class="breadcrumb">
-            Daftar Mata Kuliah <span>></span> <span th:text="${mkDetail.nama}">Artificial Intelligence</span>
-            <span>></span> <span th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</span>
+            Daftar Mata Kuliah <span>></span>
+            <span th:text="${mkDetail.nama}">Artificial Intelligence</span>
+            <span>></span>
+            <span th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</span>
           </div>
           <div class="content-header">
             <div class="folder-icon">
@@ -121,92 +144,133 @@
           </p>
 
           <p class="content-description">
-            Tugas ini dilakukan berkelompok dengan minimal <span th:text="${tugas.minAnggota}">3</span> 
-            dan maksimal <span th:text="${tugas.maxAnggota}">5</span> orang.
-            Kelompok ditentukan oleh <span th:text="${penentuKelompok}">Mahasiswa</span>.
+            Tugas ini dilakukan berkelompok dengan minimal
+            <span th:text="${tugas.minAnggota}">3</span> dan maksimal
+            <span th:text="${tugas.maxAnggota}">5</span> orang. Kelompok
+            ditentukan oleh <span th:text="${penentuKelompok}">Mahasiswa</span>.
           </p>
 
           <div class="group-info">
-            <strong>Penentu Anggota Kelompok:</strong> <span th:text="${penentuKelompok}">Mahasiswa</span>
+            <strong>Penentu Anggota Kelompok:</strong>
+            <span th:text="${penentuKelompok}">Mahasiswa</span>
           </div>
 
           <div class="deadline-section">
             <div class="deadline">
-              Deadline : <span th:text="${deadlineFormatted}">Senin, 27 November 2025</span>
+              Deadline :
+              <span th:text="${deadlineFormatted}"
+                >Senin, 27 November 2025</span
+              >
             </div>
-            
-            <button class="manage-btn" id="daftarKelompokBtn" 
-                    th:if="${tugas.modeKel == 'Dosen'}">
+
+            <button
+              class="manage-btn"
+              id="daftarKelompokBtn"
+              th:if="${#strings.equalsIgnoreCase(tugas.modeKel, 'Dosen')}">
               Daftar Kelompok
+            </button>
+
+            <button
+              class="manage-btn"
+              id="kelolaKelompokBtn"
+              th:if="${#strings.equalsIgnoreCase(tugas.modeKel, 'Mahasiswa')}">
+              Kelola Kelompok
             </button>
           </div>
         </div>
 
-        
-        <div class="content-card" id="daftarKelompokView" style="display: none;">
+        <div class="content-card" id="daftarKelompokView" style="display: none">
           <div class="breadcrumb">
-            <span th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</span> <span>></span> Daftar Kelompok
-          </div>
-          
-          <div class="kelompok-header">
-            <h3>Daftar Kelompok</h3>
-            <div class="kelompok-counter">Jumlah Kelompok: <span id="jumlahKelompok">0</span></div>
+            <span th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</span>
+            <span>></span> Daftar Kelompok
           </div>
 
-          <div id="kelompokTableContainer"> 
-            
+          <div class="kelompok-header">
+            <h3>Daftar Kelompok</h3>
+            <div class="kelompok-counter">
+              Jumlah Kelompok: <span id="jumlahKelompok">0</span>
+            </div>
           </div>
+
+          <div id="kelompokTableContainer"></div>
 
           <div class="action-buttons">
             <button class="btn-secondary" id="backToDefaultBtn">Kembali</button>
-            <button class="manage-btn" id="buatKelompokBtn">Buat Kelompok</button>
-            <button class="manage-btn" id="finalisasiKelompokBtn">Finalisasi Kelompok</button>
+            <button class="manage-btn" id="buatKelompokBtn">
+              Buat Kelompok
+            </button>
+            <button class="manage-btn" id="finalisasiKelompokBtn">
+              Finalisasi Kelompok
+            </button>
           </div>
         </div>
 
-        
-        <div class="content-card" id="formKelompokView" style="display: none;">
+        <div class="content-card" id="formKelompokView" style="display: none">
           <div class="breadcrumb">
-            <span th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</span> <span>></span> Pembentukan Kelompok
+            <span th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</span>
+            <span>></span> Pembentukan Kelompok
           </div>
-          
+
           <h3 class="form-title">Pembentukan Kelompok</h3>
 
           <form id="formKelompok">
             <div class="form-group">
               <label for="maxAnggota">Jumlah Max Anggota:</label>
-              <input type="number" id="maxAnggota" min="1" max="10" 
-                     th:value="${tugas.maxAnggota}" required>
+              <input
+                type="number"
+                id="maxAnggota"
+                min="1"
+                max="10"
+                th:value="${tugas.maxAnggota}"
+                required
+              />
             </div>
 
             <div class="form-group">
               <label for="minAnggota">Jumlah Min Anggota:</label>
-              <input type="number" id="minAnggota" min="1" max="10" 
-                     th:value="${tugas.minAnggota}" required>
+              <input
+                type="number"
+                id="minAnggota"
+                min="1"
+                max="10"
+                th:value="${tugas.minAnggota}"
+                required
+              />
             </div>
 
             <div class="form-group">
               <label for="namaKetua">Nama Ketua Kelompok:</label>
               <div class="input-with-icon">
-                <input type="text" id="namaKetua" placeholder="Rafael Cleon Adam - 6182301017" required>
+                <input
+                  type="text"
+                  id="namaKetua"
+                  placeholder="Rafael Cleon Adam - 6182301017"
+                  required
+                />
                 <button type="button" class="search-btn">🔍</button>
               </div>
             </div>
 
             <div class="form-buttons">
-              <button type="button" class="btn-secondary" id="kembaliFromFormBtn">Kembali</button>
+              <button
+                type="button"
+                class="btn-secondary"
+                id="kembaliFromFormBtn"
+              >
+                Kembali
+              </button>
               <button type="submit" class="manage-btn">Buat Kelompok</button>
             </div>
           </form>
         </div>
-        
-        <!-- View: Detail Anggota Kelompok -->
-        <div class="content-card" id="detailAnggotaView" style="display: none;">
-  
 
+        <!-- View: Detail Anggota Kelompok -->
+        <div class="content-card" id="detailAnggotaView" style="display: none">
           <div class="content-header">
             <h2>Anggota Kelompok</h2>
-            <span class="kelompok-name-subtitle" id="kelompokNameSubtitle">Nama Kelompok</span>
+            <span class="kelompok-name-subtitle" id="kelompokNameSubtitle"
+              >Nama Kelompok</span
+            >
           </div>
 
           <!-- List Anggota -->
@@ -222,16 +286,16 @@
           <!-- Action Buttons -->
           <div class="action-buttons">
             <button class="btn-secondary" id="btn-kembali-anggota-dosen">
-              <i class='bx bx-arrow-back'></i>
+              <i class="bx bx-arrow-back"></i>
               Kembali
             </button>
             <div class="right-buttons">
               <button class="btn-primary" id="btn-tambah-anggota-dosen">
-                <i class='bx bx-user-plus'></i>
+                <i class="bx bx-user-plus"></i>
                 Tambah
               </button>
               <button class="btn-primary" id="btn-selesai-anggota-dosen">
-                <i class='bx bx-check'></i>
+                <i class="bx bx-check"></i>
                 Selesai
               </button>
             </div>
@@ -239,9 +303,7 @@
         </div>
 
         <!-- View: Pilih Anggota -->
-        <div class="content-card" id="pilihAnggotaView" style="display: none;">
-  
-
+        <div class="content-card" id="pilihAnggotaView" style="display: none">
           <div class="content-header">
             <h2>Pilih anggota kelompok</h2>
           </div>
@@ -250,17 +312,17 @@
           <div class="search-section">
             <label for="search-mahasiswa-dosen">Masukkan Nama:</label>
             <div class="search-input-wrapper">
-              <input 
-                type="text" 
-                id="search-mahasiswa-dosen" 
+              <input
+                type="text"
+                id="search-mahasiswa-dosen"
                 placeholder="Nama mahasiswa - NPM"
                 autocomplete="off"
-              >
+              />
               <button class="btn-search" id="btn-search-dosen">
-                <i class='bx bx-search'></i>
+                <i class="bx bx-search"></i>
               </button>
             </div>
-            
+
             <!-- Search Results Dropdown -->
             <div class="search-results" id="search-results-dosen">
               <!-- Results akan diinject JavaScript -->
@@ -275,7 +337,7 @@
           <!-- Action Buttons -->
           <div class="action-buttons">
             <button class="btn-secondary" id="btn-kembali-pilih-dosen">
-              <i class='bx bx-arrow-back'></i>
+              <i class="bx bx-arrow-back"></i>
               Kembali
             </button>
             <!-- matiin button 
@@ -286,8 +348,6 @@
             -->
           </div>
         </div>
-
-
       </div>
     </div>
     <input type="hidden" id="currentIdKelompok" value="" />

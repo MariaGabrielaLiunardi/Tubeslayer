@@ -158,9 +158,8 @@ header .image-text .header-text{
     justify-content: space-between;
 }
 
-.sidebar li.active {
-    background-color: #C1EBFF;
-    border-radius: 10px;
+.sidebar li.active a {
+    background-color: #C1EBFF; 
 }
 
 .home{
@@ -275,11 +274,7 @@ header .image-text .header-text{
 }
 
 .rectangle-wrapper{
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    /* removed: not used on dashboard-nilai-dosen.html; kept as placeholder in other files */
 }
 
 /* Kontainer Utama Navigasi */
@@ -348,11 +343,6 @@ header .image-text .header-text{
     background-color: #C1EBFF;
 }
 
-.container .rectangle-white{
-    width: 1648px;
-    height: 802px;
-}
-
 .container {
     position: relative;
     width: 100%;
@@ -365,13 +355,19 @@ header .image-text .header-text{
 
 /* Rectangle putih */
 .rectangle-white {
-    width: 802px;
-    height: 1648px;       
+    width: 90%; /* Mengganti 802px menjadi lebih fleksibel */
+    max-width: 1648px; /* Batasan lebar maksimum */
+    height: 710px;
     background: #ffffff;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;        /* center horizontally */
+    justify-content: center;     /* center vertically */
+    margin-top: 100px;
 }
 
 /* Rectangle biru */
@@ -395,7 +391,7 @@ header .image-text .header-text{
 }
 
 .tb-icon {
-    width: 80px;
+    width: 120px;
 }
 
 .tb-text {
@@ -403,31 +399,77 @@ header .image-text .header-text{
     font-weight: 700;
 }
 
-/* Cards */
-.cards {
+/* Cards Container - arrange cards horizontally and centered */
+.card-container {
     display: flex;
-    justify-content: space-around;
+    flex-direction: row;      /* layout cards in a horizontal row */
+    gap: 100px;               /* spacing between cards */
+    align-items: center;     /* vertically center cards */
+    justify-content: center; /* horizontally center all cards in the middle */
+    flex-wrap: wrap;         /* allow wrapping on small screens */
+    padding: 20px;           /* padding inside container */
+    margin-top: 150px;
 }
 
 .card {
-    width: 220px;
-    height: 220px;
+    width: 400px;
+    height: 400px;
     background: white;
     border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.2);
     text-align: center;
-    padding: 20px;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;    /* push icon area to top, title to bottom */
+    align-items: center;
+    margin: 0;
+    overflow: hidden;                  /* clip content to card border */
+    position: relative;
+    text-decoration: none;
+    color: black;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;                       /* full card width */
+    height: 320px;                     /* overlay height, leaves ~80px for title */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, rgba(100, 180, 220, 0.8) 100%);
+    border-radius: 20px 20px 0 0;
+    z-index: 1;
 }
 
 .card img {
-    width: 80px;
-    margin-bottom: 10px;
+    width: 200px;
+    height: auto;
+    margin: 0;
+    padding-top: 50px;                /* space from top of overlay */
+    position: relative;
+    z-index: 2;                        /* icon sits on top of overlay */
 }
 
 .card p {
-    font-size: 18px;
+    font-size: 28px;
     font-weight: 600;
+    margin: 0;
+    padding: 10px 16px 12px 16px;
+    position: relative;
+    z-index: 3;                        /* title on top of everything */                /* ensure title area is white */
+}
+
+.card {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+}
+
+.card::before {
+    pointer-events: none; /* WAJIB supaya hover ketemu card */
 }

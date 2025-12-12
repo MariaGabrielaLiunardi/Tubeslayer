@@ -102,7 +102,14 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span id="mk-title" th:text="${mkDetail.nama}">Mata Kuliah</span>
+
+                <a th:href="@{/mahasiswa/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+                <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
             </div>
 
             <div id="list-tugas-view">
@@ -113,7 +120,7 @@
                         <div class="tugas-mendatang-list">
 
                             <th:block th:each="tugas, iStat : ${tugasList}">
-                                <div class="tugas-mendatang-card" th:if="${iStat.index < 2}">
+                                <div class="tugas-mendatang-card">
                                     <div class="deadline-info">
                                         <img src="/icon/kalender.png" class="kalender-icon">
                                         <span

@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="/css/dash-user.css">
     <link rel="stylesheet" href="/css/matkul-detail.css">
-    <link rel="icon" href="/static/logo/blue-logo.png" type="image/png">
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
 
     <script src="/js/dash-user.js" defer></script>
     <script src="/js/matkul-detail-dosen.js" defer></script>
@@ -101,7 +101,14 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span id="mk-title" th:text="${mkDetail.nama}">Mata Kuliah</span>
+
+                <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+                <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
             </div>
 
             <div id="list-tugas-view">
@@ -112,7 +119,7 @@
                         <div class="tugas-mendatang-list">
 
                             <th:block th:each="tugas, iStat : ${tugasList}">
-                                <div class="tugas-mendatang-card" th:if="${iStat.index < 2}">
+                                <div class="tugas-mendatang-card">
                                     <div class="deadline-info">
                                         <img src="/icon/kalender.png" class="kalender-icon">
                                         <span
@@ -175,8 +182,8 @@
                             <label for="penentuan-anggota">Penentuan anggota kelompok:</label>
                             <select id="penentuan-anggota" required>
                                 <option value="" disabled selected>Pilih metode penentuan anggota</option>
-                                <option value="dosen">Ditetapkan oleh Dosen</option>
-                                <option value="mahasiswa">Ditetapkan oleh Mahasiswa</option>
+                                <option value="Dosen">Ditetapkan oleh Dosen</option>
+                                <option value="Mahasiswa">Ditetapkan oleh Mahasiswa</option>
                             </select>
                         </div>
                         <div class="form-group" style="align-items: flex-start;">

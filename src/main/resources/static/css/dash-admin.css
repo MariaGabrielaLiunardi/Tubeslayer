@@ -554,7 +554,100 @@ header .image-text .header-text{
 .content-div a {
     text-decoration: none;
 }
+/* ============================
+   QUICK STATS SECTION
+   ============================ */
+.quick-stats-section {
+    width: 1360px;
+    display: flex;
+    flex-direction: column;
+}
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-weight: bold;
+    font-size: 17pt;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    height: 150px;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 2px 3px 1px grey;
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    gap: 20px;
+    transition: var(--tran-03);
+}
+
+.stat-icon {
+    font-size: 36px;
+    min-width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.stat-label {
+    font-weight: bold;
+    font-size: 14pt;
+    color: #333;
+}
+
+.stat-number {
+    font-weight: bold;
+    font-size: 28pt;
+    color: #0077B6;
+}
+
+.stat-sublabel {
+    font-size: 11pt;
+    color: #999;
+    font-style: italic;
+}
+
+/* Responsive untuk tablet */
+@media (max-width: 1400px) {
+    .stats-grid {
+        width: 100%;
+    }
+    
+    .quick-stats-section {
+        width: 100%;
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 900px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-card {
+        height: auto;
+        min-height: 120px;
+    }
+}
 
 
 

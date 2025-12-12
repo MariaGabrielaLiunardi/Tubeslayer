@@ -126,8 +126,13 @@ public class MahasiswaController {
         // Sort berdasarkan nama
         filteredEnrollList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
 
+        // Batasi hanya 4 mata kuliah di dashboard
+        List<MataKuliahMahasiswa> limitedEnrollList = filteredEnrollList.stream()
+            .limit(4)
+            .collect(Collectors.toList());
+
         // Kirim dengan nama variabel 'enrollList' agar cocok dengan HTML
-        model.addAttribute("enrollList", filteredEnrollList); 
+        model.addAttribute("enrollList", limitedEnrollList); 
 
         return "mahasiswa/dashboard";
     }
@@ -212,8 +217,6 @@ public class MahasiswaController {
 
         return "mahasiswa/matkul-detail";
     }
-
-
 
     @GetMapping("/mahasiswa/matkul-peserta")
     public String peserta(@RequestParam(required = false) String kodeMk, 
