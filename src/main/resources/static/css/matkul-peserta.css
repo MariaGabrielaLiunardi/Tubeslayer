@@ -223,6 +223,7 @@ body {
     justify-content: center;
     align-items: center;
     margin-right: 2px;
+    background: none;
 }
 
 .search-box img {
@@ -281,10 +282,6 @@ body {
     overflow: hidden; 
     transition: background-color 0.2s;
     display: table-row; 
-}
-
-.peserta-table-wrapper tbody tr:hover {
-    background-color: #aae0ff; 
 }
 
 .peserta-table-wrapper tbody td {
@@ -381,4 +378,13 @@ body {
 .task-link{
     text-decoration: none;
     color: black;
+}
+
+/* breadcrumb */ 
+.breadcrumb a {
+    color: black;
+}
+
+.breadcrumb a:hover {
+    color: #0078B5;
 }
