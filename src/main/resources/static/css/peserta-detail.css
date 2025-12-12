@@ -1,0 +1,384 @@
+html, body {
+    height: 100%; 
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow-y: auto; 
+    overflow-x: auto;
+    
+    background-color: rgba(172, 224, 249, 1); 
+
+    background-image: linear-gradient(
+        180deg, 
+        rgba(255, 241, 235, 1) 0%, 
+        rgba(172, 224, 249, 1) 50%, 
+        rgba(172, 224, 249, 1) 100%
+    );
+
+    min-height: 100vh;
+    height: auto; 
+    
+    background-attachment: scroll; 
+    
+    background-size: 100% 100vh; 
+    background-repeat: no-repeat;
+}
+
+.home {
+    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%) !important;
+    padding-top: 18px;
+    min-height: 100%; 
+    background-attachment: fixed;
+    background-size: 100% auto; 
+    background-repeat: repeat-y;
+}
+
+.detail-wrapper {
+    margin-top: 10px; 
+    margin-left: 22px;
+    margin-right: 22px;
+    margin-bottom: 50px; 
+
+    top: 10px;
+    background: white;
+    border-radius: 24px;
+
+    padding: 0px 0px 100px; 
+
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+    position: relative;  
+}
+
+/* header utama */
+.home .header {
+    height: 80px; 
+    width: 100%;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 10px 0 10px; 
+}
+
+.home .header .left-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-left: 20px;
+}
+
+.home .header .left-section .dashboard-title {
+    font-weight: bold;
+    font-size: 20pt;
+}
+
+.home .header .right-section {
+    gap: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.home .header .right-section .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* elemen utama header */
+.name {
+    font-weight: bold;
+    font-size: 14pt;
+}
+
+.role {
+    font-size: 12pt;
+}
+
+.pfp {
+    width: 45px;
+    height: 45px;
+}
+
+.logout-btn {
+    width: 25px;
+    height: 25px;
+}
+
+.logout {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: #C1EBFF;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 3px 1px grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* tab */
+.mk-tab {
+    background: #0078B5;
+    width: fit-content;
+    border-radius: 40px;
+    display: flex;
+    gap: 5px;
+    margin-top: 60px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+
+.tab {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-sizing: border-box; 
+}
+
+.tab.active {
+    background: #4CA6D3;
+    border-radius: 30px;
+    padding: 10px 30px; 
+}
+
+/* header mata kuliah */
+.mk-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background: #CCF0F7;
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 0px; 
+}
+
+.mk-img {
+    width: 160px;
+    height: 130px;
+    border-radius: 25px;
+    background-size: cover;
+    background-position: center;
+}
+
+.mk-info h1 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.mk-info p {
+    margin-top: 8px;
+    color: gray;
+    font-size: 18px;
+}
+
+/* breadcrumb */
+.breadcrumb {
+    font-size: 16px;
+    margin-top: 15px; 
+    margin-bottom: 25px; 
+    margin-left: 25px;
+}
+
+.search-and-count {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px; 
+    margin-left: 35px; 
+    margin-right: 55px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    width: 300px;
+    background-color: white; 
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    padding: 5px 15px;
+    border-radius: 25px;
+    font-size: 16px;
+}
+
+.search-box button {
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2px;
+}
+
+.search-box img {
+    width: 18px;
+    height: 18px;
+}
+
+.peserta-count {
+    font-size: 18px;
+}
+
+
+/* peserta content */
+.peserta-content {
+    background: #fff4ec; 
+    border-radius: 30px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+    margin: 0 30px; 
+    padding: 25px 40px 40px 40px; 
+}
+
+/* tabel peserta */
+.peserta-table-wrapper {
+    overflow-x: auto; 
+    display: block; 
+}
+
+.peserta-table-wrapper table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    table-layout: fixed; 
+}
+
+.peserta-table-wrapper thead {
+    background-color: transparent; 
+}
+
+.peserta-table-wrapper thead th {
+    text-align: left;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #555;
+    font-weight: bold;
+}
+
+.peserta-table-wrapper thead tr th:nth-child(1) { width: 5%; } 
+.peserta-table-wrapper thead tr th:nth-child(2) { width: 45%; } 
+.peserta-table-wrapper thead tr th:nth-child(3) { width: 25%; } 
+.peserta-table-wrapper thead tr th:nth-child(4) { width: 25%; } 
+
+
+.peserta-table-wrapper tbody tr {
+    background-color: #c8eaff; 
+    border-radius: 15px;
+    overflow: hidden; 
+    transition: background-color 0.2s;
+    display: table-row; 
+}
+
+.peserta-table-wrapper tbody tr:hover {
+    background-color: #aae0ff; 
+}
+
+.peserta-table-wrapper tbody td {
+    padding: 15px 20px;
+    font-size: 16px;
+    vertical-align: middle; 
+}
+
+.peserta-table-wrapper tbody td:first-child {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.peserta-table-wrapper tbody td:last-child {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.role-peserta {
+    color: #333;
+    font-weight: 500;
+}
+
+.role-dosen {
+    color: #0078B5;
+    font-weight: bold;
+}
+
+/* pagination */
+.pagination {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 20px;
+    gap: 10px;
+}
+
+.pagination .page-info {
+    padding: 5px 10px;
+    background: #c8eaff; 
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.pagination .page-arrow {
+    background: #ccc;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.pagination .page-arrow:hover:not(:disabled) {
+    background: #aaa;
+}
+
+.pagination .page-arrow:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* background card */
+.gradient-1 {
+    background: linear-gradient(#31acef, white);
+}
+
+.gradient-2 {
+    background: url("/icon/matkul-2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.gradient-3 {
+    background: radial-gradient(circle at center,
+            #29ACEF 10%,
+            #9dd6f5 40%,
+            #eaf7ff 70%,
+            #ffffff 100%);
+}
+
+.gradient-4 {
+    background: url("/icon/matkul-4.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.task-link{
+    text-decoration: none;
+    color: black;
+}

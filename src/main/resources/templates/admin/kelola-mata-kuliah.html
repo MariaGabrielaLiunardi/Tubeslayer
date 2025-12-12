@@ -11,54 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
-
-    <style th:inline="text">
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            display: inline-block;
-        }
-        .status-badge.active { background-color: #e7f7ef; color: #0ca678; }
-        .status-badge.inactive { background-color: #fff5f5; color: #fa5252; }
-
-        .suggestions {
-            position: absolute;
-            background: white;
-            border: 1px solid #ddd;
-            width: 100%;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 100;
-            display: none;
-        }
-        .suggestions li {
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-        }
-        .suggestions li:hover { background-color: #f5f5f5; }
-
-        /* Loading */
-        #global-loading {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(255,255,255,0.8);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        .spinner {
-            width: 20px; height: 20px;
-            border: 3px solid #eee;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-    </style>
 </head>
 
 <body>
@@ -167,9 +119,14 @@
                     <tr th:each="mk, iterStat : ${matkulList}" 
                         th:data-id="${mk.kodeMK}"
                         class="data-row">
-                        <td th:text="${iterStat.index + 1}">1</td>
+                        <td th:text="${iterStat.index + 1}">1.</td>
                         <td th:text="${mk.kodeMK}">Kode</td>
-                        <td th:text="${mk.nama}">Nama</td>
+                        <td>
+                            <a th:href="@{/admin/matakuliah-detail(kode=${mk.kodeMK})}" 
+                                class="matkul-link" 
+                                th:text="${mk.nama}">
+                                    Nama Mata Kuliah</a>
+                        </td>
                         <td th:text="${mk.sks}">3</td>
                         <td>
                             <span th:classappend="${mk.active} ? 'status-badge active' : 'status-badge inactive'"

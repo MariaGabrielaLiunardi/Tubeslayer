@@ -663,21 +663,15 @@ header .image-text .header-text{
 }
 
 /* --- Untuk Hapus Mahasiswa --- */
-
-/* Wrapper utama */
-.hapus-mahasiswa {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* Box konten */
+.hapus-mahasiswa{
+    display: flex;
     justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    display: none; 
+    align-items: center;    
+    width: 100%;
+    transform: translateY(70px);
 }
 
-/* Box konten */
 .hapus-mahasiswa-content {
     background: #FFF1EB;
     width: 420px;
@@ -688,12 +682,12 @@ header .image-text .header-text{
     flex-direction: column;
     gap: 20px;
     position: relative;
-    transform: translateY(70px);
 }
 
 /* Input wrapper */
 .hapus-mahasiswa-content .input-wrapper {
     position: relative;
+    border-radius: 15px;
 }
 
 /* Suggestions dropdown */
@@ -714,4 +708,25 @@ header .image-text .header-text{
     border-radius: 10px;
     border: 1.5px solid #cfcfcf;
     background: #fff;
+}
+
+.konfirmasi-hapus{
+    background: #FFF1EB;
+    width: 420px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;          
+    margin: 0 auto;
+    transform: translateY(70px);
+}
+
+.konfirmasi-hapus .button-group {
+    display: flex; 
+    justify-content: center;
+    gap: 12px;
 }
