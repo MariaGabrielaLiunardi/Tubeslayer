@@ -1,270 +1,116 @@
-@import url('https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap');
-
-* {
-    box-sizing: border-box;
-    max-width: 100%;
-    font-family: Sen;
-    margin: 0; 
-    padding: 0; 
+html, body {
+    height: 100%; 
+    margin: 0;
+    padding: 0;
 }
 
-:root{
-    /* Transition */
-    --tran-02: all 0.2s ease; 
-    --tran-03: all 0.3s ease;
-    --tran-04: all 0.4s ease;
-    --tran-05: all 0.5s ease;
+body {
+    overflow-y: auto; 
+    overflow-x: auto;
+    
+    background-color: rgba(172, 224, 249, 1); 
 
-    --nav-primary-blue: #2269a3; /* Biru tua untuk inactive */
-    --nav-active-blue: #6da8ce;  /* Biru muda untuk active */
-    --nav-text-color: #ffffff;
+    background-image: linear-gradient(
+        180deg, 
+        rgba(255, 241, 235, 1) 0%, 
+        rgba(172, 224, 249, 1) 50%, 
+        rgba(172, 224, 249, 1) 100%
+    );
+
+    min-height: 100vh;
+    height: auto; 
+    
+    background-attachment: scroll; 
+    
+    background-size: 100% 100vh; 
+    background-repeat: no-repeat;
 }
 
-body{
-    height: 100vh;
-    overflow-x: hidden;
+.home {
+    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%) !important;
+    padding-top: 18px;
+    min-height: 100%; 
+    background-attachment: fixed;
+    background-size: 100% auto; 
+    background-repeat: repeat-y;
 }
 
-/* === SIDEBAR === */
-.sidebar .text{
-    font-size: 15px; 
-    font-weight: 500;
-    color: black;
-    transition: var(--tran-03);
-    white-space: nowrap;
-    opacity: 1;
+.detail-wrapper {
+    margin-top: 10px; 
+    margin-left: 22px;
+    margin-right: 22px;
+    margin-bottom: 50px; 
+
+    top: 10px;
+    background: white;
+    border-radius: 24px;
+
+    padding: 0px 0px 100px; 
+
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+    position: relative;  
 }
 
-.sidebar.close .text{
-    opacity: 0;
-}
-
-.sidebar .image{
-    min-width: 60px;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar{
-    position: fixed;
-    top: 0; 
-    left: 0; 
-    height: 100%;
-    width: 230px;
-    padding: 10px 14px; 
-    background-color: white;
-    transition: var(--tran-05);
-    z-index: 100;
-}
-
-.sidebar.close{
-    width:73px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.sidebar li{
-    height: 50px;
-    margin-top: 10px;
-    list-style: none;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar li .icon{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 25px;
-    height: auto;
-    margin-right: 20px; 
-    margin-left: 10px
-}
-
-.sidebar li .icon,
-.sidebar li .text{
-    transition: var(--tran-02);
-}
-
-.sidebar header{
-    position: relative;
-}
-
-.sidebar .image-text img{
-    width: 55px;
-}
-
-.sidebar header .image-text{
-    display: flex;
-    align-items: center;
-}
-
-header .image-text .header-text{
-    display: flex;
-    flex-direction: column;
-}
-
-.header-text .name{
-    font-weight: bold;
-    color: #0078B5;
-    font-size:15pt;
-}
-
-.sidebar .toggle{
-    position: absolute; 
-    top: 50%; 
-    right: -40px; 
-    transform: translateY(-50%) rotate(180deg);
-    height: 35px;
-    width: 35px;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: black; 
-    font-size: 25px;
-    cursor: pointer;
-    transition: var(--tran-03);
-}
-
-.sidebar.close .toggle{
-    transform: translateY(-50%); 
-}
-
-.sidebar li a{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    transition: var(--tran-04); 
-    border-radius: 10px;
-}
-
-.sidebar li a:hover{
-    background-color: #C1EBFF;
-}
-
-.sidebar .menu{
-    margin-top: 50px;
-}
-
-.sidebar .menu-bar{
-    height: calc(100% - 50px);
-    display: flex; 
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.sidebar li.active a {
-    background-color: #C1EBFF; 
-}
-
-.home{
-    position: relative;
-    height: 100vh;
-    left: 73px; 
-    width: calc(100% - 73px);
-    transition: var(--tran-05);
-    background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%);
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar.close ~ .home{
-    filter: blur(0px);
-    pointer-events: auto;
-} 
-
-.sidebar:not(.close) ~ .home {
-    filter: blur(3px) brightness(0.7); 
-    transition: var(--tran-05); 
-    pointer-events: none; 
-}
-
-.sidebar.close ~ .home {
-    filter: blur(0px); 
-    pointer-events: auto;
-}
-
-.sidebar:not(.close) ~ .home {
-    filter: blur(3px) brightness(0.7); 
-    transition: var(--tran-05); 
-    pointer-events: none; 
-}
-
-.sidebar:not(.close) ~ .home::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.2); 
-    z-index: 5;
-}
-
-.home .header{
+/* header utama */
+.home .header {
     height: 80px; 
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
     align-items: center;
+    padding: 0 10px 0 10px; 
 }
 
-.home .header .left-section{
-    margin-left: 48px; 
+.home .header .left-section {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    gap: 15px; 
+    gap: 15px;
+    margin-left: 20px;
 }
 
-.home .header .left-section .dashboard-title{
+.home .header .left-section .dashboard-title {
     font-weight: bold;
-    font-size: 20pt; 
+    font-size: 20pt;
 }
 
-.home .header .right-section{
-    margin-right: 30px; 
+.home .header .right-section {
     gap: 15px;
     display: flex;
     align-items: center;
 }
 
-.home .header .right-section .info{
-    display: flex; 
+.home .header .right-section .info {
+    display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.name{
+/* elemen utama header */
+.name {
     font-weight: bold;
-    font-size: 14pt; 
+    font-size: 14pt;
 }
 
-.role{
-    font-size: 12pt; 
-    color: #757575;
+.role {
+    font-size: 12pt;
 }
 
-.pfp{
+.pfp {
     width: 45px;
     height: 45px;
 }
 
-.logout-btn{
+.logout-btn {
     width: 25px;
     height: 25px;
 }
 
-.logout{
+.logout {
     width: 40px;
     height: 40px;
     border: none;
-    background-color: #C1EBFF; 
+    background-color: #C1EBFF;
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 2px 3px 1px grey;
@@ -273,290 +119,229 @@ header .image-text .header-text{
     align-items: center;
 }
 
-.rectangle-wrapper{
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-/* Kontainer Utama Navigasi */
-.nav-segmented-control {
-    display: flex;
-    width: 100%;
-    max-width: 800px; /* Lebar maksimal */
-    height: 80px;
-    background-color: var(--nav-primary-blue);
-    border-radius: 40px; /* Sudut membulat penuh (setengah dari tinggi) */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Penting agar sudut melengkung sempurna */
-    font-family: Sen;
-    margin-top: 30px; /* Contoh margin agar tidak menempel ke header */
-    margin-left: 100px;
-}
-
-/* Style untuk setiap Segmen */
-.nav-segmented-control > div {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--nav-text-color);
-    font-size: 30px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    padding: 0 10px; /* Padding horizontal */
-}
-
-/* Hover effect untuk segmen inactive */
-.nav-segmented-control > div:hover:not(.nav-active) {
-    background-color: rgba(255, 255, 255, 0.1); /* Sedikit gelap/terang saat di-hover */
-}
-
-/* Style untuk Segmen Aktif */
-.nav-segmented-control .nav-active {
-    background-color: var(--nav-active-blue);
-    font-weight: 700;
+/* tab */
+.mk-tab {
+    background: #0078B5;
+    width: fit-content;
     border-radius: 40px;
-}
-
-/* Memastikan sudut kanan segmen terakhir (jika aktif) tetap bulat sempurna */
-.nav-segmented-control > div:last-child {
-    border-top-right-radius: 40px; 
-    border-bottom-right-radius: 40px;
-}
-
-/* Move blue active/background from the Dashboard item to the Open Book item
-   without changing HTML: override the original active anchor and apply
-   the blue background to the second menu item (Open Book). */
-.menu-links li.nav-link.active a {
-    background-color: transparent; /* neutralize existing active rule */
-}
-
-.menu-links li:nth-child(2) a {
-    background-color: #C1EBFF; /* same blue as active */
-    border-radius: 10px; /* match anchor rounding used elsewhere */
-}
-
-.menu-links li:nth-child(2) a .text {
-    color: black; /* keep text readable on blue */
-    font-weight: 600;
-}
-
-/* Hover effect on Dashboard icon (first menu item) */
-.menu-links li:nth-child(1) a:hover {
-    background-color: #C1EBFF;
-}
-
-.container {
-    position: relative;
-    width: 100%;
     display: flex;
-    justify-content: center;
-    margin-top: 40px;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Rectangle biru di depan */
-.rectangle-blue {
-    width: 90%; 
-    max-width: 1648px;
-    height: 220px;       
-    background: #CCF0F7; 
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    position: relative;
-    z-index: 10;          
-    display: flex;
-    align-items: center;
-    padding-left: 40px;
-    margin-top: 10px; /* Move it down from the segmented control */
-}
-
-.tb-title {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.tb-icon {
-    width: 150px;
-    border-radius: 30px;
-}
-
-.tb-text {
-    font-size: 36px;
-    font-weight: 700;
-    
-}
-
-/* Rectangle putih */
-.rectangle-white {
-    width: 90%; 
-    max-width: 1648px; 
-    min-height: 610px;
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* Align content to the top */
-    margin-top: -15px; /* Adjust this negative margin to create a small overlap with blue */
-    padding-top: 15px; /* Compensate for the negative margin */
-    padding-bottom: 20px;
-    padding-left: 40px;
-    padding-right: 40px;
-}
-
-/* Rectangle Yellow (The Overlapping Content Area) === */
-.rectangle-yellow {
-    width: calc(100% - 80px); /* 100% minus padding of .rectangle-white (40px on each side) */
-    position: absolute;
-    top: 50px; /* **CRUCIAL:** Move it 100px above the top edge of .rectangle-white */
-    height: 560px; /* Let content define height */
-    background: #FFF5F1; /* Light yellow color */
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 15; /* Ensure it is above the blue and white boxes */
-    padding: 30px; /* Internal padding for the content */
-    display: flex;
-    flex-direction: column;
-}
-
-/* The .rectangle-blue needs to hide its internal content as the yellow box will overlay it,
-   but since the user kept the `tb-title`, I'll assume they want the title visible.
-   I will position the yellow box to cover most of the white box and overlap the blue one. */
-
-
-/* === Search Bar and Info (Moved into Yellow Rectangle) === */
-.search-and-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 30px;
-    padding: 0; /* Remove padding as .rectangle-yellow already has it */
-    
-}
-
-.search-wrapper {
-    position: relative;
-    width: 350px;
-}
-
-.search-input {
-    width: 100%;
-    height: 50px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 0 50px 0 15px; 
-    font-size: 16px;
-    color: #555;
-    box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.5);
-}
-
-.search-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-}
-
-.task-info {
-    font-size: 20px;
-    font-weight: 500;
-    color: #333;
-}
-
-.boldtext{
-    font-weight: bold;
-}
-
-/* === Assignment Table Header and Row (Moved into Yellow Rectangle) === */
-.assignment-table-wrapper {
-    width: 100%;
-    padding: 0; /* Remove padding as .rectangle-yellow already has it */
-}
-
-.assignment-header {
-    display: flex;
-    background-color: transparent; 
-    border-radius: 10px;
-    padding: 15px 0;
-    font-weight: bold;
-    font-size: 18px;
-    color: black;
+    gap: 5px;
+    margin-top: 60px;
+    margin-left: 30px;
     margin-bottom: 10px;
 }
 
-.col-no {
-    width: 10%;
-    text-align: center;
+.tab {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-sizing: border-box; 
 }
 
-.col-nama {
-    width: 60%;
-    padding-left: 20px;
+.tab.active {
+    background: #4CA6D3;
+    border-radius: 30px;
+    padding: 10px 30px; 
 }
 
-.col-tenggat {
-    width: 30%;
-    text-align: center;
-}
-
-.assignment-row {
+/* header mata kuliah */
+.mk-header {
     display: flex;
     align-items: center;
-    padding: 15px 0;
+    gap: 30px;
+    background: #CCF0F7;
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 0px; 
+}
+
+.mk-img {
+    width: 160px;
+    height: 130px;
+    border-radius: 25px;
+    background-size: cover;
+    background-position: center;
+}
+
+.mk-info h1 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.mk-info p {
+    margin-top: 8px;
+    color: gray;
+    font-size: 18px;
+}
+
+/* breadcrumb */
+.breadcrumb {
     font-size: 16px;
-    background-color: #ACE0F9;
+    margin-top: 15px; 
+    margin-bottom: 25px; 
+    margin-left: 25px;
+}
+
+.search-and-count {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px; 
+    margin-left: 35px; 
+    margin-right: 55px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    width: 300px;
+    background-color: white; 
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    padding: 5px 15px;
+    border-radius: 25px;
+    font-size: 16px;
+}
+
+.search-box button {
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2px;
+    background: none;
+}
+
+.search-box img {
+    width: 18px;
+    height: 18px;
+}
+
+.peserta-count {
+    font-size: 18px;
+}
+
+
+/* peserta content */
+.peserta-content {
+    background: #fff4ec; 
     border-radius: 30px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+    margin: 0 30px; 
+    padding: 25px 40px 40px 40px; 
 }
 
-.assignment-row:last-child {
-    border-bottom: none;
+/* tabel peserta */
+.peserta-table-wrapper {
+    overflow-x: auto; 
+    display: block; 
 }
 
-.assignment-row .col-no {
+.peserta-table-wrapper table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    table-layout: fixed; 
+}
+
+.peserta-table-wrapper thead {
+    background-color: transparent; 
+}
+
+.peserta-table-wrapper thead th {
+    text-align: left;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #555;
+    font-weight: bold;
+}
+
+.peserta-table-wrapper thead tr th:nth-child(1) { width: 5%; } 
+.peserta-table-wrapper thead tr th:nth-child(2) { width: 50%; } 
+.peserta-table-wrapper thead tr th:nth-child(3) { width: 45%; } 
+
+
+.peserta-table-wrapper tbody tr {
+    background-color: #c8eaff; 
+    border-radius: 15px;
+    overflow: hidden; 
+    transition: background-color 0.2s;
+    display: table-row; 
+}
+
+.peserta-table-wrapper tbody tr.clickable-row {
+    cursor: pointer;
+}
+
+.peserta-table-wrapper tbody tr.clickable-row:hover {
+    background-color: #a8d8f5;
+}
+
+.peserta-table-wrapper tbody td {
+    padding: 15px 20px;
+    font-size: 16px;
+    vertical-align: middle; 
+}
+
+.peserta-table-wrapper tbody td:first-child {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.peserta-table-wrapper tbody td:last-child {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/* background card */
+.gradient-1 {
+    background: linear-gradient(#31acef, white);
+}
+
+.gradient-2 {
+    background: url("/icon/matkul-2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.gradient-3 {
+    background: radial-gradient(circle at center,
+            #29ACEF 10%,
+            #9dd6f5 40%,
+            #eaf7ff 70%,
+            #ffffff 100%);
+}
+
+.gradient-4 {
+    background: url("/icon/matkul-4.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.task-link{
+    text-decoration: none;
     color: black;
 }
 
-.assignment-row .col-nama {
-    color: #333;
-    font-weight: 500;
+/* breadcrumb */ 
+.breadcrumb a {
+    color: black;
 }
 
-.assignment-row .col-tenggat {
-    color: black; 
-    font-weight: 500;
-}
-
-.subject-title{
-    font-weight: bold;
-    font-size: 48px;
-}
-
-.subject-details{
-    color: gray;
-}
-
-.bold-koor{
-    font-weight:bolder;
-    color: #555;
-}
-
-.bold-NIP{
-    font-weight:bolder;
-    color: #555;
+.breadcrumb a:hover {
+    color: #0078B5;
 }

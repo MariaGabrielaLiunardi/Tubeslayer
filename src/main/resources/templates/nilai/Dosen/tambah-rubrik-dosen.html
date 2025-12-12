@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tambah Rubrik Dosen</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/tambah-rubrik-dosen.css">
-        <script src="../../../static/js/tambah-rubrik-dosen.js" defer></script>
+        <title>Tambah Rubrik Dosen - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/tambah-rubrik-dosen.css}">
+        <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
+        <script th:src="@{/js/tambah-rubrik-dosen.js}" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
 
@@ -14,7 +15,7 @@
             <header>
                 <div class="image-text">
                     <span class="image">
-                        <img src="../../../static/logo/blue-logo.png" alt="logo">
+                        <img th:src="@{/logo/blue-logo.png}" alt="logo">
                     </span>
 
                     <div class ="text header-text">
@@ -27,14 +28,14 @@
                 <div class="menu">
                     <ul class="menu-links">
                         <li class="nav-link active">
-                            <a href="#">
-                                <img src="../../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                            <a th:href="@{/dosen/dashboard}">
+                                <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="#">
-                                <img src="../../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
+                            <a th:href="@{/dosen/mata-kuliah}">
+                                <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
                                 <span class="text nav-text">Mata Kuliah</span>
                             </a>
                         </li>
@@ -46,44 +47,41 @@
         <section class="home">
             <div class="header">
                 <div class="left-section">
-                    <span class="dashboard-title"></span>
+                    <span class="dashboard-title">Kelola Rubrik Penilaian</span>
                 </div>
                 <div class="right-section">
                     <div class="info">
-                        <span class="name">Clara Joycelyne</span>
-                        <span class="role">Dosen</span>
+                        <span class="name" th:text="${user.nama}">Nama Dosen</span>
+                        <span class="role" th:text="${user.role}">Dosen</span>
                     </div>
-                    <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
-                    <button type="button" class="logout">
-                        <img src="../../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    <a th:href="@{/profil}">
+                        <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
+                    </a>
+                    <button type="button" class="logout" id="logoutButton">
+                        <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logout">
                     </button>
                 </div>
             </div>
 
             <div class="nav-segmented-control">
-                <div class="kuliah-segment">
-                    Kuliah
-                </div>
-
-                <div class="Daftar-Peserta-segment">
-                    Daftar Peserta
-                </div>
-
-                <div class="nav-active">
-                    Nilai
+                <div class="nav-tab">
+                    Kelola Rubrik
                 </div>
             </div>
             
             <div class="container">
                 <div class="rectangle-blue">
                     <div class="tb-title">
-                        <img src="../../../static/icon/bookj ver4.png" class="tb-icon">
-                        <span class="tb-text">Tugas Besar Tahap 1</span>
+                        <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
+                        <span class="tb-text" th:text="${mataKuliah.nama}">Nama Mata Kuliah</span>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="title-rubrik"> <a href="rubrik-penilaian-dosen.html">Penilaian </a>  > Edit Rubrik </div>
+                    <div class="title-rubrik"> 
+                        <a th:href="@{/dosen/rubrik-penilaian(kodeMk=${kodeMk})}" >Penilaian</a> 
+                        <span> > Kelola Rubrik</span>
+                    </div>
                     
                     <div class="rectangle-yellow">
                         <div class="assignment-table-wrapper">
@@ -91,9 +89,23 @@
                                 <div class="col-komponen">Komponen Penilaian</div>
                                 <div class="col-bobot">Bobot (%)</div>
                                 <div class="col-keterangan">Keterangan</div>
-                                <div class="col-delete-header"></div> </div>
+                                <div class="col-delete-header"></div>
+                            </div>
                             
-                            <div class="tambah-komponen">
+                            <div class="assignment-row" th:each="tugas : ${tugasList}">
+                                <div class="col-isi-komponen" th:text="${tugas.judulTugas}">Komponen</div>
+                                <div class="col-isi-bobot">
+                                    <input type="number" class="bobot-input" min="0" max="100" value="100">
+                                </div>
+                                <div class="col-isi-keterangan">
+                                    <input type="text" class="keterangan-input" th:value="${tugas.deskripsi ?: ''}">
+                                </div>
+                                <div class="col-delete">
+                                    <button class="delete-btn" onclick="removeComponent(this)">×</button>
+                                </div>
+                            </div>
+                            
+                            <div class="tambah-komponen" onclick="addComponent()">
                                 <div class="tambah-komponen-penilainan">+ Tambah Komponen Penilaian</div>
                             </div>
                         </div>
@@ -101,16 +113,103 @@
                         <div class="total-bobot">
                             <div class="total-left">
                                 <div class="total">Total Bobot</div>
-                                <div class="bobot">-</div> </div>
+                                <div class="bobot" id="totalBobotValue">0</div> 
+                            </div>
 
                             <div class="tombol-aksi">
-                                <button class="btn-batal">Rilis</button>
-                                <button class="btn-simpan">Simpan</button>
+                                <button class="btn-batal" onclick="goBack()">Batal</button>
+                                <button class="btn-simpan" onclick="saveRubrik()">Simpan</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <script th:inline="javascript">
+            // Logout handler
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    window.location.href = '/logout';
+                }
+            });
+
+            // Add new component row
+            function addComponent() {
+                const tableWrapper = document.querySelector('.assignment-table-wrapper');
+                const newRow = document.createElement('div');
+                newRow.className = 'assignment-row';
+                newRow.innerHTML = `
+                    <div class="col-isi-komponen">
+                        <input type="text" class="komponen-input" placeholder="Nama Komponen">
+                    </div>
+                    <div class="col-isi-bobot">
+                        <input type="number" class="bobot-input" min="0" max="100" value="0" onchange="calculateTotal()">
+                    </div>
+                    <div class="col-isi-keterangan">
+                        <input type="text" class="keterangan-input" placeholder="Keterangan">
+                    </div>
+                    <div class="col-delete">
+                        <button class="delete-btn" onclick="removeComponent(this)">×</button>
+                    </div>
+                `;
+                
+                // Insert before "tambah-komponen"
+                const tambahDiv = tableWrapper.querySelector('.tambah-komponen');
+                tableWrapper.insertBefore(newRow, tambahDiv);
+                calculateTotal();
+            }
+
+            // Remove component row
+            function removeComponent(btn) {
+                btn.closest('.assignment-row').remove();
+                calculateTotal();
+            }
+
+            // Calculate total bobot
+            function calculateTotal() {
+                const inputs = document.querySelectorAll('.bobot-input');
+                let total = 0;
+                inputs.forEach(input => {
+                    total += parseFloat(input.value) || 0;
+                });
+                document.getElementById('totalBobotValue').textContent = Math.min(total, 100);
+            }
+
+            // Save rubrik
+            function saveRubrik() {
+                const rows = document.querySelectorAll('.assignment-row:not(.tambah-komponen)');
+                if (rows.length === 0) {
+                    alert('Silakan tambahkan minimal satu komponen penilaian');
+                    return;
+                }
+
+                let valid = true;
+                rows.forEach(row => {
+                    const inputs = row.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        if (!input.value) valid = false;
+                    });
+                });
+
+                if (!valid) {
+                    alert('Silakan lengkapi semua komponen penilaian');
+                    return;
+                }
+
+                alert('Rubrik penilaian berhasil disimpan');
+                console.log('Rubrik saved');
+                calculateTotal();
+            }
+
+            // Go back
+            function goBack() {
+                const kodeMk = [[${kodeMk}]];
+                window.location.href = '/dosen/rubrik-penilaian?kodeMk=' + kodeMk;
+            }
+
+            // Initial calculation
+            calculateTotal();
+        </script>
     </body>
 </html>
