@@ -60,5 +60,17 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     List<MataKuliahDosen> findActiveByUserAndTahunAkademik(@Param("idUser") String idUser,
                                                           @Param("tahunAkademik") String tahunAkademik,
                                                           Pageable pageable);
+
+    // ambil list MK aktif untuk dosen tertentu di tahun akademik tertentu (tanpa Pageable)
+    @Query("""
+        SELECT mkm 
+        FROM MataKuliahDosen mkm
+        WHERE mkm.user.idUser = :idUser
+          AND mkm.isActive = true
+          AND mkm.tahunAkademik = :tahunAkademik
+        ORDER BY mkm.mataKuliah.nama ASC
+    """)
+    List<MataKuliahDosen> findById_IdUserAndTahunAkademikAndIsActive(@Param("idUser") String idUser,
+                                                                     @Param("tahunAkademik") String tahunAkademik);
 }
 

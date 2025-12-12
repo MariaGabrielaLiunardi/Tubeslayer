@@ -264,17 +264,6 @@ header .image-text .header-text{
     align-items: center;
 }
 
-/* === CONTENTS === */
-.contents {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px 0;
-    flex-grow: 1;
-}
-
 /* === NAVIGATION TABS === */
 .nav-segmented-control {
     display: flex;
@@ -287,6 +276,7 @@ header .image-text .header-text{
     font-family: Sen;
     gap: 0;
     margin-left: 30px;
+    margin-top: 10px;
 }
 
 .nav-segmented-control > div {
@@ -310,6 +300,40 @@ header .image-text .header-text{
 .nav-segmented-control .nav-active {
     background-color: #4CA6D3;
     font-weight: 700;
+}
+
+/* === MK-TAB === */
+.mk-tab {
+    background: #0078B5;
+    width: fit-content;
+    border-radius: 40px;
+    display: flex;
+    gap: 5px;
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+
+.tab {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-sizing: border-box; 
+    transition: all 0.3s ease;
+}
+
+.tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tab.active {
+    background: #4CA6D3;
+    border-radius: 30px;
+    padding: 10px 30px; 
 }
 
 /* === CONTAINER === */
@@ -356,10 +380,11 @@ header .image-text .header-text{
     color: #333;
 }
 
-/* Rectangle putih untuk cards */
+/* Rectangle putih untuk content */
 .rectangle-white {
     width: 92%;
     max-width: 1200px;
+    min-height: 600px;
     padding: 40px 40px;
     background: #ffffff;
     border-radius: 0 0 20px 20px;
@@ -367,49 +392,307 @@ header .image-text .header-text{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     margin-top: 0;
 }
 
-/* Cards Container */
-.card-container {
+/* === Breadcrumb === */
+.breadcrumb-nav {
     display: flex;
-    flex-direction: row;
-    gap: 40px;
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.card {
-    width: 280px;
-    height: 280px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    gap: 20px;
-    padding: 30px 20px;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.breadcrumb-link {
+    color: #0078B5;
     text-decoration: none;
-    color: #333;
-    cursor: pointer;
-    border: 1px solid #e8e8e8;
-}
-
-.card img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-}
-
-.card p {
-    font-size: 16pt;
     font-weight: 600;
-    text-align: center;
+    cursor: pointer;
+}
+
+.breadcrumb-link:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    color: #999;
+}
+
+.breadcrumb-current {
+    color: #333;
+    font-weight: 600;
+}
+
+/* === Form Wrapper === */
+.rubrik-form-wrapper {
+    width: 100%;
+}
+
+.rubrik-form-content {
+    width: 100%;
+}
+
+.form-header {
+    margin-bottom: 25px;
+}
+
+.form-header h2 {
+    font-size: 22px;
+    font-weight: 700;
     color: #333;
     margin: 0;
+}
+
+/* === Rubrik Table Wrapper === */
+.rubrik-table-wrapper {
+    width: 100%;
+    background: #FFF5F1;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.rubrik-table-header {
+    display: grid;
+    grid-template-columns: 2fr 0.6fr 2fr auto;
+    gap: 15px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+}
+
+.col-komponen,
+.col-bobot,
+.col-keterangan {
+    background-color: #CDE8F6;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.col-bobot {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.col-aksi {
+    background-color: transparent;
+    border: none;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rubrik-row {
+    display: grid;
+    grid-template-columns: 2fr 0.6fr 2fr auto;
+    gap: 15px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    align-items: flex-start;
+}
+
+.col-isi-komponen,
+.col-isi-bobot,
+.col-isi-keterangan,
+.col-isi-aksi {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #E0E0E0;
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    box-sizing: border-box;
+}
+
+.col-isi-bobot {
+    text-align: center;
+    justify-content: center;
+}
+
+.col-isi-keterangan {
+    align-items: flex-start;
+    padding-top: 12px;
+}
+
+.col-isi-aksi {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    justify-content: center;
+}
+
+/* === Form Inputs === */
+.input-komponen,
+.input-bobot,
+.input-keterangan {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 17px;
+    font-family: Sen;
+    padding: 0;
+    color: #333;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.input-keterangan {
+    min-height: 25px;
+    resize: none;
+    overflow: hidden;
+}
+
+.input-komponen::placeholder,
+.input-bobot::placeholder,
+.input-keterangan::placeholder {
+    color: #bbb;
+}
+
+.input-komponen:focus,
+.input-bobot:focus,
+.input-keterangan:focus {
+    outline: none;
+    color: #333;
+}
+
+/* === Buttons === */
+.btn-hapus-komponen {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background-color: #E8E8E8;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.btn-hapus-komponen:hover {
+    background-color: #D0D0D0;
+    transform: scale(1.1);
+}
+
+.btn-hapus-komponen i {
+    font-size: 18px;
+}
+
+.btn-tambah-komponen {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-tambah-komponen:hover {
+    background-color: #333;
+}
+
+/* === Rubrik Footer === */
+.rubrik-footer {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px solid #E5E5E5;
+}
+
+.rubrik-total {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.rubrik-total .label {
+    color: #333;
+}
+
+.rubrik-total .value {
+    background-color: #CDE8F6;
+    color: #0078B5;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.bobot-status {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.bobot-status.valid {
+    color: #27ae60;
+}
+
+.bobot-status.invalid {
+    color: #e74c3c;
+}
+
+/* === Form Actions === */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: flex-end;
+}
+
+.btn-simpan {
+    background-color: #0078B5;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-simpan:hover:not(:disabled) {
+    background-color: #005a8a;
+}
+
+.btn-simpan:disabled {
+    background-color: #bbb;
+    cursor: not-allowed;
+}
+
+.btn-batal {
+    background-color: #999;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.btn-batal:hover {
+    background-color: #777;
 }
 
 /* === RESPONSIVE === */
@@ -422,10 +705,10 @@ header .image-text .header-text{
     .tb-text {
         font-size: 24pt;
     }
-    
-    .card-container {
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 20px;
+
+    .rubrik-table-header,
+    .rubrik-row {
+        grid-template-columns: 40% 12% 30% 18%;
     }
 }
 
@@ -457,42 +740,18 @@ header .image-text .header-text{
         font-size: 18pt;
     }
     
-    .card-container {
+    .rubrik-table-header,
+    .rubrik-row {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 10px;
     }
-    
-    .card {
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-simpan,
+    .btn-batal {
         width: 100%;
-        max-width: 400px;
     }
-}
-
-/* === MK-TAB STYLES === */
-.mk-tab {
-    background: #0078B5;
-    width: fit-content;
-    border-radius: 40px;
-    display: flex;
-    gap: 5px;
-    margin-top: 60px;
-    margin-left: 30px;
-    margin-bottom: 10px;
-}
-
-.tab {
-    background: transparent;
-    color: white;
-    border: none;
-    padding: 10px 30px;
-    font-size: 18px;
-    border-radius: 30px;
-    cursor: pointer;
-    box-sizing: border-box; 
-}
-
-.tab.active {
-    background: #4CA6D3;
-    border-radius: 30px;
-    padding: 10px 30px; 
 }

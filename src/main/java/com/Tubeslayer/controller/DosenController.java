@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.Tubeslayer.dto.PesertaMatkulDTO;
 import com.Tubeslayer.dto.TugasBesarRequest;
@@ -38,15 +42,19 @@ import java.util.Comparator;
 @Controller
 public class DosenController {
 
+    private static final Logger logger = LoggerFactory.getLogger(DosenController.class);
+
     @Autowired private MataKuliahRepository mataKuliahRepo;
     @Autowired private TugasBesarRepository tugasRepo;
     @Autowired private MataKuliahDosenRepository mkDosenRepo; 
     @Autowired(required = false) private RubrikNilaiRepository rubrikNilaiRepo;
+    @Autowired(required = false) private KomponenNilaiRepository komponenNilaiRepo;
     @Autowired(required = false) private MataKuliahMahasiswaRepository mkMahasiswaRepo; 
     @Autowired(required = false) private KelompokRepository kelompokRepo;
     @Autowired(required = false) private TugasBesarKelompokRepository tugasKelompokRepo;
     @Autowired(required = false) private UserKelompokRepository userKelompokRepo;
     @Autowired(required = false) private UserRepository userRepo;
+    @Autowired private JdbcTemplate jdbcTemplate;
 
     private final DashboardDosenService dashboardService;
     private final MataKuliahService mataKuliahService;
@@ -74,7 +82,15 @@ public class DosenController {
         model.addAttribute("jumlahMk", jumlahMk);
         model.addAttribute("jumlahTb", jumlahTb);
 
+        // Gunakan query yang sudah working
         List<MataKuliahDosen> mataKuliahDosenList = mkDosenRepo.findById_IdUserAndIsActive(user.getIdUser(), true);
+        
+        logger.info("Dashboard Dosen - User ID: {}, Tahun Akademik: {}, Mata Kuliah Found: {}", 
+                    user.getIdUser(), tahunAkademik, mataKuliahDosenList.size());
+        if (!mataKuliahDosenList.isEmpty()) {
+            mataKuliahDosenList.forEach(mk -> logger.info("  - {}: {} (tahunAkademik: {})", 
+                mk.getMataKuliah().getKodeMK(), mk.getMataKuliah().getNama(), mk.getTahunAkademik()));
+        }
 
         // 2. LOGIKA WARNA KONSISTEN (Tambahkan ini!)
         int gradientCount = 4;
@@ -96,11 +112,16 @@ public class DosenController {
  @GetMapping("/dosen/mata-kuliah")
     public String mataKuliah(@AuthenticationPrincipal CustomUserDetails user, Model model) {
     
-        // 1. Ambil data menggunakan method yang ada di Repository kamu
-        // Perhatikan: Gunakan findById_IdUserAndIsActive sesuai file repo yang kamu kirim
+        // Logic tanggal & semester
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        String semesterTahunAjaran = (today.getMonthValue() >= 7) ? year + "/" + (year + 1) : (year - 1) + "/" + year;
+        String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
+    
+        // PERBAIKAN: Ambil data dengan tahun akademik yang sesuai
         List<MataKuliahDosen> mataKuliahDosenList = mkDosenRepo.findById_IdUserAndIsActive(user.getIdUser(), true);
 
-        // 2. --- LOGIKA WARNA KONSISTEN (HASH CODE) ---
+        // LOGIKA WARNA KONSISTEN (HASH CODE)
         int gradientCount = 4;
         for (MataKuliahDosen mkd : mataKuliahDosenList) {
             String kodeMK = mkd.getMataKuliah().getKodeMK();
@@ -108,28 +129,20 @@ public class DosenController {
             // Hitung index warna berdasarkan Kode MK (misal: "IF123" selalu menghasilkan angka yang sama)
             int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
             
-            // Set ke dalam objek (pastikan ada setter/field transient di entity MataKuliahDosen)
+            // Set ke dalam objek
             mkd.setColorIndex(colorIndex);
         }
-        // ---------------------------------------------
 
-        // 3. Sort agar rapi berdasarkan nama (Opsional)
+        // Sort agar rapi berdasarkan nama
         mataKuliahDosenList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
     
         model.addAttribute("mataKuliahDosenList", mataKuliahDosenList);
-    model.addAttribute("user", user);
-
-        // Logic tanggal & semester (Biarkan seperti semula)
-    LocalDate today = LocalDate.now();
-    int year = today.getYear();
-        String semesterTahunAjaran = (today.getMonthValue() >= 7) ? year + "/" + (year + 1) : (year - 1) + "/" + year;
-    String semesterLabel = (today.getMonthValue() >= 9 || today.getMonthValue() <= 2) ? "Ganjil" : "Genap";
-        
+        model.addAttribute("user", user);
         model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
-    model.addAttribute("semesterLabel", semesterLabel);
+        model.addAttribute("semesterLabel", semesterLabel);
 
-    return "dosen/mata-kuliah";
-}
+        return "dosen/mata-kuliah";
+    }
 
     @GetMapping("/dosen/matkul-detail")
     public String matkulDetail(@RequestParam String kodeMk,
@@ -949,5 +962,356 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         model.addAttribute("idTugas", idTugas);
 
         return "nilai/Dosen/dashboard-nilai-dosen";
+    }
+
+    /**
+     * GET - Rubrik Penilaian Dosen (View Only)
+     * Menampilkan rubrik penilaian untuk tugas tertentu
+     */
+    @GetMapping("/dosen/rubrik-penilaian")
+    public String dosenRubrikPenilaian(
+            @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer idTugas,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+        
+        if (kodeMk == null || kodeMk.isEmpty() || idTugas == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+        if (mkDosen == null || !mkDosen.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+        if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        // Prepare rubrik items untuk display
+        List<Map<String, Object>> rubrikItems = new ArrayList<>();
+        int totalBobot = 0;
+        boolean hasRubrik = false;
+        
+        if (tugas.getRubrik() != null) {
+            hasRubrik = true;
+            RubrikNilai rubrik = tugas.getRubrik();
+            
+            // Explicitly load komponen dari database menggunakan repository
+            List<KomponenNilai> komponenList = komponenNilaiRepo.findByRubrik_IdRubrik(rubrik.getIdRubrik());
+            System.out.println("DEBUG: Loaded " + komponenList.size() + " komponens for rubrik " + rubrik.getIdRubrik());
+            
+            if (komponenList != null && !komponenList.isEmpty()) {
+                for (KomponenNilai komponen : komponenList) {
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("namaKomponen", komponen.getNamaKomponen());
+                    item.put("bobot", komponen.getBobot());
+                    item.put("catatan", komponen.getCatatan() != null ? komponen.getCatatan() : "");
+                    rubrikItems.add(item);
+                    totalBobot += komponen.getBobot();
+                    System.out.println("DEBUG: Komponen - " + komponen.getNamaKomponen() + ", bobot=" + komponen.getBobot());
+                }
+            }
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("mkDosen", mkDosen);
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("kodeMk", kodeMk);
+        model.addAttribute("idTugas", idTugas);
+        model.addAttribute("rubrikItems", rubrikItems);
+        model.addAttribute("totalBobot", totalBobot);
+        model.addAttribute("hasRubrik", hasRubrik);
+
+        return "nilai/Dosen/rubrik-penilaian-dosen";
+    }
+
+    /**
+     * GET - Edit Rubrik Penilaian Dosen
+     * Menampilkan form untuk edit/tambah rubrik penilaian
+     */
+    @GetMapping("/dosen/edit-rubrik-penilaian")
+    public String dosenEditRubrik(
+            @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer idTugas,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+        
+        if (kodeMk == null || kodeMk.isEmpty() || idTugas == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+        if (mkDosen == null || !mkDosen.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+        if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        // Prepare existing rubrik items jika ada
+        List<Map<String, Object>> rubrikItems = new ArrayList<>();
+        if (tugas.getRubrik() != null) {
+            List<KomponenNilai> komponenList = komponenNilaiRepo.findByRubrik_IdRubrik(tugas.getRubrik().getIdRubrik());
+            if (komponenList != null && !komponenList.isEmpty()) {
+                for (KomponenNilai komponen : komponenList) {
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("namaKomponen", komponen.getNamaKomponen());
+                    item.put("bobot", komponen.getBobot());
+                    item.put("catatan", komponen.getCatatan() != null ? komponen.getCatatan() : "");
+                    rubrikItems.add(item);
+                }
+            }
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("mkDosen", mkDosen);
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("kodeMk", kodeMk);
+        model.addAttribute("idTugas", idTugas);
+        model.addAttribute("rubrikItems", rubrikItems);
+
+        return "nilai/Dosen/edit-rubrik-dosen";
+    }
+
+    /**
+     * POST - Save Rubrik Penilaian Dosen
+     * Menyimpan rubrik penilaian ke database
+     */
+    @PostMapping("/dosen/rubrik-penilaian/save")
+    public String saveRubrik(
+            @RequestParam String kodeMk,
+            @RequestParam Integer idTugas,
+            @RequestParam(required = false) List<String> komponenPenilaian,
+            @RequestParam(required = false) List<Integer> bobot,
+            @RequestParam(required = false) List<String> keterangan,
+            @AuthenticationPrincipal CustomUserDetails user,
+            RedirectAttributes redirectAttributes) {
+        
+        System.out.println("\n\n=== POST /dosen/rubrik-penilaian/save RECEIVED ===");
+        System.out.println("kodeMk: " + kodeMk);
+        System.out.println("idTugas: " + idTugas);
+        System.out.println("komponenPenilaian: " + (komponenPenilaian != null ? komponenPenilaian.size() + " items" : "NULL"));
+        System.out.println("bobot: " + (bobot != null ? bobot.size() + " items" : "NULL"));
+        System.out.println("keterangan: " + (keterangan != null ? keterangan.size() + " items" : "NULL"));
+        
+        try {
+            // DEBUG: Log received parameters
+            System.out.println("DEBUG: ==== saveRubrik START ====");
+            System.out.println("DEBUG: kodeMk=" + kodeMk + ", idTugas=" + idTugas);
+            System.out.println("DEBUG: komponenPenilaian=" + (komponenPenilaian != null ? komponenPenilaian.size() : "null"));
+            System.out.println("DEBUG: bobot=" + (bobot != null ? bobot.size() : "null"));
+            System.out.println("DEBUG: keterangan=" + (keterangan != null ? keterangan.size() : "null"));
+            
+            if (komponenPenilaian != null) {
+                for (int i = 0; i < komponenPenilaian.size(); i++) {
+                    System.out.println("DEBUG: [" + i + "] " + komponenPenilaian.get(i) + ", bobot=" + (bobot != null && i < bobot.size() ? bobot.get(i) : "null"));
+                }
+            }
+            
+            // Validasi input
+            if (kodeMk == null || kodeMk.isEmpty() || idTugas == null) {
+                redirectAttributes.addFlashAttribute("error", "Parameter tidak valid");
+                return "redirect:/dosen/mata-kuliah";
+            }
+
+            // Validasi akses
+            MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+            if (mataKuliah == null) {
+                redirectAttributes.addFlashAttribute("error", "Mata kuliah tidak ditemukan");
+                return "redirect:/dosen/mata-kuliah";
+            }
+
+            MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+            if (mkDosen == null || !mkDosen.isActive()) {
+                redirectAttributes.addFlashAttribute("error", "Anda tidak berhak mengakses mata kuliah ini");
+                return "redirect:/dosen/mata-kuliah";
+            }
+
+            TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+            if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
+                redirectAttributes.addFlashAttribute("error", "Tugas tidak ditemukan");
+                return "redirect:/dosen/mata-kuliah";
+            }
+
+            // Validasi total bobot
+            int totalBobot = 0;
+            if (bobot != null && !bobot.isEmpty()) {
+                for (Integer b : bobot) {
+                    totalBobot += (b != null ? b : 0);
+                }
+            }
+
+            if (totalBobot != 100) {
+                redirectAttributes.addFlashAttribute("error", "Total bobot harus 100%. Saat ini: " + totalBobot + "%");
+                return "redirect:/dosen/edit-rubrik-penilaian?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
+            }
+
+            // Save rubrik components ke database
+            RubrikNilai rubrik = tugas.getRubrik();
+            
+            // Jika belum ada rubrik, buat yang baru
+            if (rubrik == null) {
+                rubrik = new RubrikNilai();
+                rubrik = rubrikNilaiRepo.save(rubrik);
+                tugas.setRubrik(rubrik);
+                tugasRepo.save(tugas);
+            } else {
+                // Jika sudah ada, hapus komponen lama
+                if (rubrik.getKomponenList() != null) {
+                    komponenNilaiRepo.deleteAll(rubrik.getKomponenList());
+                }
+            }
+
+            // Save komponen-komponen baru
+            if (komponenPenilaian != null && !komponenPenilaian.isEmpty()) {
+                System.out.println("DEBUG: Saving " + komponenPenilaian.size() + " components");
+                System.out.println("DEBUG: Rubrik ID = " + rubrik.getIdRubrik());
+                for (int i = 0; i < komponenPenilaian.size(); i++) {
+                    String namaKomp = komponenPenilaian.get(i);
+                    int bobotVal = bobot != null && i < bobot.size() ? bobot.get(i) : 0;
+                    String keteranganVal = keterangan != null && i < keterangan.size() ? keterangan.get(i) : null;
+                    
+                    System.out.println("DEBUG: Komponen " + i + " - " + namaKomp + ", bobot=" + bobotVal + ", catatan=" + keteranganVal);
+                    
+                    KomponenNilai komponen = new KomponenNilai();
+                    komponen.setRubrik(rubrik);
+                    komponen.setNamaKomponen(namaKomp);
+                    komponen.setBobot(bobotVal);
+                    komponen.setCatatan(keteranganVal);
+                    KomponenNilai saved = komponenNilaiRepo.save(komponen);
+                    System.out.println("DEBUG: Komponen saved with ID = " + saved.getIdKomponen());
+                }
+            }
+            
+            // Verify saved components
+            List<KomponenNilai> savedKomponen = komponenNilaiRepo.findByRubrik_IdRubrik(rubrik.getIdRubrik());
+            System.out.println("DEBUG: VERIFICATION - Found " + savedKomponen.size() + " components in DB for rubrik " + rubrik.getIdRubrik());
+            for (KomponenNilai k : savedKomponen) {
+                System.out.println("DEBUG: DB Komponen - " + k.getNamaKomponen() + ", bobot=" + k.getBobot());
+            }
+
+            redirectAttributes.addFlashAttribute("success", "Rubrik penilaian berhasil disimpan");
+            return "redirect:/dosen/rubrik-penilaian?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
+            
+        } catch (Exception e) {
+            System.err.println("Error saving rubrik: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Gagal menyimpan rubrik: " + e.getMessage());
+            return "redirect:/dosen/edit-rubrik-penilaian?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
+        }
+    }
+
+    @GetMapping("/dosen/debug-mk")
+    @ResponseBody
+    public Map<String, Object> debugMK(@RequestParam String userId) {
+        Map<String, Object> result = new HashMap<>();
+        
+        try {
+            // Test simple query
+            List<MataKuliahDosen> allMK = mkDosenRepo.findById_IdUserAndIsActive(userId, true);
+            result.put("userId", userId);
+            result.put("totalMKFound", allMK.size());
+            result.put("details", allMK.stream()
+                .map(mk -> Map.of(
+                    "kodeMK", (Object)mk.getMataKuliah().getKodeMK(),
+                    "nama", (Object)mk.getMataKuliah().getNama(),
+                    "tahunAkademik", (Object)mk.getTahunAkademik(),
+                    "isActive", (Object)mk.isActive(),
+                    "kelas", (Object)mk.getKelas()
+                ))
+                .collect(Collectors.toList()));
+            result.put("success", true);
+        } catch (Exception e) {
+            result.put("error", e.toString());
+            result.put("message", e.getMessage());
+        }
+        
+        return result;
+    }
+
+    @GetMapping("/dosen/debug-raw-sql")
+    @ResponseBody
+    public Map<String, Object> debugRawSQL(@RequestParam String userId) {
+        Map<String, Object> result = new HashMap<>();
+        
+        try {
+            // Direct SQL query
+            String sql = "SELECT md.id_user, md.kode_mk, md.kelas, md.is_active, md.tahun_akademik, mk.nama " +
+                         "FROM mata_kuliah_dosen md " +
+                         "LEFT JOIN mata_kuliah mk ON md.kode_mk = mk.kode_mk " +
+                         "WHERE md.id_user = ? AND md.is_active = 1";
+            
+            List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, userId);
+            
+            result.put("userId", userId);
+            result.put("rowCount", rows.size());
+            result.put("rows", rows);
+            result.put("success", true);
+        } catch (Exception e) {
+            result.put("error", e.toString());
+            result.put("message", e.getMessage());
+        }
+        
+        return result;
+    }
+
+    @GetMapping("/dosen/init-dummy-data")
+    @ResponseBody
+    public Map<String, Object> initDummyData() {
+        Map<String, Object> result = new HashMap<>();
+        
+        try {
+            // Insert mata_kuliah_dosen untuk semua dosen
+            jdbcTemplate.update(
+                "INSERT IGNORE INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES (?, ?, ?, ?, ?, ?)",
+                "20250101", "AIF23001", "A", 1, "2025/2026", 1);
+            
+            jdbcTemplate.update(
+                "INSERT IGNORE INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES (?, ?, ?, ?, ?, ?)",
+                "20250101", "AIF23002", "A", 1, "2025/2026", 1);
+            
+            jdbcTemplate.update(
+                "INSERT IGNORE INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES (?, ?, ?, ?, ?, ?)",
+                "20250102", "AIF23003", "A", 1, "2025/2026", 1);
+            
+            jdbcTemplate.update(
+                "INSERT IGNORE INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES (?, ?, ?, ?, ?, ?)",
+                "20250102", "AIF23004", "B", 1, "2025/2026", 1);
+            
+            jdbcTemplate.update(
+                "INSERT IGNORE INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES (?, ?, ?, ?, ?, ?)",
+                "20250103", "AIF23005", "A", 1, "2025/2026", 1);
+            
+            result.put("success", true);
+            result.put("message", "Data dummy initialized successfully!");
+            
+            // Verify data
+            List<Map<String, Object>> verification = jdbcTemplate.queryForList(
+                "SELECT id_user, COUNT(*) as count FROM mata_kuliah_dosen WHERE tahun_akademik = '2025/2026' AND is_active = 1 GROUP BY id_user");
+            result.put("verification", verification);
+            
+        } catch (Exception e) {
+            result.put("error", e.toString());
+            result.put("message", e.getMessage());
+            result.put("success", false);
+        }
+        
+        return result;
     }
 }
