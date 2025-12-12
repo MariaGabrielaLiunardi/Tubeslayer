@@ -40,6 +40,10 @@ body {
     margin-bottom: 30px; 
 }
 
+.home {
+    padding: 18px;
+}
+
 .home .header .right-section{
     margin-left: auto;
     gap: 15px;

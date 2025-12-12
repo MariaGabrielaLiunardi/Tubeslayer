@@ -49,7 +49,7 @@
                     </li>
 
                     <li class="nav-link active">
-                        <a href="#">
+                        <a th:href="@{/admin/arsip-mata-kuliah}">
                             <img src="/icon/archive.png" class="icon archive-icon">
                             <span class="text nav-text">Arsip Mata Kuliah</span>
                         </a>
@@ -131,11 +131,12 @@
             </div>
 
             <div class="search-and-count">
+                <span class="peserta-count" th:text="|Total Tugas: ${tugasDataList.size()}|">Total Tugas: 0</span>
+
                 <div class="search-box">
                     <input type="text" placeholder="Cari nama tugas disini...">
                     <button><img src="/icon/search.png" alt="search"></button>
                 </div>
-                <span class="peserta-count" th:text="|Total Tugas: ${tugasDataList.size()}|">Total Tugas: 0</span>
             </div>
 
             <div class="peserta-content">
@@ -156,6 +157,16 @@
                                         th:text="${data.judulTugas}">
                                         Tugas Besar Tahap 1
                                     </a>
+                                </td>
+                            </tr>
+
+                            <tr id="empty-results-row" class="empty-message-row" style="display: none;">
+                                <td colspan="4">
+                                    <div class="empty-message-content">
+                                        <span class="empty-message-text-wrapper">
+                                            Tidak ada tugas besar terdaftar dalam mata kuliah ini.
+                                        </span>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

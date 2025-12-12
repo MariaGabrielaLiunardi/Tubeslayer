@@ -19,8 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (logoutButton) {
         logoutButton.addEventListener('click', handleLogout);
     }
-    
-    // Search & Pagination
 
     const searchBox = document.querySelector('.search-box');
     const searchInput = searchBox ? searchBox.querySelector('input[type="text"]') : null;
@@ -30,9 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
     
+    // Rows yang berisi data peserta (children.length === 4)
     const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
     
-    const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null; 
+    // PERBAIKAN: Targetkan row pesan kosong menggunakan ID unik
+    const noDataRow = document.getElementById('empty-results-row'); 
     
     let filteredPageItems = masterDataRows;
     
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextButton = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('current-page');
 
-    const itemsPerPage = 3; 
+    const itemsPerPage = 3;
     let totalPages = 0;
     let currentPage = 1;
 
@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         masterDataRows.forEach(item => {
             item.style.display = 'none';
         });
+
         filteredPageItems.forEach((item, index) => {
             if (index >= start && index < end) {
                 item.style.display = 'table-row';
@@ -71,11 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Peserta: ${filteredPageItems.length} peserta`; 
         }
         
-        // Jika Hasil pencarian 0
+        // Logic: Jika hasil filter 0, tampilkan baris pesan kosong
         if (filteredPageItems.length === 0) {
             
             if (noDataRow) {
-                noDataRow.style.display = 'none'; 
+                // Perintah untuk menampilkan row kosong
+                noDataRow.style.display = 'table-row'; 
             }
             if (pageInfoSpan) pageInfoSpan.textContent = `0 dari 0`;
             if (prevButton) prevButton.disabled = true;
@@ -86,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Jika Hasil pencarian > 0
+        // Logic: Jika hasil filter > 0, sembunyikan baris pesan kosong
         if (noDataRow) {
             noDataRow.style.display = 'none'; 
         }
@@ -99,13 +101,13 @@ document.addEventListener("DOMContentLoaded", () => {
         showPage(currentPage);
     };
 
-    // Search 
-
+    // Search
+    // Menggunakan 'input' event untuk Live Search (setiap kali teks berubah)
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         
         if (query === "") {
-            filteredPageItems = masterDataRows;
+            filteredPageItems = masterDataRows; 
         } else {
             filteredPageItems = masterDataRows.filter(row => {
                 if (row.cells.length < 3) return false;
@@ -124,18 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Event Listeners Search
-    
-    if (searchButton) {
-        searchButton.addEventListener('click', handleSearch);
-    }
-
+    // Menggunakan 'input' event untuk Live Search (setiap kali teks berubah)
     if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSearch();
-            }
-        });
+        searchInput.addEventListener('input', handleSearch); 
     }
+    
+    // Menghapus event listener lama (click dan keypress)
+    // *Tidak perlu karena kita hanya perlu event 'input'*
 
     // Event Listeners Pagination
     

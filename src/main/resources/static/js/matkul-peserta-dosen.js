@@ -40,8 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
     
+    // Rows yang berisi data peserta (children.length === 4)
     const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
-    const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null; 
+    
+    // PERBAIKAN: Targetkan row pesan kosong menggunakan ID unik
+    const noDataRow = document.getElementById('empty-results-row'); 
     
     let filteredPageItems = masterDataRows;
     
@@ -81,11 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Peserta: ${filteredPageItems.length} peserta`; 
         }
         
-        // Jika Hasil pencarian 0
+        // Logic: Jika hasil filter 0, tampilkan baris pesan kosong
         if (filteredPageItems.length === 0) {
             
             if (noDataRow) {
-                noDataRow.style.display = 'none'; 
+                // Perintah untuk menampilkan row kosong
+                noDataRow.style.display = 'table-row'; 
             }
             if (pageInfoSpan) pageInfoSpan.textContent = `0 dari 0`;
             if (prevButton) prevButton.disabled = true;
@@ -96,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Jika Hasil pencarian > 0
+        // Logic: Jika hasil filter > 0, sembunyikan baris pesan kosong
         if (noDataRow) {
             noDataRow.style.display = 'none'; 
         }
@@ -110,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Search
-
+    // Menggunakan 'input' event untuk Live Search (setiap kali teks berubah)
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         
@@ -134,17 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Event Listeners Search
-    
-    if (searchButton) {
-        searchButton.addEventListener('click', handleSearch);
-    }
-
     if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSearch();
-            }
-        });
+        searchInput.addEventListener('input', handleSearch); 
     }
 
     // Event Listeners Pagination
@@ -167,5 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     
+    // Panggil updateUI sekali di akhir untuk menentukan tampilan pertama
     updateUI(); 
 });
