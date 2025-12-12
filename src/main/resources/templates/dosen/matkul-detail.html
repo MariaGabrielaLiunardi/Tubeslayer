@@ -101,7 +101,14 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span id="mk-title" th:text="${mkDetail.nama}">Mata Kuliah</span>
+
+                <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+                <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
             </div>
 
             <div id="list-tugas-view">

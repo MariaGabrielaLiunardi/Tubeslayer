@@ -99,7 +99,21 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Mata Kuliah</span> > Daftar Peserta
+
+                <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
+                Daftar Peserta
             </div>
 
             <div class="search-and-count">
@@ -131,7 +145,7 @@
 
                                 <td th:text="${p.nomorPokok}">XXXXX</td>
 
-                                <td th:text="${p.role}">Koordinator/Mahasiswa</td>
+                                <td th:text="${p.role}">Koordinator/Pengampu/Mahasiswa</td>
                             </tr>
 
                             <tr th:if="${combinedPesertaList.empty}">

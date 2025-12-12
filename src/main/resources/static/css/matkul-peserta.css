@@ -284,10 +284,6 @@ body {
     display: table-row; 
 }
 
-.peserta-table-wrapper tbody tr:hover {
-    background-color: #aae0ff; 
-}
-
 .peserta-table-wrapper tbody td {
     padding: 15px 20px;
     font-size: 16px;
@@ -382,4 +378,13 @@ body {
 .task-link{
     text-decoration: none;
     color: black;
+}
+
+/* breadcrumb */ 
+.breadcrumb a {
+    color: black;
+}
+
+.breadcrumb a:hover {
+    color: #0078B5;
 }

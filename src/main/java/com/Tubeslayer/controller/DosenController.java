@@ -84,7 +84,7 @@ public class DosenController {
             mkd.setColorIndex(colorIndex);
         }
         List<MataKuliahDosen> limitedList = mataKuliahDosenList.stream()
-            .limit(3) // Batasi hasilnya hanya 3
+            .limit(4) // Batasi hasilnya hanya 3
             .collect(Collectors.toList());
 
         model.addAttribute("mataKuliahDosenList", limitedList);
@@ -183,8 +183,10 @@ public class DosenController {
         return "hlmn_tubes/hlmtubes-dosen";
     }
 
-    @GetMapping("/dosen/matkul-peserta")
-    public String peserta(@RequestParam(required = false) String kodeMk,
+    // File: DosenController.java (Method peserta)
+
+@GetMapping("/dosen/matkul-peserta")
+public String peserta(@RequestParam(required = false) String kodeMk,
                          @RequestParam(required = false) Integer colorIndex, 
                       @AuthenticationPrincipal CustomUserDetails user, 
                       Model model) {
@@ -197,7 +199,10 @@ public class DosenController {
     int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
     model.addAttribute("colorIndex", finalColorIndex);
 
-    // 2. Ambil List Mahasiswa
+    // 2. Ambil SEMUA DOSEN (Koordinator dan Pengampu)
+    List<MataKuliahDosen> dosenMatkulList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+
+    // 3. Ambil List Mahasiswa
     List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
     if (mkMahasiswaRepo != null) {
         try {
@@ -207,25 +212,51 @@ public class DosenController {
         }
     }
     
-    // 3. Ambil Koordinator Dosen
-    User koordinator = user.getUser(); 
-
     // --- 4. GABUNGKAN DOSEN DAN MAHASISWA MENGGUNAKAN DTO ---
     List<PesertaMatkulDTO> combinedList = new ArrayList<>();
     int counter = 1;
-
-    // 4.1. Tambahkan Dosen Koordinator 
-    combinedList.add(new PesertaMatkulDTO(
-        counter++, 
-        koordinator.getNama(), 
-        koordinator.getIdUser(), 
-        "Koordinator"
-    ));
     
-    // 4.2. Konversi Mahasiswa ke DTO
+    // ID Dosen yang sedang login
+    String loggedInUserId = user.getIdUser(); 
+
+    // 4.1. Konversi Dosen ke DTOs
+    List<PesertaMatkulDTO> dosenDTOs = dosenMatkulList.stream()
+        .map(rel -> {
+            String role;
+            
+            // Asumsi: Jika ID Dosen MKD sama dengan ID yang sedang login, dia adalah Koordinator
+            // Jika ID berbeda, dia adalah Dosen Pengampu
+            if (rel.getUser().getIdUser().equals(loggedInUserId)) {
+                role = "Koordinator"; 
+            } else {
+                role = "Pengampu"; 
+            }
+            
+            return new PesertaMatkulDTO(
+                0, // Index akan di-update
+                rel.getUser().getNama(),
+                rel.getUser().getIdUser(),
+                role
+            );
+        })
+        .collect(Collectors.toList());
+        
+    // 4.2. Urutkan Dosen: Koordinator selalu di atas, lalu Pengampu (berdasarkan nama)
+    dosenDTOs.sort(Comparator
+        .comparing((PesertaMatkulDTO dto) -> dto.getRole().equals("Koordinator")).reversed()
+        .thenComparing(PesertaMatkulDTO::getNama)
+    );
+    
+    // 4.3. Tambahkan Dosen ke Combined List dan update nomor urut
+    for (PesertaMatkulDTO dto : dosenDTOs) {
+        dto.setNo(counter++);
+        combinedList.add(dto);
+    }
+    
+    // 4.4. Konversi dan Tambahkan Mahasiswa ke DTOs
     List<PesertaMatkulDTO> mahasiswaDTOs = listPeserta.stream()
         .map(rel -> new PesertaMatkulDTO(
-            0, // Index akan diupdate setelah sorting
+            0, 
             rel.getUser().getNama(),
             rel.getUser().getIdUser(),
             "Mahasiswa",
@@ -233,29 +264,33 @@ public class DosenController {
         ))
         .collect(Collectors.toList());
         
-    // 4.3. Urutkan Mahasiswa berdasarkan Nama
+    // 4.5. Urutkan Mahasiswa berdasarkan Nama
     mahasiswaDTOs.sort(Comparator.comparing(PesertaMatkulDTO::getNama));
 
-    // 4.4. Gabungkan dan update nomor urut
-    combinedList.addAll(mahasiswaDTOs);
-    for (int i = 1; i < combinedList.size(); i++) {
-        combinedList.get(i).setNo(counter++);
+    // 4.6. Gabungkan Mahasiswa dan update nomor urut
+    for (PesertaMatkulDTO dto : mahasiswaDTOs) {
+        dto.setNo(counter++);
+        combinedList.add(dto);
     }
     // -------------------------------------------------------------
 
+    // Ambil Koordinator untuk Header MK (user yang sedang login)
+    MataKuliahDosen koordinatorUntukHeader = dosenMatkulList.stream()
+        .filter(mkd -> mkd.getUser().getIdUser().equals(loggedInUserId)) 
+        .findFirst()
+        .orElse(null);
+        
+    model.addAttribute("koordinator", koordinatorUntukHeader); 
     model.addAttribute("mkDetail", mk);
     model.addAttribute("user", user); 
-
-    if (combinedList == null) {
-    combinedList = Collections.emptyList();
-    }
-
-    model.addAttribute("combinedPesertaList", combinedList);
-    model.addAttribute("combinedPesertaList", combinedList); // List baru untuk tabel
-    model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah yang hanya Mahasiswa
+    
+    // Pastikan tidak ada duplikasi assignment
+    // model.addAttribute("combinedPesertaList", combinedList); // Hapus baris duplikat ini
+    model.addAttribute("combinedPesertaList", combinedList); 
+    model.addAttribute("pesertaCount", listPeserta.size()); 
 
     return "dosen/matkul-peserta";
-    }
+}
 
     @GetMapping("/api/kelompok/tugas/{idTugas}")
     @ResponseBody
