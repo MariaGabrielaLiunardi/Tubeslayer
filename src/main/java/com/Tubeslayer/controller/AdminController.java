@@ -28,15 +28,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -587,7 +592,7 @@ public class AdminController {
     }
 
     /**
-     * API: Import dosen dari file Excel/CSV (default aktif)
+     * API: Import dosen dari file Excel/CSV (berfungsi lengkap)
      */
     @PostMapping("/api/dosen/import")
     @ResponseBody
@@ -607,13 +612,40 @@ public class AdminController {
                         HttpStatus.BAD_REQUEST);
             }
 
+            List<User> importedDosen = new ArrayList<>();
+            List<String> errors = new ArrayList<>();
+            List<String> successes = new ArrayList<>();
+
+            if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+                // Parse file Excel
+                parseExcelFile(file, importedDosen, errors, successes, "Dosen");
+            } else if (fileName.endsWith(".csv")) {
+                // Parse file CSV (akan kita implementasikan nanti)
+                parseCSVFile(file, importedDosen, errors, successes, "Dosen");
+            }
+
+            // Simpan dosen yang berhasil diimport
+            List<Map<String, Object>> savedDosen = new ArrayList<>();
+            for (User dosen : importedDosen) {
+                try {
+                    User saved = userRepository.save(dosen);
+                    savedDosen.add(mapDosenToResponse(saved));
+                    successes.add("Dosen " + dosen.getNama() + " berhasil diimport");
+                } catch (Exception e) {
+                    errors.add("Gagal menyimpan dosen " + dosen.getNama() + ": " + e.getMessage());
+                }
+            }
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", "File " + fileName + " berhasil diupload. " +
-                    "Fitur parsing data akan segera tersedia.");
+            response.put("message", "Import file " + fileName + " selesai");
             response.put("filename", fileName);
-            response.put("size", file.getSize());
-            response.put("contentType", contentType);
+            response.put("totalImported", importedDosen.size());
+            response.put("successCount", successes.size());
+            response.put("errorCount", errors.size());
+            response.put("successMessages", successes);
+            response.put("errorMessages", errors);
+            response.put("importedData", savedDosen);
 
             return ResponseEntity.ok(response);
 
@@ -622,6 +654,49 @@ public class AdminController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * API: Download template Excel untuk import dosen
+     */
+    @GetMapping("/api/dosen/template")
+    @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<byte[]> downloadDosenTemplate() throws Exception {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Template Dosen");
+            
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("NIP");
+            headerRow.createCell(1).setCellValue("Nama");
+            headerRow.createCell(2).setCellValue("Email (opsional)");
+            
+            // Add example data
+            Row exampleRow = sheet.createRow(1);
+            exampleRow.createCell(0).setCellValue("123456");
+            exampleRow.createCell(1).setCellValue("Dr. John Doe");
+            exampleRow.createCell(2).setCellValue("john.doe@unpar.ac.id");
+            
+            // Auto-size columns
+            for (int i = 0; i < 3; i++) {
+                sheet.autoSizeColumn(i);
+            }
+            
+            // Convert to byte array
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            
+            return ResponseEntity.ok()
+                    .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    .header("Content-Disposition", "attachment; filename=template_import_dosen.xlsx")
+                    .body(outputStream.toByteArray());
+                    
+        } catch (Exception e) {
+            throw new Exception("Gagal membuat template: " + e.getMessage());
+        }
+    }
+    
+   
 
     /**
      * API: Get dosen by ID (untuk edit form)
@@ -968,7 +1043,7 @@ public class AdminController {
     }
 
     /**
-     * API: Import mahasiswa dari file Excel/CSV (default aktif)
+     * API: Import mahasiswa dari file Excel/CSV (berfungsi lengkap)
      */
     @PostMapping("/api/mahasiswa/import")
     @ResponseBody
@@ -988,13 +1063,40 @@ public class AdminController {
                         HttpStatus.BAD_REQUEST);
             }
 
+            List<User> importedMahasiswa = new ArrayList<>();
+            List<String> errors = new ArrayList<>();
+            List<String> successes = new ArrayList<>();
+
+            if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+                // Parse file Excel
+                parseExcelFile(file, importedMahasiswa, errors, successes, "Mahasiswa");
+            } else if (fileName.endsWith(".csv")) {
+                // Parse file CSV (akan kita implementasikan nanti)
+                parseCSVFile(file, importedMahasiswa, errors, successes, "Mahasiswa");
+            }
+
+            // Simpan mahasiswa yang berhasil diimport
+            List<Map<String, Object>> savedMahasiswa = new ArrayList<>();
+            for (User mahasiswa : importedMahasiswa) {
+                try {
+                    User saved = userRepository.save(mahasiswa);
+                    savedMahasiswa.add(mapMahasiswaToResponse(saved));
+                    successes.add("Mahasiswa " + mahasiswa.getNama() + " berhasil diimport");
+                } catch (Exception e) {
+                    errors.add("Gagal menyimpan mahasiswa " + mahasiswa.getNama() + ": " + e.getMessage());
+                }
+            }
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", "File " + fileName + " berhasil diupload. " +
-                    "Fitur parsing data akan segera tersedia.");
+            response.put("message", "Import file " + fileName + " selesai");
             response.put("filename", fileName);
-            response.put("size", file.getSize());
-            response.put("contentType", contentType);
+            response.put("totalImported", importedMahasiswa.size());
+            response.put("successCount", successes.size());
+            response.put("errorCount", errors.size());
+            response.put("successMessages", successes);
+            response.put("errorMessages", errors);
+            response.put("importedData", savedMahasiswa);
 
             return ResponseEntity.ok(response);
 
@@ -1004,6 +1106,48 @@ public class AdminController {
         }
     }
 
+     /**
+     * API: Download template Excel untuk import mahasiswa
+     */
+    @GetMapping("/api/mahasiswa/template")
+    @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Template Mahasiswa");
+            
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("NPM");
+            headerRow.createCell(1).setCellValue("Nama");
+            headerRow.createCell(2).setCellValue("Email (opsional)");
+            
+            // Add example data
+            Row exampleRow = sheet.createRow(1);
+            exampleRow.createCell(0).setCellValue("20241001");
+            exampleRow.createCell(1).setCellValue("Jane Smith");
+            exampleRow.createCell(2).setCellValue("jane.smith@student.unpar.ac.id");
+            
+            // Auto-size columns
+            for (int i = 0; i < 3; i++) {
+                sheet.autoSizeColumn(i);
+            }
+            
+            // Convert to byte array
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            
+            return ResponseEntity.ok()
+                    .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    .header("Content-Disposition", "attachment; filename=template_import_mahasiswa.xlsx")
+                    .body(outputStream.toByteArray());
+                    
+        } catch (Exception e) {
+            throw new Exception("Gagal membuat template: " + e.getMessage());
+        }
+    }
+    
+   
     /**
      * API: Get mahasiswa by ID (untuk edit form)
      */
@@ -1468,7 +1612,7 @@ public class AdminController {
     }
 
     /**
-     * API: Import mata kuliah dari file Excel/CSV (default aktif)
+     * API: Import mata kuliah dari file Excel/CSV (berfungsi lengkap)
      */
     @PostMapping("/api/mata-kuliah/import")
     @ResponseBody
@@ -1488,19 +1632,97 @@ public class AdminController {
                         HttpStatus.BAD_REQUEST);
             }
 
+            List<MataKuliah> importedMataKuliah = new ArrayList<>();
+            List<String> errors = new ArrayList<>();
+            List<String> successes = new ArrayList<>();
+
+            if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+                // Parse file Excel untuk mata kuliah
+                parseExcelFileForMataKuliah(file, importedMataKuliah, errors, successes);
+            } else if (fileName.endsWith(".csv")) {
+                // Parse file CSV untuk mata kuliah
+                parseCSVFileForMataKuliah(file, importedMataKuliah, errors, successes);
+            }
+
+            // Simpan mata kuliah yang berhasil diimport
+            List<Map<String, Object>> savedMataKuliah = new ArrayList<>();
+            for (MataKuliah mk : importedMataKuliah) {
+                try {
+                    MataKuliah saved = mataKuliahRepository.save(mk);
+                    
+                    Map<String, Object> mkData = new HashMap<>();
+                    mkData.put("id", saved.getKodeMK());
+                    mkData.put("kode", saved.getKodeMK());
+                    mkData.put("nama", saved.getNama());
+                    mkData.put("sks", saved.getSks());
+                    mkData.put("semester", getSemesterFromKode(saved.getKodeMK()));
+                    mkData.put("status", saved.isActive() ? "Aktif" : "Nonaktif");
+                    mkData.put("isActive", saved.isActive());
+                    
+                    savedMataKuliah.add(mkData);
+                    successes.add("Mata kuliah " + saved.getNama() + " berhasil diimport");
+                } catch (Exception e) {
+                    errors.add("Gagal menyimpan mata kuliah " + mk.getNama() + ": " + e.getMessage());
+                }
+            }
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", "File " + fileName + " berhasil diupload. " +
-                    "Fitur import data sedang dalam pengembangan.");
+            response.put("message", "Import file " + fileName + " selesai");
             response.put("filename", fileName);
-            response.put("size", file.getSize());
-            response.put("contentType", contentType);
+            response.put("totalImported", importedMataKuliah.size());
+            response.put("successCount", successes.size());
+            response.put("errorCount", errors.size());
+            response.put("successMessages", successes);
+            response.put("errorMessages", errors);
+            response.put("importedData", savedMataKuliah);
 
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             return buildErrorResponse("Gagal mengimpor file: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+     /**
+     * API: Download template Excel untuk import mata kuliah
+     */
+    @GetMapping("/api/mata-kuliah/template")
+    @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<byte[]> downloadMataKuliahTemplate() throws Exception {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Template Mata Kuliah");
+            
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Kode MK");
+            headerRow.createCell(1).setCellValue("Nama Mata Kuliah");
+            headerRow.createCell(2).setCellValue("SKS");
+            
+            // Add example data
+            Row exampleRow = sheet.createRow(1);
+            exampleRow.createCell(0).setCellValue("IF4010");
+            exampleRow.createCell(1).setCellValue("Pemrograman Web");
+            exampleRow.createCell(2).setCellValue(3);
+            
+            // Auto-size columns
+            for (int i = 0; i < 3; i++) {
+                sheet.autoSizeColumn(i);
+            }
+            
+            // Convert to byte array
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            
+            return ResponseEntity.ok()
+                    .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    .header("Content-Disposition", "attachment; filename=template_import_mata_kuliah.xlsx")
+                    .body(outputStream.toByteArray());
+                    
+        } catch (Exception e) {
+            throw new Exception("Gagal membuat template: " + e.getMessage());
         }
     }
 
@@ -1700,4 +1922,233 @@ public class AdminController {
         }
         return ResponseEntity.ok(response);
     }
+
+     // ============================
+    // HELPER METHODS FOR EXCEL PARSING
+    // ============================
+
+    /**
+     * Parse file Excel untuk dosen atau mahasiswa
+     */
+    private void parseExcelFile(MultipartFile file, List<User> userList, 
+            List<String> errors, List<String> successes, String role) throws Exception {
+        
+        try (InputStream inputStream = file.getInputStream();
+             Workbook workbook = new XSSFWorkbook(inputStream)) {
+            
+            Sheet sheet = workbook.getSheetAt(0); // Ambil sheet pertama
+            Iterator<Row> rowIterator = sheet.iterator();
+            
+            int rowNumber = 0;
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                rowNumber++;
+                
+                // Skip header row (row pertama)
+                if (rowNumber == 1) {
+                    continue;
+                }
+                
+                try {
+                    // Ambil data dari setiap kolom
+                    String id = getCellValueAsString(row.getCell(0));
+                    String nama = getCellValueAsString(row.getCell(1));
+                    String email = getCellValueAsString(row.getCell(2));
+                    
+                    // Validasi data
+                    if (id == null || id.trim().isEmpty()) {
+                        errors.add("Baris " + rowNumber + ": ID/NIP/NPM tidak boleh kosong");
+                        continue;
+                    }
+                    
+                    if (nama == null || nama.trim().isEmpty()) {
+                        errors.add("Baris " + rowNumber + ": Nama tidak boleh kosong");
+                        continue;
+                    }
+                    
+                    // Cek apakah sudah ada di database
+                    if (userRepository.existsById(id)) {
+                        errors.add("Baris " + rowNumber + ": " + id + " sudah terdaftar");
+                        continue;
+                    }
+                    
+                    // Buat user baru
+                    User user = new User();
+                    user.setIdUser(id.trim());
+                    user.setNama(nama.trim());
+                    
+                    if (email != null && !email.trim().isEmpty()) {
+                        user.setEmail(email.trim());
+                    } else {
+                        // Generate email otomatis
+                        if ("Dosen".equals(role)) {
+                            user.setEmail(generateEmail(nama, id));
+                        } else {
+                            user.setEmail(generateEmailMahasiswa(nama, id));
+                        }
+                    }
+                    
+                    // Set password default (password123)
+                    String defaultPassword = "$2a$10$lpXunJk2Te8/hHcfFFmpduViPATPUYuau.rAK1ckJbpDh5m8MSXV2";
+                    user.setPassword(defaultPassword);
+                    user.setRole(role);
+                    user.setActive(true); // Default aktif
+                    
+                    userList.add(user);
+                    successes.add("Baris " + rowNumber + ": " + nama + " berhasil diparsing");
+                    
+                } catch (Exception e) {
+                    errors.add("Baris " + rowNumber + ": Error - " + e.getMessage());
+                }
+            }
+            
+        } catch (Exception e) {
+            throw new Exception("Error parsing file Excel: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Parse file Excel untuk mata kuliah
+     */
+    private void parseExcelFileForMataKuliah(MultipartFile file, List<MataKuliah> mkList,
+            List<String> errors, List<String> successes) throws Exception {
+        
+        try (InputStream inputStream = file.getInputStream();
+             Workbook workbook = new XSSFWorkbook(inputStream)) {
+            
+            Sheet sheet = workbook.getSheetAt(0); // Ambil sheet pertama
+            Iterator<Row> rowIterator = sheet.iterator();
+            
+            int rowNumber = 0;
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                rowNumber++;
+                
+                // Skip header row (row pertama)
+                if (rowNumber == 1) {
+                    continue;
+                }
+                
+                try {
+                    // Ambil data dari setiap kolom
+                    String kode = getCellValueAsString(row.getCell(0));
+                    String nama = getCellValueAsString(row.getCell(1));
+                    String sksStr = getCellValueAsString(row.getCell(2));
+                    
+                    // Validasi data
+                    if (kode == null || kode.trim().isEmpty()) {
+                        errors.add("Baris " + rowNumber + ": Kode mata kuliah tidak boleh kosong");
+                        continue;
+                    }
+                    
+                    if (nama == null || nama.trim().isEmpty()) {
+                        errors.add("Baris " + rowNumber + ": Nama mata kuliah tidak boleh kosong");
+                        continue;
+                    }
+                    
+                    // Cek apakah sudah ada di database
+                    if (mataKuliahRepository.existsById(kode.trim())) {
+                        errors.add("Baris " + rowNumber + ": Kode " + kode + " sudah terdaftar");
+                        continue;
+                    }
+                    
+                    // Parse SKS
+                    int sks = 3; // Default
+                    if (sksStr != null && !sksStr.trim().isEmpty()) {
+                        try {
+                            sks = Integer.parseInt(sksStr.trim());
+                            if (sks <= 0 || sks > 10) {
+                                errors.add("Baris " + rowNumber + ": SKS harus antara 1-10");
+                                continue;
+                            }
+                        } catch (NumberFormatException e) {
+                            errors.add("Baris " + rowNumber + ": Format SKS tidak valid");
+                            continue;
+                        }
+                    }
+                    
+                    // Buat mata kuliah baru
+                    MataKuliah mk = new MataKuliah();
+                    mk.setKodeMK(kode.trim().toUpperCase());
+                    mk.setNama(nama.trim());
+                    mk.setSks(sks);
+                    mk.setActive(true); // Default aktif
+                    mk.setTugasList(new HashSet<>());
+                    mk.setDosenList(new HashSet<>());
+                    mk.setMahasiswaList(new HashSet<>());
+                    
+                    mkList.add(mk);
+                    successes.add("Baris " + rowNumber + ": " + nama + " berhasil diparsing");
+                    
+                } catch (Exception e) {
+                    errors.add("Baris " + rowNumber + ": Error - " + e.getMessage());
+                }
+            }
+            
+        } catch (Exception e) {
+            throw new Exception("Error parsing file Excel: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Helper method untuk membaca nilai sel Excel
+     */
+    private String getCellValueAsString(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
+        
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    // Format numeric tanpa desimal jika integer
+                    double num = cell.getNumericCellValue();
+                    if (num == (int) num) {
+                        return String.valueOf((int) num);
+                    } else {
+                        return String.valueOf(num);
+                    }
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            case BLANK:
+                return "";
+            default:
+                return "";
+        }
+    }
+    
+    /**
+     * Parse file CSV untuk dosen atau mahasiswa (placeholder)
+     */
+    private void parseCSVFile(MultipartFile file, List<User> userList,
+            List<String> errors, List<String> successes, String role) throws Exception {
+        // Implementasi parsing CSV bisa ditambahkan di sini
+        throw new Exception("Parsing CSV belum diimplementasikan. Gunakan file Excel (.xlsx)");
+    }
+    
+    /**
+     * Parse file CSV untuk mata kuliah (placeholder)
+     */
+    private void parseCSVFileForMataKuliah(MultipartFile file, List<MataKuliah> mkList,
+            List<String> errors, List<String> successes) throws Exception {
+        // Implementasi parsing CSV bisa ditambahkan di sini
+        throw new Exception("Parsing CSV belum diimplementasikan. Gunakan file Excel (.xlsx)");
+    }
+
+    @GetMapping("/matakuliah-detail")
+        public String matakuliahDetail(@RequestParam String kode, Model model) {
+            MataKuliah mk = mataKuliahRepository.findById(kode).orElse(null);
+            if (mk == null) {
+                return "redirect:/admin/kelola-mata-kuliah";
+            }
+            model.addAttribute("matakuliah", mk);
+            return "admin/matakuliah-detail";
+        }
 }

@@ -1,3 +1,30 @@
+/* ===============================
+       1. SIDEBAR TOGGLE
+    ================================ */
+    const sidebar = document.querySelector('.sidebar');
+    const toggle = document.querySelector('.toggle');
+
+    if (sidebar && toggle) {
+        toggle.addEventListener('click', () => {
+            sidebar.classList.toggle('close');
+        });
+    }
+
+
+    /* ===============================
+       2. NAV ACTIVE HIGHLIGHT
+    ================================ */
+    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+
+    navLinks.forEach(li => {
+        const anchor = li.querySelector("a");
+
+        anchor.addEventListener("click", () => {
+            navLinks.forEach(link => link.classList.remove("active"));
+            li.classList.add("active");
+        });
+    });
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Kelola Dosen JS Loaded");
 
@@ -295,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
             
             row.innerHTML = `
-                <span>${index + 1}</span>
+                <span>${index + 1}.</span>
                 <span>${dosen.nip || dosen.id}</span>
                 <span>${dosen.nama}</span>
                 <span>-</span>

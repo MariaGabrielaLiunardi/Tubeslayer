@@ -714,21 +714,15 @@ header .image-text .header-text{
 }
 
 /* --- Bagian Untuk Hapus Matkul --- */
-
-/* Wrapper utama */
-.hapus-matkul {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* Box konten */
+.hapus-matkul{
+    display: flex;
     justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    display: none; 
+    align-items: center;    
+    width: 100%;
+    transform: translateY(70px);
 }
 
-/* Box konten */
 .hapus-matkul-content {
     background: #FFF1EB;
     width: 420px;
@@ -739,30 +733,51 @@ header .image-text .header-text{
     flex-direction: column;
     gap: 20px;
     position: relative;
-    transform: translateY(70px);
 }
 
 /* Input wrapper */
-.hapus-matkul .input-wrapper {
+.hapus-matkul-content .input-wrapper {
     position: relative;
+    border-radius: 15px;
 }
 
 /* Suggestions dropdown */
-.hapus-matkul .suggestions {
+.hapus-matkul-content .suggestions {
     display: none;
 }
 
 /* Button group */
-.hapus-matkul .button-group {
+.hapus-matkul-content .button-group {
     display: flex; 
     justify-content: center;
     gap: 12px;
 }
 
-.hapus-matkul .search-box input {
+.hapus-matkul-content .search-box {
     width: 100%;
     padding: 12px 15px;
     border-radius: 10px;
     border: 1.5px solid #cfcfcf;
     background: #fff;
+}
+
+.konfirmasi-hapus{
+    background: #FFF1EB;
+    width: 420px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;          
+    margin: 0 auto;
+    transform: translateY(70px);
+}
+
+.konfirmasi-hapus .button-group {
+    display: flex; 
+    justify-content: center;
+    gap: 12px;
 }

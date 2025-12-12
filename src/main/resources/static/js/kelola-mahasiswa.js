@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
             
             row.innerHTML = `
-                <span>${index + 1}</span>
+                <span>${index + 1}.</span>
                 <span>${mahasiswa.npm || mahasiswa.id || '-'}</span>
                 <span>${mahasiswa.nama || '-'}</span>
                 <span>${mahasiswa.email || '-'}</span>
