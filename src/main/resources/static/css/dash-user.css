@@ -418,7 +418,7 @@ header .image-text .header-text{
     display: flex;
     flex-wrap: wrap;      
     gap: 20px;            
-    justify-content: flex-start; 
+    justify-content: flex-start;
 }
 
 .content-item {

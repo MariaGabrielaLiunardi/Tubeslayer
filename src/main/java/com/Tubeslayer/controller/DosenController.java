@@ -84,7 +84,7 @@ public class DosenController {
             mkd.setColorIndex(colorIndex);
         }
         List<MataKuliahDosen> limitedList = mataKuliahDosenList.stream()
-            .limit(3) // Batasi hasilnya hanya 3
+            .limit(4) // Batasi hasilnya hanya 3
             .collect(Collectors.toList());
 
         model.addAttribute("mataKuliahDosenList", limitedList);
