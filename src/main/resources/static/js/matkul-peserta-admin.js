@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tabs = document.querySelectorAll('.mk-tab button');
     
+    // Logika Tab Navigasi
     tabs.forEach(tab => {
         const tabTarget = tab.getAttribute('data-tab-target');
 
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.location.href = `/admin/arsip-matkul-detail?kodeMk=${encodeURIComponent(mataKuliahId)}`;
             });
         }
-        // tab 'Nilai' 
+        // tab 'Nilai'
     });
 
     // Logout
@@ -43,8 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
     
+    // Rows yang berisi data peserta (children.length === 4)
     const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
-    const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null; 
+    
+    // Row pesan kosong (menargetkan row yang memiliki colspan=4)
+    const noDataRow = document.getElementById('empty-results-row') || allTableRows.find(row => row.children.length !== 4); 
     
     let filteredPageItems = masterDataRows;
     
@@ -85,11 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Peserta: ${filteredPageItems.length} peserta`; 
         }
         
-        // Jika Hasil pencarian 0
+        // Logika tampilan row kosong
         if (filteredPageItems.length === 0) {
-       
+            
             if (noDataRow) {
-                noDataRow.style.display = 'none'; 
+                noDataRow.style.display = 'table-row'; // TAMPILKAN PESAN KOSONG
             }
             if (pageInfoSpan) pageInfoSpan.textContent = `0 dari 0`;
             if (prevButton) prevButton.disabled = true;
@@ -100,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Jika Hasil pencarian > 0
+        // Jika Hasil pencarian > 0, sembunyikan pesan kosong
         if (noDataRow) {
             noDataRow.style.display = 'none'; 
         }
@@ -113,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showPage(currentPage);
     };
 
-    // Search 
+    // Search (Live Search)
 
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
@@ -134,24 +138,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
         
-        updateUI(true); 
+        updateUI(true); // Reset halaman ke 1 setelah pencarian baru
     };
-
-    // Event Listeners Search
     
-    if (searchButton) {
-        searchButton.addEventListener('click', handleSearch);
-    }
-
     if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSearch();
-            }
-        });
+        searchInput.addEventListener('input', handleSearch); // Gunakan 'input' event
     }
 
-    // Event Listeners Pagination
+    // Event Listeners Pagination 
     
     if (prevButton) {
         prevButton.addEventListener('click', () => {
@@ -171,5 +165,5 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     
-    updateUI(); 
+    updateUI();
 });
