@@ -184,7 +184,7 @@
                 
                 <div th:if="${dosenList != null and !dosenList.empty}" th:each="dosen, iterStat : ${dosenList}">
                     <div class="data-row">
-                        <span th:text="${iterStat.count}">1</span>
+                        <span th:text="${iterStat.count}">1.</span>
                         <span th:text="${dosen.idUser}">NIP</span>
                         <span th:text="${dosen.nama}">Nama Dosen</span>
                         <span>-</span>
@@ -274,7 +274,7 @@
             <!-- VIEW 6: Konfirmasi Hapus-->
             <div class="konfirmasi-hapus" id="konfirmasi-hapus">
                 <div class="konfirmasi-hapus-content">
-                    <span>Apakah Anda yakin ingin menghapus dosen ini?</span>
+                    <span>Apakah Anda yakin ingin menghapus mahasiswa ini?</span>
                     <div class="button-group">
                         <button class="btn btn-cancel" id="btn-cancel-confirm">Batal</button>
                         <button class="btn btn-confirm-delete" id="btn-confirm-delete-final">Hapus</button>
