@@ -113,7 +113,21 @@
             </div>
 
             <div class="breadcrumb">
-                Arsip Mata Kuliah > <span th:text="${mkDetail?.nama}">Mata Kuliah</span> > Daftar Tugas Besar
+
+                <a th:href="@{/admin/arsip-mata-kuliah}" style="text-decoration: none;">
+                    Arsip Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/admin/arsip-matkul-detail(kodeMk=${mkDetail.kodeMK})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mkDetail?.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
+                Daftar Tugas Besar
             </div>
 
             <div class="search-and-count">

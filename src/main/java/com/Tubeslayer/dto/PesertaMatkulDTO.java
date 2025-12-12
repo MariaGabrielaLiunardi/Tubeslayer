@@ -8,7 +8,7 @@ public class PesertaMatkulDTO {
     private int no;
     private String nama;
     private String nomorPokok; // NPM (Mahasiswa) atau NIP (Dosen)
-    private String role; // Role: "Koordinator" atau "Mahasiswa"
+    private String role; // Role: "Koordinator" "Pengampu" atau "Mahasiswa"
     private String kelas; // Hanya untuk Mahasiswa
     
     // Konstruktor untuk Mahasiswa
