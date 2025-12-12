@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pemberian Nilai Individu Dosen</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/pemberian-nilai-individu-dosen.css">
-        <script src="../../../static/js/pemberian-nilai-individu-dosen.js" defer></script>
+        <title>Pemberian Nilai Individu Dosen - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/pemberian-nilai-individu-dosen.css}">
+        <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
+        <script th:src="@{/js/pemberian-nilai-individu-dosen.js}" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
 
@@ -14,7 +15,7 @@
             <header>
                 <div class="image-text">
                     <span class="image">
-                        <img src="../../../static/logo/blue-logo.png" alt="logo">
+                        <img th:src="@{/logo/blue-logo.png}" alt="logo">
                     </span>
 
                     <div class ="text header-text">
@@ -27,14 +28,14 @@
                 <div class="menu">
                     <ul class="menu-links">
                         <li class="nav-link active">
-                            <a href="#">
-                                <img src="../../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                            <a th:href="@{/dosen/dashboard}">
+                                <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="#">
-                                <img src="../../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
+                            <a th:href="@{/dosen/mata-kuliah}">
+                                <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
                                 <span class="text nav-text">Mata Kuliah</span>
                             </a>
                         </li>
@@ -46,90 +47,127 @@
         <section class="home">
             <div class="header">
                 <div class="left-section">
-                    <span class="dashboard-title"></span>
+                    <span class="dashboard-title">Detail Penilaian</span>
                 </div>
                 <div class="right-section">
                     <div class="info">
-                        <span class="name">Clara Joycelyne Siauttara</span>
-                        <span class="role">Dosen</span>
+                        <span class="name" th:text="${user.nama}">Nama Dosen</span>
+                        <span class="role" th:text="${user.role}">Dosen</span>
                     </div>
-                    <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
-                    <button type="button" class="logout">
-                        <img src="../../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    <a th:href="@{/profil}">
+                        <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
+                    </a>
+                    <button type="button" class="logout" id="logoutButton">
+                        <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logout">
                     </button>
                 </div>
             </div>
 
             <div class="nav-segmented-control">
-                <div class="kuliah-segment">
-                    Kuliah
-                </div>
-
-                <div class="Daftar-Peserta-segment">
-                    Daftar Peserta
-                </div>
-
-                <div class="nav-active">
-                    Nilai
+                <div class="nav-tab">
+                    Detail Anggota
                 </div>
             </div>
             
             <div class="container">
                 <div class="rectangle-blue">
                     <div class="tb-title">
-                        <img src="../../../static/icon/bookj ver4.png" class="tb-icon">
-                        <span class="tb-text">Tugas Besar Tahap 1</span>
+                        <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
+                        <span class="tb-text" th:text="${mataKuliah.nama}">Nama Mata Kuliah</span>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
 
                     <div class="breadcrumb">
-                        <a href="pemberian-nilai-dosen.html" class="crumb">Pemberian Nilai</a>
+                        <a th:href="@{/dosen/pemberian-nilai(kodeMk=${kodeMk})}" class="crumb">Pemberian Nilai</a>
                         <span class="crumb"> > </span>
-                        <span class="crumb current">Kelompok 1</span>
+                        <span class="crumb current">Detail Anggota</span>
                     </div>
 
                     <div class="rectangle-yellow">
-                        <div class="assignment-table-wrapper">
+                        <div class="assignment-table-wrapper" th:if="${not #lists.isEmpty(pesertaList)}">
                             <div class="assignment-header">
-                                <div class="col-kel">Kelompok</div>
+                                <div class="col-kel">Nama Anggota</div>
                                 <div class="col-bobot">Nilai</div>
                             </div>
 
-                            <div class="assignment-row">
-                                <div class="col-isi-kel"></div>
-                                <div class="col-isi-nilai"></div>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-kel"></div>
-                                <div class="col-isi-nilai"></div>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-kel"></div>
-                                <div class="col-isi-nilai"></div>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-kel"></div>
-                                <div class="col-isi-nilai"></div>
+                            <div class="assignment-row" th:each="peserta : ${pesertaList}">
+                                <div class="col-isi-kel" th:text="${peserta.nama ?: 'Anggota'}">Nama Anggota</div>
+                                <div class="col-isi-nilai">
+                                    <input type="number" class="nilai-individu" min="0" max="100" 
+                                           th:value="${peserta.nilaiIndividual ?: ''}" placeholder="0">
+                                </div>
                             </div>
 
                             <div class="tombol-aksi">
-                                <button class="btn-rilis">Batal</button>
-                                <button class="btn-simpan">Simpan</button>
+                                <button class="btn-rilis" onclick="goBack()">Batal</button>
+                                <button class="btn-simpan" onclick="saveIndividualGrades()">Simpan</button>
                             </div>
 
                             <div class="nilai-kel">
-                                <div class="kel">Nilai Kelompok:</div>
-                                <div class="nilai">100</div>
+                                <div class="kel">Rata-rata Nilai:</div>
+                                <div class="nilai" id="averageNilai">0</div>
                             </div>
+                        </div>
+
+                        <div th:if="${#lists.isEmpty(pesertaList)}" style="text-align: center; padding: 40px; color: #999;">
+                            <p>Tidak ada data anggota kelompok</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <script th:inline="javascript">
+            // Logout handler
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    window.location.href = '/logout';
+                }
+            });
+
+            // Calculate average value
+            function calculateAverage() {
+                const inputs = document.querySelectorAll('.nilai-individu');
+                let total = 0;
+                let count = 0;
+                inputs.forEach(input => {
+                    if (input.value) {
+                        total += parseFloat(input.value);
+                        count++;
+                    }
+                });
+                const average = count > 0 ? (total / count).toFixed(2) : 0;
+                document.getElementById('averageNilai').textContent = average;
+            }
+
+            // Save individual grades
+            function saveIndividualGrades() {
+                calculateAverage();
+                const inputs = document.querySelectorAll('.nilai-individu');
+                let filled = false;
+                inputs.forEach(input => {
+                    if (input.value) filled = true;
+                });
+                if (!filled) {
+                    alert('Silakan masukkan minimal satu nilai');
+                    return;
+                }
+                alert('Nilai individu berhasil disimpan');
+                console.log('Individual grades saved');
+            }
+
+            // Go back
+            function goBack() {
+                const kodeMk = [[${kodeMk}]];
+                window.location.href = '/dosen/pemberian-nilai?kodeMk=' + kodeMk;
+            }
+
+            // Listen to input changes
+            document.querySelectorAll('.nilai-individu').forEach(input => {
+                input.addEventListener('input', calculateAverage);
+            });
+        </script>
     </body>
 </html>

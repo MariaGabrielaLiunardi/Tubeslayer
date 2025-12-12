@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 
 import com.Tubeslayer.dto.PesertaMatkulDTO;
 import com.Tubeslayer.dto.TugasBesarRequest;
+import com.Tubeslayer.dto.PemberianNilaiDTO;
 import com.Tubeslayer.entity.*;
 
 import com.Tubeslayer.repository.*;
@@ -762,5 +763,191 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("error", e.getMessage()));
         }
+    }
+
+    /**
+     * GET - Dashboard Nilai Dosen
+     * Menampilkan daftar nilai untuk mata kuliah yang diampu
+     */
+    @GetMapping("/dosen/nilai")
+    public String dosenNilai(
+            @RequestParam(required = false) String kodeMk,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+        
+        // Jika tidak ada kodeMk, redirect ke mata kuliah
+        if (kodeMk == null || kodeMk.isEmpty()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        // Cek apakah dosen mengajar mata kuliah ini
+        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        // Get relasi dosen-matakuliah untuk mendapatkan detail kelas
+        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+        if (mkDosen == null || !mkDosen.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        // Get semua tugas untuk mata kuliah ini
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline));
+
+        // Get peserta mata kuliah
+        List<MataKuliahMahasiswa> pesertaList = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("mkDosen", mkDosen);
+        model.addAttribute("tugasList", tugasList);
+        model.addAttribute("pesertaList", pesertaList);
+        model.addAttribute("kodeMk", kodeMk);
+
+        return "nilai/Dosen/nilai-dosen";
+    }
+
+    /**
+     * GET - Jadwal Penilaian Dosen
+     * Menampilkan jadwal penilaian untuk tugas/rubrik
+     */
+    @GetMapping("/dosen/jadwal-penilaian")
+    public String dosenJadwalPenilaian(
+            @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer idTugas,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+        
+        if (kodeMk == null || kodeMk.isEmpty()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+        if (mkDosen == null || !mkDosen.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline));
+
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("mkDosen", mkDosen);
+        model.addAttribute("tugasList", tugasList);
+        model.addAttribute("kodeMk", kodeMk);
+        model.addAttribute("idTugas", idTugas);
+
+        return "nilai/Dosen/jadwal-penilaian-dosen";
+    }
+
+    /**
+     * GET - Pemberian Nilai Dosen
+     * Menampilkan form pemberian nilai untuk tugas/kelompok
+     */
+    @GetMapping("/dosen/pemberian-nilai")
+    public String dosenPemberianNilai(
+            @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer idTugas,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+        
+        if (kodeMk == null || kodeMk.isEmpty()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+        if (mkDosen == null || !mkDosen.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        TugasBesar tugas = null;
+        if (idTugas != null) {
+            tugas = tugasRepo.findById(idTugas).orElse(null);
+            if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
+                return "redirect:/dosen/mata-kuliah";
+            }
+        }
+
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline));
+
+        // Load groups (kelompok) with their grades for the specific tugas
+        List<PemberianNilaiDTO> pesertaList = new ArrayList<>();
+        if (idTugas != null && tugas != null) {
+            List<Object[]> rawResults = tugasKelompokRepo.findGrupesWithNilaiByTugas(idTugas);
+            pesertaList = rawResults.stream()
+                    .map(row -> new PemberianNilaiDTO(
+                            (Integer) row[0], // idKelompok
+                            (String) row[1],  // namaKelompok
+                            (Integer) row[2], // idTugas
+                            row[3] != null ? ((Number) row[3]).intValue() : 0 // nilai
+                    ))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("mkDosen", mkDosen);
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("tugasList", tugasList);
+        model.addAttribute("pesertaList", pesertaList);
+        model.addAttribute("kodeMk", kodeMk);
+        model.addAttribute("idTugas", idTugas);
+
+        return "nilai/Dosen/pemberian-nilai-dosen";
+    }
+
+    /**
+     * GET - Detail Tugas Dosen
+     * Menampilkan detail tugas dengan pilihan rubrik, jadwal, dan pemberian nilai
+     */
+    @GetMapping("/dosen/dashboard-penilaian")
+    public String dosenDashboardPenilaian(
+            @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer idTugas,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+        
+        if (kodeMk == null || kodeMk.isEmpty() || idTugas == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+        if (mkDosen == null || !mkDosen.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+        if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("mkDosen", mkDosen);
+        model.addAttribute("tugasList", tugasList);
+        model.addAttribute("kodeMk", kodeMk);
+        model.addAttribute("idTugas", idTugas);
+
+        return "nilai/Dosen/dashboard-nilai-dosen";
     }
 }
