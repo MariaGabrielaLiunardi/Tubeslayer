@@ -24,9 +24,12 @@ public class KomponenNilai {
 
     private int bobot;
 
-    @Column(length = 300)
+    @Column(columnDefinition = "TEXT")
     private String catatan;
 
+    @Column(nullable = true)
     private LocalTime jam;
+    
+    @Column(nullable = true)
     private LocalDate tanggal;
 }
