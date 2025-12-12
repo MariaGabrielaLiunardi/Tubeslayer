@@ -122,6 +122,16 @@
                 <span class="name" id="profil-nama" th:text="${user.nama}">Nama User</span>
                 <span class="role" id="profil-role" th:text="${user.role}">Role User</span>
                 <span class="email" id="profil-email" th:text="${user.email}">email@unpar.ac.id</span>
+
+                <!-- Dosen specific: show NIP only -->
+                <div th:if="${user.role} == 'Dosen'" class="dosen-info">
+                    <div class="nip">NIP: <span th:text="${nip}">20080107</span></div>
+                </div>
+
+                <!-- Mahasiswa specific: show NPM only -->
+                <div th:if="${user.role} == 'Mahasiswa'" class="mahasiswa-info">
+                    <div class="npm">NPM: <span th:text="${npm}">19012345</span></div>
+                </div>
             </div>
 
         </div>
