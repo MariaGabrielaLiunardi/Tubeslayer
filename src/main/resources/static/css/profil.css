@@ -275,7 +275,15 @@ header .image-text .header-text{
   color: #555;
 }
 
+.dosen-info{
+    font-size: 12pt;
+    color: #555;
+}
 
+.mahasiswa-info{
+    font-size: 12pt;
+    color: #555;
+}
 .pfp{
     width: 150px;
     height: 150px;
