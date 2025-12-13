@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Jadwal Penilaian Mahasiswa</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/jadwal-penilaian-mahasiswa.css">
-        <script src="../../../static/js/jadwal-penilaian-mahasiswa.js" defer></script>
+        <title>Jadwal Penilaian - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/jadwal-penilaian-mahasiswa.css}">
+        <script th:src="@{/js/jadwal-penilaian-dosen.js}" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
 
@@ -14,7 +14,7 @@
             <header>
                 <div class="image-text">
                     <span class="image">
-                        <img src="../../../static/logo/blue-logo.png" alt="logo">
+                        <img th:src="@{/logo/blue-logo.png}" alt="logo">
                     </span>
 
                     <div class ="text header-text">
@@ -26,15 +26,15 @@
             <div class="menu-bar">
                 <div class="menu">
                     <ul class="menu-links">
-                        <li class="nav-link active">
-                            <a href="#">
-                                <img src="../../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                        <li class="nav-link">
+                            <a th:href="@{/mahasiswa/dashboard}">
+                                <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
-                        <li class="nav-link">
-                            <a href="nilai-mahasiswa.html">
-                                <img src="../../../static/icon/open-book.png" class="icon open-book-icon">
+                        <li class="nav-link active">
+                            <a th:href="@{/mahasiswa/mata-kuliah}">
+                                <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
                                 <span class="text nav-text">Mata Kuliah</span>
                             </a>
                         </li>
@@ -46,82 +46,134 @@
         <section class="home">
             <div class="header">
                 <div class="left-section">
-                    <span class="dashboard-title"></span>
+                    <span class="dashboard-title">Jadwal Penilaian</span>
                 </div>
                 <div class="right-section">
                     <div class="info">
-                        <span class="name">Keisha Neira Jocelyn</span>
-                        <span class="role">Mahasiswa</span>
+                        <span class="name" th:text="${user.nama}">Nama Mahasiswa</span>
+                        <span class="role" th:text="${user.role}">Mahasiswa</span>
                     </div>
-                    <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
-                    <button type="button" class="logout">
-                        <img src="../../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    <a th:href="@{/profil}">
+                        <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
+                    </a>
+                    <button type="button" class="logout" id="logoutButton">
+                        <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logout">
                     </button>
                 </div>
             </div>
 
             <div class="nav-segmented-control">
-                <div class="kuliah-segment">
-                    Kuliah
-                </div>
-
-                <div class="Daftar-Peserta-segment">
-                    Daftar Peserta
-                </div>
-
-                <div class="nav-active">
-                    Nilai
+                <div class="nav-tab">
+                    Jadwal Penilaian
                 </div>
             </div>
             
             <div class="container">
                 <div class="rectangle-blue">
                     <div class="tb-title">
-                        <img src="../../../static/icon/bookj ver4.png" class="tb-icon">
-                        <span class="tb-text">Tugas Besar Tahap 1</span>
+                        <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
+                        <span class="tb-text" th:text="${tugas.judulTugas}">Nama Tugas Besar</span>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="tilte-rubrik">Jadwal Penilaian</div>
+                    <div class="breadcrumb-nav">
+                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk},idTugas=${idTugas})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                        <span class="breadcrumb-separator">&gt;</span>
+                        <span class="breadcrumb-current">Jadwal Penilaian</span>
+                    </div>
+
                     <div class="rectangle-yellow">
                         <div class="assignment-table-wrapper">
-                            <div class="assignment-header">
-                                <div class="col-komponen">Komponen</div>
-                                <div class="col-tanggal">Tanggal</div>
-                                <div class="col-jam">Jam</div>
-                            </div>
+                            <form id="jadwalForm">
+                                <input type="hidden" id="kodeMk" th:value="${kodeMk}">
+                                <input type="hidden" id="idTugas" th:value="${idTugas}">
+                                <input type="hidden" id="deletedTugasIds" value="">
+                                
+                                <div class="assignment-header">
+                                    <div class="col-kel">Komponen</div>
+                                    <div class="col-tanggal">Tanggal</div>
+                                    <div class="col-jam">Jam</div>
+                                </div>
 
-                            <div class="assignment-row">
-                                <div class="col-isi-komponen"></div>
-                                <div class="col-isi-tanggal"></div>
-                                <div class="col-isi-jam"></div>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-komponen"></div>
-                                <div class="col-isi-tanggal"></div>
-                                <div class="col-isi-jam"></div>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-komponen"></div>
-                                <div class="col-isi-tanggal"></div>
-                                <div class="col-isi-jam"></div>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-komponen"></div>
-                                <div class="col-isi-tanggal"></div>
-                                <div class="col-isi-jam"></div>
-                            </div>
+                                <div id="jadwalContainer">
+                                    <!-- Jadwal akan diload via JavaScript -->
+                                </div>
+                            </form>
                         </div>
-
-                        <a href="dashboard-nilai-mahasiswa.html"> <div class="kembali">Kembali</div> </a>
-
                     </div>
                 </div>
             </div>
         </section>
+
+        <script th:inline="javascript">
+            // Logout handler
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    window.location.href = '/logout';
+                }
+            });
+
+            // Toggle sidebar
+            const toggle = document.querySelector('.toggle');
+            const sidebar = document.querySelector('.sidebar');
+
+            toggle.addEventListener('click', function() {
+                sidebar.classList.toggle('close');
+            });
+
+            // Counter untuk ID jadwal baru
+            let newJadwalCounter = 0;
+
+            // Initialize - Load jadwal dari server
+            window.addEventListener('load', function() {
+                loadJadwalList();
+            });
+
+            // Load jadwal list dari tugas
+            function loadJadwalList() {
+                const idTugas = document.getElementById('idTugas').value;
+                const kodeMk = document.getElementById('kodeMk').value;
+                
+                fetch('/mahasiswa/jadwal-penilaian/get?mk=' + kodeMk + '&idTugas=' + idTugas)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.jadwalList) {
+                            const container = document.getElementById('jadwalContainer');
+                            container.innerHTML = '';
+                            
+                            if (data.jadwalList.length === 0) {
+                                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">Belum ada jadwal penilaian</div>';
+                                return;
+                            }
+                            
+                            data.jadwalList.forEach(item => {
+                                const newRow = document.createElement('div');
+                                newRow.className = 'assignment-row jadwal-existing';
+                                newRow.setAttribute('data-id-tugas', item.idTugas);
+                                
+                                const tanggalParts = item.deadline.split('T');
+                                const tanggal = tanggalParts[0];
+                                const jam = tanggalParts[1] ? tanggalParts[1].substring(0, 5) : '00:00';
+                                
+                                newRow.innerHTML = `
+                                    <div class="col-isi-kel">${item.judulTugas}</div>
+                                    <div class="col-isi-tanggal">
+                                        <input type="date" class="input-tanggal" value="${tanggal}" readonly disabled>
+                                    </div>
+                                    <div class="col-isi-jam">
+                                        <input type="time" class="input-jam" value="${jam}" readonly disabled>
+                                    </div>
+                                `;
+                                
+                                container.appendChild(newRow);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error loading jadwal:', error));
+            }
+
+
+        </script>
     </body>
 </html>

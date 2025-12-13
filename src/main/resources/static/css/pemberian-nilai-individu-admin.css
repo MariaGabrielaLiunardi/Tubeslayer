@@ -423,7 +423,7 @@ header .image-text .header-text{
     padding: 30px; /* Internal padding for the content */
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 0px;
 }
 
 .assignment-table-wrapper {
