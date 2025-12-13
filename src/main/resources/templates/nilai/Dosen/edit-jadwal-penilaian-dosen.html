@@ -70,6 +70,12 @@
             </div>
             
             <div class="container">
+                <div class="back-button">
+                    <button th:onclick="|window.location.href='@{/dosen/nilai(kodeMk=${kodeMk})}'|">
+                        ← Kembali
+                    </button>
+                </div>
+
                 <div class="rectangle-blue">
                     <div class="tb-title">
                         <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">

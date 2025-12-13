@@ -79,9 +79,32 @@
                 
                 <div class="rectangle-white">
                     <div class="breadcrumb">
-                        <a th:href="@{/dosen/pemberian-nilai(kodeMk=${kodeMk}, idTugas=${idTugas})}" class="crumb">Pemberian Nilai</a>
-                        <span class="crumb"> > </span>
-                        <span class="crumb current" th:text="${kelompok != null ? kelompok.namaKelompok : 'Detail'}">Kelompok</span>
+                        <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                            Daftar Mata Kuliah
+                        </a>
+
+                        &gt;
+
+                        <a th:href="@{/dosen/matkul-detail(kodeMk=${kodeMk})}"
+                            style="text-decoration: none;">
+                            <span th:text="${mataKuliah != null ? mataKuliah.nama : 'Mata Kuliah'}">Mata Kuliah</span>
+                        </a>
+
+                        &gt;
+
+                        <a th:href="@{/dosen/dashboard-penilaian(kodeMk=${kodeMk},idTugas=${idTugas})}" style="text-decoration: none;">
+                            Penilaian
+                        </a>
+
+                        &gt;
+
+                        <a th:href="@{/dosen/pemberian-nilai(kodeMk=${kodeMk},idTugas=${idTugas})}" style="text-decoration: none;">
+                            Pemberian Nilai
+                        </a>
+
+                        &gt;
+
+                        Detail Anggota
                     </div>
 
                     <div style="width: 100%; padding: 30px 0;">
@@ -89,30 +112,30 @@
                         <div style="background-color: #e8f4f8; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
                             <div style="display: flex; gap: 30px;">
                                 <div>
-                                    <span style="font-size: 14px; color: #666;">Nama Kelompok:</span>
-                                    <p style="font-size: 16px; font-weight: 600; margin: 5px 0;" th:text="${kelompok != null ? kelompok.namaKelompok : '-'}">-</p>
+                                    <span style="font-size: 16px; color: #666;">Nama Kelompok:</span>
+                                    <p style="font-size: 18px; font-weight: 600; margin: 5px 0;" th:text="${kelompok != null ? kelompok.namaKelompok : '-'}">-</p>
                                 </div>
                                 <div>
-                                    <span style="font-size: 14px; color: #666;">Jumlah Anggota:</span>
-                                    <p style="font-size: 16px; font-weight: 600; margin: 5px 0;" th:text="${pesertaList != null ? pesertaList.size() : '0'}">0</p>
+                                    <span style="font-size: 16px; color: #666;">Jumlah Anggota:</span>
+                                    <p style="font-size: 18px; font-weight: 600; margin: 5px 0;" th:text="${pesertaList != null ? pesertaList.size() : '0'}">0</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Anggota Section -->
                         <div th:if="${not #lists.isEmpty(pesertaList)}" style="margin-bottom: 40px;">
-                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">Daftar Anggota Kelompok</h3>
+                            <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 15px;">Daftar Anggota Kelompok</h3>
                             <div style="background-color: white; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
                                 <div style="display: grid; grid-template-columns: 1fr; padding: 15px 20px; background-color: white;">
-                                    <div th:each="peserta : ${pesertaList}" style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; color: #555; font-size: 15px;" th:text="${peserta.nama ?: 'Anggota'}">Nama Anggota</div>
+                                    <div th:each="peserta : ${pesertaList}" style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; color: #555; font-size: 16px;" th:text="${peserta.nama ?: 'Anggota'}">Nama Anggota</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Empty Rubrik Message -->
                         <div th:if="${#lists.isEmpty(komponenList)}" style="background-color: #ffe8e8; border: 2px solid #ff6b6b; border-radius: 10px; padding: 20px; margin-bottom: 30px; text-align: center;">
-                            <p style="margin: 0; font-size: 16px; font-weight: 600; color: #d63031;">⚠️ Rubrik Penilaian Belum Tersedia</p>
-                            <p style="margin: 10px 0 0 0; font-size: 14px; color: #a61e4d;">Silakan buat rubrik penilaian terlebih dahulu sebelum memberikan nilai kepada kelompok ini.</p>
+                            <p style="margin: 0; font-size: 18px; font-weight: 600; color: #d63031;">⚠️ Rubrik Penilaian Belum Tersedia</p>
+                            <p style="margin: 10px 0 0 0; font-size: 16px; color: #a61e4d;">Silakan buat rubrik penilaian terlebih dahulu sebelum memberikan nilai kepada kelompok ini.</p>
                         </div>
 
                         <!-- Buttons & Catatan -->
@@ -125,14 +148,9 @@
                                 </a>
                             </div>
 
-                            <!-- Tombol Kembali -->
-                            <div style="flex: 0 0 auto;">
-                                <button class="btn-kembali" onclick="goBack()">Kembali</button>
-                            </div>
-
                             <!-- Catatan Penting -->
                             <div th:if="${not #lists.isEmpty(komponenList)}" style="flex: 1; background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px;">
-                                <p style="margin: 0; font-size: 14px; color: #856404;">
+                                <p style="margin: 0; font-size: 15px; color: #856404;">
                                     <strong>Catatan:</strong> Klik tombol "Lihat Rubrik" untuk memberikan nilai berdasarkan komponen penilaian. Nilai kelompok akan dihitung otomatis dari bobot masing-masing komponen.
                                 </p>
                             </div>
@@ -149,13 +167,6 @@
                     window.location.href = '/logout';
                 }
             });
-
-            // Go back
-            function goBack() {
-                const kodeMk = [[${kodeMk}]];
-                const idTugas = [[${idTugas}]];
-                window.location.href = '/dosen/pemberian-nilai?kodeMk=' + kodeMk + '&idTugas=' + idTugas;
-            }
         </script>
     </body>
 </html>

@@ -84,7 +84,26 @@
                 
                 <div class="rectangle-white">
                     <div class="breadcrumb">
-                        <span class="crumb current">Pemberian Nilai</span>
+                        <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                            Daftar Mata Kuliah
+                        </a>
+
+                        &gt;
+
+                        <a th:href="@{/dosen/matkul-detail(kodeMk=${kodeMk})}"
+                            style="text-decoration: none;">
+                            <span th:text="${mataKuliah != null ? mataKuliah.nama : 'Mata Kuliah'}">Mata Kuliah</span>
+                        </a>
+
+                        &gt;
+
+                        <a th:href="@{/dosen/dashboard-penilaian(kodeMk=${kodeMk},idTugas=${idTugas})}" style="text-decoration: none;">
+                            Penilaian
+                        </a>
+
+                        &gt;
+
+                        Pemberian Nilai
                     </div>
 
                     <div style="width: 100%; padding: 30px 0;" th:if="${not #lists.isEmpty(pesertaList)}">

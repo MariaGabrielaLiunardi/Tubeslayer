@@ -73,10 +73,27 @@
         </div>
 
         <div class="detail-wrapper">
-            <div class="back-button">
-                <button th:onclick="|window.location.href='@{/dosen/tugas-detail(idTugas=${tugas.idTugas})}'|">
-                    ← Kembali
-                </button>
+            <div class="breadcrumb">
+                <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDetail.kodeMK})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/tugas-detail(idTugas=${tugas.idTugas})}" style="text-decoration: none;">
+                    <span th:text="${tugas.judulTugas}">Tugas</span>
+                </a>
+
+                &gt;
+
+                Pemberian Nilai Kelompok
             </div>
 
             <div class="tugas-header">
@@ -185,6 +202,47 @@
         // ID Tugas dan Kelompok dari template
         const idTugas = [[${tugas.idTugas}]];
         const idKelompok = [[${kelompokTerpilih != null ? kelompokTerpilih.idKelompok : 0}]];
+        
+        // Function untuk memuat nilai yang sudah tersimpan
+        function loadSavedNilaiKelompok() {
+            // Ambil leader/anggota pertama untuk fetch nilai
+            const anggotaList = document.querySelectorAll('.anggota-item');
+            if (anggotaList.length === 0) {
+                return;
+            }
+            
+            const firstAnggotaIdElement = anggotaList[0].querySelector('.anggota-id');
+            const idUser = firstAnggotaIdElement ? firstAnggotaIdElement.textContent.trim() : null;
+            
+            if (!idUser) {
+                return;
+            }
+            
+            // Fetch nilai dari API
+            fetch(`/api/nilai/${idUser}/${idTugas}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists && data.nilaiPerKomponen) {
+                        // Populate input fields dengan nilai yang tersimpan
+                        Object.entries(data.nilaiPerKomponen).forEach(([komponenId, nilai]) => {
+                            const input = document.querySelector(`[data-komponen-id="${komponenId}"]`);
+                            if (input) {
+                                input.value = nilai;
+                            }
+                        });
+                        
+                        // Hitung dan update preview
+                        hitungNilaiKelompok();
+                        
+                        // Tampilkan tombol hapus jika ada nilai tersimpan
+                        const deleteBtn = document.getElementById('btn-hapus-kelompok');
+                        if (deleteBtn) {
+                            deleteBtn.style.display = 'block';
+                        }
+                    }
+                })
+                .catch(error => console.error('Error loading nilai:', error));
+        }
         
         // Function untuk menghitung nilai kelompok dari komponen-komponen
         function hitungNilaiKelompok() {
@@ -360,6 +418,9 @@
 
         // Event listeners untuk input komponen nilai - hitung realtime
         document.addEventListener('DOMContentLoaded', function() {
+            // Muat nilai yang sudah tersimpan
+            loadSavedNilaiKelompok();
+            
             document.querySelectorAll('.nilai-komponen-input').forEach(input => {
                 input.addEventListener('change', hitungNilaiKelompok);
                 input.addEventListener('input', hitungNilaiKelompok);

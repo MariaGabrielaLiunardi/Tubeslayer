@@ -73,10 +73,27 @@
         </div>
 
         <div class="detail-wrapper">
-            <div class="back-button">
-                <button th:onclick="|window.location.href='@{/dosen/tugas-detail(idTugas=${tugas.idTugas})}'|">
-                    ← Kembali
-                </button>
+            <div class="breadcrumb">
+                <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDetail.kodeMK})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/tugas-detail(idTugas=${tugas.idTugas})}" style="text-decoration: none;">
+                    <span th:text="${tugas.judulTugas}">Tugas</span>
+                </a>
+
+                &gt;
+
+                Pemberian Nilai Individu
             </div>
 
             <div class="tugas-header">
@@ -267,6 +284,28 @@
             });
         }
 
+        // Function untuk load saved nilai individu dari database
+        function loadSavedNilaiIndividu() {
+            // Iterate semua kelompok dan semua anggota
+            for (const idKelompok in kelompokData) {
+                const kelompok = kelompokData[idKelompok];
+                if (!kelompok.anggota) continue;
+
+                kelompok.anggota.forEach(anggota => {
+                    // Fetch nilai untuk setiap user
+                    fetch(`/api/nilai/${anggota.userId}/${idTugas}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.exists && data.nilaiPribadi) {
+                                // Update kelompokData dengan nilai yang tersimpan
+                                anggota.nilai = data.nilaiPribadi;
+                            }
+                        })
+                        .catch(error => console.error('Error loading nilai:', error));
+                });
+            }
+        }
+
         // Function untuk simpan nilai individu
         function simpanNilaiIndividu(userId, tugasId) {
             const input = document.querySelector(`.nilai-input[data-user-id="${userId}"]`);
@@ -362,6 +401,9 @@
 
         // Event listeners untuk tombol kelompok
         document.addEventListener('DOMContentLoaded', function() {
+            // Load saved nilai dari database
+            loadSavedNilaiIndividu();
+            
             console.log('DOM Content Loaded');
             console.log('kelompokData:', kelompokData);
             console.log('All kelompok buttons:', document.querySelectorAll('.kelompok-btn').length);

@@ -15,6 +15,39 @@
     --tran-05: all 0.5s ease;
 }
 
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 0 15px 0;
+    background-color: transparent;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.breadcrumb-link {
+    color: #0078B5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #005a8d;
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    color: #999;
+    font-weight: 400;
+}
+
+.breadcrumb-current {
+    color: #333;
+    font-weight: 400;
+}
+
 body{
     height: 100vh;
     background-color: rgba(172, 224, 249, 1);

@@ -1,48 +1,110 @@
 /* Pemberian Nilai Dosen - Modern CSS */
 
+/* Override background gradient for pemberian nilai pages */
+.home {
+    background: linear-gradient(0deg, rgba(172, 224, 249, 1) 0%, rgba(172, 224, 249, 0.8) 70%, rgba(255, 241, 235, 1) 100%) !important;
+    height: auto;
+}
+
+/* Back Button Styling */
+.back-button button {
+    background-color: #0078B5;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: Sen, sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 120, 181, 0.2);
+}
+
+.back-button button:hover {
+    background-color: #005a8d;
+    box-shadow: 0 4px 12px rgba(0, 120, 181, 0.3);
+    transform: translateY(-2px);
+}
+
+.back-button button:active {
+    transform: translateY(0);
+}
+
 .detail-wrapper {
     padding: 20px;
 }
 
-.back-button {
-    margin-bottom: 20px;
+/* Breadcrumb Navigation */
+.breadcrumb {
+    font-size: 16px;
+    margin-top: 15px; 
+    margin-bottom: 25px; 
+    margin-left: 0px;
 }
 
-.back-button button {
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+.breadcrumb a {
+    color: black;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    color: #0078B5;
+}
+
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 0 15px 0;
+    background-color: transparent;
+    margin-bottom: 15px;
     font-size: 14px;
-    transition: all 0.3s ease;
-    font-weight: 500;
 }
 
-.back-button button:hover {
-    background-color: #2563eb;
-    transform: translateX(-2px);
+.breadcrumb-link {
+    color: #0078B5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #005a8d;
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    color: #999;
+    font-weight: 400;
+}
+
+.breadcrumb-current {
+    color: #333;
+    font-weight: 400;
 }
 
 /* Tugas Header */
 .tugas-header {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
+    background: #CCF0F7;
+    color: black;
     padding: 30px;
     border-radius: 10px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 4px 6px gray;
 }
 
 .tugas-header h1 {
     margin: 0 0 15px 0;
-    font-size: 28px;
+    font-size: 32px;
 }
 
 .tugas-header p {
     margin: 8px 0;
-    font-size: 14px;
+    font-size: 16px;
     opacity: 0.9;
 }
 
@@ -63,23 +125,17 @@
     background: white;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     color: #555;
     transition: all 0.3s ease;
 }
 
-.nav-button:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
-    color: #3b82f6;
-}
-
 .nav-button.active {
-    background: #3b82f6;
-    border-color: #3b82f6;
+    background: black;
+    border: none; 
     color: white;
-    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 4px 6px gray;
 }
 
 /* Kelompok Selector */
@@ -93,7 +149,7 @@
 
 .kelompok-selector h3 {
     margin: 0 0 15px 0;
-    font-size: 16px;
+    font-size: 18px;
     color: #333;
     font-weight: 600;
 }
@@ -111,22 +167,16 @@
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 14px;
+    font-size: 16px;
     color: #666;
     font-weight: 500;
 }
 
-.kelompok-btn:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
-    color: #3b82f6;
-}
-
 .kelompok-btn.active {
-    background: #3b82f6;
+    background: black;
     color: white;
-    border-color: #3b82f6;
-    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+    border: none;
+    box-shadow: 0 2px 6px gray;
 }
 
 /* Pemberian Nilai Form */
@@ -139,9 +189,9 @@
 
 .pemberian-nilai-form h3 {
     margin: 0 0 25px 0;
-    font-size: 20px;
+    font-size: 22px;
     color: #333;
-    border-bottom: 2px solid #667eea;
+    border-bottom: none;
     padding-bottom: 10px;
 }
 
@@ -195,11 +245,11 @@
 }
 
 .anggota-detail .anggota-id {
-    background: #3b82f6;
-    color: white;
+    background: #CCF0F7;
+    color: black;
     padding: 4px 10px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 15px;
     font-weight: bold;
     width: fit-content;
 }
@@ -211,7 +261,7 @@
 }
 
 .anggota-detail .anggota-role {
-    font-size: 12px;
+    font-size: 15px;
     color: #666;
     background: #f0f0f0;
     padding: 3px 8px;
@@ -355,27 +405,27 @@
 
 .anggota-info-section .anggota-nama {
     flex: 1;
-    font-size: 14px;
+    font-size: 16px;
     color: #555;
     font-weight: 500;
 }
 
 .anggota-info-section .anggota-id {
-    background: #3b82f6;
-    color: white;
+    background: #CCF0F7;
+    color: black;
     padding: 3px 10px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 15px;
     font-weight: bold;
     margin: 0;
 }
 
 .anggota-info-section .anggota-role {
-    background: #1e40af;
-    color: white;
+    background: #CCF0F7;
+    color: black;
     padding: 3px 10px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 15px;
     font-weight: bold;
     margin: 0;
 }
@@ -400,7 +450,7 @@
 }
 
 .komponen-input label {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: #333;
 }
@@ -409,7 +459,7 @@
     padding: 10px 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
     transition: all 0.3s ease;
 }
 
@@ -435,7 +485,7 @@
 }
 
 .info-text {
-    font-size: 12px;
+    font-size: 14px;
     color: #999;
 }
 
@@ -449,18 +499,19 @@
 
 .nilai-kelompok-preview h5 {
     margin: 0;
-    font-size: 13px;
+    font-size: 16px;
     color: #666;
     font-weight: 600;
 }
 
 .nilai-preview-box {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
+    background: #CCF0F7;
+    color: black;
     padding: 20px;
     border-radius: 8px;
     text-align: center;
-    min-height: 80px;
+    min-height: 30px;
+    max-width: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -468,7 +519,7 @@
 }
 
 .nilai-angka {
-    font-size: 36px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -513,7 +564,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     transition: all 0.3s ease;
     flex: 1;
@@ -536,6 +587,7 @@
 .btn-hapus {
     background-color: #e74c3c;
     color: white;
+    border-radius: 12px;
 }
 
 .btn-hapus:hover {
@@ -555,6 +607,11 @@
     text-align: center;
     color: #999;
     font-size: 16px;
+}
+
+.kelompok-list{
+    gap: 10px; 
+    display: flex; 
 }
 
 /* Responsive */
@@ -781,7 +838,7 @@
     border-radius: 12px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     background-color: black;
     color: white;
@@ -942,7 +999,7 @@
     padding: 8px 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
     transition: all 0.2s ease;
 }
@@ -967,14 +1024,14 @@
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 15px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-weight: 500;
 }
 
 .anggota-item .btn-primary {
-    background: #3b82f6;
+    background: black;
     color: white;
 }
 

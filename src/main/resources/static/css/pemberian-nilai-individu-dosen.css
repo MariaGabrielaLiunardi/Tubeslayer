@@ -2,6 +2,39 @@
 
 /* === PAGE-SPECIFIC: Pemberian Nilai Individu Dosen === */
 
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 0 15px 0;
+    background-color: transparent;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.breadcrumb-link {
+    color: #0078B5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #005a8d;
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    color: #999;
+    font-weight: 400;
+}
+
+.breadcrumb-current {
+    color: #333;
+    font-weight: 400;
+}
+
 .rectangle-blue {
     width: 90%; 
     max-width: 1648px;
@@ -152,30 +185,6 @@
     transform: translateY(0);
 }
 
-.btn-kembali {
-    padding: 15px 40px;
-    background-color: black;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    font-family: Sen;
-}
-
-.btn-kembali:hover {
-    background-color: #333;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-}
-
-.btn-kembali:active {
-    transform: translateY(0);
-}
-
 .breadcrumb {
     display: flex;
     align-items: center;
@@ -220,7 +229,7 @@
     background-color: #CDE8F6;
     padding: 15px;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 17px;
     border-bottom: 2px solid #9dd4ed;
 }
 
@@ -240,12 +249,14 @@
 .col-rubrik-isi-nama {
     font-weight: 500;
     color: #333;
+    font-size: 16px;
 }
 
 .col-rubrik-isi-bobot {
     text-align: center;
     font-weight: 600;
     color: #1e40af;
+    font-size: 16px;
 }
 
 .col-rubrik-isi-nilai input,
@@ -254,7 +265,7 @@
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .col-rubrik-isi-nilai input {
@@ -263,5 +274,54 @@
 }
 
 .col-rubrik-isi-catatan input {
-    font-size: 13px;
+    font-size: 15px;
+}
+
+/* Nilai Anggota Table */
+.nilai-anggota-table {
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.nilai-anggota-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+    background-color: #CDE8F6;
+    padding: 15px;
+    font-weight: 600;
+    font-size: 16px;
+    border-bottom: 2px solid #9dd4ed;
+}
+
+.nilai-anggota-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    align-items: center;
+}
+
+.nilai-anggota-row:last-child {
+    border-bottom: none;
+}
+
+.col-nama-anggota {
+    font-weight: 500;
+    color: #333;
+    font-size: 16px;
+}
+
+.col-nilai-anggota input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
 }
