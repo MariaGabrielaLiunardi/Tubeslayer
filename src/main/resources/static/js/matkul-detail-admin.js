@@ -1,9 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     const mkTabDiv = document.querySelector('.mk-tab');
-    const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
-
-    const tabs = document.querySelectorAll('.mk-tab button');
 
     // Logika Logout 
     

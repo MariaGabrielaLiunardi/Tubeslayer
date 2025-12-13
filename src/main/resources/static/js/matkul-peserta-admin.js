@@ -4,17 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
 
     const tabs = document.querySelectorAll('.mk-tab button');
-    
-    // Logika Tab Navigasi
-    tabs.forEach(tab => {
-        const tabTarget = tab.getAttribute('data-tab-target');
-
-        if (tabTarget === 'kuliah' && mataKuliahId) {
-            tab.addEventListener('click', () => {
-                window.location.href = `/admin/matakuliah-detail?kode=${encodeURIComponent(mataKuliahId)}`;
-            });
-        }
-    });
 
     // Logout
 
