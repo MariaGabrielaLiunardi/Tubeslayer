@@ -4,6 +4,10 @@ html, body {
     padding: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
 body {
     overflow-y: auto; 
     overflow-x: auto;

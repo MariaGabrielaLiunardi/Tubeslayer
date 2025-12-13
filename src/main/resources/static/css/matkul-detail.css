@@ -25,6 +25,9 @@ body {
     background-repeat: no-repeat;
 }
 
+a {
+    text-decoration: none;
+}
 
 .detail-wrapper {
     margin-top: 10px; 

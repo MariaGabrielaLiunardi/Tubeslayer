@@ -7,50 +7,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
-    <link rel="stylesheet" href="/css/peserta-detail.css">
+    <link rel="stylesheet" href="/css/matkul-peserta.css">
     <link rel="icon" href="/logo/blue-logo.png" type="image/png">
 
     <script src="/js/dash-user.js" defer></script>
-    <script src="/js/matkul-peserta-mhs.js" defer></script>
+    <script src="/js/matkul-peserta-admin.js" defer></script>
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
 
     <nav class="sidebar close">
-        <header>
-            <div class="image-text">
-                <span class="image">
-                    <img src="/logo/blue-logo.png" alt="logo">
-                </span>
-                <div class="text header-text">
-                    <span class="name">Tubeslayer</span>
-                </div>
-            </div>
-        </header>
-
-        <i class='bxr bx-chevron-right toggle'></i>
-
-        <div class="menu-bar">
-            <div class="menu">
-                <ul class="menu-links">
-                    <li class="nav-link">
-                        <a th:href="@{/mahasiswa/dashboard}">
-                            <img src="/icon/dashboard.png" class="icon">
-                            <span class="text nav-text">Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link active">
-                        <a th:href="@{/mahasiswa/mata-kuliah}">
-                            <img src="/icon/open-book.png" class="icon">
-                            <span class="text nav-text">Mata Kuliah</span>
-                        </a>
-                    </li>
-                </ul>
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img th:src="@{/logo/blue-logo.png}" alt="logo">
+            </span>
+            <div class="text header-text">
+                <span class="name">Tubeslayer</span>
             </div>
         </div>
-    </nav>
+    </header>
+
+    <i class='bxr bx-chevron-right toggle'></i>
+
+    <div class="menu-bar">
+        <ul class="menu-links">
+            <li class="nav-link">
+                <a th:href="@{/admin/dashboard}">
+                    <img th:src="@{/icon/dashboard.png}" class="icon dashboard-icon">
+                    <span class="text nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-link active">
+                <a th:href="@{/admin/menu-awal-ad}">
+                    <img th:src="@{/icon/database.png}" class="icon database-icon">
+                    <span class="text nav-text">Data</span>
+                </a>
+            </li>
+            <li class="nav-link">
+                <a th:href="@{/admin/arsip-mata-kuliah}">
+                    <img th:src="@{/icon/archive.png}" class="icon archive-icon">
+                    <span class="text nav-text">Arsip Mata Kuliah</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
     <section class="home">
 
@@ -107,7 +110,21 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Mata Kuliah</span> > Daftar Peserta
+
+                <a th:href="@{/mahasiswa/mata-kuliah}">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
+                Daftar Peserta
             </div>
 
             <div class="search-and-count">
@@ -139,7 +156,7 @@
 
                                 <td th:text="${p.nomorPokok}">XXXXX</td>
 
-                                <td th:text="${p.role}">Koordinator/Mahasiswa</td>
+                                <td th:text="${p.role}">Koordinator/Pengampu/Mahasiswa</td>
                             </tr>
 
                             <tr th:if="${combinedPesertaList != null and combinedPesertaList.size() == 1}">
