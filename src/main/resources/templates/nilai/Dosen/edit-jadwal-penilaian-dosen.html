@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Edit Jadwal Penilaian Dosen</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/edit-jadwal-penilaian-dosen.css">
-        <script src="../../../static/js/edit-jadwal-penilaian-dosen.js" defer></script>
+        <title>Edit Jadwal Penilaian Dosen - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/edit-jadwal-penilaian-dosen.css}">
+        <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
+        <script th:src="@{/js/edit-jadwal-penilaian-dosen.js}" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
 
@@ -14,7 +15,7 @@
             <header>
                 <div class="image-text">
                     <span class="image">
-                        <img src="../../../static/logo/blue-logo.png" alt="logo">
+                        <img th:src="@{/logo/blue-logo.png}" alt="logo">
                     </span>
 
                     <div class ="text header-text">
@@ -27,14 +28,14 @@
                 <div class="menu">
                     <ul class="menu-links">
                         <li class="nav-link active">
-                            <a href="#">
-                                <img src="../../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                            <a th:href="@{/dosen/dashboard}">
+                                <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="#">
-                                <img src="../../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
+                            <a th:href="@{/dosen/mata-kuliah}">
+                                <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
                                 <span class="text nav-text">Mata Kuliah</span>
                             </a>
                         </li>
@@ -46,78 +47,116 @@
         <section class="home">
             <div class="header">
                 <div class="left-section">
-                    <span class="dashboard-title"></span>
+                    <span class="dashboard-title">Edit Jadwal Penilaian</span>
                 </div>
                 <div class="right-section">
                     <div class="info">
-                        <span class="name">Clara Joycelyne Siauttara</span>
-                        <span class="role">Dosen</span>
+                        <span class="name" th:text="${user.nama}">Nama Dosen</span>
+                        <span class="role" th:text="${user.role}">Dosen</span>
                     </div>
-                    <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
-                    <button type="button" class="logout">
-                        <img src="../../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    <a th:href="@{/profil}">
+                        <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
+                    </a>
+                    <button type="button" class="logout" id="logoutButton">
+                        <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logout">
                     </button>
                 </div>
             </div>
 
             <div class="nav-segmented-control">
-                <div class="kuliah-segment">
-                    Kuliah
-                </div>
-
-                <div class="Daftar-Peserta-segment">
-                    Daftar Peserta
-                </div>
-
-                <div class="nav-active">
-                    Nilai
+                <div class="nav-tab">
+                    Edit Jadwal
                 </div>
             </div>
             
             <div class="container">
+                <div class="back-button">
+                    <button th:onclick="|window.location.href='@{/dosen/nilai(kodeMk=${kodeMk})}'|">
+                        ← Kembali
+                    </button>
+                </div>
+
                 <div class="rectangle-blue">
                     <div class="tb-title">
-                        <img src="../../../static/icon/bookj ver4.png" class="tb-icon">
-                        <span class="tb-text">Tugas Besar Tahap 1</span>
+                        <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
+                        <span class="tb-text" th:text="${mataKuliah.nama}">Nama Mata Kuliah</span>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
                     <div class="breadcrumb">
-                        <a href="jadwal-penilaian-dosen.html" class="crumb">Jadwal Penilaian</a>
+                        <a th:href="@{/dosen/jadwal-penilaian(kodeMk=${kodeMk})}" class="crumb">Jadwal Penilaian</a>
                         <span class="crumb"> > </span>
                         <span class="crumb current">Edit Jadwal Penilaian</span>
                     </div>
 
                     <div class="rectangle-yellow">
-                        <div class="assignment-table-wrapper">
+                        <div class="assignment-table-wrapper" th:if="${tugasList}">
                             <div class="assignment-header">
                                 <div class="col-komponen">Komponen</div>
-                                
+                            </div>
+
+                            <div class="assignment-row" th:each="tugas : ${tugasList}">
+                                <div class="col-isi-kel" th:text="${tugas.judulTugas}">Komponen</div>
                             </div>
 
                             <div class="assignment-row">
                                 <div class="col-isi-kel">Tanggal:</div>
                                 <div class="input-wrapper">
-                                    <input type="date" class="date-picker">
+                                    <input type="date" class="date-picker" id="jadwalTanggal" 
+                                           th:value="${tugas ? #temporals.format(tugas.deadline, 'yyyy-MM-dd') : ''}">
                                 </div>
                             </div>
 
                             <div class="assignment-row">
                                 <div class="col-isi-kel">Jam:</div>
                                 <div class="input-wrapper">
-                                    <input type="time" class="time-picker">
+                                    <input type="time" class="time-picker" id="jadwalJam"
+                                           th:value="${tugas ? #temporals.format(tugas.deadline, 'HH:mm') : ''}">
                                 </div>
                             </div>
 
                             <div class="tombol-aksi">
-                                <button class="btn-rilis">Batal</button>
-                                <button class="btn-simpan">Simpan</button>
+                                <button class="btn-rilis" onclick="goBack()">Batal</button>
+                                <button class="btn-simpan" onclick="saveSchedule()">Simpan</button>
                             </div>
+                        </div>
+
+                        <div th:if="${not tugasList}" style="text-align: center; padding: 40px; color: #999;">
+                            <p>Data jadwal tidak ditemukan</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <script th:inline="javascript">
+            // Logout handler
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    window.location.href = '/logout';
+                }
+            });
+
+            // Save schedule
+            function saveSchedule() {
+                const tanggal = document.getElementById('jadwalTanggal').value;
+                const jam = document.getElementById('jadwalJam').value;
+                
+                if (!tanggal || !jam) {
+                    alert('Silakan lengkapi tanggal dan jam');
+                    return;
+                }
+
+                alert('Jadwal penilaian berhasil diperbarui');
+                console.log('Schedule saved:', tanggal, jam);
+            }
+
+            // Go back
+            function goBack() {
+                const kodeMk = [[${kodeMk}]];
+                window.location.href = '/dosen/jadwal-penilaian?kodeMk=' + kodeMk;
+            }
+        </script>
     </body>
 </html>

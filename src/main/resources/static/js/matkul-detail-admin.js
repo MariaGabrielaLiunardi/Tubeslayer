@@ -32,15 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
    
+    // Baris data tugas hanya memiliki 2 kolom (No dan Nama Tugas)
     const masterDataRows = allTableRows.filter(row => row.children.length === 2); 
     
+    // Asumsi row kosong adalah row yang bukan data
     const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 2) : null; 
     
     let filteredPageItems = masterDataRows;
     
-    const prevButton = document.getElementById('prev-page');
-    const nextButton = document.getElementById('next-page');
-    const pageInfoSpan = document.getElementById('current-page');
+    const prevButton = document.getElementById('prev-page'); // Asumsi ada pagination
+    const nextButton = document.getElementById('next-page'); // Asumsi ada pagination
+    const pageInfoSpan = document.getElementById('current-page'); // Asumsi ada pagination
 
     const itemsPerPage = 3; 
     let totalPages = 0;
@@ -71,14 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
         totalPages = Math.ceil(filteredPageItems.length / itemsPerPage);
         
         if (pesertaCountSpan) {
-            pesertaCountSpan.textContent = `Tugas: ${filteredPageItems.length} tugas`; 
+            pesertaCountSpan.textContent = `Total Tugas: ${filteredPageItems.length}`; 
         }
         
-        // Gak ada datanya
+        // Gak ada datanya (Setelah filter)
         if (filteredPageItems.length === 0) {
             
+            // Tampilkan baris pesan kosong jika ada
             if (noDataRow) {
-                noDataRow.style.display = 'none'; 
+                noDataRow.style.display = 'table-row'; 
             }
             if (pageInfoSpan) pageInfoSpan.textContent = `0 dari 0`;
             if (prevButton) prevButton.disabled = true;
@@ -91,19 +94,19 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Ada datanya 
         if (noDataRow) {
-            noDataRow.style.display = 'none'; 
+            noDataRow.style.display = 'none'; // Sembunyikan baris pesan kosong
         }
 
         if (pageInfoSpan) pageInfoSpan.textContent = `${currentPage} dari ${totalPages}`;
         
+        // Handle pagination buttons (walaupun pagination mungkin tidak ada di HTML ini)
         if (prevButton) prevButton.disabled = currentPage === 1;
         if (nextButton) nextButton.disabled = currentPage === totalPages;
 
         showPage(currentPage);
     };
 
-    // Search 
-
+    // Search (Live Search)
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         
@@ -113,23 +116,28 @@ document.addEventListener("DOMContentLoaded", () => {
             filteredPageItems = masterDataRows.filter(row => {
                 if (row.cells.length < 2) return false;
                 
+                // Kolom Nama Tugas Besar ada di index 1 (setelah index 0: No)
                 const nameCell = row.cells[1]; 
                 
+                // Filter hanya berdasarkan Nama Tugas
                 const matchesName = nameCell && nameCell.textContent.toLowerCase().includes(query);
 
                 return matchesName; 
             });
         }
         
-        updateUI(true); 
+        updateUI(true); // Reset halaman ke 1 setelah pencarian baru
     };
     
-    if (searchButton) {
-        searchButton.addEventListener('click', handleSearch);
-    }
-
     if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
+        searchInput.addEventListener('input', handleSearch); 
+    }
+    // Menghapus event listener lama
+    if (searchButton) {
+        searchButton.removeEventListener('click', handleSearch);
+    }
+    if (searchInput) {
+        searchInput.removeEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 handleSearch();
             }

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pemberian Nilai Dosen</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/jadwal-penilaian-dosen.css">
-        <script src="../../../static/js/jadwal-penilaian-dosen.js" defer></script>
+        <title>Jadwal Penilaian Dosen - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/jadwal-penilaian-dosen.css}">
+        <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
+        <script th:src="@{/js/jadwal-penilaian-dosen.js}" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
 
@@ -14,7 +15,7 @@
             <header>
                 <div class="image-text">
                     <span class="image">
-                        <img src="../../../static/logo/blue-logo.png" alt="logo">
+                        <img th:src="@{/logo/blue-logo.png}" alt="logo">
                     </span>
 
                     <div class ="text header-text">
@@ -27,14 +28,14 @@
                 <div class="menu">
                     <ul class="menu-links">
                         <li class="nav-link active">
-                            <a href="#">
-                                <img src="../../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                            <a th:href="@{/dosen/dashboard}">
+                                <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-link">
-                            <a href="#">
-                                <img src="../../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
+                            <a th:href="@{/dosen/mata-kuliah}">
+                                <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
                                 <span class="text nav-text">Mata Kuliah</span>
                             </a>
                         </li>
@@ -46,87 +47,285 @@
         <section class="home">
             <div class="header">
                 <div class="left-section">
-                    <span class="dashboard-title"></span>
+                    <span class="dashboard-title">Jadwal Penilaian</span>
                 </div>
                 <div class="right-section">
                     <div class="info">
-                        <span class="name">Clara Joycelyne Siauttara</span>
-                        <span class="role">Dosen</span>
+                        <span class="name" th:text="${user.nama}">Nama Dosen</span>
+                        <span class="role" th:text="${user.role}">Dosen</span>
                     </div>
-                    <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
-                    <button type="button" class="logout">
-                        <img src="../../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    <a th:href="@{/profil}">
+                        <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
+                    </a>
+                    <button type="button" class="logout" id="logoutButton">
+                        <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logout">
                     </button>
                 </div>
             </div>
 
             <div class="nav-segmented-control">
-                <div class="kuliah-segment">
-                    Kuliah
-                </div>
-
-                <div class="Daftar-Peserta-segment">
-                    Daftar Peserta
-                </div>
-
-                <div class="nav-active">
-                    Nilai
+                <div class="nav-tab">
+                    Jadwal Penilaian
                 </div>
             </div>
             
             <div class="container">
                 <div class="rectangle-blue">
                     <div class="tb-title">
-                        <img src="../../../static/icon/bookj ver4.png" class="tb-icon">
-                        <span class="tb-text">Tugas Besar Tahap 1</span>
+                        <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
+                        <span class="tb-text" th:text="${tugas.judulTugas}">Nama Tugas Besar</span>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="breadcrumb">
-                        <span class="crumb current">Jadwal Penilaian</span>
+                    <div class="breadcrumb-nav">
+                        <a th:href="@{/dosen/dashboard-penilaian(kodeMk=${kodeMk},idTugas=${idTugas})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-current">Jadwal Penilaian</span>
                     </div>
 
                     <div class="rectangle-yellow">
                         <div class="assignment-table-wrapper">
-                            <div class="assignment-header">
-                                <div class="col-kel">Komponen</div>
-                                <div class="col-tanggal">Tanggal</div>
-                                <div class="col-jam">Jam</div>
-                                <div class="col-edit"></div>
-                            </div>
+                            <form id="jadwalForm">
+                                <input type="hidden" id="kodeMk" th:value="${kodeMk}">
+                                <input type="hidden" id="idTugas" th:value="${idTugas}">
+                                <input type="hidden" id="deletedTugasIds" value="">
+                                
+                                <div class="assignment-header">
+                                    <div class="col-kel">Komponen</div>
+                                    <div class="col-tanggal">Tanggal</div>
+                                    <div class="col-jam">Jam</div>
+                                    <div class="col-aksi"></div>
+                                </div>
 
-                            <div class="assignment-row">
-                                <div class="col-isi-kel"></div>
-                                <div class="col-isi-nilai"></div>
-                                <div class="col-isi-jam"></div>
-                                <a href="edit-jadwal-penilaian-dosen.html" class="col-isi-lihat-link"><button class="col-isi-lihat">Edit</button></a>
-                            </div>
+                                <div id="jadwalContainer">
+                                    <!-- Jadwal akan diload via JavaScript -->
+                                </div>
 
-                            <div class="assignment-row">
-                                <div class="col-isi-kel"></div>
-                                <div class="col-isi-nilai"></div>
-                                <div class="col-isi-jam"></div>
-                                <a href="edit-jadwal-penilaian-dosen.html" class="col-isi-lihat-link"><button class="col-isi-lihat">Edit</button></a>
-                            </div>
+                                <button type="button" class="btn-tambah-jadwal" onclick="tambahJadwal()">
+                                    + Tambah Jadwal Penilaian
+                                </button>
+                            </form>
 
-                            <div class="assignment-row">
-                                <div class="col-isi-kel"></div>
-                                <div class="col-isi-nilai"></div>
-                                <div class="col-isi-jam"></div>
-                                <a href="edit-jadwal-penilaian-dosen.html" class="col-isi-lihat-link"><button class="col-isi-lihat">Edit</button></a>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-kel"></div>
-                                <div class="col-isi-nilai"></div>
-                                <div class="col-isi-jam"></div>
-                                <a href="edit-jadwal-penilaian-dosen.html" class="col-isi-lihat-link"><button class="col-isi-lihat">Edit</button></a>
+                            <div class="tombol-aksi">
+                                <button class="btn-simpan" id="btnSimpan" onclick="simpanJadwal()">Simpan</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <script th:inline="javascript">
+            // Logout handler
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    window.location.href = '/logout';
+                }
+            });
+
+            // Toggle sidebar
+            const toggle = document.querySelector('.toggle');
+            const sidebar = document.querySelector('.sidebar');
+
+            toggle.addEventListener('click', function() {
+                sidebar.classList.toggle('close');
+            });
+
+            // Counter untuk ID jadwal baru
+            let newJadwalCounter = 0;
+
+            // Initialize - Load jadwal dari server
+            window.addEventListener('load', function() {
+                loadJadwalList();
+            });
+
+            // Load jadwal list dari tugas
+            function loadJadwalList() {
+                const idTugas = document.getElementById('idTugas').value;
+                const kodeMk = document.getElementById('kodeMk').value;
+                
+                fetch('/dosen/jadwal-penilaian/get?kodeMk=' + kodeMk + '&idTugas=' + idTugas)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.jadwalList) {
+                            const container = document.getElementById('jadwalContainer');
+                            container.innerHTML = '';
+                            
+                            data.jadwalList.forEach(item => {
+                                const newRow = document.createElement('div');
+                                newRow.className = 'assignment-row jadwal-existing';
+                                newRow.setAttribute('data-id-tugas', item.idTugas);
+                                
+                                const tanggalParts = item.deadline.split('T');
+                                const tanggal = tanggalParts[0];
+                                const jam = tanggalParts[1] ? tanggalParts[1].substring(0, 5) : '00:00';
+                                
+                                newRow.innerHTML = `
+                                    <div class="col-isi-kel">${item.judulTugas}</div>
+                                    <div class="col-isi-tanggal">
+                                        <input type="date" class="input-tanggal" value="${tanggal}">
+                                    </div>
+                                    <div class="col-isi-jam">
+                                        <input type="time" class="input-jam" value="${jam}">
+                                    </div>
+                                    <div class="col-isi-aksi">
+                                        <button type="button" class="btn-hapus-jadwal" title="Hapus Jadwal">
+                                            🗑️
+                                        </button>
+                                    </div>
+                                `;
+                                
+                                const deleteBtn = newRow.querySelector('.btn-hapus-jadwal');
+                                deleteBtn.addEventListener('click', function(e) {
+                                    e.preventDefault();
+                                    hapusJadwal(this);
+                                });
+                                
+                                container.appendChild(newRow);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error loading jadwal:', error));
+            }
+
+            // Hapus Jadwal
+            function hapusJadwal(button) {
+                const row = button.closest('.assignment-row');
+                if (confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
+                    const idTugas = row.getAttribute('data-id-tugas');
+                    
+                    // Jika adalah jadwal yang sudah ada (bukan baru), track di deleted list
+                    if (row.classList.contains('jadwal-existing') && !idTugas.toString().startsWith('-')) {
+                        const deletedIds = document.getElementById('deletedTugasIds').value;
+                        const newDeletedIds = deletedIds ? deletedIds + ',' + idTugas : idTugas;
+                        document.getElementById('deletedTugasIds').value = newDeletedIds;
+                    }
+                    
+                    row.remove();
+                }
+            }
+
+            // Tambah Jadwal Baru
+            function tambahJadwal() {
+                newJadwalCounter--;
+                const container = document.getElementById('jadwalContainer');
+                
+                const newRow = document.createElement('div');
+                newRow.className = 'assignment-row jadwal-baru';
+                newRow.setAttribute('data-id-tugas', newJadwalCounter);
+                newRow.innerHTML = `
+                    <div class="col-isi-kel">
+                        <input type="text" class="input-komponen-name" placeholder="Nama Komponen" required>
+                    </div>
+                    <div class="col-isi-tanggal">
+                        <input type="date" class="input-tanggal" required>
+                    </div>
+                    <div class="col-isi-jam">
+                        <input type="time" class="input-jam" required>
+                    </div>
+                    <div class="col-isi-aksi">
+                        <button type="button" class="btn-hapus-jadwal" title="Hapus Jadwal">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+                
+                const deleteBtn = newRow.querySelector('.btn-hapus-jadwal');
+                deleteBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    hapusJadwal(this);
+                });
+                
+                container.appendChild(newRow);
+            }
+
+            // Simpan Jadwal
+            function simpanJadwal() {
+                const kodeMk = document.getElementById('kodeMk').value;
+                const idTugas = document.getElementById('idTugas').value;
+                const jadwalData = [];
+                const deletedIds = document.getElementById('deletedTugasIds').value;
+                
+                document.querySelectorAll('#jadwalContainer .assignment-row').forEach(row => {
+                    const rowIdTugas = row.getAttribute('data-id-tugas');
+                    
+                    // Handle jadwal baru (dengan input text untuk nama komponen)
+                    if (row.classList.contains('jadwal-baru')) {
+                        const namaKomponen = row.querySelector('.input-komponen-name').value.trim();
+                        const tanggal = row.querySelector('.input-tanggal').value;
+                        const jam = row.querySelector('.input-jam').value;
+
+                        if (!namaKomponen || !tanggal || !jam) {
+                            alert('Silakan lengkapi nama komponen, tanggal dan jam untuk semua jadwal baru');
+                            return false;
+                        }
+
+                        jadwalData.push({
+                            idTugas: null,
+                            namaKomponen: namaKomponen,
+                            tanggal: tanggal,
+                            jam: jam,
+                            isNew: true
+                        });
+                    } else {
+                        // Handle jadwal existing
+                        const tanggal = row.querySelector('.input-tanggal').value;
+                        const jam = row.querySelector('.input-jam').value;
+
+                        if (!tanggal || !jam) {
+                            alert('Silakan lengkapi tanggal dan jam untuk semua komponen');
+                            return false;
+                        }
+
+                        jadwalData.push({
+                            idTugas: parseInt(rowIdTugas),
+                            tanggal: tanggal,
+                            jam: jam,
+                            isNew: false
+                        });
+                    }
+                });
+
+                if (jadwalData.length === 0) {
+                    alert('Tidak ada jadwal untuk disimpan');
+                    return;
+                }
+
+                const payload = {
+                    kodeMk: kodeMk,
+                    idTugas: parseInt(idTugas),
+                    jadwalList: jadwalData
+                };
+
+                if (deletedIds) {
+                    payload.deletedTugasIds = deletedIds.split(',').map(id => parseInt(id.trim()));
+                }
+
+                console.log('Payload:', payload);
+
+                // Send to backend
+                fetch('/dosen/jadwal-penilaian/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Jadwal penilaian berhasil disimpan');
+                        location.reload();
+                    } else {
+                        alert('Gagal menyimpan jadwal: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat menyimpan jadwal');
+                });
+            }
+        </script>
     </body>
 </html>

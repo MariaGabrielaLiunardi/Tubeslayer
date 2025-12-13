@@ -36,4 +36,18 @@ public interface UserKelompokRepository extends JpaRepository<UserKelompok, User
         @Param("idKelompok") Integer idKelompok, 
         @Param("role") String role
     );
+    
+    /**
+     * Cari kelompok yang berisi user tertentu untuk tugas tertentu
+     * @param idUser ID user
+     * @param idTugas ID tugas
+     * @return List UserKelompok yang merupakan anggota kelompok dalam tugas tersebut
+     */
+    @Query("SELECT uk FROM UserKelompok uk " +
+           "WHERE uk.user.idUser = :idUser " +
+           "AND uk.kelompok.idKelompok IN (" +
+               "SELECT tbk.idKelompok FROM TugasBesarKelompok tbk WHERE tbk.idTugas = :idTugas" +
+           ")")
+    List<UserKelompok> findByUser_IdUserAndKelompok_InTugaBesar(@Param("idUser") String idUser, 
+                                                                 @Param("idTugas") Integer idTugas);
 }

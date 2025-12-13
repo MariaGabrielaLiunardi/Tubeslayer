@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pemberian Nilai - Tubeslayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/dash-user.css">
+    <link rel="stylesheet" href="/css/pemberian-nilai-dosen.css">
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
+
+    <script src="/js/dash-user.js" defer></script>
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bxr bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a th:href="@{/dosen/dashboard}">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a th:href="@{/dosen/mata-kuliah}">
+                            <img src="/icon/open-book.png" class="icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Pemberian Nilai</span>
+            </div>
+
+            <div class="right-section">
+                <div class="info">
+                    <span class="name" th:text="${user.nama}">Nama</span>
+                    <span class="role" th:text="${user.role}">Role</span>
+                </div>
+                <a th:href="@{/profil}">
+                    <img src="/icon/pfp.png" class="pfp" alt="pfp">
+                </a>
+                <button class="logout" id="logoutButton">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <div class="detail-wrapper">
+            <div class="breadcrumb">
+                <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDetail.kodeMK})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/tugas-detail(idTugas=${tugas.idTugas})}" style="text-decoration: none;">
+                    <span th:text="${tugas.judulTugas}">Tugas</span>
+                </a>
+
+                &gt;
+
+                Pemberian Nilai Kelompok
+            </div>
+
+            <div class="tugas-header">
+                <div class="tugas-info">
+                    <h1 th:text="${tugas.judulTugas}">Judul Tugas</h1>
+                    <p><b>Mata Kuliah:</b> <span th:text="${mkDetail.nama}">Mata Kuliah</span></p>
+                    <p><b>Deskripsi:</b> <span th:text="${tugas.deskripsi}">Deskripsi Tugas</span></p>
+                </div>
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="navigation-tabs">
+                <button class="nav-button active" th:onclick="|window.location.href='@{/dosen/pemberian-nilai(idTugas=${tugas.idTugas})}'|">
+                    📊 Nilai Kelompok
+                </button>
+                <button class="nav-button" th:onclick="|window.location.href='@{/dosen/pemberian-nilai-individu(idTugas=${tugas.idTugas})}'|">
+                    👤 Nilai Individu
+                </button>
+            </div>
+
+            <!-- Tabs untuk pilih kelompok -->
+            <div class="kelompok-selector" th:if="${kelompokList != null && !kelompokList.isEmpty()}">
+                <h3>Pilih Kelompok:</h3>
+                <div class="kelompok-list">
+                    <button class="kelompok-btn" 
+                            th:each="kelompok : ${kelompokList}"
+                            th:data-kelompok-id="${kelompok.idKelompok}"
+                            th:text="${kelompok.namaKelompok}"
+                            th:classappend="${kelompokTerpilih != null && kelompokTerpilih.idKelompok == kelompok.idKelompok ? 'active' : ''}">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Pemberian Nilai Kelompok -->
+            <div class="pemberian-nilai-form" th:if="${kelompokTerpilih != null && anggotaList != null && !anggotaList.isEmpty()}">
+                <h3>Pemberian Nilai Kelompok - <span th:text="${kelompokTerpilih.namaKelompok}">Nama Kelompok</span></h3>
+
+                <!-- Section Anggota Kelompok (Info saja, tidak ada input per-anggota) -->
+                <div class="anggota-info-section">
+                    <h4>Anggota Kelompok:</h4>
+                    <div class="anggota-list">
+                        <div class="anggota-item" th:each="anggota : ${anggotaList}">
+                            <span class="anggota-id" th:text="${anggota.user.idUser}"></span>
+                            <span class="anggota-nama" th:text="${anggota.user.nama}"></span>
+                            <span class="anggota-role" th:text="'[' + ${anggota.role} + ']'"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Input Komponen Nilai (untuk seluruh kelompok) -->
+                <div class="komponen-form">
+                    <h4>Input Nilai Per Komponen:</h4>
+                    
+                    <div class="komponen-inputs">
+                        <div class="komponen-input" th:each="komponen : ${komponenList}">
+                            <label th:for="'nilai-komponen-' + ${komponen.idKomponen}"
+                                   th:text="${komponen.namaKomponen} + ' (Bobot: ' + ${komponen.bobot} + '%)'">
+                                Komponen Nilai
+                            </label>
+                            <input type="number"
+                                   th:id="'nilai-komponen-' + ${komponen.idKomponen}"
+                                   class="nilai-komponen-input"
+                                   th:data-komponen-id="${komponen.idKomponen}"
+                                   th:data-komponen-nama="${komponen.namaKomponen}"
+                                   th:data-bobot="${komponen.bobot}"
+                                   min="0"
+                                   max="100"
+                                   placeholder="0">
+                            <span class="info-text">0 - 100</span>
+                        </div>
+                    </div>
+
+                    <!-- Preview Nilai Kelompok -->
+                    <div class="nilai-kelompok-preview">
+                        <h5>Nilai Kelompok (Hasil Akumulasi):</h5>
+                        <div class="nilai-preview-box">
+                            <span class="nilai-angka" id="preview-nilai-kelompok" data-nilai="0">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn-simpan"
+                                th:data-tugas-id="${tugas.idTugas}"
+                                th:data-kelompok-id="${kelompokTerpilih.idKelompok}">
+                            Simpan Nilai Kelompok
+                        </button>
+                        <button class="btn-hapus"
+                                th:data-tugas-id="${tugas.idTugas}"
+                                th:data-kelompok-id="${kelompokTerpilih.idKelompok}"
+                                id="btn-hapus-kelompok">
+                            Hapus Nilai Kelompok
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert jika tidak ada kelompok -->
+            <div class="no-data" th:if="${kelompokList == null || kelompokList.isEmpty()}">
+                <p>Belum ada kelompok untuk tugas ini.</p>
+            </div>
+        </div>
+    </section>
+
+    <script th:inline="javascript">
+        // ID Tugas dan Kelompok dari template
+        const idTugas = [[${tugas.idTugas}]];
+        const idKelompok = [[${kelompokTerpilih != null ? kelompokTerpilih.idKelompok : 0}]];
+        
+        // Function untuk memuat nilai yang sudah tersimpan
+        function loadSavedNilaiKelompok() {
+            // Ambil leader/anggota pertama untuk fetch nilai
+            const anggotaList = document.querySelectorAll('.anggota-item');
+            if (anggotaList.length === 0) {
+                return;
+            }
+            
+            const firstAnggotaIdElement = anggotaList[0].querySelector('.anggota-id');
+            const idUser = firstAnggotaIdElement ? firstAnggotaIdElement.textContent.trim() : null;
+            
+            if (!idUser) {
+                return;
+            }
+            
+            // Fetch nilai dari API
+            fetch(`/api/nilai/${idUser}/${idTugas}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists && data.nilaiPerKomponen) {
+                        // Populate input fields dengan nilai yang tersimpan
+                        Object.entries(data.nilaiPerKomponen).forEach(([komponenId, nilai]) => {
+                            const input = document.querySelector(`[data-komponen-id="${komponenId}"]`);
+                            if (input) {
+                                input.value = nilai;
+                            }
+                        });
+                        
+                        // Hitung dan update preview
+                        hitungNilaiKelompok();
+                        
+                        // Tampilkan tombol hapus jika ada nilai tersimpan
+                        const deleteBtn = document.getElementById('btn-hapus-kelompok');
+                        if (deleteBtn) {
+                            deleteBtn.style.display = 'block';
+                        }
+                    }
+                })
+                .catch(error => console.error('Error loading nilai:', error));
+        }
+        
+        // Function untuk menghitung nilai kelompok dari komponen-komponen
+        function hitungNilaiKelompok() {
+            let totalNilai = 0;
+            const komponenInputs = document.querySelectorAll('.nilai-komponen-input');
+            let semuaTerisi = true;
+
+            komponenInputs.forEach(input => {
+                const nilai = parseInt(input.value) || 0;
+                const bobot = parseInt(input.dataset.bobot) || 0;
+
+                // Validasi nilai 0-100
+                if (input.value !== '' && (nilai < 0 || nilai > 100)) {
+                    input.classList.add('error');
+                    semuaTerisi = false;
+                } else {
+                    input.classList.remove('error');
+                }
+
+                // Hanya hitung jika ada nilai
+                if (input.value !== '') {
+                    totalNilai += (nilai * bobot) / 100;
+                }
+            });
+
+            // Update preview
+            const preview = document.getElementById('preview-nilai-kelompok');
+            if (preview) {
+                preview.textContent = Math.round(totalNilai);
+                preview.dataset.nilai = totalNilai;
+                preview.dataset.allFilled = semuaTerisi && Array.from(komponenInputs).some(i => i.value !== '');
+            }
+        }
+
+        // Function untuk simpan nilai kelompok
+        function simpanNilaiKelompok() {
+            // Ambil leader/anggota pertama sebagai perwakilan untuk menyimpan nilai kelompok
+            const anggotaList = document.querySelectorAll('.anggota-item');
+            if (anggotaList.length === 0) {
+                alert('Tidak ada anggota kelompok');
+                return;
+            }
+
+            // Gunakan user ID dari anggota pertama (leader)
+            const firstAnggotaIdElement = anggotaList[0].querySelector('.anggota-id');
+            const idUser = firstAnggotaIdElement ? firstAnggotaIdElement.textContent.trim() : null;
+            
+            if (!idUser) {
+                alert('Tidak dapat menemukan ID anggota');
+                return;
+            }
+
+            // Kumpulkan nilai per komponen
+            const nilaiPerKomponen = {};
+            const inputs = document.querySelectorAll('.nilai-komponen-input');
+            
+            let valid = true;
+            inputs.forEach(input => {
+                const nilai = input.value;
+                const komponenId = parseInt(input.dataset.komponenId);
+                
+                if (nilai === '') {
+                    alert('Semua komponen harus diisi!');
+                    valid = false;
+                    return;
+                }
+
+                const numValue = parseInt(nilai);
+                if (isNaN(numValue) || numValue < 0 || numValue > 100) {
+                    alert('Nilai harus antara 0 dan 100!');
+                    valid = false;
+                    return;
+                }
+                
+                nilaiPerKomponen[komponenId] = numValue;
+            });
+
+            if (!valid || Object.keys(nilaiPerKomponen).length === 0) {
+                return;
+            }
+
+            // Payload untuk API - nilai kelompok dikirim untuk leader, akan diterapkan ke semua anggota
+            const payload = {
+                idUser: idUser,
+                idTugas: idTugas,
+                nilaiPerKomponen: nilaiPerKomponen,
+                isSamaBuat: true  // Selalu true untuk nilai kelompok - berlaku untuk semua anggota
+            };
+
+            fetch('/api/nilai/simpan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('Nilai kelompok berhasil disimpan untuk semua anggota!');
+                    // Tampilkan tombol hapus
+                    const deleteBtn = document.getElementById('btn-hapus-kelompok');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'block';
+                    }
+                } else {
+                    alert('Error: ' + (data.error || 'Gagal menyimpan nilai'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan: ' + error.message);
+            });
+        }
+
+        // Function untuk hapus nilai kelompok
+        function hapusNilaiKelompok() {
+            if (!confirm('Apakah Anda yakin ingin menghapus nilai untuk seluruh kelompok?')) {
+                return;
+            }
+
+            // Gunakan user ID dari anggota pertama
+            const anggotaList = document.querySelectorAll('.anggota-item');
+            if (anggotaList.length === 0) {
+                alert('Tidak ada anggota kelompok');
+                return;
+            }
+
+            const firstAnggotaIdElement = anggotaList[0].querySelector('.anggota-id');
+            const idUser = firstAnggotaIdElement ? firstAnggotaIdElement.textContent.trim() : null;
+            
+            if (!idUser) {
+                alert('Tidak dapat menemukan ID anggota');
+                return;
+            }
+
+            const params = new URLSearchParams({
+                idUser: idUser,
+                idTugas: idTugas
+            });
+
+            fetch('/api/nilai/hapus?' + params, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('Nilai kelompok berhasil dihapus!');
+                    // Reload atau clear form
+                    document.querySelectorAll('.nilai-komponen-input').forEach(input => {
+                        input.value = '';
+                    });
+                    hitungNilaiKelompok();
+                    const deleteBtn = document.getElementById('btn-hapus-kelompok');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'none';
+                    }
+                } else {
+                    alert('Error: ' + (data.error || 'Gagal menghapus nilai'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan: ' + error.message);
+            });
+        }
+
+        // Event listeners untuk input komponen nilai - hitung realtime
+        document.addEventListener('DOMContentLoaded', function() {
+            // Muat nilai yang sudah tersimpan
+            loadSavedNilaiKelompok();
+            
+            document.querySelectorAll('.nilai-komponen-input').forEach(input => {
+                input.addEventListener('change', hitungNilaiKelompok);
+                input.addEventListener('input', hitungNilaiKelompok);
+            });
+
+            // Event listener untuk tombol kelompok
+            document.querySelectorAll('.kelompok-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const idKelompokBtn = this.dataset.kelompokId;
+                    window.location.href = `/dosen/pemberian-nilai?idTugas=${idTugas}&idKelompok=${idKelompokBtn}`;
+                });
+            });
+
+            // Event listener untuk tombol simpan
+            const btnSimpan = document.querySelector('.btn-simpan');
+            if (btnSimpan) {
+                btnSimpan.addEventListener('click', simpanNilaiKelompok);
+            }
+
+            // Event listener untuk tombol hapus
+            const btnHapus = document.querySelector('.btn-hapus');
+            if (btnHapus) {
+                btnHapus.addEventListener('click', hapusNilaiKelompok);
+            }
+
+            // Hitung nilai saat page load
+            hitungNilaiKelompok();
+        });
+    </script>
+
+</body>
+
+</html>
