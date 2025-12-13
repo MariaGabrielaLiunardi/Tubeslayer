@@ -73,11 +73,11 @@
                 <div class="rectangle-blue">
                     <div class="tb-title">
                         <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
-                        <div th:if="${not #lists.isEmpty(pesertaList)}">
-                            <span class="tb-text" th:text="${mataKuliah.nama}">Nama Mata Kuliah</span>
+                        <div th:if="${tugas != null}">
+                            <span class="tb-text" th:text="${tugas.judulTugas}">Nama Tugas</span>
                         </div>
-                        <div th:if="${#lists.isEmpty(pesertaList)}">
-                            <span class="tb-text">Tidak ada peserta</span>
+                        <div th:if="${tugas == null}">
+                            <span class="tb-text">Pilih tugas terlebih dahulu</span>
                         </div>
                     </div>
                 </div>
@@ -87,33 +87,32 @@
                         <span class="crumb current">Pemberian Nilai</span>
                     </div>
 
-                    <div class="rectangle-yellow" th:if="${not #lists.isEmpty(pesertaList)}">
+                    <div style="width: 100%; padding: 30px 0;" th:if="${not #lists.isEmpty(pesertaList)}">
+                        <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 20px;">Daftar Kelompok Penerima Tugas</h3>
                         <div class="assignment-table-wrapper">
                             <div class="assignment-header">
-                                <div class="col-kel">Kelompok</div>
-                                <div class="col-bobot">Nilai</div>
+                                <div class="col-kel-header">Kelompok</div>
+                                <div class="col-nilai-header">Nilai Kelompok</div>
+                                <div class="col-aksi-header">Aksi</div>
                             </div>
 
                             <div class="assignment-row" th:each="peserta : ${pesertaList}">
                                 <div class="col-isi-kel" th:text="${peserta.namaKelompok}">Nama Kelompok</div>
-                                <div class="col-isi-nilai">
-                                    <input type="number" class="nilai-input" min="0" max="100" th:value="${peserta.nilai ?: ''}" placeholder="0">
-                                </div>
+                                <div class="col-isi-nilai-display" th:text="${peserta.nilai != null && peserta.nilai > 0 ? peserta.nilai : '-'}">-</div>
                                 <a th:href="@{/dosen/pemberian-nilai-individu(kodeMk=${kodeMk}, idTugas=${peserta.idTugas}, idKelompok=${peserta.idKelompok})}" 
-                                   class="col-isi-lihat-link">
-                                   <button class="col-isi-lihat">Lihat Detail</button>
+                                   class="col-isi-aksi-link">
+                                   <button class="col-isi-lihat">Berikan Nilai</button>
                                 </a>
                             </div>
+                        </div>
 
-                            <div class="tombol-aksi">
-                                <button class="btn-rilis" onclick="toggleReleaseConfirm()">Rilis Nilai</button>
-                                <button class="btn-simpan" onclick="saveGrades()">Simpan</button>
-                            </div>
+                        <div class="tombol-aksi">
+                            <button class="btn-rilis" onclick="toggleReleaseConfirm()">Rilis Nilai</button>
                         </div>
                     </div>
 
                     <div th:if="${#lists.isEmpty(pesertaList)}" style="text-align: center; padding: 40px; color: #999;">
-                        <p>Tidak ada peserta untuk mata kuliah ini</p>
+                        <p>Tidak ada kelompok untuk tugas ini</p>
                     </div>
                 </div>
             </div>
@@ -126,29 +125,6 @@
                     window.location.href = '/logout';
                 }
             });
-
-            // Save grades handler
-            function saveGrades() {
-                const kodeMk = [[${kodeMk}]];
-                const inputs = document.querySelectorAll('.nilai-input');
-                const grades = {};
-                
-                inputs.forEach(input => {
-                    if (input.value) {
-                        const row = input.closest('.assignment-row');
-                        const kelompok = row.querySelector('.col-isi-kel').textContent;
-                        grades[kelompok] = input.value;
-                    }
-                });
-
-                if (Object.keys(grades).length === 0) {
-                    alert('Silakan masukkan minimal satu nilai');
-                    return;
-                }
-
-                alert('Nilai berhasil disimpan');
-                console.log('Grades saved:', grades);
-            }
 
             // Release grades confirmation
             function toggleReleaseConfirm() {

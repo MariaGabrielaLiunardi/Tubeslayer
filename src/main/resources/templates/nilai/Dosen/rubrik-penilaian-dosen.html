@@ -101,13 +101,25 @@
                 <div class="rectangle-white">
                     <div class="rubrik-header">
                         <h2>Rubrik Penilaian</h2>
-                        <th:block th:if="${hasRubrik}">
+                        <th:block th:if="${hasRubrik && rubrikItems.size() > 0}">
                             <a th:href="@{/dosen/edit-rubrik-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas})}"
                                class="btn-edit-rubrik">
                                 Edit Rubrik
                             </a>
                         </th:block>
                     </div>
+
+                    <!-- Error and Success Messages -->
+                    <th:block th:if="${error}">
+                        <div style="background-color: #ffebee; color: #c62828; padding: 12px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #c62828;">
+                            <strong>❌ Error:</strong> <span th:text="${error}">Error message</span>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${success}">
+                        <div style="background-color: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #2e7d32;">
+                            <strong>✅ Sukses:</strong> <span th:text="${success}">Success message</span>
+                        </div>
+                    </th:block>
 
                     <th:block th:if="${hasRubrik && rubrikItems.size() > 0}">
                         <div class="rubrik-table-wrapper rubrik-readonly">
@@ -126,7 +138,7 @@
                                     <input type="number" class="input-bobot input-readonly" th:value="${item.bobot}" disabled readonly>
                                 </div>
                                 <div class="col-isi-keterangan">
-                                    <textarea class="input-keterangan input-readonly" disabled readonly rows="1">[[${item.catatan ?: ''}]]</textarea>
+                                    <textarea class="input-keterangan input-readonly" disabled readonly rows="1">[[${(item.catatan != null and !item.catatan.isEmpty() and !item.catatan.contains('T')) ? item.catatan : ''}]]</textarea>
                                 </div>
                                 <div class="col-isi-aksi"></div>
                             </div>

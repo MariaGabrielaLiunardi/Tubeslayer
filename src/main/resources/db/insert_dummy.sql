@@ -264,10 +264,10 @@ INSERT INTO nilai (id_user, id_tugas, nilai_pribadi, nilai_kelompok) VALUES
 ('6182301013',10,93,95);
 
 -- === komponen_nilai examples for some rubriks ===
-INSERT INTO komponen_nilai (id_rubrik, nama_komponen, bobot, catatan, jam, tanggal) VALUES
-(1,'Laporan',40,'Laporan lengkap','10:00:00','2025-01-15'),
-(1,'Presentasi',30,'Presentasi 10 menit','13:00:00','2025-01-15'),
-(2,'Koding',50,'Implementasi sesuai standar','09:00:00','2025-01-18');
+INSERT INTO komponen_nilai (id_rubrik, nama_komponen, bobot, catatan) VALUES
+(1,'Laporan',40,'Laporan lengkap'),
+(1,'Presentasi',30,'Presentasi 10 menit'),
+(2,'Koding',50,'Implementasi sesuai standar');
 
 -- === jadwal_penilaian examples ===
 INSERT INTO jadwal_penilaian (id_rubrik, tanggal, jam, ruangan) VALUES

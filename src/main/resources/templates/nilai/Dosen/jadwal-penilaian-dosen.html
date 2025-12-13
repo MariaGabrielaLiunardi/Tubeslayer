@@ -73,42 +73,43 @@
                 <div class="rectangle-blue">
                     <div class="tb-title">
                         <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
-                        <div th:if="${not #lists.isEmpty(tugasList)}">
-                            <span class="tb-text" th:text="${tugasList[0].judulTugas}">Nama Tugas</span>
-                        </div>
-                        <div th:if="${#lists.isEmpty(tugasList)}">
-                            <span class="tb-text">Pilih Tugas untuk Memulai</span>
-                        </div>
+                        <span class="tb-text" th:text="${tugas.judulTugas}">Nama Tugas Besar</span>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
                     <div class="breadcrumb">
+                        <a th:href="@{/dosen/mata-kuliah}" class="crumb">Mata Kuliah</a>
+                        <span class="crumb"> > </span>
                         <span class="crumb current">Jadwal Penilaian</span>
                     </div>
 
                     <div class="rectangle-yellow">
-                        <div class="assignment-table-wrapper" th:if="${not #lists.isEmpty(tugasList)}">
-                            <div class="assignment-header">
-                                <div class="col-kel">Komponen</div>
-                                <div class="col-tanggal">Tanggal</div>
-                                <div class="col-jam">Jam</div>
-                                <div class="col-edit"></div>
-                            </div>
+                        <div class="assignment-table-wrapper">
+                            <form id="jadwalForm">
+                                <input type="hidden" id="kodeMk" th:value="${kodeMk}">
+                                <input type="hidden" id="idTugas" th:value="${idTugas}">
+                                <input type="hidden" id="deletedTugasIds" value="">
+                                
+                                <div class="assignment-header">
+                                    <div class="col-kel">Komponen</div>
+                                    <div class="col-tanggal">Tanggal</div>
+                                    <div class="col-jam">Jam</div>
+                                    <div class="col-aksi"></div>
+                                </div>
 
-                            <div class="assignment-row" th:each="komponen : ${tugasList}">
-                                <div class="col-isi-kel" th:text="${komponen.judulTugas}">Nama Komponen</div>
-                                <div class="col-isi-nilai" th:text="${#temporals.format(komponen.deadline, 'dd MMM yyyy')}">Tanggal</div>
-                                <div class="col-isi-jam" th:text="${#temporals.format(komponen.deadline, 'HH:mm')}">Jam</div>
-                                <a th:href="@{/dosen/edit-jadwal-penilaian(kodeMk=${kodeMk}, idTugas=${komponen.idTugas})}" 
-                                   class="col-isi-lihat-link">
-                                   <button class="col-isi-lihat">Edit</button>
-                                </a>
-                            </div>
-                        </div>
+                                <div id="jadwalContainer">
+                                    <!-- Jadwal akan diload via JavaScript -->
+                                </div>
 
-                        <div th:if="${#lists.isEmpty(tugasList)}" style="text-align: center; padding: 40px; color: #999;">
-                            <p>Tidak ada tugas untuk mata kuliah ini</p>
+                                <button type="button" class="btn-tambah-jadwal" onclick="tambahJadwal()">
+                                    + Tambah Jadwal Penilaian
+                                </button>
+                            </form>
+
+                            <div class="tombol-aksi">
+                                <button class="btn-simpan" id="btnSimpan" onclick="simpanJadwal()">Simpan</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -122,6 +123,209 @@
                     window.location.href = '/logout';
                 }
             });
+
+            // Toggle sidebar
+            const toggle = document.querySelector('.toggle');
+            const sidebar = document.querySelector('.sidebar');
+
+            toggle.addEventListener('click', function() {
+                sidebar.classList.toggle('close');
+            });
+
+            // Counter untuk ID jadwal baru
+            let newJadwalCounter = 0;
+
+            // Initialize - Load jadwal dari server
+            window.addEventListener('load', function() {
+                loadJadwalList();
+            });
+
+            // Load jadwal list dari tugas
+            function loadJadwalList() {
+                const idTugas = document.getElementById('idTugas').value;
+                const kodeMk = document.getElementById('kodeMk').value;
+                
+                fetch('/dosen/jadwal-penilaian/get?kodeMk=' + kodeMk + '&idTugas=' + idTugas)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.jadwalList) {
+                            const container = document.getElementById('jadwalContainer');
+                            container.innerHTML = '';
+                            
+                            data.jadwalList.forEach(item => {
+                                const newRow = document.createElement('div');
+                                newRow.className = 'assignment-row jadwal-existing';
+                                newRow.setAttribute('data-id-tugas', item.idTugas);
+                                
+                                const tanggalParts = item.deadline.split('T');
+                                const tanggal = tanggalParts[0];
+                                const jam = tanggalParts[1] ? tanggalParts[1].substring(0, 5) : '00:00';
+                                
+                                newRow.innerHTML = `
+                                    <div class="col-isi-kel">${item.judulTugas}</div>
+                                    <div class="col-isi-tanggal">
+                                        <input type="date" class="input-tanggal" value="${tanggal}">
+                                    </div>
+                                    <div class="col-isi-jam">
+                                        <input type="time" class="input-jam" value="${jam}">
+                                    </div>
+                                    <div class="col-isi-aksi">
+                                        <button type="button" class="btn-hapus-jadwal" title="Hapus Jadwal">
+                                            🗑️
+                                        </button>
+                                    </div>
+                                `;
+                                
+                                const deleteBtn = newRow.querySelector('.btn-hapus-jadwal');
+                                deleteBtn.addEventListener('click', function(e) {
+                                    e.preventDefault();
+                                    hapusJadwal(this);
+                                });
+                                
+                                container.appendChild(newRow);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error loading jadwal:', error));
+            }
+
+            // Hapus Jadwal
+            function hapusJadwal(button) {
+                const row = button.closest('.assignment-row');
+                if (confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
+                    const idTugas = row.getAttribute('data-id-tugas');
+                    
+                    // Jika adalah jadwal yang sudah ada (bukan baru), track di deleted list
+                    if (row.classList.contains('jadwal-existing') && !idTugas.toString().startsWith('-')) {
+                        const deletedIds = document.getElementById('deletedTugasIds').value;
+                        const newDeletedIds = deletedIds ? deletedIds + ',' + idTugas : idTugas;
+                        document.getElementById('deletedTugasIds').value = newDeletedIds;
+                    }
+                    
+                    row.remove();
+                }
+            }
+
+            // Tambah Jadwal Baru
+            function tambahJadwal() {
+                newJadwalCounter--;
+                const container = document.getElementById('jadwalContainer');
+                
+                const newRow = document.createElement('div');
+                newRow.className = 'assignment-row jadwal-baru';
+                newRow.setAttribute('data-id-tugas', newJadwalCounter);
+                newRow.innerHTML = `
+                    <div class="col-isi-kel">
+                        <input type="text" class="input-komponen-name" placeholder="Nama Komponen" required>
+                    </div>
+                    <div class="col-isi-tanggal">
+                        <input type="date" class="input-tanggal" required>
+                    </div>
+                    <div class="col-isi-jam">
+                        <input type="time" class="input-jam" required>
+                    </div>
+                    <div class="col-isi-aksi">
+                        <button type="button" class="btn-hapus-jadwal" title="Hapus Jadwal">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+                
+                const deleteBtn = newRow.querySelector('.btn-hapus-jadwal');
+                deleteBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    hapusJadwal(this);
+                });
+                
+                container.appendChild(newRow);
+            }
+
+            // Simpan Jadwal
+            function simpanJadwal() {
+                const kodeMk = document.getElementById('kodeMk').value;
+                const idTugas = document.getElementById('idTugas').value;
+                const jadwalData = [];
+                const deletedIds = document.getElementById('deletedTugasIds').value;
+                
+                document.querySelectorAll('#jadwalContainer .assignment-row').forEach(row => {
+                    const rowIdTugas = row.getAttribute('data-id-tugas');
+                    
+                    // Handle jadwal baru (dengan input text untuk nama komponen)
+                    if (row.classList.contains('jadwal-baru')) {
+                        const namaKomponen = row.querySelector('.input-komponen-name').value.trim();
+                        const tanggal = row.querySelector('.input-tanggal').value;
+                        const jam = row.querySelector('.input-jam').value;
+
+                        if (!namaKomponen || !tanggal || !jam) {
+                            alert('Silakan lengkapi nama komponen, tanggal dan jam untuk semua jadwal baru');
+                            return false;
+                        }
+
+                        jadwalData.push({
+                            idTugas: null,
+                            namaKomponen: namaKomponen,
+                            tanggal: tanggal,
+                            jam: jam,
+                            isNew: true
+                        });
+                    } else {
+                        // Handle jadwal existing
+                        const tanggal = row.querySelector('.input-tanggal').value;
+                        const jam = row.querySelector('.input-jam').value;
+
+                        if (!tanggal || !jam) {
+                            alert('Silakan lengkapi tanggal dan jam untuk semua komponen');
+                            return false;
+                        }
+
+                        jadwalData.push({
+                            idTugas: parseInt(rowIdTugas),
+                            tanggal: tanggal,
+                            jam: jam,
+                            isNew: false
+                        });
+                    }
+                });
+
+                if (jadwalData.length === 0) {
+                    alert('Tidak ada jadwal untuk disimpan');
+                    return;
+                }
+
+                const payload = {
+                    kodeMk: kodeMk,
+                    idTugas: parseInt(idTugas),
+                    jadwalList: jadwalData
+                };
+
+                if (deletedIds) {
+                    payload.deletedTugasIds = deletedIds.split(',').map(id => parseInt(id.trim()));
+                }
+
+                console.log('Payload:', payload);
+
+                // Send to backend
+                fetch('/dosen/jadwal-penilaian/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Jadwal penilaian berhasil disimpan');
+                        location.reload();
+                    } else {
+                        alert('Gagal menyimpan jadwal: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat menyimpan jadwal');
+                });
+            }
         </script>
     </body>
 </html>

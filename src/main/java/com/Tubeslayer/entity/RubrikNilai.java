@@ -23,6 +23,6 @@ public class RubrikNilai {
     @OneToOne(mappedBy = "rubrik", fetch = FetchType.LAZY, optional = false)
     private TugasBesar tugasBesar;
 
-    @OneToMany(mappedBy = "rubrik", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rubrik", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<KomponenNilai> komponenList;
 }

@@ -106,9 +106,7 @@ CREATE TABLE komponen_nilai (
     id_rubrik INT NOT NULL,
     nama_komponen VARCHAR(50) NOT NULL,
     bobot INT NOT NULL,
-    catatan VARCHAR(300) NOT NULL,
-    jam TIME NOT NULL,
-    tanggal DATE NOT NULL,
+    catatan VARCHAR(300) NULL,
     FOREIGN KEY (id_rubrik) REFERENCES rubrik_nilai(id_rubrik)
 );
 

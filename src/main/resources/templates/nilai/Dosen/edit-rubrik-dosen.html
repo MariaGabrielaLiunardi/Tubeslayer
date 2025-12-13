@@ -105,6 +105,18 @@
                         <span class="breadcrumb-current">Edit Rubrik</span>
                     </div>
 
+                    <!-- Error and Success Messages -->
+                    <th:block th:if="${error}">
+                        <div style="background-color: #ffebee; color: #c62828; padding: 12px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #c62828;">
+                            <strong>❌ Error:</strong> <span th:text="${error}">Error message</span>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${success}">
+                        <div style="background-color: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #2e7d32;">
+                            <strong>✅ Sukses:</strong> <span th:text="${success}">Success message</span>
+                        </div>
+                    </th:block>
+
                     <div class="rubrik-form-wrapper">
                         <form id="rubrikForm" th:action="@{/dosen/rubrik-penilaian/save}" method="POST">
                             <input type="hidden" name="kodeMk" th:value="${kodeMk}">
@@ -134,7 +146,7 @@
                                                     <input type="number" class="input-bobot" name="bobot" min="0" max="100" th:value="${item.bobot}" placeholder="0" required>
                                                 </div>
                                                 <div class="col-isi-keterangan">
-                                                    <textarea class="input-keterangan" name="keterangan" placeholder="Masukkan keterangan (opsional)" rows="1" th:text="${item.catatan ?: ''}"></textarea>
+                                                    <textarea class="input-keterangan" name="keterangan" placeholder="Masukkan keterangan (opsional)" rows="1">[[${(item.catatan != null and !item.catatan.isEmpty() and !item.catatan.contains('T')) ? item.catatan : ''}]]</textarea>
                                                 </div>
                                                 <div class="col-isi-aksi">
                                                     <button type="button" class="btn-hapus-komponen" th:onclick="|hapusKomponen(${iter.index})|" title="Hapus Komponen">

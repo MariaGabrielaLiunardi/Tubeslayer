@@ -49,21 +49,6 @@
     padding-right: 40px;
 }
 
-.rectangle-yellow {
-    width: calc(100% - 80px);
-    position: absolute;
-    top: 100px;
-    height: 480px;
-    background: #FFF5F1;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 15;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
-}
-
 .assignment-table-wrapper {
     width: 100%;
     padding: 0;
@@ -71,60 +56,87 @@
 
 .assignment-header {
     display: flex;
-    gap: 25px;
+    gap: 20px;
     border-radius: 10px;
     padding: 0; 
     font-weight: bold;
-    font-size: 20px;
+    font-size: 18px;
     color: black;
     margin-bottom: 10px;
     justify-content: flex-start;
+    margin-top: 20px;
 }
 
-.col-kel {
-    width: 65%;
+.col-kel-header {
+    width: 50%;
     text-align: left;
     background-color: #CDE8F6;
-    border-radius: 15px;
-    padding: 15px 15px;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
 }
 
-.col-bobot {
-    width: 10%;
+.col-nilai-header {
+    width: 20%;
     text-align: center;
     background-color: #CDE8F6;
-    border-radius: 15px;
-    padding: 15px 15px;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.col-aksi-header {
+    width: 30%;
+    text-align: center;
+    background-color: #CDE8F6;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .assignment-row {
     display: flex;
-    gap: 25px;
+    gap: 20px;
     border-radius: 10px;
     padding: 0; 
-    font-weight: bold;
-    font-size: 20px;
+    font-weight: 600;
+    font-size: 16px;
     color: black;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     justify-content: flex-start;
+    align-items: center;
 }
 
 .col-isi-kel {
-    width: 65%;
+    width: 50%;
     text-align: left;
     background-color: white;
-    border-radius: 15px;
-    padding: 15px 15px;
-    border: solid black 1px;
+    border-radius: 12px;
+    padding: 15px 20px;
+    border: 1px solid #e0e0e0;
 }
 
-.col-isi-nilai {
-    width: 10%;
-    text-align: center; 
-    background-color: white;
-    border-radius: 15px;
-    padding: 3px 15px;
-    border: solid black 1px;
+.col-isi-nilai-display {
+    width: 20%;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 15px 20px;
+    border: 1px solid #e0e0e0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e40af;
+}
+
+.col-isi-aksi-link {
+    width: 30%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .col-isi-lihat {
@@ -133,72 +145,78 @@
     background-color: black;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 5, 2, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     font-family: Sen;
 }
 
 .col-isi-lihat:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 2, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
+    background-color: #333;
 }
 
 .col-isi-lihat:active {
     transform: translateY(0);
 }
 
-.col-isi-lihat-link {
-    width: 20%;
-    text-decoration: none;
+.tombol-aksi {
     display: flex;
-    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
     justify-content: center;
 }
 
-.tombol-aksi {
-    position: absolute;
-    left: 30px;
-    bottom: 30px;
-    display: flex;
-    gap: 10px;
-    z-index: 25;
-}
-
 .btn-simpan, .btn-rilis {
-    padding: 20px 20px;
+    padding: 15px 40px;
     border: none;
-    border-radius: 15px;
+    border-radius: 12px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 20px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+    font-size: 18px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     background-color: black;
     color: white;
+    transition: all 0.2s ease;
+}
+
+.btn-simpan:hover, .btn-rilis:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    background-color: #333;
+}
+
+.btn-simpan:active, .btn-rilis:active {
+    transform: translateY(0);
 }
 
 .breadcrumb {
     display: flex;
     align-items: center;
     gap: 8px;          
-    font-size: 28px;   
+    font-size: 18px;   
     text-align: left;  
-    margin-top: 50px;
-    margin-right: 1275px;
+    margin-top: 20px;
+    width: 100%;
 }
 
 .breadcrumb .crumb {
-    color: #333;
+    color: #555;
     text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
 .breadcrumb .crumb:hover {
+    color: #1e40af;
     text-decoration: underline;
 }
 
 .breadcrumb .current {
-    color: #000;
+    color: #1e40af;
+    font-weight: 600;
 }
