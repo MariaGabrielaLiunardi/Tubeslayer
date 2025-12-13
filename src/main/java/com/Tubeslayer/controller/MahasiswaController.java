@@ -314,7 +314,6 @@ public class MahasiswaController {
         }
 
         Optional<TugasBesar> tugasOpt = tugasRepo.findById(idTugas);
-
         if (!tugasOpt.isPresent()) {
             return "redirect:/mahasiswa/mata-kuliah";
         }
