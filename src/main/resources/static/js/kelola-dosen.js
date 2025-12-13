@@ -1,29 +1,28 @@
 /* ===============================
        1. SIDEBAR TOGGLE
     ================================ */
-    const sidebar = document.querySelector('.sidebar');
-    const toggle = document.querySelector('.toggle');
+const sidebar = document.querySelector('.sidebar');
+const toggle = document.querySelector('.toggle');
 
-    if (sidebar && toggle) {
-        toggle.addEventListener('click', () => {
-            sidebar.classList.toggle('close');
-        });
-    }
+if (sidebar && toggle) {
+    toggle.addEventListener('click', () => {
+        sidebar.classList.toggle('close');
+    });
+}
 
-
-    /* ===============================
+/* ===============================
        2. NAV ACTIVE HIGHLIGHT
     ================================ */
-    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+const navLinks = document.querySelectorAll('.sidebar .nav-link');
 
-    navLinks.forEach(li => {
-        const anchor = li.querySelector("a");
+navLinks.forEach(li => {
+    const anchor = li.querySelector("a");
 
-        anchor.addEventListener("click", () => {
-            navLinks.forEach(link => link.classList.remove("active"));
-            li.classList.add("active");
-        });
+    anchor.addEventListener("click", () => {
+        navLinks.forEach(link => link.classList.remove("active"));
+        li.classList.add("active");
     });
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Kelola Dosen JS Loaded");
@@ -43,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tableView: document.getElementById("table-view"),
         footerView: document.getElementById("footer-view"),
         searchbar: document.getElementById("search-bar"),
+        paginationContainer: document.querySelector(".pagination-container"),
         
         // Add dosen flow
         pilihCara: document.getElementById("pilih-cara"),
@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
         btnDelete: document.getElementById("btn-delete"),
         btnImport: document.getElementById("btn-import"),
         btnManual: document.getElementById("btn-manual"),
-        buttonPage: document.getElementById("pagination"),
         
         // Forms
         tambahForm: document.getElementById("tambah-dosen-form"),
@@ -78,7 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
         btnCancelConfirm: document.getElementById("btn-cancel-confirm"),
         btnConfirmDeleteFinal: document.getElementById("btn-confirm-delete-final"),
         btnPilihFile: document.getElementById("btn-pilih-file"),
-        fileInput: document.getElementById("file-input")
+        fileInput: document.getElementById("file-input"),
+
+        // Pagination elements
+        prevPageBtn: document.getElementById("prev-page"),
+        nextPageBtn: document.getElementById("next-page"),
+        pageInfo: document.getElementById("current-page")
     };
 
     // Log elements for debugging
@@ -90,6 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==================== STATE ====================
     let daftarDosen = [];
     let selectedDosen = null;
+    let filteredData = [];
+    let currentPage = 1;
+    const itemsPerPage = 3; // 3 data per halaman
 
     // ==================== INITIALIZATION ====================
     init();
@@ -102,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Setup event listeners
         setupEventListeners();
         
-        // Load data
+        // Load initial data
         await loadDosenData();
         
         // Setup search
@@ -128,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.tableView) elements.tableView.style.display = 'none';
         if (elements.footerView) elements.footerView.style.display = 'none';
         if (elements.searchbar) elements.searchbar.style.display = 'none';
+        if (elements.paginationContainer) elements.paginationContainer.style.display = 'none';
         
         // Clear titles
         if (elements.subTitle) elements.subTitle.textContent = '';
@@ -150,7 +158,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.searchbar) {
             elements.searchbar.style.display = 'block';
         }
-        elements.buttonPage.style.display = 'flex';
+        if (elements.paginationContainer) {
+            elements.paginationContainer.style.display = 'flex';
+        }
+        
         // Reset titles
         if (elements.subTitle) elements.subTitle.textContent = '';
         if (elements.subTitle2) elements.subTitle2.textContent = '';
@@ -174,7 +185,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (elements.subTitle) elements.subTitle.textContent = " > Tambah Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = "";
-        elements.buttonPage.style.display = 'none';
     }
 
     function showImportView() {
@@ -185,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (elements.subTitle) elements.subTitle.textContent = " > Tambah Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = " > Import";
-        elements.buttonPage.style.display = 'none';
     }
 
     function showManualView() {
@@ -196,7 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (elements.subTitle) elements.subTitle.textContent = " > Tambah Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = " > Tambah Baru";
-        elements.buttonPage.style.display = 'none';
     }
 
     function showHapusView() {
@@ -207,7 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (elements.subTitle) elements.subTitle.textContent = " > Hapus Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = "";
-        elements.buttonPage.style.display = 'none';
         
         // Setup search for delete
         setupDeleteSearch();
@@ -219,7 +226,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.konfirmasiHapus) {
             elements.konfirmasiHapus.style.display = 'flex';
         }
-        elements.buttonPage.style.display = 'none';
     }
 
     // ==================== API FUNCTIONS ====================
@@ -239,8 +245,10 @@ document.addEventListener("DOMContentLoaded", () => {
             
             if (result.success) {
                 daftarDosen = result.data || [];
+                filteredData = []; // Reset filter
+                currentPage = 1;   // Reset to page 1
                 renderDosenTable();
-                updateCount(result.count || daftarDosen.length);
+                updateCount(daftarDosen.length);
                 console.log(`Loaded ${daftarDosen.length} dosen`);
             } else {
                 throw new Error(result.message);
@@ -251,6 +259,9 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Fallback: extract from existing HTML
             extractDataFromExistingTable();
+            filteredData = [];
+            currentPage = 1;
+            renderDosenTable();
         } finally {
             showLoading(false);
         }
@@ -260,7 +271,10 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await fetch(API_DOSEN, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify(dosenData)
             });
             
@@ -280,7 +294,10 @@ document.addEventListener("DOMContentLoaded", () => {
     async function deleteDosen(id) {
         try {
             const response = await fetch(`${API_DOSEN}/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json'
+                }
             });
             
             const result = await response.json();
@@ -296,46 +313,121 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    async function importDosenFile(file) {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const response = await fetch(`${API_DOSEN}/import`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.message || `HTTP ${response.status}`);
+            }
+            
+            return result;
+        } catch (error) {
+            console.error("Error importing file:", error);
+            throw error;
+        }
+    }
+
     // ==================== RENDER FUNCTIONS ====================
-    function renderDosenTable() {
-        if (!elements.tableView) {
-            console.error("Table view element not found!");
-            return;
+    function getActiveData() {
+        return filteredData.length > 0 ? filteredData : daftarDosen;
+    }
+
+    function updatePaginationInfo(totalPages) {
+        if (elements.pageInfo) {
+            elements.pageInfo.textContent = `${totalPages === 0 ? 0 : currentPage} / ${Math.max(totalPages, 1)}`;
         }
         
-        // Clear existing data rows (keep header)
-        const existingRows = elements.tableView.querySelectorAll('.data-row');
-        existingRows.forEach(row => {
-            if (row.parentNode) {
-                row.parentNode.removeChild(row);
-            }
-        });
+        // Update button states
+        if (elements.prevPageBtn) {
+            elements.prevPageBtn.disabled = currentPage === 1;
+        }
         
-        console.log("Rendering", daftarDosen.length, "dosen");
-        
-        // Add new rows
-        daftarDosen.forEach((dosen, index) => {
-            const row = document.createElement('div');
-            row.className = 'data-row';
-            
-            const statusText = dosen.status || (dosen.isActive ? 'Aktif' : 'Nonaktif');
-            const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
-            
-            row.innerHTML = `
-                <span>${index + 1}.</span>
-                <span>${dosen.nip || dosen.id}</span>
-                <span>${dosen.nama}</span>
-                <span>-</span>
-                <span>
-                    <span class="status-badge ${statusClass}">
-                        ${statusText}
-                    </span>
-                </span>
-            `;
-            
-            elements.tableView.appendChild(row);
-        });
+        if (elements.nextPageBtn) {
+            elements.nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+        }
     }
+
+function renderDosenTable() {
+    if (!elements.tableView) {
+        console.error("Table view element not found!");
+        return;
+    }
+    
+    // Clear existing data rows
+    const existingRows = elements.tableView.querySelectorAll('.data-row');
+    existingRows.forEach(row => {
+        if (row.parentNode) {
+            row.parentNode.removeChild(row);
+        }
+    });
+    
+    const dataToShow = getActiveData();
+    const totalItems = dataToShow.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+    
+    console.log(`📊 Total items: ${totalItems}, Items per page: ${itemsPerPage}, Total pages: ${totalPages}`);
+    
+    // Adjust current page if out of bounds
+    if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+    if (currentPage < 1) currentPage = 1;
+    
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = Math.min(start + itemsPerPage, totalItems);
+    const pageItems = dataToShow.slice(start, end);
+    
+    console.log(`🔄 Rendering page ${currentPage} of ${totalPages}, items ${start + 1}-${end} of ${totalItems}`);
+    
+    // Add rows for current page
+    pageItems.forEach((dosen, index) => {
+        const row = document.createElement('div');
+        row.className = 'data-row';
+        
+        const statusText = dosen.status || (dosen.isActive ? 'Aktif' : 'Nonaktif');
+        const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
+        
+        row.innerHTML = `
+            <span>${start + index + 1}.</span>
+            <span>${dosen.nip || dosen.id || '-'}</span>
+            <span>${dosen.nama || '-'}</span>
+            <span>${dosen.email || '-'}</span>
+            <span>
+                <span class="status-badge ${statusClass}">
+                    ${statusText}
+                </span>
+            </span>
+        `;
+        
+        elements.tableView.appendChild(row);
+    });
+    
+    // Show empty message if no data
+    if (pageItems.length === 0) {
+        const emptyRow = document.createElement('div');
+        emptyRow.className = 'data-row';
+        emptyRow.style.textAlign = 'center';
+        emptyRow.style.padding = '20px';
+        emptyRow.style.color = '#666';
+        emptyRow.innerHTML = `
+            <span style="display: block; width: 100%;">
+                Tidak ada data dosen
+            </span>
+        `;
+        elements.tableView.appendChild(emptyRow);
+    }
+    
+    updatePaginationInfo(totalPages);
+    updateCount(totalItems);
+    console.log(`✅ Page ${currentPage}/${totalPages} rendered with ${pageItems.length} items`);
+}
 
     function extractDataFromExistingTable() {
         if (!elements.tableView) return;
@@ -347,11 +439,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const cells = row.querySelectorAll('span');
             if (cells.length >= 5) {
                 const nama = cells[2].textContent.trim();
-                if (nama && nama !== 'Nama Dosen') { // Skip template rows
+                if (nama && nama !== 'Nama Dosen' && nama !== '-') {
                     daftarDosen.push({
                         id: cells[1].textContent.trim() || `DSN${index + 1}`,
                         nip: cells[1].textContent.trim(),
                         nama: nama,
+                        email: cells[3].textContent.trim() !== '-' ? cells[3].textContent.trim() : null,
                         status: cells[4].textContent.trim(),
                         isActive: cells[4].textContent.trim() === 'Aktif'
                     });
@@ -359,7 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
         
-        updateCount(daftarDosen.length);
         console.log(`Extracted ${daftarDosen.length} dosen from existing table`);
     }
 
@@ -444,74 +536,53 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.searchInput) {
             elements.searchInput.addEventListener('input', handleDeleteSearch);
         }
-        
-        console.log("Event listeners setup complete");
-    }
 
-    function setupSearch() {
-        const searchInput = elements.searchbar?.querySelector('input');
-        if (!searchInput) return;
-        
-        searchInput.addEventListener('input', (e) => {
-            const keyword = e.target.value.toLowerCase().trim();
-            
-            if (!keyword) {
-                renderDosenTable();
-                return;
-            }
-            
-            const filtered = daftarDosen.filter(dosen => 
-                dosen.nama.toLowerCase().includes(keyword) || 
-                (dosen.nip && dosen.nip.toLowerCase().includes(keyword)) ||
-                (dosen.email && dosen.email.toLowerCase().includes(keyword))
-            );
-            
-            // Create temporary copy for rendering
-            const originalData = daftarDosen;
-            daftarDosen = filtered;
-            renderDosenTable();
-            daftarDosen = originalData;
-        });
-    }
-
-    function setupDeleteSearch() {
-        if (!elements.suggestionsBox) return;
-        
-        elements.suggestionsBox.innerHTML = '';
-        elements.suggestionsBox.style.display = 'none';
-        
-        daftarDosen.forEach(dosen => {
-            const li = document.createElement('li');
-            li.textContent = `${dosen.nip} - ${dosen.nama}`;
-            li.dataset.id = dosen.id;
-            li.dataset.nama = dosen.nama;
-            
-            li.addEventListener('click', () => {
-                if (elements.searchInput) {
-                    elements.searchInput.value = `${dosen.nip} - ${dosen.nama}`;
-                }
-                selectedDosen = {
-                    id: dosen.id,
-                    nama: dosen.nama
-                };
-                if (elements.suggestionsBox) {
-                    elements.suggestionsBox.style.display = 'none';
+        // Pagination buttons
+        if (elements.prevPageBtn) {
+            elements.prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage -= 1;
+                    renderDosenTable();
                 }
             });
-            
-            elements.suggestionsBox.appendChild(li);
+        }
+        
+        if (elements.nextPageBtn) {
+            elements.nextPageBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(getActiveData().length / itemsPerPage) || 1;
+                if (currentPage < totalPages) {
+                    currentPage += 1;
+                    renderDosenTable();
+                }
+            });
+        }
+        
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (elements.suggestionsBox && !elements.suggestionsBox.contains(e.target) && 
+                elements.searchInput && !elements.searchInput.contains(e.target)) {
+                elements.suggestionsBox.style.display = 'none';
+            }
         });
+        
+        console.log("Event listeners setup complete");
     }
 
     // ==================== EVENT HANDLERS ====================
     async function handleFormSubmit(e) {
         e.preventDefault();
         
-        const nip = document.getElementById("nip-dosen").value.trim();
-        const nama = document.getElementById("nama-dosen").value.trim();
-        const status = document.getElementById("status-dosen").value;
+        console.log("🔄 Form tambah dosen submitted");
         
+        const nip = document.getElementById("nip-dosen")?.value.trim();
+        const nama = document.getElementById("nama-dosen")?.value.trim();
+        const email = document.getElementById("email-dosen")?.value.trim();
+        
+        console.log("📝 Input values:", { nip, nama, email });
+        
+        // Validasi
         if (!nama) {
+            console.error("❌ Nama kosong");
             showMessage("Nama dosen harus diisi", "error");
             return;
         }
@@ -519,32 +590,44 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             showLoading(true);
             
+            // Format data sesuai controller
             const dosenData = {
-                nama: nama,
-                status: status
+                nama: nama
             };
             
-            // Only add NIP if provided
-            if (nip) {
+            // Tambahkan NIP jika ada
+            if (nip && nip.trim() !== "") {
                 dosenData.nip = nip;
             }
             
+            // Tambahkan email jika ada
+            if (email && email.trim() !== "") {
+                dosenData.email = email;
+            }
+            
+            // TANPA status - otomatis aktif
+            console.log("📤 Sending data to API:", dosenData);
+            
             const result = await addDosen(dosenData);
             
+            console.log("📥 API Response:", result);
+            
             if (result.success) {
-                showMessage(result.message, "success");
+                showMessage("Dosen berhasil ditambahkan", "success");
                 
                 // Reset form
-                elements.tambahForm.reset();
+                if (elements.tambahForm) elements.tambahForm.reset();
                 
                 // Reload data
                 await loadDosenData();
                 
                 // Return to main view
                 showMainView();
+            } else {
+                throw new Error(result.message || "Gagal menambahkan dosen");
             }
         } catch (error) {
-            console.error("Form submission error:", error);
+            console.error("❌ Form submission error:", error);
             showMessage("Gagal menambahkan dosen: " + error.message, "error");
         } finally {
             showLoading(false);
@@ -561,8 +644,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!keyword) return;
         
         const filtered = daftarDosen.filter(dosen => 
-            dosen.nama.toLowerCase().includes(keyword) || 
-            (dosen.nip && dosen.nip.toLowerCase().includes(keyword))
+            (dosen.nama || '').toLowerCase().includes(keyword) || 
+            (dosen.nip || '').toLowerCase().includes(keyword) ||
+            (dosen.email || '').toLowerCase().includes(keyword)
         );
         
         if (filtered.length === 0) return;
@@ -571,17 +655,52 @@ document.addEventListener("DOMContentLoaded", () => {
         
         filtered.forEach(dosen => {
             const li = document.createElement('li');
-            li.textContent = `${dosen.nip} - ${dosen.nama}`;
+            const kode = dosen.nip || dosen.id;
+            const nama = dosen.nama;
+            li.textContent = `${kode} - ${nama}`;
             li.dataset.id = dosen.id;
-            li.dataset.nama = dosen.nama;
+            li.dataset.nama = nama;
+            li.dataset.kode = kode;
             
             li.addEventListener('click', () => {
                 if (elements.searchInput) {
-                    elements.searchInput.value = `${dosen.nip} - ${dosen.nama}`;
+                    elements.searchInput.value = `${kode} - ${nama}`;
                 }
                 selectedDosen = {
                     id: dosen.id,
-                    nama: dosen.nama
+                    kode: kode,
+                    nama: nama
+                };
+                elements.suggestionsBox.style.display = 'none';
+            });
+            
+            elements.suggestionsBox.appendChild(li);
+        });
+    }
+
+    function setupDeleteSearch() {
+        if (!elements.suggestionsBox) return;
+        
+        elements.suggestionsBox.innerHTML = '';
+        elements.suggestionsBox.style.display = 'none';
+        
+        daftarDosen.forEach(dosen => {
+            const li = document.createElement('li');
+            const kode = dosen.nip || dosen.id;
+            const nama = dosen.nama;
+            li.textContent = `${kode} - ${nama}`;
+            li.dataset.id = dosen.id;
+            li.dataset.nama = nama;
+            li.dataset.kode = kode;
+            
+            li.addEventListener('click', () => {
+                if (elements.searchInput) {
+                    elements.searchInput.value = `${kode} - ${nama}`;
+                }
+                selectedDosen = {
+                    id: dosen.id,
+                    kode: kode,
+                    nama: nama
                 };
                 elements.suggestionsBox.style.display = 'none';
             });
@@ -594,6 +713,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!selectedDosen) {
             showMessage("Pilih dosen terlebih dahulu", "error");
             return;
+        }
+        
+        // Update confirmation text
+        const confirmText = document.getElementById("konfirmasi-hapus-text");
+        if (confirmText) {
+            confirmText.innerHTML = `
+                Apakah Anda yakin ingin menghapus dosen:<br>
+                <strong>${selectedDosen.kode} - ${selectedDosen.nama}</strong>
+            `;
         }
         
         showKonfirmasiHapusView();
@@ -611,7 +739,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = await deleteDosen(selectedDosen.id);
             
             if (result.success) {
-                showMessage(result.message, "success");
+                showMessage("Dosen berhasil dihapus", "success");
                 
                 // Reload data
                 await loadDosenData();
@@ -644,18 +772,10 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             showLoading(true);
             
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            const response = await fetch(`${API_DOSEN}/import`, {
-                method: 'POST',
-                body: formData
-            });
-            
-            const result = await response.json();
+            const result = await importDosenFile(file);
             
             if (result.success) {
-                showMessage(result.message, "success");
+                showMessage("File berhasil diimport", "success");
                 
                 // Reload data
                 await loadDosenData();
@@ -663,7 +783,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Return to main view
                 showMainView();
             } else {
-                throw new Error(result.message);
+                throw new Error(result.message || "Import gagal");
             }
         } catch (error) {
             console.error("File upload error:", error);
@@ -672,6 +792,31 @@ document.addEventListener("DOMContentLoaded", () => {
             showLoading(false);
             e.target.value = '';
         }
+    }
+
+    function setupSearch() {
+        const searchInput = elements.searchbar?.querySelector('input');
+        if (!searchInput) return;
+        
+        searchInput.addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase().trim();
+            
+            if (!keyword) {
+                filteredData = [];
+                currentPage = 1;
+                renderDosenTable();
+                return;
+            }
+            
+            filteredData = daftarDosen.filter(dosen => 
+                (dosen.nama || '').toLowerCase().includes(keyword) || 
+                (dosen.nip || '').toLowerCase().includes(keyword) ||
+                (dosen.email || '').toLowerCase().includes(keyword)
+            );
+            
+            currentPage = 1;
+            renderDosenTable();
+        });
     }
 
     // ==================== UTILITY FUNCTIONS ====================
@@ -689,12 +834,18 @@ document.addEventListener("DOMContentLoaded", () => {
         
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
+        
+        const bgColor = type === 'success' ? '#4CAF50' : 
+                       type === 'error' ? '#f44336' : '#2196F3';
+        const icon = type === 'success' ? '✓' : 
+                    type === 'error' ? '✗' : 'ℹ';
+        
         notification.innerHTML = `
             <div style="position: fixed; top: 20px; right: 20px; padding: 12px 20px; 
                         border-radius: 4px; color: white; z-index: 10000; font-size: 14px;
-                        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+                        background: ${bgColor};
                         box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px;">
-                ${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'} ${message}
+                ${icon} ${message}
             </div>
         `;
         
@@ -724,77 +875,3 @@ document.addEventListener("DOMContentLoaded", () => {
         document.head.appendChild(style);
     }
 });
-
-// Pagination setup: dynamic calculation so each page shows `itemsPerPage` items
-let masterPageItems = [];
-let filteredPageItems = [];
-const itemsPerPage = 3; // show 3 names per page
-let currentPage = 1;
-let totalPages = 1;
-
-// Elemen Pagination
-const prevButton = document.getElementById('prev-page');
-const nextButton = document.getElementById('next-page');
-const pageInfoSpan = document.getElementById('current-page');
-
-function updatePaginationData() {
-    masterPageItems = Array.from(document.querySelectorAll('#table-view .data-row'));
-    if (masterPageItems.length === 0) {
-        console.warn('Tidak ada .data-row ditemukan.');
-    }
-    filteredPageItems = masterPageItems.slice();
-    totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
-    currentPage = Math.min(currentPage, totalPages);
-    showPage(currentPage);
-}
-
-function showPage(page) {
-    const start = (page - 1) * itemsPerPage;
-    const end = page * itemsPerPage;
-
-    masterPageItems.forEach(item => item.style.display = 'none');
-
-    filteredPageItems.forEach((item, index) => {
-        if (index >= start && index < end) item.style.display = 'block';
-        else item.style.display = 'none';
-    });
-
-    if (pageInfoSpan) pageInfoSpan.textContent = `${currentPage} / ${totalPages}`;
-
-    if (prevButton) prevButton.disabled = currentPage === 1;
-    if (nextButton) nextButton.disabled = currentPage === totalPages;
-}
-
-if (prevButton) prevButton.addEventListener('click', () => {
-    if (currentPage > 1) {
-        currentPage--;
-        showPage(currentPage);
-    }
-});
-
-if (nextButton) nextButton.addEventListener('click', () => {
-    if (currentPage < totalPages) {
-        currentPage++;
-        showPage(currentPage);
-    }
-});
-
-// Initialize pagination after initial render
-updatePaginationData();
-
-// Search and filter for the pagination-controlled list
-const searchInput = document.getElementById('search-input');
-if (searchInput) {
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
-        filteredPageItems = masterPageItems.filter(row => {
-            const spans = row.querySelectorAll('span');
-            const nama = (spans[2]?.textContent || '').toLowerCase();
-            const kelas = (spans[3]?.textContent || '').toLowerCase();
-            return nama.includes(query) || kelas.includes(query);
-        });
-        totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
-        currentPage = 1;
-        showPage(currentPage);
-    });
-}
