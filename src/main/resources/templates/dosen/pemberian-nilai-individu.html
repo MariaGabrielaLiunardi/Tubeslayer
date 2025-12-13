@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pemberian Nilai Individu - Tubeslayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/dash-user.css">
+    <link rel="stylesheet" href="/css/pemberian-nilai-dosen.css">
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
+
+    <script src="/js/dash-user.js" defer></script>
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bxr bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a th:href="@{/dosen/dashboard}">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a th:href="@{/dosen/mata-kuliah}">
+                            <img src="/icon/open-book.png" class="icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Pemberian Nilai Individu</span>
+            </div>
+
+            <div class="right-section">
+                <div class="info">
+                    <span class="name" th:text="${user.nama}">Nama</span>
+                    <span class="role" th:text="${user.role}">Role</span>
+                </div>
+                <a th:href="@{/profil}">
+                    <img src="/icon/pfp.png" class="pfp" alt="pfp">
+                </a>
+                <button class="logout" id="logoutButton">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <div class="detail-wrapper">
+            <div class="breadcrumb">
+                <a th:href="@{/dosen/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/matkul-detail(kodeMk=${mkDetail.kodeMK})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
+                <a th:href="@{/dosen/tugas-detail(idTugas=${tugas.idTugas})}" style="text-decoration: none;">
+                    <span th:text="${tugas.judulTugas}">Tugas</span>
+                </a>
+
+                &gt;
+
+                Pemberian Nilai Individu
+            </div>
+
+            <div class="tugas-header">
+                <div class="tugas-info">
+                    <h1 th:text="${tugas.judulTugas}">Judul Tugas</h1>
+                    <p><b>Mata Kuliah:</b> <span th:text="${mkDetail.nama}">Mata Kuliah</span></p>
+                    <p><b>Deskripsi:</b> <span th:text="${tugas.deskripsi}">Deskripsi Tugas</span></p>
+                </div>
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="navigation-tabs">
+                <button class="nav-button" th:onclick="|window.location.href='@{/dosen/pemberian-nilai(idTugas=${tugas.idTugas})}'|">
+                    📊 Nilai Kelompok
+                </button>
+                <button class="nav-button active" th:onclick="|window.location.href='@{/dosen/pemberian-nilai-individu(idTugas=${tugas.idTugas})}'|">
+                    👤 Nilai Individu
+                </button>
+            </div>
+
+            <!-- Kelompok Selector -->
+            <div class="kelompok-selector" th:if="${!kelompokList.isEmpty()}">
+                <h3>Pilih Kelompok:</h3>
+                <div class="kelompok-tabs">
+                    <button class="kelompok-btn" 
+                            th:each="kelompok : ${kelompokList}"
+                            th:data-kelompok-id="${kelompok.idKelompok}"
+                            th:text="${kelompok.namaKelompok}"
+                            th:classappend="${kelompokList.indexOf(kelompok) == 0 ? 'active' : ''}">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Daftar Anggota dari Kelompok Terpilih -->
+            <div class="kelompok-content" th:if="${!kelompokList.isEmpty()}">
+                <h2>Nilai Individu Anggota</h2>
+
+                <!-- List Anggota dengan Form Input Nilai -->
+                <div class="anggota-list" id="anggota-list">
+                    <!-- Akan diisi oleh JavaScript -->
+                </div>
+            </div>
+
+            <!-- Alert jika tidak ada kelompok -->
+            <div class="alert alert-warning" th:if="${anggotaByKelompok.isEmpty()}">
+                <p>Belum ada kelompok untuk tugas ini</p>
+            </div>
+
+            <!-- Alert error -->
+            <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+        </div>
+
+    </section>
+
+    <!-- Data storage untuk JavaScript - embed JSON string dari controller -->
+    <div id="data-kelompok-json" th:data-json="${kelompokListJson}" style="display: none;"></div>
+    <div id="data-anggota-json" th:data-json="${anggotaByKelompokJson}" style="display: none;"></div>
+    <div id="data-nilai-json" th:data-json="${nilaiMapJson}" style="display: none;"></div>
+    <div id="data-tugas" th:data-tugas-id="${tugas.idTugas}" style="display: none;"></div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        
+        // Parse data dari hidden elements
+        const idTugas = parseInt(document.getElementById('data-tugas').getAttribute('data-tugas-id'));
+        let kelompokData = {};
+        
+        try {
+            const kelompokListJson = document.getElementById('data-kelompok-json').getAttribute('data-json');
+            const anggotaByKelompokJson = document.getElementById('data-anggota-json').getAttribute('data-json');
+            const nilaiMapJson = document.getElementById('data-nilai-json').getAttribute('data-json');
+            
+            const kelompokList = JSON.parse(kelompokListJson);
+            const anggotaByKelompok = JSON.parse(anggotaByKelompokJson);
+            const nilaiMap = JSON.parse(nilaiMapJson);
+            
+            // Build kelompokData object
+            kelompokList.forEach(kelompok => {
+                const idK = kelompok.idKelompok;
+                const anggotaList = anggotaByKelompok[idK] || [];
+                
+                kelompokData[idK] = {
+                    namaKelompok: kelompok.namaKelompok,
+                    anggota: anggotaList.map(anggota => {
+                        const nilaiObj = nilaiMap[anggota.user.idUser];
+                        return {
+                            userId: anggota.user.idUser,
+                            nama: anggota.user.nama,
+                            role: anggota.role,
+                            nilai: nilaiObj ? nilaiObj.nilaiPribadi : 0
+                        };
+                    })
+                };
+            });
+            
+            console.log('Data parsed successfully');
+            console.log('idTugas:', idTugas);
+            console.log('kelompokData:', kelompokData);
+        } catch (e) {
+            console.error('Error parsing data:', e);
+        }
+        
+        // Function untuk render anggota dari kelompok yang dipilih
+        function renderAnggota(idKelompok) {
+            const anggotaList = document.getElementById('anggota-list');
+            anggotaList.innerHTML = '';
+
+            console.log('Rendering kelompok:', idKelompok);
+            console.log('Data kelompok:', kelompokData[idKelompok]);
+
+            if (!kelompokData[idKelompok] || !kelompokData[idKelompok].anggota) {
+                anggotaList.innerHTML = '<p>Tidak ada anggota</p>';
+                return;
+            }
+
+            const anggota = kelompokData[idKelompok].anggota;
+            console.log('Anggota count:', anggota.length);
+
+            anggota.forEach(item => {
+                const html = `
+                    <div class="anggota-item">
+                        <div class="anggota-info-box">
+                            <div class="anggota-detail">
+                                <span class="anggota-id">${item.userId}</span>
+                                <span class="anggota-nama">${item.nama}</span>
+                                <span class="anggota-role">${item.role}</span>
+                            </div>
+                            <div class="nilai-group">
+                                <input type="number"
+                                       class="nilai-input"
+                                       data-user-id="${item.userId}"
+                                       data-tugas-id="${idTugas}"
+                                       min="0"
+                                       max="100"
+                                       placeholder="Nilai"
+                                       value="${item.nilai !== null && item.nilai !== undefined && item.nilai !== '' ? item.nilai : ''}">
+                            </div>
+                            <div class="button-group">
+                                <button class="btn btn-primary btn-simpan"
+                                        data-user-id="${item.userId}"
+                                        data-tugas-id="${idTugas}">
+                                    Simpan
+                                </button>
+                                <button class="btn btn-danger btn-hapus"
+                                        data-user-id="${item.userId}"
+                                        data-tugas-id="${idTugas}"
+                                        style="${item.nilai !== null && item.nilai !== undefined && item.nilai !== '' ? '' : 'display: none;'}">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                anggotaList.innerHTML += html;
+            });
+
+            // Attach event listeners
+            attachEventListeners();
+        }
+
+        // Function untuk attach event listeners
+        function attachEventListeners() {
+            document.querySelectorAll('.btn-simpan').forEach(button => {
+                button.onclick = function() {
+                    const userId = this.dataset.userId;
+                    const tugasId = parseInt(this.dataset.tugasId);
+                    simpanNilaiIndividu(userId, tugasId);
+                };
+            });
+
+            document.querySelectorAll('.btn-hapus').forEach(button => {
+                button.onclick = function() {
+                    const userId = this.dataset.userId;
+                    const tugasId = parseInt(this.dataset.tugasId);
+                    hapusNilaiIndividu(userId, tugasId);
+                };
+            });
+
+            document.querySelectorAll('.nilai-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const nilai = parseInt(this.value);
+                    if (this.value !== '' && (isNaN(nilai) || nilai < 0 || nilai > 100)) {
+                        this.classList.add('error');
+                    } else {
+                        this.classList.remove('error');
+                    }
+                });
+            });
+        }
+
+        // Function untuk load saved nilai individu dari database
+        function loadSavedNilaiIndividu() {
+            // Iterate semua kelompok dan semua anggota
+            for (const idKelompok in kelompokData) {
+                const kelompok = kelompokData[idKelompok];
+                if (!kelompok.anggota) continue;
+
+                kelompok.anggota.forEach(anggota => {
+                    // Fetch nilai untuk setiap user
+                    fetch(`/api/nilai/${anggota.userId}/${idTugas}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.exists && data.nilaiPribadi) {
+                                // Update kelompokData dengan nilai yang tersimpan
+                                anggota.nilai = data.nilaiPribadi;
+                            }
+                        })
+                        .catch(error => console.error('Error loading nilai:', error));
+                });
+            }
+        }
+
+        // Function untuk simpan nilai individu
+        function simpanNilaiIndividu(userId, tugasId) {
+            const input = document.querySelector(`.nilai-input[data-user-id="${userId}"]`);
+            if (!input) {
+                alert('Input tidak ditemukan');
+                return;
+            }
+
+            const nilai = input.value;
+            if (nilai === '') {
+                alert('Nilai harus diisi!');
+                return;
+            }
+
+            const numValue = parseInt(nilai);
+            if (isNaN(numValue) || numValue < 0 || numValue > 100) {
+                alert('Nilai harus antara 0 dan 100!');
+                return;
+            }
+
+            const payload = {
+                idUser: userId,
+                idTugas: tugasId,
+                nilaiPribadi: numValue
+            };
+
+            fetch('/api/nilai/simpan-individu', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('Nilai individu berhasil disimpan!');
+                    const deleteBtn = document.querySelector(`.btn-hapus[data-user-id="${userId}"]`);
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'block';
+                    }
+                } else {
+                    alert('Error: ' + (data.error || 'Gagal menyimpan nilai'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan: ' + error.message);
+            });
+        }
+
+        // Function untuk hapus nilai individu
+        function hapusNilaiIndividu(userId, tugasId) {
+            if (!confirm('Apakah Anda yakin ingin menghapus nilai individu siswa ini?')) {
+                return;
+            }
+
+            const params = new URLSearchParams({
+                idUser: userId,
+                idTugas: tugasId
+            });
+
+            fetch('/api/nilai/hapus?' + params, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('Nilai individu berhasil dihapus!');
+                    const input = document.querySelector(`.nilai-input[data-user-id="${userId}"]`);
+                    if (input) {
+                        input.value = '';
+                    }
+                    const deleteBtn = document.querySelector(`.btn-hapus[data-user-id="${userId}"]`);
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'none';
+                    }
+                } else {
+                    alert('Error: ' + (data.error || 'Gagal menghapus nilai'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan: ' + error.message);
+            });
+        }
+
+        // Event listeners untuk tombol kelompok
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved nilai dari database
+            loadSavedNilaiIndividu();
+            
+            console.log('DOM Content Loaded');
+            console.log('kelompokData:', kelompokData);
+            console.log('All kelompok buttons:', document.querySelectorAll('.kelompok-btn').length);
+
+            document.querySelectorAll('.kelompok-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log('Button clicked:', this.textContent);
+                    document.querySelectorAll('.kelompok-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const idKelompok = parseInt(this.dataset.kelompokId);
+                    console.log('Selected kelompok ID:', idKelompok);
+                    renderAnggota(idKelompok);
+                });
+            });
+
+            const firstButton = document.querySelector('.kelompok-btn');
+            console.log('First button:', firstButton);
+            if (firstButton) {
+                console.log('Clicking first button');
+                firstButton.click();
+            }
+        });
+        /*]]>*/
+    </script>
+
+</body>
+
+</html>

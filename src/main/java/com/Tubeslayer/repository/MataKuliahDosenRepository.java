@@ -20,9 +20,18 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
      * Mencari semua relasi MataKuliahDosen berdasarkan kode mata kuliah.
      * Ini digunakan untuk menemukan koordinator/pengajar MK.
      */
-    List<MataKuliahDosen> findByMataKuliah_KodeMKAndIsActive(String kodeMk, boolean isActive); 
+    List<MataKuliahDosen> findByMataKuliah_KodeMKAndIsActive(String kodeMk, boolean isActive);
     
-    // Hapus semua kode TugasBesar di repository ini
+    /**
+     * Cari relasi dosen-matakuliah berdasarkan ID dosen dan kode mata kuliah
+     */
+    @Query("""
+        SELECT md
+        FROM MataKuliahDosen md
+        WHERE md.user.idUser = :idUser AND md.mataKuliah.kodeMK = :kodeMK
+    """)
+    MataKuliahDosen findById_IdUserAndKodeMK(@Param("idUser") String idUser, @Param("kodeMK") String kodeMK);
+    
     // hitung jumlah mk aktif untuk dosen tertentu di tahun akademik tertentu
     int countById_IdUserAndTahunAkademikAndIsActive(String idUser, String tahunAkademik, boolean isActive);
 
@@ -51,5 +60,17 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     List<MataKuliahDosen> findActiveByUserAndTahunAkademik(@Param("idUser") String idUser,
                                                           @Param("tahunAkademik") String tahunAkademik,
                                                           Pageable pageable);
+
+    // ambil list MK aktif untuk dosen tertentu di tahun akademik tertentu (tanpa Pageable)
+    @Query("""
+        SELECT mkm 
+        FROM MataKuliahDosen mkm
+        WHERE mkm.user.idUser = :idUser
+          AND mkm.isActive = true
+          AND mkm.tahunAkademik = :tahunAkademik
+        ORDER BY mkm.mataKuliah.nama ASC
+    """)
+    List<MataKuliahDosen> findById_IdUserAndTahunAkademikAndIsActive(@Param("idUser") String idUser,
+                                                                     @Param("tahunAkademik") String tahunAkademik);
 }
 

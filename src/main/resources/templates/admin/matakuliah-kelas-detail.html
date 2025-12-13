@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubeslayer</title>
+
+    <!-- CSS & JS -->
+    <link rel="stylesheet" th:href="@{/css/matakuliah-kelas-detail.css}">
+    <script th:src="@{/js/matakuliah-kelas-detail.js}" defer></script>
+
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+<nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img th:src="@{/logo/blue-logo.png}" alt="logo">
+            </span>
+            <div class="text header-text">
+                <span class="name">Tubeslayer</span>
+            </div>
+        </div>
+    </header>
+
+    <i class='bxr bx-chevron-right toggle'></i>
+
+    <div class="menu-bar">
+        <ul class="menu-links">
+            <li class="nav-link">
+                <a th:href="@{/admin/dashboard}">
+                    <img th:src="@{/icon/dashboard.png}" class="icon dashboard-icon">
+                    <span class="text nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-link active">
+                <a th:href="@{/admin/menu-awal-ad}">
+                    <img th:src="@{/icon/database.png}" class="icon database-icon">
+                    <span class="text nav-text">Data</span>
+                </a>
+            </li>
+            <li class="nav-link">
+                <a th:href="@{/admin/arsip-mata-kuliah}">
+                    <img th:src="@{/icon/archive.png}" class="icon archive-icon">
+                    <span class="text nav-text">Arsip Mata Kuliah</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<section class="home">
+    <div class="header">
+        <div class="left-section">
+            <span class="dashboard-title">Kelola Mata Kuliah</span>
+        </div>
+
+        <div class="right-section">
+            <div class="info">
+                <span class="name" th:text="${user.nama}">Nama</span>
+                <span class="role" th:text="${user.role}">Role</span>
+            </div>
+            <img th:src="@{/icon/pfp.png}" class="pfp">
+            <button class="logout" id="logoutButton">
+                <img th:src="@{/icon/logout.png}" class="logout-btn">
+            </button>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="matkul-banner">
+            <div class="matkul-banner-color"></div>
+            <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
+        </div>
+
+        <div class="list-container">
+
+            <!-- HEADER -->
+            <div class="list-header">
+                <h3>
+                    Daftar Kelas
+                    <span th:text="'(' + ${kelasList.size()} + ' kelas)'"> (0 kelas)</span>
+                </h3>
+
+                <div class="search-box" id="search-bar">
+                    <input type="text" id="search-input" placeholder="Cari kelas...">
+                    <i class='bx bx-search'></i>
+                </div>
+            </div>
+
+            <!-- TABLE VIEW -->
+            <div class="custom-table-container" id="table-view">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kelas</th>
+                            <th>Tahun Akademik</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="table-body">
+                        <tr th:each="kelas, iterStat : ${kelasList}" 
+                            th:data-id="${kelas.kelas}">
+                            <td th:text="${iterStat.index + 1}">1</td>
+                            <td><a th:href="@{/admin/matakuliah-detail(kode=${mkDetail.kodeMK}, kelas=${kelas.kelas})}" 
+               th:text="${kelas.kelas}">A</a></td>
+                            <td th:text="${kelas.tahunAkademik}">2023/2024</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div th:if="${kelasList.isEmpty()}" style="text-align: center; padding: 20px; color: #999;">
+                    <p>Tidak ada kelas untuk mata kuliah ini.</p>
+                </div>
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="pagination-container">
+                <button id="prev-page" class="page-btn">‹</button>
+                <span id="page-info" class="page-info">1 / 1</span>
+                <button id="next-page" class="page-btn">›</button>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer-actions" id="footer-view">
+                <div class="button-group">
+                    <button class="btn" id="btn-back" onclick="window.history.back()">Kembali</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    // Simple pagination setup
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('#table-body tr');
+        const pageSize = 3;
+        let currentPage = 1;
+        const totalPages = Math.ceil(rows.length / pageSize);
+
+        function renderPage() {
+            rows.forEach((row, index) => {
+                row.style.display = (index >= (currentPage - 1) * pageSize && index < currentPage * pageSize) ? '' : 'none';
+            });
+            document.getElementById('page-info').textContent = currentPage + ' / ' + totalPages;
+            document.getElementById('prev-page').disabled = currentPage === 1;
+            document.getElementById('next-page').disabled = currentPage === totalPages;
+        }
+
+        document.getElementById('prev-page').addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage();
+            }
+        });
+
+        document.getElementById('next-page').addEventListener('click', function() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage();
+            }
+        });
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('keyup', function(e) {
+            const query = e.target.value.toLowerCase();
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+
+        renderPage();
+    });
+</script>
+
+<style>
+    .matkul-banner-color {
+        display: none;
+    }
+
+    .matkul-banner {
+        background: linear-gradient(135deg, #D8F1FF, #E3F2FD) !important;
+    }
+
+    .matkul-banner.gradient-1 {
+        background: linear-gradient(135deg, #D8F1FF, #E3F2FD) !important;
+    }
+
+    .matkul-banner.gradient-2 {
+        background: linear-gradient(135deg, #FFE8D1, #FFECB3) !important;
+    }
+
+    .matkul-banner.gradient-3 {
+        background: linear-gradient(135deg, #E8D8FF, #F3E5F5) !important;
+    }
+
+    .matkul-banner.gradient-4 {
+        background: linear-gradient(135deg, #D8FFDB, #E8F5E9) !important;
+    }
+</style>
+
+</body>
+
+</html>

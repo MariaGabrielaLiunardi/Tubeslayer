@@ -725,92 +725,76 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-const masterPageItems = Array.from(document.querySelectorAll("#table-view .data-row"));
-
-// Jika tidak ada data, stop script
-if (masterPageItems.length === 0) {
-    console.warn("Tidak ada .data-row ditemukan.");
-}
-
-// Variabel untuk menyimpan item yang sedang difilter
-let filteredPageItems = masterPageItems;
+// Pagination setup: dynamic calculation so each page shows `itemsPerPage` items
+let masterPageItems = [];
+let filteredPageItems = [];
+const itemsPerPage = 3; // show 3 names per page
+let currentPage = 1;
+let totalPages = 1;
 
 // Elemen Pagination
 const prevButton = document.getElementById('prev-page');
 const nextButton = document.getElementById('next-page');
 const pageInfoSpan = document.getElementById('current-page');
 
-const itemsPerPage = 3;
-let currentPage = 1;
+function updatePaginationData() {
+    masterPageItems = Array.from(document.querySelectorAll('#table-view .data-row'));
+    if (masterPageItems.length === 0) {
+        console.warn('Tidak ada .data-row ditemukan.');
+    }
+    filteredPageItems = masterPageItems.slice();
+    totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
+    currentPage = Math.min(currentPage, totalPages);
+    showPage(currentPage);
+}
 
-let totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
-
-// Fungsi Menampilkan Halaman 
-const showPage = (page) => {
-
+function showPage(page) {
     const start = (page - 1) * itemsPerPage;
     const end = page * itemsPerPage;
 
-    masterPageItems.forEach(item => {
-        item.style.display = "none";
-    });
+    masterPageItems.forEach(item => item.style.display = 'none');
 
-    // Show item filter only untuk halaman ini
     filteredPageItems.forEach((item, index) => {
-        if (index >= start && index < end) {
-            item.style.display = "block";
-        }
+        if (index >= start && index < end) item.style.display = 'block';
+        else item.style.display = 'none';
     });
 
-    // Update info halaman
-    pageInfoSpan.textContent = `${currentPage} / ${totalPages}`;
+    if (pageInfoSpan) pageInfoSpan.textContent = `${currentPage} / ${totalPages}`;
 
-    // Disable prev/next kalau mentok
-    prevButton.disabled = currentPage === 1;
-    nextButton.disabled = currentPage === totalPages;
-};
+    if (prevButton) prevButton.disabled = currentPage === 1;
+    if (nextButton) nextButton.disabled = currentPage === totalPages;
+}
 
-// Tombol Prev
-prevButton.addEventListener("click", () => {
+if (prevButton) prevButton.addEventListener('click', () => {
     if (currentPage > 1) {
         currentPage--;
         showPage(currentPage);
     }
 });
 
-// Tombol Next
-nextButton.addEventListener("click", () => {
+if (nextButton) nextButton.addEventListener('click', () => {
     if (currentPage < totalPages) {
         currentPage++;
         showPage(currentPage);
     }
 });
 
+// Initialize pagination after initial render
+updatePaginationData();
 
-showPage(currentPage);
-
-// Search dan Filter
-
-const searchInput = document.getElementById("search-input");
-
+// Search and filter for the pagination-controlled list
+const searchInput = document.getElementById('search-input');
 if (searchInput) {
-    searchInput.addEventListener("input", () => {
+    searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
-
-        // Filter berdasar span ke-2 (nama) dan span ke-3 (kelas)
         filteredPageItems = masterPageItems.filter(row => {
-            const spans = row.querySelectorAll("span");
-
-            const nama = (spans[1]?.textContent || "").toLowerCase();
-            const kelas = (spans[2]?.textContent || "").toLowerCase();
-
+            const spans = row.querySelectorAll('span');
+            const nama = (spans[2]?.textContent || '').toLowerCase();
+            const kelas = (spans[3]?.textContent || '').toLowerCase();
             return nama.includes(query) || kelas.includes(query);
         });
-
-        // Hitung ulang total halaman
         totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
         currentPage = 1;
-
         showPage(currentPage);
     });
 }

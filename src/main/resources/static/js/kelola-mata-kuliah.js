@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedMataKuliah = null;
     let filteredData = null;
     let currentPage = 1;
-    const pageSize = 10;
+    const pageSize = 3; 
 
     // ==================== INITIALIZATION ====================
     init();
@@ -490,6 +490,22 @@ function renderMataKuliahTable() {
                 elements.suggestionsBox.style.display = 'none';
             }
         });
+
+        // Row click handler to navigate to detail page
+        const tableBody = document.getElementById('table-body');
+        if (tableBody) {
+            tableBody.addEventListener('click', (e) => {
+                // Find the closest data-row
+                const row = e.target.closest('.data-row');
+                if (row) {
+                    // Get the kode MK from the second cell (Kode MK column)
+                    const kodeMK = row.cells[1]?.textContent.trim();
+                    if (kodeMK) {
+                        window.location.href = `/admin/matakuliah-kelas-detail?kode=${kodeMK}`;
+                    }
+                }
+            });
+        }
     }
 
     async function handleFormSubmit(e) {

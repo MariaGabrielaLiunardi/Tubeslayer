@@ -34,7 +34,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .userDetailsService(customUserDetailsService)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/index", "/login", "/css/**", "/js/**", "/logo/**", "/icon/**", "/img/**").permitAll()
+                .requestMatchers("/", "/index", "/login", "/css/**", "/js/**", "/logo/**", "/icon/**", "/img/**", "/dosen/debug-mk", "/dosen/debug-raw-sql", "/dosen/init-dummy-data").permitAll()
                 .requestMatchers("/profil/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/dosen/**").hasRole("DOSEN")

@@ -1,5 +1,5 @@
 -- === USERS (admin, dosen, mahasiswa) ===
-INSERT INTO user_table (id_user, email, password, nama, role, is_active) VALUES
+INSERT IGNORE INTO user_table (id_user, email, password, nama, role, is_active) VALUES
 ('20250199','admin@unpar.ac.id','$2a$12$JVCmMGpDmD1yd7d7eOmDAe1oSRUD13rNu4L7VNBUW2IDX3GDGZ1Bi','Admin Sistem','Admin',1),
 ('20250101','agus@unpar.ac.id','$2a$12$jsq4xkNTSQQKF6O5f3ctsuxSuxXSEgu1ULt5ugH.xKBHTmDxllum2','Agus Santoso','Dosen',1),
 ('20250102','maria@unpar.ac.id','$2a$12$jsq4xkNTSQQKF6O5f3ctsuxSuxXSEgu1ULt5ugH.xKBHTmDxllum2','Maria Lestari','Dosen',1),
@@ -35,7 +35,7 @@ INSERT INTO user_table (id_user, email, password, nama, role, is_active) VALUES
 INSERT INTO rubrik_nilai (id_rubrik) VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10),(11),(12),(13),(14),(15),(16),(17),(18),(19),(20);
 
 -- === Mata Kuliah (5 active, 5 inactive) ===
-INSERT INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
+INSERT IGNORE INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
 ('AIF23001','Algoritma dan Pemrograman',3,1),
 ('AIF23002','Struktur Data',3,1),
 ('AIF23003','Basis Data',3,1),
@@ -49,7 +49,7 @@ INSERT INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES
 ('AIF23925','Bahasa Indonesia Teknis',2,0);
 
 -- === Mata Kuliah Dosen (which dosen teaches which MK) ===
-INSERT INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES
+INSERT IGNORE INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES
 ('20250101','AIF23001','A',1,'2025/2026',1),
 ('20250101','AIF23002','A',1,'2025/2026',1),
 ('20250102','AIF23003','A',1,'2025/2026',1),
@@ -264,10 +264,10 @@ INSERT INTO nilai (id_user, id_tugas, nilai_pribadi, nilai_kelompok) VALUES
 ('6182301013',10,93,95);
 
 -- === komponen_nilai examples for some rubriks ===
-INSERT INTO komponen_nilai (id_rubrik, nama_komponen, bobot, catatan, jam, tanggal) VALUES
-(1,'Laporan',40,'Laporan lengkap','10:00:00','2025-01-15'),
-(1,'Presentasi',30,'Presentasi 10 menit','13:00:00','2025-01-15'),
-(2,'Koding',50,'Implementasi sesuai standar','09:00:00','2025-01-18');
+INSERT INTO komponen_nilai (id_rubrik, nama_komponen, bobot, catatan) VALUES
+(1,'Laporan',40,'Laporan lengkap'),
+(1,'Presentasi',30,'Presentasi 10 menit'),
+(2,'Koding',50,'Implementasi sesuai standar');
 
 -- === jadwal_penilaian examples ===
 INSERT INTO jadwal_penilaian (id_rubrik, tanggal, jam, ruangan) VALUES

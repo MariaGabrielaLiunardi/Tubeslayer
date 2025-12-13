@@ -74,12 +74,33 @@ document.addEventListener("DOMContentLoaded", () => {
         btnCancelConfirm: document.getElementById("btn-cancel-confirm"),
         btnConfirmDeleteFinal: document.getElementById("btn-confirm-delete-final"),
         btnPilihFile: document.getElementById("btn-pilih-file"),
-        fileInput: document.getElementById("file-input")
+        fileInput: document.getElementById("file-input"),
+        
+        // Pagination buttons
+        prevButton: document.getElementById("prev-page"),
+        nextButton: document.getElementById("next-page")
     };
 
     // ==================== STATE ====================
     let daftarMahasiswa = [];
     let selectedMahasiswa = null;
+    let currentPage = 1;
+    const pageSize = 3; // show 3 names per page
+
+    // Helper function to get active mahasiswa
+    function getActiveData() {
+        return daftarMahasiswa.filter(m => {
+            const statusText = m.status || (m.isActive ? 'Aktif' : 'Nonaktif');
+            return statusText === 'Aktif';
+        });
+    }
+
+    function updatePaginationInfo(totalPages) {
+        const pageInfoSpan = document.getElementById('current-page');
+        if (pageInfoSpan) {
+            pageInfoSpan.textContent = `${totalPages === 0 ? 0 : currentPage} / ${Math.max(totalPages, 1)}`;
+        }
+    }
 
     // ==================== INITIALIZATION ====================
     init();
@@ -327,10 +348,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
         
-        console.log("Rendering", daftarMahasiswa.length, "mahasiswa");
-        
-        // Add new rows
-        if (daftarMahasiswa.length === 0) {
+        const data = getActiveData();
+        const totalPages = Math.ceil(data.length / pageSize) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        const start = (currentPage - 1) * pageSize;
+        const pageItems = data.slice(start, start + pageSize);
+
+        if (pageItems.length === 0) {
             const emptyRow = document.createElement('div');
             emptyRow.className = 'data-row';
             emptyRow.style.textAlign = 'center';
@@ -340,18 +366,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span style="grid-column: 1 / -1">Tidak ada data mahasiswa</span>
             `;
             elements.tableView.appendChild(emptyRow);
+            updateCount(0);
+            updatePaginationInfo(0);
             return;
         }
-        
-        daftarMahasiswa.forEach((mahasiswa, index) => {
+
+        // Render only the page slice
+        pageItems.forEach((mahasiswa, idx) => {
             const row = document.createElement('div');
             row.className = 'data-row';
-            
+
             const statusText = mahasiswa.status || (mahasiswa.isActive ? 'Aktif' : 'Nonaktif');
             const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
-            
+
             row.innerHTML = `
-                <span>${index + 1}.</span>
+                <span>${start + idx + 1}.</span>
                 <span>${mahasiswa.npm || mahasiswa.id || '-'}</span>
                 <span>${mahasiswa.nama || '-'}</span>
                 <span>${mahasiswa.email || '-'}</span>
@@ -361,9 +390,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     </span>
                 </span>
             `;
-            
+
             elements.tableView.appendChild(row);
         });
+
+        // Update count and pagination info
+        updateCount(data.length);
+        updatePaginationInfo(totalPages);
     }
 
     function updateCount(count) {
@@ -455,6 +488,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 elements.suggestionsBox.style.display = 'none';
             }
         });
+
+        // Pagination
+        if (elements.prevButton) {
+            elements.prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage -= 1;
+                    renderMahasiswaTable();
+                }
+            });
+        }
+        if (elements.nextButton) {
+            elements.nextButton.addEventListener('click', () => {
+                const totalPages = Math.ceil(getActiveData().length / pageSize) || 1;
+                if (currentPage < totalPages) {
+                    currentPage += 1;
+                    renderMahasiswaTable();
+                }
+            });
+        }
     }
 
     async function handleFormSubmit(e) {
@@ -670,13 +722,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
             
-            const filtered = daftarMahasiswa.filter(mahasiswa => 
-                mahasiswa.nama.toLowerCase().includes(keyword) || 
-                (mahasiswa.npm && mahasiswa.npm.toLowerCase().includes(keyword)) ||
-                (mahasiswa.email && mahasiswa.email.toLowerCase().includes(keyword))
-            );
+            const filtered = daftarMahasiswa.filter(mahasiswa => {
+                const statusText = mahasiswa.status || (mahasiswa.isActive ? 'Aktif' : 'Nonaktif');
+                return statusText === 'Aktif' && (
+                    mahasiswa.nama.toLowerCase().includes(keyword) || 
+                    (mahasiswa.npm && mahasiswa.npm.toLowerCase().includes(keyword)) ||
+                    (mahasiswa.email && mahasiswa.email.toLowerCase().includes(keyword))
+                );
+            });
             
-            // Render filtered results
+            // Render filtered results with pagination
+            currentPage = 1;
             renderFilteredTable(filtered);
         });
     }
@@ -692,8 +748,29 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
         
-        // Add filtered rows
-        filteredData.forEach((mahasiswa, index) => {
+        const totalPages = Math.ceil(filteredData.length / pageSize) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        const start = (currentPage - 1) * pageSize;
+        const pageItems = filteredData.slice(start, start + pageSize);
+
+        if (pageItems.length === 0) {
+            const emptyRow = document.createElement('div');
+            emptyRow.className = 'data-row';
+            emptyRow.style.textAlign = 'center';
+            emptyRow.style.padding = '20px';
+            emptyRow.style.color = '#666';
+            emptyRow.innerHTML = `
+                <span style="grid-column: 1 / -1">Tidak ditemukan data mahasiswa</span>
+            `;
+            elements.tableView.appendChild(emptyRow);
+            updatePaginationInfo(0);
+            return;
+        }
+
+        // Render only the page slice
+        pageItems.forEach((mahasiswa, idx) => {
             const row = document.createElement('div');
             row.className = 'data-row';
             
@@ -701,7 +778,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
             
             row.innerHTML = `
-                <span>${index + 1}</span>
+                <span>${start + idx + 1}</span>
                 <span>${mahasiswa.npm || mahasiswa.id || '-'}</span>
                 <span>${mahasiswa.nama || '-'}</span>
                 <span>${mahasiswa.email || '-'}</span>
@@ -715,17 +792,8 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.tableView.appendChild(row);
         });
         
-        if (filteredData.length === 0) {
-            const emptyRow = document.createElement('div');
-            emptyRow.className = 'data-row';
-            emptyRow.style.textAlign = 'center';
-            emptyRow.style.padding = '20px';
-            emptyRow.style.color = '#666';
-            emptyRow.innerHTML = `
-                <span style="grid-column: 1 / -1">Tidak ditemukan data mahasiswa</span>
-            `;
-            elements.tableView.appendChild(emptyRow);
-        }
+        // Update pagination info
+        updatePaginationInfo(totalPages);
     }
 
     // ==================== UTILITY FUNCTIONS ====================
@@ -735,6 +803,8 @@ document.addEventListener("DOMContentLoaded", () => {
             loadingEl.style.display = show ? 'flex' : 'none';
         }
     }
+
+    
 
     function showMessage(message, type = 'info') {
         // Remove existing notifications
@@ -769,93 +839,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
-const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 4) : null;
-
-// Jika tidak ada data, stop script
-if (masterPageItems.length === 0) {
-    console.warn("Tidak ada .data-row ditemukan.");
-}
-
-// Variabel untuk menyimpan item yang sedang difilter
-let filteredPageItems = masterPageItems;
-
-// Elemen Pagination
-const prevButton = document.getElementById('prev-page');
-const nextButton = document.getElementById('next-page');
-const pageInfoSpan = document.getElementById('current-page');
-
-const itemsPerPage = 3;
-let currentPage = 1;
-
-let totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
-
-// Fungsi Menampilkan Halaman 
-const showPage = (page) => {
-
-    const start = (page - 1) * itemsPerPage;
-    const end = page * itemsPerPage;
-
-    masterPageItems.forEach(item => {
-        item.style.display = "none";
-    });
-
-    // Show item filter only untuk halaman ini
-    filteredPageItems.forEach((item, index) => {
-        if (index >= start && index < end) {
-            item.style.display = "block";
-        }
-    });
-
-    // Update info halaman
-    pageInfoSpan.textContent = `${currentPage} / ${totalPages}`;
-
-    // Disable prev/next kalau mentok
-    prevButton.disabled = currentPage === 1;
-    nextButton.disabled = currentPage === totalPages;
-};
-
-// Tombol Prev
-prevButton.addEventListener("click", () => {
-    if (currentPage > 1) {
-        currentPage--;
-        showPage(currentPage);
-    }
-});
-
-// Tombol Next
-nextButton.addEventListener("click", () => {
-    if (currentPage < totalPages) {
-        currentPage++;
-        showPage(currentPage);
-    }
-});
 
 
-showPage(currentPage);
-
-// Search dan Filter
-
-const searchInput = document.getElementById("search-input");
-
-if (searchInput) {
-    searchInput.addEventListener("input", () => {
-        const query = searchInput.value.toLowerCase();
-
-        // Filter berdasar span ke-2 (nama) dan span ke-3 (kelas)
-        filteredPageItems = masterPageItems.filter(row => {
-            const spans = row.querySelectorAll("span");
-
-            const nama = (spans[1]?.textContent || "").toLowerCase();
-            const kelas = (spans[2]?.textContent || "").toLowerCase();
-
-            return nama.includes(query) || kelas.includes(query);
-        });
-
-        // Hitung ulang total halaman
-        totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
-        currentPage = 1;
-
-        showPage(currentPage);
-    });
-}

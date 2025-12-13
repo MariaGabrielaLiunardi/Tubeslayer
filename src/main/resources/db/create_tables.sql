@@ -106,10 +106,18 @@ CREATE TABLE komponen_nilai (
     id_rubrik INT NOT NULL,
     nama_komponen VARCHAR(50) NOT NULL,
     bobot INT NOT NULL,
-    catatan VARCHAR(300) NOT NULL,
-    jam TIME NOT NULL,
-    tanggal DATE NOT NULL,
+    catatan VARCHAR(300) NULL,
     FOREIGN KEY (id_rubrik) REFERENCES rubrik_nilai(id_rubrik)
+);
+
+CREATE TABLE nilai_komponen (
+    id_nilai_komponen INT AUTO_INCREMENT PRIMARY KEY,
+    id_nilai INT NOT NULL,
+    id_komponen INT NOT NULL,
+    nilai_komponen INT NOT NULL,
+    UNIQUE KEY uk_nilai_komponen (id_nilai, id_komponen),
+    FOREIGN KEY (id_nilai) REFERENCES nilai(id_nilai),
+    FOREIGN KEY (id_komponen) REFERENCES komponen_nilai(id_komponen)
 );
 
 -- PASTIKAN DATABASE tubeslayer SUDAH ADA & USE tubeslayer;
