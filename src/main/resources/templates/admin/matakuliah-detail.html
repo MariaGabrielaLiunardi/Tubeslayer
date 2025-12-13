@@ -18,41 +18,42 @@
 
 <body>
 
-  <nav class="sidebar close">
+ <nav class="sidebar close">
     <header>
         <div class="image-text">
             <span class="image">
-                <img th:src="@{/logo/blue-logo.png}" alt="logo">
+                <img src="/logo/blue-logo.png" alt="logo">
             </span>
-            <div class="text header-text">
+
+            <div class ="text header-text">
                 <span class="name">Tubeslayer</span>
             </div>
         </div>
     </header>
-
-    <i class='bxr bx-chevron-right toggle'></i>
-
+    <i class='bx bx-chevron-right toggle'></i> 
     <div class="menu-bar">
-        <ul class="menu-links">
-            <li class="nav-link">
-                <a th:href="@{/admin/dashboard}">
-                    <img th:src="@{/icon/dashboard.png}" class="icon dashboard-icon">
-                    <span class="text nav-text">Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-link active">
-                <a th:href="@{/admin/menu-awal-ad}">
-                    <img th:src="@{/icon/database.png}" class="icon database-icon">
-                    <span class="text nav-text">Data</span>
-                </a>
-            </li>
-            <li class="nav-link">
-                <a th:href="@{/admin/arsip-mata-kuliah}">
-                    <img th:src="@{/icon/archive.png}" class="icon archive-icon">
-                    <span class="text nav-text">Arsip Mata Kuliah</span>
-                </a>
-            </li>
-        </ul>
+        <div class="menu">
+            <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="/admin/dashboard">
+                        <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-link active">
+                    <a href="/admin/menu-awal-ad">
+                        <img src="/icon/database.png" alt="Database Icon" class="icon database-icon">
+                        <span class="text nav-text">Data</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="/admin/arsip-mata-kuliah">
+                        <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                        <span class="text nav-text">Arsip Mata Kuliah</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -88,8 +89,6 @@
                 th:attr="data-target-url=@{/admin/peserta-detail(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
                 onclick="window.location.href=this.getAttribute('data-target-url')"> Daftar Peserta
             </button>
-
-            <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
         <div class="detail-wrapper">
