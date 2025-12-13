@@ -26,6 +26,7 @@ import com.Tubeslayer.entity.*;
 
 import com.Tubeslayer.repository.*;
 import com.Tubeslayer.service.*;
+import com.Tubeslayer.dto.PemberianNilaiPerKomponenDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,9 @@ public class DosenController {
     @Autowired private UserKelompokRepository userKelompokRepo;
     @Autowired private UserRepository userRepo;
     @Autowired private JdbcTemplate jdbcTemplate;
+    @Autowired private NilaiRepository nilaiRepository;
+    @Autowired private NilaiKomponenRepository nilaiKomponenRepository;
+    @Autowired private NilaiService nilaiService;
 
     private final DashboardDosenService dashboardService;
     private final MataKuliahService mataKuliahService;
@@ -961,7 +965,9 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         try {
             String kodeMk = (String) payload.get("kodeMk");
             Object idTugasObj = payload.get("idTugas");
+            @SuppressWarnings("unchecked")
             List<Map<String, Object>> jadwalList = (List<Map<String, Object>>) payload.get("jadwalList");
+            @SuppressWarnings("unchecked")
             List<Integer> deletedKomponenIds = (List<Integer>) payload.get("deletedTugasIds");
 
             // Validasi input
@@ -1082,142 +1088,6 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         }
         
         return response;
-    }
-
-    /**
-     * GET - Pemberian Nilai Dosen
-     * Menampilkan form pemberian nilai untuk tugas/kelompok
-     */
-    @GetMapping("/dosen/pemberian-nilai")
-    public String dosenPemberianNilai(
-            @RequestParam(required = false) String kodeMk,
-            @RequestParam(required = false) Integer idTugas,
-            @AuthenticationPrincipal CustomUserDetails user,
-            Model model) {
-        
-        if (kodeMk == null || kodeMk.isEmpty()) {
-            return "redirect:/dosen/mata-kuliah";
-        }
-
-        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
-        if (mataKuliah == null) {
-            return "redirect:/dosen/mata-kuliah";
-        }
-
-        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
-        if (mkDosen == null || !mkDosen.isActive()) {
-            return "redirect:/dosen/mata-kuliah";
-        }
-
-        TugasBesar tugas = null;
-        if (idTugas != null) {
-            tugas = tugasRepo.findById(idTugas).orElse(null);
-            if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
-                return "redirect:/dosen/mata-kuliah";
-            }
-        }
-
-        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
-        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline));
-
-        // Load groups (kelompok) with their grades for the specific tugas
-        List<PemberianNilaiDTO> pesertaList = new ArrayList<>();
-        if (idTugas != null && tugas != null) {
-            List<Object[]> rawResults = tugasKelompokRepo.findGrupesWithNilaiByTugas(idTugas);
-            pesertaList = rawResults.stream()
-                    .map(row -> new PemberianNilaiDTO(
-                            (Integer) row[0], // idKelompok
-                            (String) row[1],  // namaKelompok
-                            (Integer) row[2], // idTugas
-                            row[3] != null ? ((Number) row[3]).intValue() : 0 // nilai
-                    ))
-                    .collect(Collectors.toList());
-        }
-
-        model.addAttribute("user", user);
-        model.addAttribute("mataKuliah", mataKuliah);
-        model.addAttribute("mkDosen", mkDosen);
-        model.addAttribute("tugas", tugas);
-        model.addAttribute("tugasList", tugasList);
-        model.addAttribute("pesertaList", pesertaList);
-        model.addAttribute("kodeMk", kodeMk);
-        model.addAttribute("idTugas", idTugas);
-
-        return "nilai/Dosen/pemberian-nilai-dosen";
-    }
-
-    /**
-     * GET - Pemberian Nilai Individu Dosen
-     * Menampilkan form pemberian nilai untuk anggota kelompok tertentu
-     */
-    @GetMapping("/dosen/pemberian-nilai-individu")
-    public String dosenPemberianNilaiIndividu(
-            @RequestParam(required = false) String kodeMk,
-            @RequestParam(required = false) Integer idTugas,
-            @RequestParam(required = false) Integer idKelompok,
-            @AuthenticationPrincipal CustomUserDetails user,
-            Model model) {
-        
-        if (kodeMk == null || kodeMk.isEmpty()) {
-            return "redirect:/dosen/mata-kuliah";
-        }
-
-        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
-        if (mataKuliah == null) {
-            return "redirect:/dosen/mata-kuliah";
-        }
-
-        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
-        if (mkDosen == null || !mkDosen.isActive()) {
-            return "redirect:/dosen/mata-kuliah";
-        }
-
-        TugasBesar tugas = null;
-        if (idTugas != null) {
-            tugas = tugasRepo.findById(idTugas).orElse(null);
-            if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
-                return "redirect:/dosen/mata-kuliah";
-            }
-        }
-
-        Kelompok kelompok = null;
-        if (idKelompok != null) {
-            kelompok = kelompokRepo.findById(idKelompok).orElse(null);
-            if (kelompok == null) {
-                return "redirect:/dosen/pemberian-nilai?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
-            }
-        }
-
-        // Get anggota kelompok
-        List<UserKelompok> anggotaList = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
-        List<PesertaMatkulDTO> pesertaList = new ArrayList<>();
-        int no = 1;
-        for (UserKelompok uk : anggotaList) {
-            pesertaList.add(new PesertaMatkulDTO(
-                no++,
-                uk.getUser().getNama(),
-                uk.getUser().getIdUser(),
-                "Mahasiswa"
-            ));
-        }
-
-        // Get rubrik penilaian
-        RubrikNilai rubrik = tugas != null ? tugas.getRubrik() : null;
-        Set<KomponenNilai> komponenList = rubrik != null ? rubrik.getKomponenList() : new HashSet<>();
-
-        model.addAttribute("user", user);
-        model.addAttribute("mataKuliah", mataKuliah);
-        model.addAttribute("mkDosen", mkDosen);
-        model.addAttribute("tugas", tugas);
-        model.addAttribute("kelompok", kelompok);
-        model.addAttribute("pesertaList", pesertaList);
-        model.addAttribute("rubrik", rubrik);
-        model.addAttribute("komponenList", komponenList);
-        model.addAttribute("kodeMk", kodeMk);
-        model.addAttribute("idTugas", idTugas);
-        model.addAttribute("idKelompok", idKelompok);
-
-        return "nilai/Dosen/pemberian-nilai-individu-dosen";
     }
 
     /**
@@ -1778,5 +1648,483 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         }
         
         return result;
+    }
+
+    // ============================
+    // PEMBERIAN NILAI OLEH DOSEN
+    // ============================
+
+    /**
+     * GET - Tampilkan halaman untuk pemberian nilai
+     * Query parameter:
+     *   - idTugas: ID tugas yang akan dinilai
+     *   - idKelompok: (optional) ID kelompok jika ingin menilai kelompok tertentu
+     */
+    @GetMapping("/dosen/pemberian-nilai")
+    public String pemberianNilai(@RequestParam(required = false) Integer idTugas,
+                                @RequestParam(required = false) Integer idKelompok,
+                                @AuthenticationPrincipal CustomUserDetails user,
+                                Model model) {
+        
+        logger.info("Accessing pemberian-nilai: idTugas={}, user={}", idTugas, user.getIdUser());
+        
+        if (idTugas == null || idTugas <= 0) {
+            logger.warn("Invalid idTugas: {}", idTugas);
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+        if (tugas == null) {
+            logger.warn("Tugas tidak ditemukan: idTugas={}", idTugas);
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        // Cek apakah user adalah dosen pembuat tugas
+        if (!tugas.getDosen().getIdUser().equals(user.getIdUser())) {
+            logger.warn("User {} bukan dosen pembuat tugas {}. Dosen sebenarnya: {}", 
+                user.getIdUser(), idTugas, tugas.getDosen().getIdUser());
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("mkDetail", tugas.getMataKuliah());
+
+        // Ambil rubrik dan komponen nilai
+        RubrikNilai rubrik = tugas.getRubrik();
+        if (rubrik == null) {
+            logger.warn("Rubrik tidak ditemukan untuk tugas: {}", idTugas);
+            model.addAttribute("error", "Rubrik untuk tugas ini tidak ditemukan");
+            return "dosen/pemberian-nilai";
+        }
+
+        List<KomponenNilai> komponenList = new ArrayList<>(rubrik.getKomponenList());
+        komponenList.sort(Comparator.comparing(KomponenNilai::getIdKomponen));
+
+        model.addAttribute("rubrik", rubrik);
+        model.addAttribute("komponenList", komponenList);
+
+        // Ambil list kelompok untuk tugas ini
+        List<TugasBesarKelompok> tugasKelompokList = tugasKelompokRepo.findByIdTugas(idTugas);
+        List<Kelompok> kelompokList = tugasKelompokList.stream()
+            .map(TugasBesarKelompok::getKelompok)
+            .collect(Collectors.toList());
+
+        // Urutkan berdasarkan nama kelompok
+        kelompokList.sort(Comparator.comparing(Kelompok::getNamaKelompok));
+
+        model.addAttribute("kelompokList", kelompokList);
+
+        // Auto-select kelompok pertama jika tidak ada yang dipilih dan ada kelompok tersedia
+        if ((idKelompok == null || idKelompok <= 0) && !kelompokList.isEmpty()) {
+            idKelompok = kelompokList.get(0).getIdKelompok();
+        }
+
+        // Jika idKelompok diberikan, ambil detail kelompok dan anggotanya
+        if (idKelompok != null && idKelompok > 0) {
+            Kelompok kelompok = kelompokRepo.findById(idKelompok).orElse(null);
+            if (kelompok != null) {
+                model.addAttribute("kelompokTerpilih", kelompok);
+
+                // Ambil anggota kelompok
+                List<UserKelompok> anggotaList = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
+                anggotaList.sort(Comparator.comparing(uk -> uk.getUser().getNama()));
+
+                model.addAttribute("anggotaList", anggotaList);
+
+                // Ambil nilai yang sudah ada untuk anggota kelompok ini
+                Map<String, Nilai> nilaiMap = new HashMap<>();
+                for (UserKelompok anggota : anggotaList) {
+                    Nilai nilai = nilaiRepository
+                        .findByUser_IdUserAndTugas_IdTugas(anggota.getUser().getIdUser(), idTugas)
+                        .orElse(null);
+                    if (nilai != null) {
+                        nilaiMap.put(anggota.getUser().getIdUser(), nilai);
+                    }
+                }
+                model.addAttribute("nilaiMap", nilaiMap);
+            }
+        }
+
+        return "dosen/pemberian-nilai";
+    }
+
+    /**
+     * GET - Tampilkan halaman untuk pemberian nilai individu
+     * Query parameter:
+     *   - idTugas: ID tugas yang akan dinilai
+     */
+    @GetMapping("/dosen/pemberian-nilai-individu")
+    public String pemberianNilaiIndividu(@RequestParam(required = false) Integer idTugas,
+                                         @AuthenticationPrincipal CustomUserDetails user,
+                                         Model model) {
+        
+        logger.info("Accessing pemberian-nilai-individu: idTugas={}, user={}", idTugas, user.getIdUser());
+        
+        if (idTugas == null || idTugas <= 0) {
+            logger.warn("Invalid idTugas: {}", idTugas);
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+        if (tugas == null) {
+            logger.warn("Tugas tidak ditemukan: idTugas={}", idTugas);
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        // Cek apakah user adalah dosen pembuat tugas
+        if (!tugas.getDosen().getIdUser().equals(user.getIdUser())) {
+            logger.warn("User {} bukan dosen pembuat tugas {}. Dosen sebenarnya: {}", 
+                user.getIdUser(), idTugas, tugas.getDosen().getIdUser());
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("mkDetail", tugas.getMataKuliah());
+
+        // Ambil list kelompok untuk tugas ini
+        List<TugasBesarKelompok> tugasKelompokList = tugasKelompokRepo.findByIdTugas(idTugas);
+        List<Kelompok> kelompokList = tugasKelompokList.stream()
+            .map(TugasBesarKelompok::getKelompok)
+            .collect(Collectors.toList());
+
+        // Urutkan berdasarkan nama kelompok
+        kelompokList.sort(Comparator.comparing(Kelompok::getNamaKelompok));
+
+        model.addAttribute("kelompokList", kelompokList);
+
+        // Ambil semua anggota dari semua kelompok untuk tugas ini
+        Map<Integer, List<UserKelompok>> anggotaByKelompok = new HashMap<>();
+        Map<String, Nilai> nilaiMap = new HashMap<>();
+
+        for (Kelompok kelompok : kelompokList) {
+            List<UserKelompok> anggotaList = userKelompokRepo.findByKelompok_IdKelompok(kelompok.getIdKelompok());
+            anggotaList.sort(Comparator.comparing(uk -> uk.getUser().getNama()));
+            anggotaByKelompok.put(kelompok.getIdKelompok(), anggotaList);
+
+            // Ambil nilai yang sudah ada
+            for (UserKelompok anggota : anggotaList) {
+                Nilai nilai = nilaiRepository
+                    .findByUser_IdUserAndTugas_IdTugas(anggota.getUser().getIdUser(), idTugas)
+                    .orElse(null);
+                if (nilai != null) {
+                    nilaiMap.put(anggota.getUser().getIdUser(), nilai);
+                }
+            }
+        }
+
+        model.addAttribute("anggotaByKelompok", anggotaByKelompok);
+        model.addAttribute("nilaiMap", nilaiMap);
+
+        // Build JSON strings manually untuk avoid serialization issues
+        try {
+            // Build kelompokList JSON
+            StringBuilder kelompokJson = new StringBuilder("[");
+            for (int i = 0; i < kelompokList.size(); i++) {
+                Kelompok k = kelompokList.get(i);
+                if (i > 0) kelompokJson.append(",");
+                kelompokJson.append("{\"idKelompok\":").append(k.getIdKelompok())
+                    .append(",\"namaKelompok\":\"").append(k.getNamaKelompok()).append("\"}");
+            }
+            kelompokJson.append("]");
+            
+            // Build anggotaByKelompok JSON
+            StringBuilder anggotaJson = new StringBuilder("{");
+            boolean firstKey = true;
+            for (Kelompok kelompok : kelompokList) {
+                if (!firstKey) anggotaJson.append(",");
+                anggotaJson.append("\"").append(kelompok.getIdKelompok()).append("\":[");
+                
+                List<UserKelompok> anggotaList = anggotaByKelompok.getOrDefault(kelompok.getIdKelompok(), new ArrayList<>());
+                for (int i = 0; i < anggotaList.size(); i++) {
+                    UserKelompok uk = anggotaList.get(i);
+                    if (i > 0) anggotaJson.append(",");
+                    anggotaJson.append("{\"user\":{\"idUser\":\"").append(uk.getUser().getIdUser())
+                        .append("\",\"nama\":\"").append(uk.getUser().getNama())
+                        .append("\"},\"role\":\"").append(uk.getRole()).append("\"}");
+                }
+                
+                anggotaJson.append("]");
+                firstKey = false;
+            }
+            anggotaJson.append("}");
+            
+            // Build nilaiMap JSON
+            StringBuilder nilaiJson = new StringBuilder("{");
+            boolean firstNilai = true;
+            for (String userId : nilaiMap.keySet()) {
+                if (!firstNilai) nilaiJson.append(",");
+                Nilai n = nilaiMap.get(userId);
+                nilaiJson.append("\"").append(userId).append("\":{\"nilaiPribadi\":").append(n.getNilaiPribadi()).append("}");
+                firstNilai = false;
+            }
+            nilaiJson.append("}");
+            
+            model.addAttribute("kelompokListJson", kelompokJson.toString());
+            model.addAttribute("anggotaByKelompokJson", anggotaJson.toString());
+            model.addAttribute("nilaiMapJson", nilaiJson.toString());
+            
+            logger.info("JSON strings built successfully");
+        } catch (Exception e) {
+            logger.error("Error building JSON strings", e);
+            model.addAttribute("kelompokListJson", "[]");
+            model.addAttribute("anggotaByKelompokJson", "{}");
+            model.addAttribute("nilaiMapJson", "{}");
+        }
+
+        return "dosen/pemberian-nilai-individu";
+    }
+
+    /**
+     * POST - Simpan nilai untuk satu user untuk satu tugas
+     * Request body:
+     * {
+     *   "idUser": "user_id",
+     *   "idTugas": 1,
+     *   "nilaiPerKomponen": {1: 80, 2: 75, 3: 90},
+     *   "isSamaBuat": false
+     * }
+     */
+    @PostMapping("/api/nilai/simpan")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<?> simpanNilai(@RequestBody PemberianNilaiPerKomponenDTO request,
+                                         @AuthenticationPrincipal CustomUserDetails user) {
+        try {
+            // Validasi request
+            if (request.getIdUser() == null || request.getIdUser().isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "ID User tidak valid"));
+            }
+            if (request.getIdTugas() == null || request.getIdTugas() <= 0) {
+                return ResponseEntity.badRequest().body(Map.of("error", "ID Tugas tidak valid"));
+            }
+            if (request.getNilaiPerKomponen() == null || request.getNilaiPerKomponen().isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Nilai komponen tidak ada"));
+            }
+
+            // Cek apakah user adalah dosen pembuat tugas
+            TugasBesar tugas = tugasRepo.findById(request.getIdTugas())
+                .orElseThrow(() -> new IllegalArgumentException("Tugas tidak ditemukan"));
+
+            if (!tugas.getDosen().getIdUser().equals(user.getIdUser())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Anda tidak berhak memberikan nilai untuk tugas ini"));
+            }
+
+            // Validasi bahwa semua komponen terisi
+            if (!nilaiService.isSemuaKomponenTerisi(request.getIdTugas(), request.getNilaiPerKomponen())) {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Semua komponen harus memiliki nilai"));
+            }
+
+            // Simpan nilai menggunakan service
+            Nilai nilaiTersimpan = nilaiService.simpanNilai(
+                request.getIdUser(),
+                request.getIdTugas(),
+                request.getNilaiPerKomponen(),
+                request.isSamaBuat()
+            );
+
+            // Jika isSamaBuat true, terapkan nilai sama ke semua anggota kelompok
+            if (request.isSamaBuat()) {
+                // Ambil kelompok user dari tugas ini
+                List<UserKelompok> userDalamTugas = userKelompokRepo
+                    .findByUser_IdUserAndKelompok_InTugaBesar(request.getIdUser(), request.getIdTugas());
+                
+                if (!userDalamTugas.isEmpty()) {
+                    // Ambil ID kelompok dari salah satu anggota
+                    Integer idKelompok = userDalamTugas.get(0).getKelompok().getIdKelompok();
+                    
+                    // Terapkan nilai sama untuk semua anggota kelompok
+                    List<UserKelompok> semuaAnggota = userKelompokRepo
+                        .findByKelompok_IdKelompok(idKelompok);
+                    
+                    for (UserKelompok anggota : semuaAnggota) {
+                        if (!anggota.getUser().getIdUser().equals(request.getIdUser())) {
+                            nilaiService.simpanNilai(
+                                anggota.getUser().getIdUser(),
+                                request.getIdTugas(),
+                                request.getNilaiPerKomponen(),
+                                false
+                            );
+                        }
+                    }
+                }
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Nilai berhasil disimpan");
+            response.put("idNilai", nilaiTersimpan.getIdNilai());
+            response.put("nilaiKelompok", nilaiTersimpan.getNilaiKelompok());
+
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error menyimpan nilai", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Terjadi kesalahan: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * POST - Simpan nilai individu (nilai pribadi) untuk satu user
+     * Request body:
+     * {
+     *   "idUser": "user_id",
+     *   "idTugas": 1,
+     *   "nilaiPribadi": 85
+     * }
+     */
+    @PostMapping("/api/nilai/simpan-individu")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<?> simpanNilaiIndividu(@RequestBody Map<String, Object> request,
+                                                  @AuthenticationPrincipal CustomUserDetails user) {
+        try {
+            String idUser = (String) request.get("idUser");
+            Integer idTugas = ((Number) request.get("idTugas")).intValue();
+            Integer nilaiPribadi = ((Number) request.get("nilaiPribadi")).intValue();
+
+            // Validasi
+            if (idUser == null || idUser.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "ID User tidak valid"));
+            }
+            if (idTugas == null || idTugas <= 0) {
+                return ResponseEntity.badRequest().body(Map.of("error", "ID Tugas tidak valid"));
+            }
+            if (nilaiPribadi < 0 || nilaiPribadi > 100) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Nilai harus antara 0-100"));
+            }
+
+            // Cek apakah user adalah dosen pembuat tugas
+            TugasBesar tugas = tugasRepo.findById(idTugas)
+                .orElseThrow(() -> new IllegalArgumentException("Tugas tidak ditemukan"));
+
+            if (!tugas.getDosen().getIdUser().equals(user.getIdUser())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Anda tidak berhak memberikan nilai untuk tugas ini"));
+            }
+
+            // Ambil atau buat Nilai baru
+            Nilai nilai = nilaiRepository
+                .findByUser_IdUserAndTugas_IdTugas(idUser, idTugas)
+                .orElse(null);
+
+            if (nilai == null) {
+                // Buat Nilai baru - nilai pribadi saja
+                nilai = new Nilai();
+                nilai.setUser(userRepo.findById(idUser)
+                    .orElseThrow(() -> new IllegalArgumentException("User tidak ditemukan")));
+                nilai.setTugas(tugas);
+                nilai.setNilaiPribadi(nilaiPribadi);
+                nilai.setNilaiKelompok(0); // Default 0 untuk nilai kelompok sampai diberikan
+            } else {
+                // Update nilai pribadi
+                nilai.setNilaiPribadi(nilaiPribadi);
+            }
+
+            Nilai nilaiTersimpan = nilaiRepository.save(nilai);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Nilai individu berhasil disimpan");
+            response.put("idNilai", nilaiTersimpan.getIdNilai());
+            response.put("nilaiPribadi", nilaiTersimpan.getNilaiPribadi());
+
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error menyimpan nilai individu", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Terjadi kesalahan: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * GET - Ambil nilai yang sudah ada untuk satu user dan tugas
+     */
+    @GetMapping("/api/nilai/{idUser}/{idTugas}")
+    @ResponseBody
+    public ResponseEntity<?> getNilai(@PathVariable String idUser,
+                                      @PathVariable Integer idTugas,
+                                      @AuthenticationPrincipal CustomUserDetails user) {
+        try {
+            // Cek apakah user adalah dosen pembuat tugas
+            TugasBesar tugas = tugasRepo.findById(idTugas)
+                .orElseThrow(() -> new IllegalArgumentException("Tugas tidak ditemukan"));
+
+            if (!tugas.getDosen().getIdUser().equals(user.getIdUser())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Anda tidak berhak mengakses nilai ini"));
+            }
+
+            Nilai nilai = nilaiService.getNilaiByUserAndTugas(idUser, idTugas);
+
+            if (nilai == null) {
+                return ResponseEntity.ok(Map.of("exists", false));
+            }
+
+            // Ambil nilai komponen
+            List<NilaiKomponen> nilaiKomponenList = nilaiKomponenRepository.findByNilai_IdNilai(nilai.getIdNilai());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("exists", true);
+            response.put("idNilai", nilai.getIdNilai());
+            response.put("nilaiKelompok", nilai.getNilaiKelompok());
+            response.put("nilaiPribadi", nilai.getNilaiPribadi());
+
+            // Convert nilai komponen ke map
+            Map<Integer, Integer> nilaiPerKomponen = new HashMap<>();
+            for (NilaiKomponen nk : nilaiKomponenList) {
+                nilaiPerKomponen.put(nk.getKomponen().getIdKomponen(), nk.getNilaiKomponen());
+            }
+            response.put("nilaiPerKomponen", nilaiPerKomponen);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            logger.error("Error mengambil nilai", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Terjadi kesalahan: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * POST - Hapus nilai untuk satu user dan tugas
+     */
+    @PostMapping("/api/nilai/hapus")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<?> hapusNilai(@RequestParam String idUser,
+                                       @RequestParam Integer idTugas,
+                                       @AuthenticationPrincipal CustomUserDetails user) {
+        try {
+            // Cek apakah user adalah dosen pembuat tugas
+            TugasBesar tugas = tugasRepo.findById(idTugas)
+                .orElseThrow(() -> new IllegalArgumentException("Tugas tidak ditemukan"));
+
+            if (!tugas.getDosen().getIdUser().equals(user.getIdUser())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Anda tidak berhak menghapus nilai ini"));
+            }
+
+            nilaiService.hapusNilai(idUser, idTugas);
+
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Nilai berhasil dihapus"
+            ));
+
+        } catch (Exception e) {
+            logger.error("Error menghapus nilai", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Terjadi kesalahan: " + e.getMessage()));
+        }
     }
 }

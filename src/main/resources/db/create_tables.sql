@@ -101,6 +101,16 @@ CREATE TABLE nilai (
     FOREIGN KEY (id_tugas) REFERENCES tugas_besar(id_tugas)
 );
 
+CREATE TABLE nilai_komponen (
+    id_nilai_komponen INT AUTO_INCREMENT PRIMARY KEY,
+    id_nilai INT NOT NULL,
+    id_komponen INT NOT NULL,
+    nilai_komponen INT NOT NULL,
+    UNIQUE KEY uk_nilai_komponen (id_nilai, id_komponen),
+    FOREIGN KEY (id_nilai) REFERENCES nilai(id_nilai),
+    FOREIGN KEY (id_komponen) REFERENCES komponen_nilai(id_komponen)
+);
+
 CREATE TABLE komponen_nilai (
     id_komponen INT AUTO_INCREMENT PRIMARY KEY,
     id_rubrik INT NOT NULL,
