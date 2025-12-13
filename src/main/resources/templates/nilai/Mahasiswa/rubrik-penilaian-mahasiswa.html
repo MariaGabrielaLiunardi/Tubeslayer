@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Rubrik Penilaian Mahasiswa</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/rubrik-penilaian-mahasiswa.css">
-        <script src="../../../static/js/rubrik-penilaian-mahasiswa.js" defer></script>
+        <title>Rubrik Penilaian - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/rubrik-penilaian-mahasiswa.css}">
+        <script th:src="@{/js/rubrik-penilaian-dosen.js}" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
 
@@ -14,7 +14,7 @@
             <header>
                 <div class="image-text">
                     <span class="image">
-                        <img src="../../../static/logo/blue-logo.png" alt="logo">
+                        <img th:src="@{/logo/blue-logo.png}" alt="logo">
                     </span>
 
                     <div class ="text header-text">
@@ -26,15 +26,15 @@
             <div class="menu-bar">
                 <div class="menu">
                     <ul class="menu-links">
-                        <li class="nav-link active">
-                            <a href="#">
-                                <img src="../../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                        <li class="nav-link">
+                            <a th:href="@{/mahasiswa/dashboard}">
+                                <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
-                        <li class="nav-link">
-                            <a href="nilai-mahasiswa.html">
-                                <img src="../../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
+                        <li class="nav-link active">
+                            <a th:href="@{/mahasiswa/mata-kuliah}">
+                                <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
                                 <span class="text nav-text">Mata Kuliah</span>
                             </a>
                         </li>
@@ -46,87 +46,124 @@
         <section class="home">
             <div class="header">
                 <div class="left-section">
-                    <span class="dashboard-title"></span>
+                    <span class="dashboard-title">Rubrik Penilaian</span>
                 </div>
                 <div class="right-section">
                     <div class="info">
-                        <span class="name">Keisha Neira Jocelyn</span>
-                        <span class="role">Mahasiswa</span>
+                        <span class="name" th:text="${user.nama}">Nama Mahasiswa</span>
+                        <span class="role" th:text="${user.role}">Mahasiswa</span>
                     </div>
-                    <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
-                    <button type="button" class="logout">
-                        <img src="../../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
+                    <a th:href="@{/profil}">
+                        <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
+                    </a>
+                    <button type="button" class="logout" id="logoutButton">
+                        <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logout">
                     </button>
                 </div>
             </div>
 
             <div class="nav-segmented-control">
-                <div class="kuliah-segment">
+                <div class="nav-tab">
+                    Rubrik Penilaian
+                </div>
+            </div>
+
+            <div class="mk-tab" th:data-mk-kode="${kodeMk}">
+                <button class="tab" data-tab-target="kuliah"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk})}'|">
                     Kuliah
-                </div>
-
-                <div class="Daftar-Peserta-segment">
+                </button>
+                <button class="tab" data-tab-target="peserta"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(mk=${kodeMk})}'|">
                     Daftar Peserta
-                </div>
-
-                <div class="nav-active">
-                    Nilai
-                </div>
+                </button>
+                <button class="tab active" data-tab-target="nilai"
+                    th:onclick="|window.location.href='@{/mahasiswa/dashboard-nilai(mk=${kodeMk},idTugas=${idTugas})}'|">Nilai</button>
             </div>
             
             <div class="container">
                 <div class="rectangle-blue">
                     <div class="tb-title">
-                        <img src="../../../static/icon/bookj ver4.png" class="tb-icon">
-                        <span class="tb-text">Tugas Besar Tahap 1</span>
+                        <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
+                        <th:block th:if="${tugas != null}">
+                            <span class="tb-text" th:text="${tugas.judulTugas}">Nama Tugas</span>
+                        </th:block>
+                        <th:block th:if="${tugas == null}">
+                            <span class="tb-text">Pilih Tugas untuk Memulai</span>
+                        </th:block>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="tilte-rubrik">Rubrik Penilaian</div>
-                    <div class="rectangle-yellow">
-                        <div class="assignment-table-wrapper">
-                            <div class="assignment-header">
+                    <div class="breadcrumb-nav">
+                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk},idTugas=${idTugas})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                        <span class="breadcrumb-separator">&gt;</span>
+                        <span class="breadcrumb-current">Rubrik Penilaian</span>
+                    </div>
+                    
+                    <div class="rubrik-header">
+                        <h2>Rubrik Penilaian</h2>
+                    </div>
+
+                    <!-- Error and Success Messages -->
+                    <th:block th:if="${error}">
+                        <div style="background-color: #ffebee; color: #c62828; padding: 12px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #c62828;">
+                            <strong>❌ Error:</strong> <span th:text="${error}">Error message</span>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${success}">
+                        <div style="background-color: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #2e7d32;">
+                            <strong>✅ Sukses:</strong> <span th:text="${success}">Success message</span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="${hasRubrik && rubrikItems.size() > 0}">
+                        <div class="rubrik-table-wrapper rubrik-readonly">
+                            <div class="rubrik-table-header">
                                 <div class="col-komponen">Komponen Penilaian</div>
                                 <div class="col-bobot">Bobot (%)</div>
                                 <div class="col-keterangan">Keterangan</div>
+                                <div class="col-aksi"></div>
                             </div>
 
-                            <div class="assignment-row">
-                                <div class="col-isi-komponen"></div>
-                                <div class="col-isi-bobot"></div>
-                                <div class="col-isi-keterangan"></div>
+                            <div class="rubrik-row" th:each="item : ${rubrikItems}">
+                                <div class="col-isi-komponen">
+                                    <input type="text" class="input-komponen input-readonly" th:value="${item.namaKomponen}" disabled readonly>
+                                </div>
+                                <div class="col-isi-bobot">
+                                    <input type="number" class="input-bobot input-readonly" th:value="${item.bobot}" disabled readonly>
+                                </div>
+                                <div class="col-isi-keterangan">
+                                    <textarea class="input-keterangan input-readonly" disabled readonly>[[${(item.catatan != null and !item.catatan.isEmpty() and !item.catatan.contains('T')) ? item.catatan : ''}]]</textarea>
+                                </div>
+                                <div class="col-isi-aksi"></div>
                             </div>
 
-                            <div class="assignment-row">
-                                <div class="col-isi-komponen"></div>
-                                <div class="col-isi-bobot"></div>
-                                <div class="col-isi-keterangan"></div>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-komponen"></div>
-                                <div class="col-isi-bobot"></div>
-                                <div class="col-isi-keterangan"></div>
-                            </div>
-
-                            <div class="assignment-row">
-                                <div class="col-isi-komponen"></div>
-                                <div class="col-isi-bobot"></div>
-                                <div class="col-isi-keterangan"></div>
+                            <div class="rubrik-footer">
+                                <div class="rubrik-total">
+                                    <span class="label">Total Bobot</span>
+                                    <span class="value" th:text="${totalBobot} + '%'">100%</span>
+                                </div>
                             </div>
                         </div>
+                    </th:block>
 
-                        <div class="total-bobot">
-                                <div class="total">Total Bobot</div>
-                                <div class="bobot">-</div> 
+                    <th:block th:if="${!hasRubrik || rubrikItems.size() == 0}">
+                        <div class="empty-state">
+                            <p>Belum ada rubrik penilaian untuk tugas ini</p>
                         </div>
-
-                        <a href="dashboard-nilai-mahasiswa.html"><div class="kembali">Kembali</div></a>
-                        
-                    </div>
+                    </th:block>
                 </div>
             </div>
         </section>
+
+        <script th:inline="javascript">
+            // Logout handler
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    window.location.href = '/logout';
+                }
+            });
+        </script>
     </body>
 </html>
