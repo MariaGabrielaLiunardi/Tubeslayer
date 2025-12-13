@@ -1193,6 +1193,147 @@
     color: #7f1d1d;
 }
 
+/* Lihat Nilai Mahasiswa Specific Styles */
+.nilai-content {
+    padding: 30px;
+}
+
+.breadcrumb-link {
+    color: #0078B5;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-link:hover {
+    color: #005a8d;
+    text-decoration: underline;
+}
+
+.nilai-section {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+}
+
+.kelompok-info {
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 16px;
+}
+
+.nilai-display-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 20px 0;
+}
+
+.nilai-kelompok-card {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    margin-top: 20px;
+}
+
+.nilai-label {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.nilai-value {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.nilai-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.nilai-table thead {
+    background: #f8f9fa;
+}
+
+.nilai-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #1a1a1a;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.nilai-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef;
+    color: #333;
+}
+
+.nilai-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.nilai-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.no-nilai {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    font-size: 18px;
+}
+
+.action-buttons {
+    margin-top: 40px;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-back {
+    background-color: #0078B5;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 120, 181, 0.2);
+}
+
+.btn-back:hover {
+    background-color: #005a8d;
+    box-shadow: 0 4px 12px rgba(0, 120, 181, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-back:active {
+    transform: translateY(0);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .anggota-nilai-item {
@@ -1212,5 +1353,21 @@
     .btn-simpan-individu,
     .btn-hapus-individu {
         flex: 1;
+    }
+
+    .nilai-display-card {
+        max-width: 100%;
+    }
+
+    .nilai-value {
+        font-size: 28px;
+    }
+
+    .table-wrapper {
+        margin: 15px -15px;
+    }
+
+    .nilai-content {
+        padding: 20px;
     }
 }
