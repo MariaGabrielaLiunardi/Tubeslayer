@@ -197,9 +197,9 @@ public class AdminController {
 
         model.addAttribute("colorIndex", randomColorIndex);
 
-        MataKuliahDosen koordinator = null;
-        try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
+       MataKuliahDosen koordinator = null;
+       try {
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
             }
@@ -210,7 +210,7 @@ public class AdminController {
 
         List<TugasBesar> tugasList = Collections.emptyList();
         try {
-            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
+            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true); 
         } catch (Exception e) {
             System.err.println("Error fetching tasks for archive: " + e.getMessage());
         }
@@ -224,7 +224,7 @@ public class AdminController {
 
             return map;
         }).collect(Collectors.toList());
-        
+    
         model.addAttribute("mkDetail", mkDetail);
         model.addAttribute("tugasDataList", tugasData);
 
@@ -255,7 +255,7 @@ public class AdminController {
 
         MataKuliahDosen koordinator = null;
         try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true); 
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
             }
@@ -266,9 +266,9 @@ public class AdminController {
 
         List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
 
-        if (mkMahasiswaRepo != null) {
+        if (mkMahasiswaRepo != null && mk != null) {
             try {
-                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMK(mk.getKodeMK());
+                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true);
             } catch (Exception e) {
                 System.err.println("Error saat mengambil data peserta arsip: " + e.getMessage());
             }

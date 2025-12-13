@@ -92,7 +92,6 @@
                 th:attr="data-target-url=@{/admin/matkul-peserta(kodeMk=${mkDetail.kodeMK})}"
                 onclick="window.location.href=this.getAttribute('data-target-url')"> Daftar Peserta
             </button>
-            <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
         <div class="detail-wrapper">
@@ -101,13 +100,9 @@
                 <div class="mk-img" th:classappend="'gradient-' + (${colorIndex} + 1)"></div>
                 <div class="mk-info">
                     <h1 th:text="${mkDetail?.nama ?: 'Mata Kuliah Tidak Ditemukan'}">Mata Kuliah</h1>
-
-                    <p><b>Koordinator:</b>
-                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum Ditentukan</span>
-                    </p>
-
-                    <p><b>NIP:</b>
-                        <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span>
+                    <p><b>Koordinator:</b> <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum
+                            Ditentukan</span></p>
+                    <p><b>NIP:</b> <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span></p>
                     </p>
                 </div>
             </div>
