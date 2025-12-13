@@ -1,5 +1,3 @@
-//kode admincontoller yang jalan
-
 package com.Tubeslayer.controller;
 
 import com.Tubeslayer.dto.MKArchiveDTO;
