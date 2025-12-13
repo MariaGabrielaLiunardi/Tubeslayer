@@ -25,7 +25,7 @@ public class TugasBesar {
     @JoinColumn(name = "id_user", nullable = false)
     private User dosen;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_rubrik", unique = true)
     private RubrikNilai rubrik;
 

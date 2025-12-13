@@ -2,8 +2,6 @@ package com.Tubeslayer.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalTime; 
-import java.time.LocalDate; 
 
 @Entity
 @Table(name = "komponen_nilai")
@@ -14,7 +12,6 @@ public class KomponenNilai {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idKomponen;
 
-// Relasi RubrikNilai 
     @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "id_rubrik") 
     private RubrikNilai rubrik;
@@ -22,14 +19,9 @@ public class KomponenNilai {
     @Column(length = 50, nullable = false)
     private String namaKomponen;
 
+    @Column(nullable = false)
     private int bobot;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "VARCHAR(300)", nullable = true)
     private String catatan;
-
-    @Column(nullable = true)
-    private LocalTime jam;
-    
-    @Column(nullable = true)
-    private LocalDate tanggal;
 }

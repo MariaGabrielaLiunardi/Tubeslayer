@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping; 
 import org.springframework.web.bind.annotation.RequestBody; 
@@ -31,6 +32,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,13 +50,13 @@ public class DosenController {
     @Autowired private MataKuliahRepository mataKuliahRepo;
     @Autowired private TugasBesarRepository tugasRepo;
     @Autowired private MataKuliahDosenRepository mkDosenRepo; 
-    @Autowired(required = false) private RubrikNilaiRepository rubrikNilaiRepo;
-    @Autowired(required = false) private KomponenNilaiRepository komponenNilaiRepo;
-    @Autowired(required = false) private MataKuliahMahasiswaRepository mkMahasiswaRepo; 
-    @Autowired(required = false) private KelompokRepository kelompokRepo;
-    @Autowired(required = false) private TugasBesarKelompokRepository tugasKelompokRepo;
-    @Autowired(required = false) private UserKelompokRepository userKelompokRepo;
-    @Autowired(required = false) private UserRepository userRepo;
+    @Autowired private RubrikNilaiRepository rubrikNilaiRepo;
+    @Autowired private KomponenNilaiRepository komponenNilaiRepo;
+    @Autowired private MataKuliahMahasiswaRepository mkMahasiswaRepo; 
+    @Autowired private KelompokRepository kelompokRepo;
+    @Autowired private TugasBesarKelompokRepository tugasKelompokRepo;
+    @Autowired private UserKelompokRepository userKelompokRepo;
+    @Autowired private UserRepository userRepo;
     @Autowired private JdbcTemplate jdbcTemplate;
 
     private final DashboardDosenService dashboardService;
@@ -824,7 +827,7 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
 
     /**
      * GET - Jadwal Penilaian Dosen
-     * Menampilkan jadwal penilaian untuk tugas/rubrik
+     * Menampilkan jadwal penilaian untuk satu tugas besar spesifik
      */
     @GetMapping("/dosen/jadwal-penilaian")
     public String dosenJadwalPenilaian(
@@ -847,17 +850,238 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
             return "redirect:/dosen/mata-kuliah";
         }
 
-        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
-        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline));
+        // Jika idTugas tidak diberikan, redirect ke halaman pertama atau error
+        if (idTugas == null) {
+            List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+            if (!tugasList.isEmpty()) {
+                tugasList.sort(Comparator.comparing(TugasBesar::getDeadline));
+                return "redirect:/dosen/jadwal-penilaian?kodeMk=" + kodeMk + "&idTugas=" + tugasList.get(0).getIdTugas();
+            }
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        // Get tugas spesifik
+        TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+        if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk) || !tugas.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
 
         model.addAttribute("user", user);
         model.addAttribute("mataKuliah", mataKuliah);
-        model.addAttribute("mkDosen", mkDosen);
-        model.addAttribute("tugasList", tugasList);
+        model.addAttribute("tugas", tugas);
         model.addAttribute("kodeMk", kodeMk);
         model.addAttribute("idTugas", idTugas);
 
         return "nilai/Dosen/jadwal-penilaian-dosen";
+    }
+
+    /**
+     * GET - Get Jadwal Penilaian Data
+     * Mengambil data jadwal penilaian untuk satu tugas besar
+     */
+    @GetMapping("/dosen/jadwal-penilaian/get")
+    @ResponseBody
+    public Map<String, Object> getJadwalPenilaian(
+            @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer idTugas,
+            @AuthenticationPrincipal CustomUserDetails user) {
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            // Validasi input
+            if (kodeMk == null || kodeMk.isEmpty() || idTugas == null) {
+                response.put("success", false);
+                response.put("message", "Parameter tidak valid");
+                return response;
+            }
+
+            // Validasi akses
+            MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+            if (mataKuliah == null) {
+                response.put("success", false);
+                response.put("message", "Mata kuliah tidak ditemukan");
+                return response;
+            }
+
+            MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+            if (mkDosen == null || !mkDosen.isActive()) {
+                response.put("success", false);
+                response.put("message", "Anda tidak berhak mengakses mata kuliah ini");
+                return response;
+            }
+
+            // Get tugas spesifik
+            TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+            if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk) || !tugas.isActive()) {
+                response.put("success", false);
+                response.put("message", "Tugas tidak ditemukan");
+                return response;
+            }
+
+            // Get rubrik dan komponennya
+            RubrikNilai rubrik = tugas.getRubrik();
+            List<Map<String, Object>> jadwalList = new ArrayList<>();
+
+            if (rubrik != null && rubrik.getKomponenList() != null) {
+                for (KomponenNilai komponen : rubrik.getKomponenList()) {
+                    Map<String, Object> jadwal = new HashMap<>();
+                    jadwal.put("idTugas", komponen.getIdKomponen());
+                    jadwal.put("judulTugas", komponen.getNamaKomponen());
+                    jadwal.put("deadline", tugas.getDeadline().toString());
+                    jadwalList.add(jadwal);
+                }
+            }
+
+            response.put("success", true);
+            response.put("jadwalList", jadwalList);
+            
+        } catch (Exception e) {
+            System.err.println("Error getting jadwal: " + e.getMessage());
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", "Gagal mengambil data jadwal: " + e.getMessage());
+        }
+        
+        return response;
+    }
+
+    /**
+     * POST - Save Jadwal Penilaian Dosen
+     * Menyimpan jadwal penilaian untuk tugas/rubrik (create, update, delete)
+     */
+    @PostMapping("/dosen/jadwal-penilaian/save")
+    @ResponseBody
+    public Map<String, Object> saveJadwalPenilaian(
+            @RequestBody Map<String, Object> payload,
+            @AuthenticationPrincipal CustomUserDetails user) {
+        
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            String kodeMk = (String) payload.get("kodeMk");
+            Object idTugasObj = payload.get("idTugas");
+            List<Map<String, Object>> jadwalList = (List<Map<String, Object>>) payload.get("jadwalList");
+            List<Integer> deletedKomponenIds = (List<Integer>) payload.get("deletedTugasIds");
+
+            // Validasi input
+            if (kodeMk == null || kodeMk.isEmpty() || idTugasObj == null) {
+                response.put("success", false);
+                response.put("message", "Parameter tidak valid");
+                return response;
+            }
+
+            Integer idTugas = ((Number) idTugasObj).intValue();
+
+            // Validasi akses
+            MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+            if (mataKuliah == null) {
+                response.put("success", false);
+                response.put("message", "Mata kuliah tidak ditemukan");
+                return response;
+            }
+
+            MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+            if (mkDosen == null || !mkDosen.isActive()) {
+                response.put("success", false);
+                response.put("message", "Anda tidak berhak mengakses mata kuliah ini");
+                return response;
+            }
+
+            // Get tugas
+            TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+            if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
+                response.put("success", false);
+                response.put("message", "Tugas tidak ditemukan");
+                return response;
+            }
+
+            // Get rubrik - jika belum ada, buat baru
+            RubrikNilai rubrik = tugas.getRubrik();
+            if (rubrik == null) {
+                rubrik = new RubrikNilai();
+                rubrik = rubrikNilaiRepo.save(rubrik);
+                tugas.setRubrik(rubrik);
+                tugasRepo.save(tugas);
+            }
+
+            // 1. Delete komponennya yang ditandai untuk dihapus
+            if (deletedKomponenIds != null && !deletedKomponenIds.isEmpty()) {
+                for (Integer idKomponen : deletedKomponenIds) {
+                    KomponenNilai komponen = komponenNilaiRepo.findById(idKomponen).orElse(null);
+                    if (komponen != null && komponen.getRubrik().getIdRubrik().equals(rubrik.getIdRubrik())) {
+                        komponenNilaiRepo.delete(komponen);
+                    }
+                }
+            }
+
+            // 2. Update deadline untuk komponen dan create/update komponen baru
+            if (jadwalList != null && !jadwalList.isEmpty()) {
+                for (Map<String, Object> jadwal : jadwalList) {
+                    Object idKomponenObj = jadwal.get("idTugas");
+                    String namaKomponen = (String) jadwal.get("namaKomponen");
+                    String tanggal = (String) jadwal.get("tanggal");
+                    String jam = (String) jadwal.get("jam");
+                    Boolean isNew = (Boolean) jadwal.get("isNew");
+
+                    // Validasi format tanggal dan jam
+                    LocalDateTime deadline;
+                    try {
+                        LocalDate date = LocalDate.parse(tanggal);
+                        LocalTime time = LocalTime.parse(jam);
+                        deadline = LocalDateTime.of(date, time);
+                    } catch (Exception e) {
+                        response.put("success", false);
+                        response.put("message", "Format tanggal atau jam tidak valid");
+                        return response;
+                    }
+
+                    if (isNew != null && isNew) {
+                        // CREATE - Buat komponen baru
+                        KomponenNilai newKomponen = new KomponenNilai();
+                        newKomponen.setRubrik(rubrik);
+                        newKomponen.setNamaKomponen(namaKomponen);
+                        newKomponen.setBobot(0); // Default bobot 0, bisa diupdate di rubrik
+                        newKomponen.setCatatan("");
+                        
+                        // Update tugas deadline jika ini komponen pertama atau deadline lebih awal
+                        if (tugas.getDeadline() == null || deadline.isAfter(tugas.getDeadline())) {
+                            tugas.setDeadline(deadline);
+                        }
+                        
+                        komponenNilaiRepo.save(newKomponen);
+                        tugasRepo.save(tugas);
+                        
+                    } else {
+                        // UPDATE - Update deadline komponen
+                        Integer idKomponen = ((Number) idKomponenObj).intValue();
+                        KomponenNilai komponen = komponenNilaiRepo.findById(idKomponen).orElse(null);
+                        
+                        if (komponen != null && komponen.getRubrik().getIdRubrik().equals(rubrik.getIdRubrik())) {
+                            // Keep existing catatan, don't overwrite with deadline
+                            komponenNilaiRepo.save(komponen);
+                            
+                            // Update tugas deadline
+                            if (tugas.getDeadline() == null || deadline.isAfter(tugas.getDeadline())) {
+                                tugas.setDeadline(deadline);
+                                tugasRepo.save(tugas);
+                            }
+                        }
+                    }
+                }
+            }
+
+            response.put("success", true);
+            response.put("message", "Jadwal penilaian berhasil disimpan");
+            
+        } catch (Exception e) {
+            System.err.println("Error saving jadwal: " + e.getMessage());
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", "Gagal menyimpan jadwal: " + e.getMessage());
+        }
+        
+        return response;
     }
 
     /**
@@ -920,6 +1144,140 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         model.addAttribute("idTugas", idTugas);
 
         return "nilai/Dosen/pemberian-nilai-dosen";
+    }
+
+    /**
+     * GET - Pemberian Nilai Individu Dosen
+     * Menampilkan form pemberian nilai untuk anggota kelompok tertentu
+     */
+    @GetMapping("/dosen/pemberian-nilai-individu")
+    public String dosenPemberianNilaiIndividu(
+            @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer idTugas,
+            @RequestParam(required = false) Integer idKelompok,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+        
+        if (kodeMk == null || kodeMk.isEmpty()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+        if (mkDosen == null || !mkDosen.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        TugasBesar tugas = null;
+        if (idTugas != null) {
+            tugas = tugasRepo.findById(idTugas).orElse(null);
+            if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
+                return "redirect:/dosen/mata-kuliah";
+            }
+        }
+
+        Kelompok kelompok = null;
+        if (idKelompok != null) {
+            kelompok = kelompokRepo.findById(idKelompok).orElse(null);
+            if (kelompok == null) {
+                return "redirect:/dosen/pemberian-nilai?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
+            }
+        }
+
+        // Get anggota kelompok
+        List<UserKelompok> anggotaList = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
+        List<PesertaMatkulDTO> pesertaList = new ArrayList<>();
+        int no = 1;
+        for (UserKelompok uk : anggotaList) {
+            pesertaList.add(new PesertaMatkulDTO(
+                no++,
+                uk.getUser().getNama(),
+                uk.getUser().getIdUser(),
+                "Mahasiswa"
+            ));
+        }
+
+        // Get rubrik penilaian
+        RubrikNilai rubrik = tugas != null ? tugas.getRubrik() : null;
+        Set<KomponenNilai> komponenList = rubrik != null ? rubrik.getKomponenList() : new HashSet<>();
+
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("mkDosen", mkDosen);
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("kelompok", kelompok);
+        model.addAttribute("pesertaList", pesertaList);
+        model.addAttribute("rubrik", rubrik);
+        model.addAttribute("komponenList", komponenList);
+        model.addAttribute("kodeMk", kodeMk);
+        model.addAttribute("idTugas", idTugas);
+        model.addAttribute("idKelompok", idKelompok);
+
+        return "nilai/Dosen/pemberian-nilai-individu-dosen";
+    }
+
+    /**
+     * GET - Pemberian Nilai Rubrik Dosen
+     * Menampilkan form untuk mengisi nilai rubrik penilaian kelompok tertentu
+     */
+    @GetMapping("/dosen/pemberian-nilai-rubrik")
+    public String dosenPemberianNilaiRubrik(
+            @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer idTugas,
+            @RequestParam(required = false) Integer idKelompok,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
+        
+        if (kodeMk == null || kodeMk.isEmpty()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliah mataKuliah = mataKuliahRepo.findById(kodeMk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        MataKuliahDosen mkDosen = mkDosenRepo.findById_IdUserAndKodeMK(user.getIdUser(), kodeMk);
+        if (mkDosen == null || !mkDosen.isActive()) {
+            return "redirect:/dosen/mata-kuliah";
+        }
+
+        TugasBesar tugas = null;
+        if (idTugas != null) {
+            tugas = tugasRepo.findById(idTugas).orElse(null);
+            if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(kodeMk)) {
+                return "redirect:/dosen/mata-kuliah";
+            }
+        }
+
+        Kelompok kelompok = null;
+        if (idKelompok != null) {
+            kelompok = kelompokRepo.findById(idKelompok).orElse(null);
+            if (kelompok == null) {
+                return "redirect:/dosen/pemberian-nilai?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
+            }
+        }
+
+        // Get rubrik penilaian
+        RubrikNilai rubrik = tugas != null ? tugas.getRubrik() : null;
+        Set<KomponenNilai> komponenList = rubrik != null ? rubrik.getKomponenList() : new HashSet<>();
+
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("mkDosen", mkDosen);
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("kelompok", kelompok);
+        model.addAttribute("rubrik", rubrik);
+        model.addAttribute("komponenList", komponenList);
+        model.addAttribute("kodeMk", kodeMk);
+        model.addAttribute("idTugas", idTugas);
+        model.addAttribute("idKelompok", idKelompok);
+
+        return "nilai/Dosen/pemberian-nilai-rubrik-dosen";
     }
 
     /**
@@ -1103,12 +1461,27 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
             @AuthenticationPrincipal CustomUserDetails user,
             RedirectAttributes redirectAttributes) {
         
+        logger.info("=========== SAVE RUBRIK METHOD CALLED ===========");
+        logger.info("kodeMk: {}, idTugas: {}", kodeMk, idTugas);
+        logger.info("komponenPenilaian: {}", komponenPenilaian);
+        logger.info("bobot: {}", bobot);
+        logger.info("keterangan: {}", keterangan);
+        
         System.out.println("\n\n=== POST /dosen/rubrik-penilaian/save RECEIVED ===");
         System.out.println("kodeMk: " + kodeMk);
         System.out.println("idTugas: " + idTugas);
-        System.out.println("komponenPenilaian: " + (komponenPenilaian != null ? komponenPenilaian.size() + " items" : "NULL"));
-        System.out.println("bobot: " + (bobot != null ? bobot.size() + " items" : "NULL"));
-        System.out.println("keterangan: " + (keterangan != null ? keterangan.size() + " items" : "NULL"));
+        System.out.println("komponenPenilaian: " + (komponenPenilaian != null ? komponenPenilaian : "NULL"));
+        System.out.println("bobot: " + (bobot != null ? bobot : "NULL"));
+        System.out.println("keterangan: " + (keterangan != null ? keterangan : "NULL"));
+        System.out.println("komponenPenilaian details: ");
+        if (komponenPenilaian != null) {
+            for (int i = 0; i < komponenPenilaian.size(); i++) {
+                String komp = komponenPenilaian.get(i);
+                Integer bob = bobot != null && i < bobot.size() ? bobot.get(i) : null;
+                String ket = keterangan != null && i < keterangan.size() ? keterangan.get(i) : null;
+                System.out.println("  [" + i + "] nama='" + komp + "', bobot=" + bob + ", ket='" + ket + "'");
+            }
+        }
         
         try {
             // DEBUG: Log received parameters
@@ -1120,7 +1493,8 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
             
             if (komponenPenilaian != null) {
                 for (int i = 0; i < komponenPenilaian.size(); i++) {
-                    System.out.println("DEBUG: [" + i + "] " + komponenPenilaian.get(i) + ", bobot=" + (bobot != null && i < bobot.size() ? bobot.get(i) : "null"));
+                    String namaKompC = komponenPenilaian.get(i);
+                    System.out.println("DEBUG: [" + i + "] '" + namaKompC + "' (length=" + (namaKompC != null ? namaKompC.length() : "null") + "), bobot=" + (bobot != null && i < bobot.size() ? bobot.get(i) : "null"));
                 }
             }
             
@@ -1156,25 +1530,40 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
                     totalBobot += (b != null ? b : 0);
                 }
             }
+            
+            System.out.println("DEBUG: Total bobot validation = " + totalBobot);
 
             if (totalBobot != 100) {
+                System.err.println("ERROR: Total bobot tidak 100%, actual: " + totalBobot);
                 redirectAttributes.addFlashAttribute("error", "Total bobot harus 100%. Saat ini: " + totalBobot + "%");
                 return "redirect:/dosen/edit-rubrik-penilaian?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
             }
 
-            // Save rubrik components ke database
+            // Save rubrik components ke database dengan proper transaction handling
             RubrikNilai rubrik = tugas.getRubrik();
             
             // Jika belum ada rubrik, buat yang baru
             if (rubrik == null) {
                 rubrik = new RubrikNilai();
+                rubrik.setKomponenList(new HashSet<>());
                 rubrik = rubrikNilaiRepo.save(rubrik);
-                tugas.setRubrik(rubrik);
-                tugasRepo.save(tugas);
+                System.out.println("DEBUG: New rubrik created with ID = " + rubrik.getIdRubrik());
             } else {
-                // Jika sudah ada, hapus komponen lama
-                if (rubrik.getKomponenList() != null) {
-                    komponenNilaiRepo.deleteAll(rubrik.getKomponenList());
+                // Force reload rubrik dari database untuk ensure fresh data
+                rubrik = rubrikNilaiRepo.findById(rubrik.getIdRubrik()).orElse(rubrik);
+                System.out.println("DEBUG: Existing rubrik loaded with ID = " + rubrik.getIdRubrik());
+                
+                // Clear old komponen dengan cascade
+                if (rubrik.getKomponenList() != null && !rubrik.getKomponenList().isEmpty()) {
+                    int oldSize = rubrik.getKomponenList().size();
+                    rubrik.getKomponenList().clear();
+                    rubrikNilaiRepo.save(rubrik); // Flush cascade delete
+                    System.out.println("DEBUG: Cleared " + oldSize + " existing components");
+                }
+                
+                // Re-initialize list
+                if (rubrik.getKomponenList() == null) {
+                    rubrik.setKomponenList(new HashSet<>());
                 }
             }
 
@@ -1182,37 +1571,72 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
             if (komponenPenilaian != null && !komponenPenilaian.isEmpty()) {
                 System.out.println("DEBUG: Saving " + komponenPenilaian.size() + " components");
                 System.out.println("DEBUG: Rubrik ID = " + rubrik.getIdRubrik());
+                System.out.println("DEBUG: Rubrik.getKomponenList() = " + (rubrik.getKomponenList() != null ? "NOT NULL" : "NULL"));
+                
                 for (int i = 0; i < komponenPenilaian.size(); i++) {
                     String namaKomp = komponenPenilaian.get(i);
                     int bobotVal = bobot != null && i < bobot.size() ? bobot.get(i) : 0;
                     String keteranganVal = keterangan != null && i < keterangan.size() ? keterangan.get(i) : null;
                     
-                    System.out.println("DEBUG: Komponen " + i + " - " + namaKomp + ", bobot=" + bobotVal + ", catatan=" + keteranganVal);
+                    System.out.println("DEBUG: ===== Processing Komponen " + i + " =====");
+                    System.out.println("DEBUG: namaKomp='" + namaKomp + "' (null=" + (namaKomp == null) + ")");
+                    System.out.println("DEBUG: bobotVal=" + bobotVal);
+                    System.out.println("DEBUG: keteranganVal='" + keteranganVal + "'");
                     
+                    if (namaKomp == null || namaKomp.trim().isEmpty()) {
+                        System.err.println("WARNING: Komponen " + i + " has empty name, skipping");
+                        continue;
+                    }
+                    
+                    System.out.println("DEBUG: Creating KomponenNilai object");
                     KomponenNilai komponen = new KomponenNilai();
                     komponen.setRubrik(rubrik);
-                    komponen.setNamaKomponen(namaKomp);
+                    komponen.setNamaKomponen(namaKomp.trim());
                     komponen.setBobot(bobotVal);
-                    komponen.setCatatan(keteranganVal);
+                    komponen.setCatatan(keteranganVal != null ? keteranganVal.trim() : "");
+                    // jam dan tanggal tidak digunakan di komponen_nilai, hanya di jadwal_penilaian
+                    // database akan menggunakan default values
+                    
+                    System.out.println("DEBUG: Saving komponen to repository");
                     KomponenNilai saved = komponenNilaiRepo.save(komponen);
                     System.out.println("DEBUG: Komponen saved with ID = " + saved.getIdKomponen());
+                    System.out.println("DEBUG: Saved komponen - nama='" + saved.getNamaKomponen() + "', bobot=" + saved.getBobot());
+                    
+                    rubrik.getKomponenList().add(saved);
+                    System.out.println("DEBUG: Added to rubrik list, current size = " + rubrik.getKomponenList().size());
                 }
+            } else {
+                System.err.println("WARNING: komponenPenilaian is null or empty!");
+                System.out.println("DEBUG: komponenPenilaian=" + komponenPenilaian);
             }
             
+            // Final save rubrik dengan updated komponen list
+            System.out.println("DEBUG: Final save rubrik with " + (rubrik.getKomponenList() != null ? rubrik.getKomponenList().size() : 0) + " components");
+            rubrik = rubrikNilaiRepo.save(rubrik);
+            System.out.println("DEBUG: Rubrik saved");
+            
+            tugas.setRubrik(rubrik);
+            tugasRepo.save(tugas);
+            System.out.println("DEBUG: Tugas updated with rubrik ID = " + rubrik.getIdRubrik());
+            
             // Verify saved components
+            System.out.println("DEBUG: ===== VERIFICATION START =====");
             List<KomponenNilai> savedKomponen = komponenNilaiRepo.findByRubrik_IdRubrik(rubrik.getIdRubrik());
             System.out.println("DEBUG: VERIFICATION - Found " + savedKomponen.size() + " components in DB for rubrik " + rubrik.getIdRubrik());
             for (KomponenNilai k : savedKomponen) {
-                System.out.println("DEBUG: DB Komponen - " + k.getNamaKomponen() + ", bobot=" + k.getBobot());
+                System.out.println("DEBUG: DB Komponen - nama='" + k.getNamaKomponen() + "', bobot=" + k.getBobot() + ", catatan='" + (k.getCatatan() != null ? k.getCatatan() : "") + "'");
             }
+            System.out.println("DEBUG: ===== VERIFICATION END =====");
 
             redirectAttributes.addFlashAttribute("success", "Rubrik penilaian berhasil disimpan");
             return "redirect:/dosen/rubrik-penilaian?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
             
         } catch (Exception e) {
-            System.err.println("Error saving rubrik: " + e.getMessage());
+            System.err.println("ERROR saving rubrik: " + e.getMessage());
+            logger.error("Error saving rubrik", e);
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Gagal menyimpan rubrik: " + e.getMessage());
+            String errorMsg = e.getMessage() != null ? e.getMessage() : "Kesalahan tidak diketahui";
+            redirectAttributes.addFlashAttribute("error", "Gagal menyimpan rubrik: " + errorMsg);
             return "redirect:/dosen/edit-rubrik-penilaian?kodeMk=" + kodeMk + "&idTugas=" + idTugas;
         }
     }
@@ -1240,6 +1664,47 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         } catch (Exception e) {
             result.put("error", e.toString());
             result.put("message", e.getMessage());
+        }
+        
+        return result;
+    }
+
+    @GetMapping("/dosen/rubrik-test")
+    @ResponseBody
+    public Map<String, Object> rubrikTest(
+            @RequestParam Integer idTugas,
+            @AuthenticationPrincipal CustomUserDetails user) {
+        Map<String, Object> result = new HashMap<>();
+        
+        try {
+            TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+            if (tugas == null) {
+                result.put("success", false);
+                result.put("message", "Tugas tidak ditemukan");
+                return result;
+            }
+            
+            RubrikNilai rubrik = tugas.getRubrik();
+            result.put("idTugas", idTugas);
+            result.put("hasRubrik", rubrik != null);
+            
+            if (rubrik != null) {
+                result.put("idRubrik", rubrik.getIdRubrik());
+                List<KomponenNilai> komponenList = komponenNilaiRepo.findByRubrik_IdRubrik(rubrik.getIdRubrik());
+                result.put("komponenCount", komponenList.size());
+                result.put("komponenList", komponenList.stream()
+                    .map(k -> Map.of(
+                        "nama", (Object)k.getNamaKomponen(),
+                        "bobot", (Object)k.getBobot(),
+                        "catatan", (Object)(k.getCatatan() != null ? k.getCatatan() : "")
+                    ))
+                    .collect(Collectors.toList()));
+            }
+            
+            result.put("success", true);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("error", e.getMessage());
         }
         
         return result;

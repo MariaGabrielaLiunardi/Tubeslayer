@@ -73,46 +73,69 @@
                 <div class="rectangle-blue">
                     <div class="tb-title">
                         <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
-                        <span class="tb-text" th:text="${mataKuliah.nama}">Nama Mata Kuliah</span>
+                        <span class="tb-text" th:text="${tugas != null ? tugas.judulTugas : 'Tugas'}">Nama Tugas</span>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
-
                     <div class="breadcrumb">
-                        <a th:href="@{/dosen/pemberian-nilai(kodeMk=${kodeMk})}" class="crumb">Pemberian Nilai</a>
+                        <a th:href="@{/dosen/pemberian-nilai(kodeMk=${kodeMk}, idTugas=${idTugas})}" class="crumb">Pemberian Nilai</a>
                         <span class="crumb"> > </span>
-                        <span class="crumb current">Detail Anggota</span>
+                        <span class="crumb current" th:text="${kelompok != null ? kelompok.namaKelompok : 'Detail'}">Kelompok</span>
                     </div>
 
-                    <div class="rectangle-yellow">
-                        <div class="assignment-table-wrapper" th:if="${not #lists.isEmpty(pesertaList)}">
-                            <div class="assignment-header">
-                                <div class="col-kel">Nama Anggota</div>
-                                <div class="col-bobot">Nilai</div>
-                            </div>
-
-                            <div class="assignment-row" th:each="peserta : ${pesertaList}">
-                                <div class="col-isi-kel" th:text="${peserta.nama ?: 'Anggota'}">Nama Anggota</div>
-                                <div class="col-isi-nilai">
-                                    <input type="number" class="nilai-individu" min="0" max="100" 
-                                           th:value="${peserta.nilaiIndividual ?: ''}" placeholder="0">
+                    <div style="width: 100%; padding: 30px 0;">
+                        <!-- Info Section -->
+                        <div style="background-color: #e8f4f8; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
+                            <div style="display: flex; gap: 30px;">
+                                <div>
+                                    <span style="font-size: 14px; color: #666;">Nama Kelompok:</span>
+                                    <p style="font-size: 16px; font-weight: 600; margin: 5px 0;" th:text="${kelompok != null ? kelompok.namaKelompok : '-'}">-</p>
                                 </div>
-                            </div>
-
-                            <div class="tombol-aksi">
-                                <button class="btn-rilis" onclick="goBack()">Batal</button>
-                                <button class="btn-simpan" onclick="saveIndividualGrades()">Simpan</button>
-                            </div>
-
-                            <div class="nilai-kel">
-                                <div class="kel">Rata-rata Nilai:</div>
-                                <div class="nilai" id="averageNilai">0</div>
+                                <div>
+                                    <span style="font-size: 14px; color: #666;">Jumlah Anggota:</span>
+                                    <p style="font-size: 16px; font-weight: 600; margin: 5px 0;" th:text="${pesertaList != null ? pesertaList.size() : '0'}">0</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div th:if="${#lists.isEmpty(pesertaList)}" style="text-align: center; padding: 40px; color: #999;">
-                            <p>Tidak ada data anggota kelompok</p>
+                        <!-- Anggota Section -->
+                        <div th:if="${not #lists.isEmpty(pesertaList)}" style="margin-bottom: 40px;">
+                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">Daftar Anggota Kelompok</h3>
+                            <div style="background-color: white; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
+                                <div style="display: grid; grid-template-columns: 1fr; padding: 15px 20px; background-color: white;">
+                                    <div th:each="peserta : ${pesertaList}" style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; color: #555; font-size: 15px;" th:text="${peserta.nama ?: 'Anggota'}">Nama Anggota</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty Rubrik Message -->
+                        <div th:if="${#lists.isEmpty(komponenList)}" style="background-color: #ffe8e8; border: 2px solid #ff6b6b; border-radius: 10px; padding: 20px; margin-bottom: 30px; text-align: center;">
+                            <p style="margin: 0; font-size: 16px; font-weight: 600; color: #d63031;">⚠️ Rubrik Penilaian Belum Tersedia</p>
+                            <p style="margin: 10px 0 0 0; font-size: 14px; color: #a61e4d;">Silakan buat rubrik penilaian terlebih dahulu sebelum memberikan nilai kepada kelompok ini.</p>
+                        </div>
+
+                        <!-- Buttons & Catatan -->
+                        <div style="display: flex; gap: 15px; align-items: flex-start; margin-bottom: 0;">
+                            <!-- Tombol Lihat Rubrik -->
+                            <div th:if="${not #lists.isEmpty(komponenList)}" style="flex: 0 0 auto;">
+                                <a th:href="@{/dosen/pemberian-nilai-rubrik(kodeMk=${kodeMk}, idTugas=${idTugas}, idKelompok=${idKelompok})}" 
+                                   style="text-decoration: none;">
+                                    <button class="btn-lihat-rubrik">Lihat Rubrik</button>
+                                </a>
+                            </div>
+
+                            <!-- Tombol Kembali -->
+                            <div style="flex: 0 0 auto;">
+                                <button class="btn-kembali" onclick="goBack()">Kembali</button>
+                            </div>
+
+                            <!-- Catatan Penting -->
+                            <div th:if="${not #lists.isEmpty(komponenList)}" style="flex: 1; background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px;">
+                                <p style="margin: 0; font-size: 14px; color: #856404;">
+                                    <strong>Catatan:</strong> Klik tombol "Lihat Rubrik" untuk memberikan nilai berdasarkan komponen penilaian. Nilai kelompok akan dihitung otomatis dari bobot masing-masing komponen.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,47 +150,12 @@
                 }
             });
 
-            // Calculate average value
-            function calculateAverage() {
-                const inputs = document.querySelectorAll('.nilai-individu');
-                let total = 0;
-                let count = 0;
-                inputs.forEach(input => {
-                    if (input.value) {
-                        total += parseFloat(input.value);
-                        count++;
-                    }
-                });
-                const average = count > 0 ? (total / count).toFixed(2) : 0;
-                document.getElementById('averageNilai').textContent = average;
-            }
-
-            // Save individual grades
-            function saveIndividualGrades() {
-                calculateAverage();
-                const inputs = document.querySelectorAll('.nilai-individu');
-                let filled = false;
-                inputs.forEach(input => {
-                    if (input.value) filled = true;
-                });
-                if (!filled) {
-                    alert('Silakan masukkan minimal satu nilai');
-                    return;
-                }
-                alert('Nilai individu berhasil disimpan');
-                console.log('Individual grades saved');
-            }
-
             // Go back
             function goBack() {
                 const kodeMk = [[${kodeMk}]];
-                window.location.href = '/dosen/pemberian-nilai?kodeMk=' + kodeMk;
+                const idTugas = [[${idTugas}]];
+                window.location.href = '/dosen/pemberian-nilai?kodeMk=' + kodeMk + '&idTugas=' + idTugas;
             }
-
-            // Listen to input changes
-            document.querySelectorAll('.nilai-individu').forEach(input => {
-                input.addEventListener('input', calculateAverage);
-            });
         </script>
     </body>
 </html>

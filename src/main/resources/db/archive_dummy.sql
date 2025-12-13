@@ -152,17 +152,17 @@ INSERT INTO nilai (id_user, id_tugas, nilai_pribadi, nilai_kelompok) VALUES
 -- ===========================
 -- KOMPONEN NILAI
 -- ===========================
-INSERT INTO komponen_nilai (id_rubrik, nama_komponen, bobot, catatan, jam, tanggal) VALUES
-(101,'Analisis Logika',35,'Analisis proposisi','09:00:00','2023-10-12'),
-(102,'Implementasi Graf',40,'Pembuatan graf','10:00:00','2023-11-15'),
-(103,'Limit Kasus',25,'Analisis limit','11:00:00','2023-10-18'),
-(104,'Integral Tugas',35,'Integral terapan','09:00:00','2023-12-03'),
-(105,'Kasus Etika',40,'Analisis kasus','13:00:00','2023-09-23'),
-(106,'Kode Etik',30,'Pedoman etik','10:00:00','2023-11-08'),
-(107,'Evolusi Komputer',35,'Sejarah komputer','14:00:00','2023-09-28'),
-(108,'Tokoh TI',25,'Analisis tokoh','09:00:00','2023-11-13'),
-(109,'Laporan Teknis',40,'Penulisan laporan','10:00:00','2023-10-08'),
-(110,'Proposal Proyek',35,'Proposal proyek IT','13:00:00','2023-11-23');
+INSERT INTO komponen_nilai (id_rubrik, nama_komponen, bobot, catatan) VALUES
+(101,'Analisis Logika',35,'Analisis proposisi'),
+(102,'Implementasi Graf',40,'Pembuatan graf'),
+(103,'Limit Kasus',25,'Analisis limit'),
+(104,'Integral Tugas',35,'Integral terapan'),
+(105,'Kasus Etika',40,'Analisis kasus'),
+(106,'Kode Etik',30,'Pedoman etik'),
+(107,'Evolusi Komputer',35,'Sejarah komputer'),
+(108,'Tokoh TI',25,'Analisis tokoh'),
+(109,'Laporan Teknis',40,'Penulisan laporan'),
+(110,'Proposal Proyek',35,'Proposal proyek IT');
 
 -- ===========================
 -- JADWAL PENILAIAN
