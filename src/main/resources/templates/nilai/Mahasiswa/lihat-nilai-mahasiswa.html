@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lihat Nilai Detail - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/pemberian-nilai-mahasiswa.css}">
+        <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
+        <script th:src="@{/js/pemberian-nilai-mahasiswa.js}" defer></script>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
+    </head>
+
+    <body>
+        <nav class="sidebar close">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img th:src="@{/logo/blue-logo.png}" alt="logo">
+                    </span>
+
+                    <div class ="text header-text">
+                        <span class="name">Tubeslayer</span>
+                    </div>
+                </div>
+            </header>
+            <i class='bx bx-chevron-right toggle'></i> 
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a th:href="@{/mahasiswa/dashboard}">
+                                <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
+                                <span class="text nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-link active">
+                            <a th:href="@{/mahasiswa/mata-kuliah}">
+                                <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
+                                <span class="text nav-text">Mata Kuliah</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="home">
+            <div class="header">
+                <div class="left-section">
+                    <span class="dashboard-title">Lihat Nilai Detail</span>
+                </div>
+                <div class="right-section">
+                    <div class="info">
+                        <span class="name" th:text="${user.nama}">Nama Mahasiswa</span>
+                        <span class="role" th:text="${user.role}">Mahasiswa</span>
+                    </div>
+                    <a th:href="@{/profil}">
+                        <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
+                    </a>
+                    <button type="button" class="logout" id="logoutButton">
+                        <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logout">
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-segmented-control">
+                <div class="nav-tab">
+                    Lihat Nilai Detail
+                </div>
+            </div>
+            
+            <div class="container">
+                <div class="rectangle-blue">
+                    <div class="tb-title">
+                        <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
+                        <div th:if="${tugas != null}">
+                            <span class="tb-text" th:text="${tugas.judulTugas}">Nama Tugas</span>
+                        </div>
+                        <div th:if="${tugas == null}">
+                            <span class="tb-text">Pilih tugas terlebih dahulu</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rectangle-white">
+                    <div class="breadcrumb">
+                        <a th:href="@{/mahasiswa/mata-kuliah}" style="text-decoration: none;">
+                            Daftar Mata Kuliah
+                        </a>
+
+                        &gt;
+
+                        <a th:href="@{/mahasiswa/matkul-detail(mk=${kodeMk})}"
+                            style="text-decoration: none;">
+                            <span th:text="${mataKuliah != null ? mataKuliah.nama : 'Mata Kuliah'}">Mata Kuliah</span>
+                        </a>
+
+                        &gt;
+
+                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk},idTugas=${idTugas})}" style="text-decoration: none;">
+                            Nilai
+                        </a>
+
+                        &gt;
+
+                        Lihat Detail
+                    </div>
+
+                    <!-- Nilai Pribadi (hanya nilai akhir) -->
+                    <div th:if="${nilaiPribadi != null}" style="width: 100%; padding: 20px 0;">
+                        <div class="nilai-container">
+                            <div class="nilai-card nilai-pribadi">
+                                <span class="label">Nilai Pribadi</span>
+                                <span class="value" th:text="${nilaiPribadi.nilaiAkhir != null && nilaiPribadi.nilaiAkhir > 0 ? nilaiPribadi.nilaiAkhir : '-'}">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nilai Kelompok (jika ada) -->
+                    <div th:if="${nilaiKelompok != null}" style="width: 100%; padding: 30px 0;">
+                        <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 20px;">Nilai Kelompok</h3>
+                        <p style="margin-bottom: 10px; color: #666;">
+                            Kelompok: <strong th:text="${namaKelompok}">Nama Kelompok</strong>
+                        </p>
+                        <div class="assignment-table-wrapper">
+                            <div class="assignment-header">
+                                <div class="col-rubrik">Rubrik Penilaian</div>
+                                <div class="col-bobot">Bobot(%)</div>
+                                <div class="col-nilai">Nilai</div>
+                                <div class="col-catatan">Catatan</div>
+                            </div>
+
+                            <div class="assignment-row" th:each="komponen : ${nilaiKelompok.komponenList}">
+                                <div class="col-isi-rubrik" th:text="${komponen.namaKomponen}">Komponen</div>
+                                <div class="col-isi-bobot" th:text="${komponen.bobot}">-</div>
+                                <div class="col-isi-nilai" th:text="${komponen.nilai != null && komponen.nilai > 0 ? komponen.nilai : '-'}">-</div>
+                                <div class="col-isi-catatan" th:text="${komponen.catatan != null ? komponen.catatan : '-'}">-</div>
+                            </div>
+                        </div>
+
+                        <div class="nilai-container">
+                            <div class="nilai-card nilai-kelompok">
+                                <span class="label">Nilai Akhir Kelompok</span>
+                                <span class="value" th:text="${nilaiKelompok.nilaiAkhir != null && nilaiKelompok.nilaiAkhir > 0 ? nilaiKelompok.nilaiAkhir : '-'}">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jika tidak ada nilai -->
+                    <div th:if="${nilaiPribadi == null && nilaiKelompok == null}" style="text-align: center; padding: 40px; color: #999;">
+                        <p>Nilai belum dirilis oleh dosen</p>
+                    </div>
+
+                    <!-- Tombol Kembali -->
+                    <div style="margin-top: 30px;">
+                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk},idTugas=${idTugas})}" style="text-decoration: none;">
+                            <button class="btn-kembali">Kembali</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script th:inline="javascript">
+            // Logout handler
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    window.location.href = '/logout';
+                }
+            });
+        </script>
+    </body>
+</html>

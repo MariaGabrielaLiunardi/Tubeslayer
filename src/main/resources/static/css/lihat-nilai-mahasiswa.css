@@ -1,0 +1,1216 @@
+/* Pemberian Nilai Dosen - Modern CSS */
+
+/* Override background gradient for pemberian nilai pages */
+.home {
+    background: linear-gradient(0deg, rgba(172, 224, 249, 1) 0%, rgba(172, 224, 249, 0.8) 70%, rgba(255, 241, 235, 1) 100%) !important;
+    height: auto;
+}
+
+/* Back Button Styling */
+.back-button button {
+    background-color: #0078B5;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: Sen, sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 120, 181, 0.2);
+}
+
+.back-button button:hover {
+    background-color: #005a8d;
+    box-shadow: 0 4px 12px rgba(0, 120, 181, 0.3);
+    transform: translateY(-2px);
+}
+
+.back-button button:active {
+    transform: translateY(0);
+}
+
+.detail-wrapper {
+    padding: 20px;
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb {
+    font-size: 16px;
+    margin-top: 15px; 
+    margin-bottom: 25px; 
+    margin-left: 0px;
+}
+
+.breadcrumb a {
+    color: black;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    color: #0078B5;
+}
+
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 0 15px 0;
+    background-color: transparent;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.breadcrumb-link {
+    color: #0078B5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #005a8d;
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    color: #999;
+    font-weight: 400;
+}
+
+.breadcrumb-current {
+    color: #333;
+    font-weight: 400;
+}
+
+/* Tugas Header */
+.tugas-header {
+    background: #CCF0F7;
+    color: black;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px gray;
+}
+
+.tugas-header h1 {
+    margin: 0 0 15px 0;
+    font-size: 32px;
+}
+
+.tugas-header p {
+    margin: 8px 0;
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.tugas-info {
+    max-width: 100%;
+}
+
+/* Navigation Tabs */
+.navigation-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.nav-button {
+    padding: 12px 24px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.3s ease;
+}
+
+.nav-button.active {
+    background: black;
+    border: none; 
+    color: white;
+    box-shadow: 0 4px 6px gray;
+}
+
+/* Kelompok Selector */
+.kelompok-selector {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.kelompok-selector h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.kelompok-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.kelompok-btn {
+    padding: 10px 20px;
+    border: 2px solid #ddd;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+}
+
+.kelompok-btn.active {
+    background: black;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 6px gray;
+}
+
+/* Pemberian Nilai Form */
+.pemberian-nilai-form {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.pemberian-nilai-form h3 {
+    margin: 0 0 25px 0;
+    font-size: 22px;
+    color: #333;
+    border-bottom: none;
+    padding-bottom: 10px;
+}
+
+/* Kelompok Content - untuk nilai individu */
+.kelompok-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.kelompok-content h2 {
+    margin: 0 0 25px 0;
+    font-size: 20px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Anggota List */
+.anggota-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.anggota-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    background: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.anggota-item:hover {
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    border-color: #667eea;
+}
+
+/* Anggota Info Box - untuk form input nilai individu */
+.anggota-info-box {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 15px;
+    align-items: center;
+}
+
+.anggota-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.anggota-detail .anggota-id {
+    background: #CCF0F7;
+    color: black;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: bold;
+    width: fit-content;
+}
+
+.anggota-detail .anggota-nama {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.anggota-detail .anggota-role {
+    font-size: 15px;
+    color: #666;
+    background: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 3px;
+    width: fit-content;
+}
+
+.nilai-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nilai-group .nilai-input {
+    width: 80px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.nilai-group .nilai-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.nilai-group .nilai-input.error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+}
+
+.button-group .btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.button-group .btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.button-group .btn-primary:hover {
+    background: #2563eb;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.button-group .btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.button-group .btn-danger:hover {
+    background: #dc2626;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.anggota-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.anggota-header h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+    flex: 1;
+}
+
+.anggota-id {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.anggota-role {
+    background: #1e40af;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Anggota Info Section (untuk menampilkan list anggota saja, tanpa input) */
+.anggota-info-section {
+    background: #f5f7fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border: 1px solid #e0e7ff;
+}
+
+.anggota-info-section h4 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.anggota-info-section .anggota-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.anggota-info-section .anggota-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 15px;
+    background: white;
+    margin: 0;
+    transition: all 0.2s ease;
+}
+
+.anggota-info-section .anggota-item:hover {
+    background: #eff6ff;
+    box-shadow: none;
+}
+
+.anggota-info-section .anggota-nama {
+    flex: 1;
+    font-size: 16px;
+    color: #555;
+    font-weight: 500;
+}
+
+.anggota-info-section .anggota-id {
+    background: #CCF0F7;
+    color: black;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.anggota-info-section .anggota-role {
+    background: #CCF0F7;
+    color: black;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Komponen Form */
+.komponen-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.komponen-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.komponen-input {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.komponen-input label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.komponen-input input {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.komponen-input input:focus,
+.nilai-komponen-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.komponen-input input.error,
+.nilai-komponen-input.error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.nilai-komponen-input {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.info-text {
+    font-size: 14px;
+    color: #999;
+}
+
+/* Nilai Kelompok Preview */
+.nilai-kelompok-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.nilai-kelompok-preview h5 {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+    font-weight: 600;
+}
+
+.nilai-preview-box {
+    background: #CCF0F7;
+    color: black;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    min-height: 30px;
+    max-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.15);
+}
+
+.nilai-angka {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Sama Buat Checkbox */
+.sama-buat-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+    padding: 15px;
+    background: #eff6ff;
+    border-radius: 5px;
+    grid-column: 1 / -1;
+    border: 1px solid #dbeafe;
+}
+
+.sama-buat-checkbox input[type="checkbox"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: #3b82f6;
+}
+
+.sama-buat-checkbox label {
+    cursor: pointer;
+    font-size: 14px;
+    color: #1e40af;
+    margin: 0;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    grid-column: 1 / -1;
+}
+
+.btn-simpan,
+.btn-hapus {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.btn-simpan {
+    background-color: #27ae60;
+    color: white;
+}
+
+.btn-simpan:hover {
+    background-color: #229954;
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+.btn-simpan:active {
+    transform: scale(0.98);
+}
+
+.btn-hapus {
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 12px;
+}
+
+.btn-hapus:hover {
+    background-color: #c0392b;
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.btn-hapus:active {
+    transform: scale(0.98);
+}
+
+/* No Data */
+.no-data {
+    background: white;
+    padding: 40px 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+}
+
+.kelompok-list{
+    gap: 10px; 
+    display: flex; 
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .komponen-form {
+        grid-template-columns: 1fr;
+    }
+
+    .nilai-kelompok-preview {
+        order: 3;
+    }
+
+    .sama-buat-checkbox,
+    .action-buttons {
+        grid-column: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .anggota-header {
+        flex-wrap: wrap;
+    }
+
+    .anggota-header h4 {
+        flex: 1 100%;
+    }
+
+    .tugas-header {
+        padding: 20px;
+    }
+
+    .pemberian-nilai-form {
+        padding: 20px;
+    }
+
+    .anggota-item {
+        padding: 15px;
+    }
+
+    .kelompok-list {
+        gap: 8px;
+    }
+
+    .kelompok-btn {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn-simpan,
+    .btn-hapus {
+        width: 100%;
+    }
+}
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    position: relative;
+    z-index: 10;          
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+    margin-top: 10px;
+}
+
+.tb-icon {
+    width: 150px;
+    border-radius: 30px;
+}
+
+.tb-text {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.rectangle-white {
+    width: 90%; 
+    max-width: 1648px; 
+    min-height: 610px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: -15px;
+    padding-top: 15px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.assignment-table-wrapper {
+    width: 100%;
+    padding: 0;
+}
+
+.assignment-header {
+    display: flex;
+    gap: 20px;
+    border-radius: 10px;
+    padding: 0; 
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+    margin-bottom: 10px;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.col-kel-header {
+    width: 50%;
+    text-align: left;
+    background-color: #CDE8F6;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.col-nilai-header {
+    width: 20%;
+    text-align: center;
+    background-color: #CDE8F6;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.col-aksi-header {
+    width: 30%;
+    text-align: center;
+    background-color: #CDE8F6;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.assignment-row {
+    display: flex;
+    gap: 20px;
+    border-radius: 10px;
+    padding: 0; 
+    font-weight: 600;
+    font-size: 16px;
+    color: black;
+    margin-bottom: 12px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.col-isi-kel {
+    width: 50%;
+    text-align: left;
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.col-isi-nilai-display {
+    width: 20%;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 15px 20px;
+    border: 1px solid #e0e0e0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e40af;
+}
+
+.col-isi-aksi-link {
+    width: 30%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.col-isi-lihat {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    font-family: Sen;
+}
+
+.col-isi-lihat:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    background-color: #333;
+}
+
+.col-isi-lihat:active {
+    transform: translateY(0);
+}
+
+.tombol-aksi {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+.btn-simpan, .btn-rilis {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: black;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.btn-simpan:hover, .btn-rilis:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    background-color: #333;
+}
+
+.btn-simpan:active, .btn-rilis:active {
+    transform: translateY(0);
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;          
+    font-size: 18px;   
+    text-align: left;  
+    margin-top: 20px;
+    width: 100%;
+}
+
+.breadcrumb .crumb {
+    color: #555;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb .crumb:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+
+.breadcrumb .current {
+    color: #1e40af;
+    font-weight: 600;
+}
+/* Pemberian Nilai Individu Styles */
+.individu-form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.individu-form-container h2 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    color: #333;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 15px;
+}
+
+.individu-form-container .info-text {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.kelompok-section {
+    margin-bottom: 35px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+.kelompok-section .kelompok-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.kelompok-section .kelompok-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+.anggota-nilai-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.anggota-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 15px;
+    padding: 12px 15px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+    align-items: center;
+}
+
+.anggota-item:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.anggota-item .row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 15px;
+    width: 100%;
+    align-items: center;
+}
+
+.anggota-item .col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.anggota-item .col label {
+    font-size: 11px;
+    background: #3b82f6;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    width: fit-content;
+    font-weight: bold;
+}
+
+.anggota-item .col .font-bold {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+    margin: 0;
+}
+
+.anggota-item .col small {
+    background: #f0f0f0;
+    color: #666;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    width: fit-content;
+}
+
+.anggota-item .col-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.anggota-item .nilai-input {
+    width: 80px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.anggota-item .nilai-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.anggota-item .nilai-input.error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.anggota-item .col-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.anggota-item .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.anggota-item .btn-primary {
+    background: black;
+    color: white;
+}
+
+.anggota-item .btn-primary:hover {
+    background: #2563eb;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.anggota-item .btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.anggota-item .btn-danger:hover {
+    background: #dc2626;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.anggota-item .btn-sm {
+    padding: 6px 12px;
+    font-size: 11px;
+}
+
+.anggota-nilai-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+}
+
+.anggota-nilai-item:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.anggota-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 250px;
+}
+
+.anggota-info .anggota-id {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.anggota-info .anggota-nama {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.anggota-info .anggota-role {
+    background: #f0f0f0;
+    color: #666;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.nilai-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 150px;
+}
+
+.nilai-input-container .info-text {
+    font-size: 11px;
+    color: #999;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.nilai-individu-input {
+    width: 80px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.nilai-individu-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.nilai-individu-input.error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.btn-simpan-individu,
+.btn-hapus-individu {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-simpan-individu {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-simpan-individu:hover {
+    background: #2563eb;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.btn-hapus-individu {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-hapus-individu:hover {
+    background: #dc2626;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+/* Alert Messages */
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert p {
+    margin: 0;
+}
+
+.alert-warning {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    color: #92400e;
+}
+
+.alert-danger {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #7f1d1d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .anggota-nilai-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nilai-input-container {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .nilai-individu-input {
+        width: 100%;
+    }
+
+    .btn-simpan-individu,
+    .btn-hapus-individu {
+        flex: 1;
+    }
+}
