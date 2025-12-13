@@ -11,10 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (tabTarget === 'kuliah' && mataKuliahId) {
             tab.addEventListener('click', () => {
-                window.location.href = `/admin/arsip-matkul-detail?kodeMk=${encodeURIComponent(mataKuliahId)}`;
+                window.location.href = `/admin/matakuliah-detail?kode=${encodeURIComponent(mataKuliahId)}`;
             });
         }
-        // tab 'Nilai'
     });
 
     // Logout

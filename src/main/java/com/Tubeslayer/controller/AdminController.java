@@ -2249,42 +2249,9 @@ public class AdminController {
         return "admin/matakuliah-detail";
     }
    
-//     // ============================
-// // PESERTA DETAIL
-// // ============================
-
-// @GetMapping("/peserta-detail")
-// public String pesertaDetail(@RequestParam Long idKelompok,
-//                                @AuthenticationPrincipal CustomUserDetails user,
-//                                Model model) {
-//     model.addAttribute("user", user);
-
-//     // Ambil kelas berdasarkan idKelompok
-//     Kelompok kelas = kelompokRepository.findById(idKelompok).orElse(null);
-//     if (kelas == null) {
-//         return "redirect:/admin/matakuliah-detail";
-//     }
-
-//     String kodeMk = kelas.getMataKuliah().getKodeMK();
-//     String kelasHuruf = kelas.getKelas(); // Asumsikan ada field 'kelas' di entity Kelompok
-    
-//     // Ubah query untuk filter KELAS juga
-//     List<MataKuliahMahasiswa> pesertaList = 
-//         mkMahasiswaRepo.findByMataKuliah_KodeMKAndKelasAndIsActive(kodeMk, kelasHuruf, true);
-
-//     // Ambil koordinator dosen aktif untuk MK ini
-//     List<MataKuliahDosen> dosenKoordinator =
-//             mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
-
-//     model.addAttribute("kelasDetail", kelas);
-//     model.addAttribute("pesertaList", pesertaList);
-//     model.addAttribute("koordinator", dosenKoordinator.isEmpty() ? null : dosenKoordinator.get(0));
-
-//     return "admin/peserta-detail";
-// }
 
 @GetMapping("/peserta-detail")
-public String detailPeserta(@RequestParam String kodeMk,
+public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required = false) Integer colorIndex,
                             @AuthenticationPrincipal CustomUserDetails user,
                             Model model) {
     model.addAttribute("user", user);
@@ -2293,6 +2260,9 @@ public String detailPeserta(@RequestParam String kodeMk,
     if (mk == null) {
         return "redirect:/admin/dashboard";
     }
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        model.addAttribute("colorIndex", finalColorIndex);
 
     // Ambil semua dosen aktif untuk MK ini
     List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
