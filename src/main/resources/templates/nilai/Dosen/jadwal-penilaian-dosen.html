@@ -78,10 +78,10 @@
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="breadcrumb">
-                        <a th:href="@{/dosen/mata-kuliah}" class="crumb">Mata Kuliah</a>
-                        <span class="crumb"> > </span>
-                        <span class="crumb current">Jadwal Penilaian</span>
+                    <div class="breadcrumb-nav">
+                        <a th:href="@{/dosen/dashboard-penilaian(kodeMk=${kodeMk},idTugas=${idTugas})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-current">Jadwal Penilaian</span>
                     </div>
 
                     <div class="rectangle-yellow">

@@ -77,12 +77,10 @@
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="breadcrumb">
-                        <a th:href="@{/dosen/pemberian-nilai(kodeMk=${kodeMk}, idTugas=${idTugas})}" class="crumb">Pemberian Nilai</a>
-                        <span class="crumb"> > </span>
-                        <a th:href="@{/dosen/pemberian-nilai-individu(kodeMk=${kodeMk}, idTugas=${idTugas}, idKelompok=${idKelompok})}" class="crumb" th:text="${kelompok != null ? kelompok.namaKelompok : 'Kelompok'}">Kelompok</a>
-                        <span class="crumb"> > </span>
-                        <span class="crumb current">Nilai Rubrik</span>
+                    <div class="breadcrumb-nav">
+                        <a th:href="@{/dosen/dashboard-penilaian(kodeMk=${kodeMk},idTugas=${idTugas})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-current">Nilai Rubrik</span>
                     </div>
 
                     <div style="width: 100%; padding: 30px 0;">
@@ -118,7 +116,7 @@
                         <!-- Nilai Kelompok Display -->
                         <div th:if="${not #lists.isEmpty(komponenList)}" style="background-color: #e8f4f8; padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 18px; font-weight: 600; color: #333;">Nilai Kelompok (Weighted):</span>
-                            <span id="averageNilai" style="font-size: 32px; font-weight: 700; color: #1e40af; padding: 10px 20px; background-color: white; border-radius: 8px; min-width: 80px; text-align: center;">0</span>
+                            <span id="averageNilai" style="font-size: 24px; font-weight: 700; color: #1e40af; padding: 10px 20px; background-color: white; border-radius: 8px; min-width: 80px; text-align: center;">0</span>
                         </div>
 
                         <!-- Pilihan Pemberian Nilai Individu -->
@@ -137,15 +135,15 @@
 
                             <!-- Nilai Sama untuk Semua -->
                             <div id="nilaiSamaSection" style="margin-top: 15px;">
-                                <label style="font-size: 14px; color: #666; display: block; margin-bottom: 8px;">
+                                <label style="font-size: 16px; color: #666; display: block; margin-bottom: 8px;">
                                     Masukkan nilai yang sama untuk semua anggota:
                                 </label>
-                                <input type="number" id="nilaiSamaBuat" min="0" max="100" placeholder="0" style="width: 100%; max-width: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                                <input type="number" id="nilaiSamaBuat" min="0" max="100" placeholder="0" style="width: 100%; max-width: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;">
                             </div>
 
                             <!-- Nilai Berbeda per Anggota -->
                             <div id="nilaiBerbedaSection" style="display: none; margin-top: 15px;">
-                                <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                                <p style="font-size: 16px; color: #666; margin-bottom: 15px;">
                                     Masukkan nilai untuk masing-masing anggota kelompok:
                                 </p>
                                 <div class="nilai-anggota-table" th:if="${not #lists.isEmpty(pesertaList)}">
@@ -165,7 +163,7 @@
 
                         <!-- Catatan Penting -->
                         <div th:if="${not #lists.isEmpty(komponenList)}" style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 30px;">
-                            <p style="margin: 0; font-size: 14px; color: #856404;">
+                            <p style="margin: 0; font-size: 15px; color: #856404;">
                                 <strong>Catatan:</strong> Nilai kelompok adalah hasil perhitungan otomatis dari nilai komponen × bobot komponen. Nilai individu anggota bersifat opsional untuk pembedaan prestasi individu dalam kelompok.
                             </p>
                         </div>
