@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Mahasiswa - Tubeslayer</title>
+    <title>Tubeslayer</title>
     
     <!-- Thymeleaf URLs -->
     <link rel="stylesheet" th:href="@{/css/kelola-mahasiswa.css}">
@@ -242,12 +242,6 @@
 
                         <label for="nama-mahasiswa">Nama Mahasiswa:</label>
                         <input type="text" id="nama-mahasiswa" name="nama-mahasiswa" required placeholder="Isi nama mahasiswa...">
-
-                        <label for="status-mahasiswa">Status:</label>
-                        <select id="status-mahasiswa" name="status-mahasiswa" required>
-                            <option value="1">Aktif</option>
-                            <option value="0">Nonaktif</option>
-                        </select>
 
                         <button type="submit" class="btn btn-submit" id="btn-submit">Tambah Mahasiswa</button>
                     </form>

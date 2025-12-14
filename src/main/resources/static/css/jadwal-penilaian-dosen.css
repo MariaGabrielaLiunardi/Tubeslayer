@@ -1,11 +1,12 @@
-@import url('penilaian-dosen-base.css');
-
 /* === PAGE-SPECIFIC: Jadwal Penilaian Dosen === */
 
 /* Breadcrumb Navigation */
 .breadcrumb-nav {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    align-self:start;
+    margin-top: 30px; 
     gap: 12px;
     padding: 0 0 15px 0;
     background-color: transparent;
@@ -14,14 +15,14 @@
 }
 
 .breadcrumb-link {
-    color: #0078B5;
+    color: #333;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.2s ease;
 }
 
 .breadcrumb-link:hover {
-    color: #005a8d;
+    color: #000;
     text-decoration: underline;
 }
 
@@ -32,7 +33,7 @@
 
 .breadcrumb-current {
     color: #333;
-    font-weight: 400;
+    font-weight: 600;
 }
 
 .rectangle-blue {
@@ -94,7 +95,7 @@
     padding: 30px;
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 0px;
 }
 
 .assignment-table-wrapper {

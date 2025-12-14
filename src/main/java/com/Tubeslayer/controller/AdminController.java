@@ -1,5 +1,3 @@
-//kode admincontoller yang jalan
-
 package com.Tubeslayer.controller;
 
 import com.Tubeslayer.dto.MKArchiveDTO;
@@ -199,8 +197,8 @@ public class AdminController {
 
         model.addAttribute("colorIndex", randomColorIndex);
 
-        MataKuliahDosen koordinator = null;
-        try {
+       MataKuliahDosen koordinator = null;
+       try {
             List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
@@ -212,7 +210,7 @@ public class AdminController {
 
         List<TugasBesar> tugasList = Collections.emptyList();
         try {
-            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
+            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false); 
         } catch (Exception e) {
             System.err.println("Error fetching tasks for archive: " + e.getMessage());
         }
@@ -226,7 +224,7 @@ public class AdminController {
 
             return map;
         }).collect(Collectors.toList());
-        
+    
         model.addAttribute("mkDetail", mkDetail);
         model.addAttribute("tugasDataList", tugasData);
 
@@ -257,7 +255,7 @@ public class AdminController {
 
         MataKuliahDosen koordinator = null;
         try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false); 
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
             }
@@ -268,9 +266,9 @@ public class AdminController {
 
         List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
 
-        if (mkMahasiswaRepo != null) {
+        if (mkMahasiswaRepo != null && mk != null) {
             try {
-                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMK(mk.getKodeMK());
+                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), false);
             } catch (Exception e) {
                 System.err.println("Error saat mengambil data peserta arsip: " + e.getMessage());
             }
@@ -2251,42 +2249,9 @@ public class AdminController {
         return "admin/matakuliah-detail";
     }
    
-//     // ============================
-// // PESERTA DETAIL
-// // ============================
-
-// @GetMapping("/peserta-detail")
-// public String pesertaDetail(@RequestParam Long idKelompok,
-//                                @AuthenticationPrincipal CustomUserDetails user,
-//                                Model model) {
-//     model.addAttribute("user", user);
-
-//     // Ambil kelas berdasarkan idKelompok
-//     Kelompok kelas = kelompokRepository.findById(idKelompok).orElse(null);
-//     if (kelas == null) {
-//         return "redirect:/admin/matakuliah-detail";
-//     }
-
-//     String kodeMk = kelas.getMataKuliah().getKodeMK();
-//     String kelasHuruf = kelas.getKelas(); // Asumsikan ada field 'kelas' di entity Kelompok
-    
-//     // Ubah query untuk filter KELAS juga
-//     List<MataKuliahMahasiswa> pesertaList = 
-//         mkMahasiswaRepo.findByMataKuliah_KodeMKAndKelasAndIsActive(kodeMk, kelasHuruf, true);
-
-//     // Ambil koordinator dosen aktif untuk MK ini
-//     List<MataKuliahDosen> dosenKoordinator =
-//             mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
-
-//     model.addAttribute("kelasDetail", kelas);
-//     model.addAttribute("pesertaList", pesertaList);
-//     model.addAttribute("koordinator", dosenKoordinator.isEmpty() ? null : dosenKoordinator.get(0));
-
-//     return "admin/peserta-detail";
-// }
 
 @GetMapping("/peserta-detail")
-public String detailPeserta(@RequestParam String kodeMk,
+public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required = false) Integer colorIndex,
                             @AuthenticationPrincipal CustomUserDetails user,
                             Model model) {
     model.addAttribute("user", user);
@@ -2295,6 +2260,9 @@ public String detailPeserta(@RequestParam String kodeMk,
     if (mk == null) {
         return "redirect:/admin/dashboard";
     }
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        model.addAttribute("colorIndex", finalColorIndex);
 
     // Ambil semua dosen aktif untuk MK ini
     List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);

@@ -139,4 +139,8 @@ public class KelompokJdbcService {
     public String getNamaKelompok(Integer idTugas, String idUser) {
         return kelompokJdbcRepo.getNamaKelompok(idTugas, idUser);
     }
+
+    public Integer getIdKelompok(Integer idTugas, String idUser) {
+        return kelompokJdbcRepo.getKelompokIdByUser(idTugas, idUser);
+    }
 }

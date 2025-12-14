@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Tubeslayer</title>
+    <title>Tubeslayer - <span th:text="${mkDetail.nama}">Mata Kuliah</span></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
@@ -17,52 +16,49 @@
 </head>
 
 <body>
-
-  <nav class="sidebar close">
-    <header>
-        <div class="image-text">
-            <span class="image">
-                <img th:src="@{/logo/blue-logo.png}" alt="logo">
-            </span>
-            <div class="text header-text">
-                <span class="name">Tubeslayer</span>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+        <i class='bx bx-chevron-right toggle'></i> 
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="/admin/dashboard">
+                            <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-link active">
+                        <a href="/admin/menu-awal-ad">
+                            <img src="/icon/database.png" alt="Database Icon" class="icon database-icon">
+                            <span class="text nav-text">Data</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="/admin/arsip-mata-kuliah">
+                            <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                            <span class="text nav-text">Arsip Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </header>
-
-    <i class='bxr bx-chevron-right toggle'></i>
-
-    <div class="menu-bar">
-        <ul class="menu-links">
-            <li class="nav-link">
-                <a th:href="@{/admin/dashboard}">
-                    <img th:src="@{/icon/dashboard.png}" class="icon dashboard-icon">
-                    <span class="text nav-text">Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-link active">
-                <a th:href="@{/admin/menu-awal-ad}">
-                    <img th:src="@{/icon/database.png}" class="icon database-icon">
-                    <span class="text nav-text">Data</span>
-                </a>
-            </li>
-            <li class="nav-link">
-                <a th:href="@{/admin/arsip-mata-kuliah}">
-                    <img th:src="@{/icon/archive.png}" class="icon archive-icon">
-                    <span class="text nav-text">Arsip Mata Kuliah</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+    </nav>
 
     <section class="home">
-
         <div class="header">
             <div class="left-section">
                 <span class="dashboard-title">Kelola Mata Kuliah</span>
             </div>
-
             <div class="right-section">
                 <div class="info">
                     <span class="name" th:text="${user.nama}">Nama Admin</span>
@@ -77,68 +73,70 @@
             </div>
         </div>
 
-        <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
-
-            <button class="tab active" data-tab-target="kuliah"
-                th:attr="data-target-url=@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
-                onclick="window.location.href=this.getAttribute('data-target-url')"> Kuliah
-            </button>
-
-            <button class="tab" data-tab-target="peserta"
-                th:attr="data-target-url=@{/admin/peserta-detail(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
-                onclick="window.location.href=this.getAttribute('data-target-url')"> Daftar Peserta
-            </button>
-
-            <button class="tab" data-tab-target="nilai">Nilai</button>
+        <!-- Tabs - PERBAIKAN: Gunakan link langsung untuk admin -->
+        <div class="mk-tab">
+            <a th:href="@{/admin/matkul-detail(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+               class="tab active">
+                Kuliah
+            </a>
+            <a th:href="@{/admin/peserta-detail(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+               class="tab">
+                Daftar Peserta
+            </a>
         </div>
 
         <div class="detail-wrapper">
-
             <div class="mk-header">
                 <div class="mk-img" th:classappend="'gradient-' + (${colorIndex} + 1)"></div>
                 <div class="mk-info">
                     <h1 th:text="${mkDetail.nama}">Mata Kuliah</h1>
-                    <p><b>Koordinator:</b> <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">Belum
-                            Ditentukan</span></p>
-                    <p><b>NIP:</b> <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">XXXXX</span></p>
+                    <p><b>Koordinator:</b> 
+                        <span th:text="${koordinator?.user?.nama ?: 'Belum Ditentukan'}">
+                            Belum Ditentukan
+                        </span>
+                    </p>
+                    <p><b>NIP:</b> 
+                        <span th:text="${koordinator?.user?.idUser ?: 'XXXXX'}">
+                            XXXXX
+                        </span>
+                    </p>
                 </div>
             </div>
 
+            <!-- Breadcrumb - PERBAIKAN: Struktur yang benar -->
             <div class="breadcrumb">
-
-                <a th:href="@{/mahasiswa/mata-kuliah}">
+                <a th:href="@{/admin/arsip-mata-kuliah}">
                     Daftar Mata Kuliah
                 </a>
-
                 &gt;
                 <span th:text="${mkDetail.nama}">Mata Kuliah</span>
-                </a>
             </div>
 
             <div id="list-tugas-view">
                 <div class="mk-content">
-
+                    <!-- Tugas Mendatang -->
                     <div class="tugas-box">
                         <h3>Tugas Mendatang</h3>
                         <div class="tugas-mendatang-list">
-
-                            <th:block th:each="tugas, iStat : ${tugasList}">
+                            <th:block th:each="tugas : ${tugasList}">
                                 <div class="tugas-mendatang-card">
                                     <div class="deadline-info">
                                         <img src="/icon/kalender.png" class="kalender-icon">
-                                        <span
-                                            th:text="|Deadline: ${#temporals.format(tugas.deadline, 'dd/MM/yyyy')}|">Deadline:
-                                            DD/MM/YYYY</span>
+                                        <span th:text="'Deadline: ' + ${#temporals.format(tugas.deadline, 'dd/MM/yyyy')}">
+                                            Deadline: DD/MM/YYYY
+                                        </span>
                                     </div>
                                     <p th:text="${tugas.judulTugas}">Nama Tugas</p>
                                 </div>
                             </th:block>
-
+                            <div th:if="${tugasList.empty}" class="no-tugas">
+                                <p>Tidak ada tugas mendatang.</p>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Daftar Tugas Besar -->
                     <div class="tugas-besar-list" id="tugas-besar-list">
-
                         <th:block th:each="tugas : ${tugasList}">
                             <div class="tugas-besar">
                                 <div class="tugas-header">
@@ -148,23 +146,27 @@
                                 <p th:text="${tugas.deskripsi}">
                                     Deskripsi tugas.
                                 </p>
-                                <a th:href="@{/mahasiswa/tugas-detail(idTugas=${tugas.idTugas})}">
+                                <!-- PERBAIKAN PENTING: Tambahkan kodeMk parameter 
+                                 <a th:href="@{/admin/tugas-detail(kodeMk=${mkDetail.kodeMK}, idTugas=${tugas.idTugas})}">
                                     <button class="btn-lihat">Lihat Tugas ></button>
-                                </a>
+                                </a>-->
                             </div>
                         </th:block>
 
                         <div th:if="${tugasList.empty}" class="tugas-besar">
                             <p>Belum ada Tugas Besar yang tersedia untuk mata kuliah ini.</p>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
+    <script>
+        // Logout handler
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            window.location.href = '/logout';
+        });
+    </script>
 </body>
-
 </html>

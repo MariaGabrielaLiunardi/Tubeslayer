@@ -86,7 +86,9 @@
                 onclick="window.location.href=this.getAttribute('data-target-url')"> Daftar Peserta
             </button>
 
-            <button class="tab" data-tab-target="nilai">Nilai</button>
+            <button class="tab" data-tab-target="nilai"
+                th:attr="data-target-url=@{/mahasiswa/nilai(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')">Nilai</button>
         </div>
 
         <div class="detail-wrapper">

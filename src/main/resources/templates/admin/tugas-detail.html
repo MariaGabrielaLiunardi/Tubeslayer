@@ -69,7 +69,7 @@
               id="current-user-name"
               th:text="${user.nama}"
             >
-              Maria Gabriela
+              Admin
             </div>
             <div class="user-role" th:text="${user.role}">Admin</div>
           </div>
@@ -92,18 +92,18 @@
         <button
           class="tab active"
           data-tab-target="kuliah"
-          th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK})}'|"
+          th:onclick="|window.location.href='@{/admin/matkul-detail(mk=${mkDetail.kodeMK})}'|"
+
         >
           Kuliah
         </button>
         <button
           class="tab"
           data-tab-target="peserta"
-          th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|"
+          th:onclick="|window.location.href='@{/admin/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|"
         >
           Daftar Peserta
         </button>
-        <button class="tab" data-tab-target="nilai">Nilai</button>
       </div>
 
       <!-- Card Container - NEW DESIGN -->

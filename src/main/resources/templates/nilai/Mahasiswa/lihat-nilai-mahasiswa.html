@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lihat Nilai - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
+        <link rel="stylesheet" th:href="@{/css/lihat-nilai-mahasiswa.css}">
+        <script th:src="@{/js/lihat-nilai-mahasiswa.js}" defer></script>
+        <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>  
+    </head>
+
+    <body>
+        <nav class="sidebar close">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img th:src="@{/logo/blue-logo.png}" alt="logo">
+                    </span>
+
+                    <div class ="text header-text">
+                        <span class="name">Tubeslayer</span>
+                    </div>
+                </div>
+            </header>
+            <i class='bx bx-chevron-right toggle'></i> 
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a th:href="@{/mahasiswa/dashboard}">
+                                <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
+                                <span class="text nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-link active">
+                            <a th:href="@{/mahasiswa/mata-kuliah}">
+                                <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
+                                <span class="text nav-text">Mata Kuliah</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="home">
+            <div class="header">
+                <div class="left-section">
+                    <span class="dashboard-title">Lihat Nilai</span>
+                </div>
+                <div class="right-section">
+                    <div class="info">
+                        <span class="name" th:text="${user.nama}">Nama Mahasiswa</span>
+                        <span class="role" th:text="${user.role}">Mahasiswa</span>
+                    </div>
+                    <a th:href="@{/profil}">
+                        <img th:src="@{/icon/pfp.png}" class="pfp" alt="pfp">
+                    </a>
+                    <button type="button" class="logout" id="logoutButton">
+                        <img th:src="@{/icon/logout.png}" class="logout-btn" alt="logout">
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-segmented-control">
+                <div class="nav-tab">
+                    Lihat Nilai
+                </div>
+            </div>
+
+            <div class="mk-tab" th:data-mk-kode="${kodeMk}">
+                <button class="tab" data-tab-target="kuliah"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk}, colorIndex=${colorIndex})}'|">
+                    Kuliah
+                </button>
+                <button class="tab" data-tab-target="peserta"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|">
+                    Daftar Peserta
+                </button>
+                <button class="tab active" data-tab-target="nilai"
+                    th:onclick="|window.location.href='@{/mahasiswa/nilai(mk=${kodeMk}, colorIndex=${colorIndex})}'|">
+                    Nilai
+                </button>
+            </div>
+            
+            <div class="container">
+                <div class="rectangle-blue">
+                    <div class="tb-title">
+                        <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
+                        <div th:if="${tugas != null}">
+                            <span class="tb-text" th:text="${tugas.judulTugas}">Nama Tugas</span>
+                        </div>
+                        <div th:if="${tugas == null}">
+                            <span class="tb-text">Pilih tugas terlebih dahulu</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rectangle-white">
+                    <div class="nilai-content">
+                        <div class="breadcrumb">
+                            <a th:href="@{/mahasiswa/mata-kuliah}" class="breadcrumb-link">Daftar Mata Kuliah</a>
+                            &gt;
+                            <a th:href="@{/mahasiswa/matkul-detail(mk=${kodeMk}, colorIndex=${colorIndex})}" class="breadcrumb-link">
+                                <span th:text="${mataKuliah != null ? mataKuliah.nama : 'Mata Kuliah'}">Mata Kuliah</span>
+                            </a>
+                            &gt;
+                            <a th:href="@{/mahasiswa/nilai(mk=${kodeMk}, colorIndex=${colorIndex})}" class="breadcrumb-link">Nilai</a>
+                            &gt;
+                            <a th:href="@{/mahasiswa/dashboard-penilaian(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                            &gt;
+                            <span>Lihat Nilai</span>
+                        </div>
+
+                        <!-- Section Nilai Pribadi -->
+                        <div class="nilai-section" th:if="${nilaiPribadi != null}">
+                            <h3 class="section-title">Nilai Pribadi</h3>
+                            <div class="nilai-display-card">
+                                <span class="nilai-label">Nilai Akhir</span>
+                                <span class="nilai-value" th:text="${nilaiPribadi.nilaiAkhir != null && nilaiPribadi.nilaiAkhir > 0 ? nilaiPribadi.nilaiAkhir : '-'}">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Section Nilai Kelompok -->
+                        <div class="nilai-section" th:if="${nilaiKelompok != null}">
+                            <h3 class="section-title">Nilai Kelompok</h3>
+                            <p class="kelompok-info">
+                                Kelompok: <strong th:text="${namaKelompok}">Nama Kelompok</strong>
+                            </p>
+                            
+                            <div class="table-wrapper">
+                                <table class="nilai-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rubrik Penilaian</th>
+                                            <th>Bobot (%)</th>
+                                            <th>Nilai</th>
+                                            <th>Catatan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="komponen : ${nilaiKelompok.komponenList}">
+                                            <td th:text="${komponen.namaKomponen}">Komponen</td>
+                                            <td th:text="${komponen.bobot}">-</td>
+                                            <td th:text="${komponen.nilai != null && komponen.nilai > 0 ? komponen.nilai : '-'}">-</td>
+                                            <td th:text="${komponen.catatan != null && !komponen.catatan.isEmpty() ? komponen.catatan : '-'}">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="nilai-display-card nilai-kelompok-card">
+                                <span class="nilai-label">Nilai Akhir Kelompok</span>
+                                <span class="nilai-value" th:text="${nilaiKelompok.nilaiAkhir != null && nilaiKelompok.nilaiAkhir > 0 ? nilaiKelompok.nilaiAkhir : '-'}">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Jika tidak ada nilai -->
+                        <div class="no-nilai" th:if="${nilaiPribadi == null && nilaiKelompok == null}">
+                            <p>Nilai belum dirilis oleh dosen</p>
+                        </div>
+
+                        <!-- Tombol Kembali -->
+                        <div class="action-buttons">
+                            <a th:href="@{/mahasiswa/dashboard-penilaian(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" class="btn-back">
+                                <i class='bx bx-arrow-back'></i> Kembali
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script th:inline="javascript">
+            // Logout handler
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin logout?')) {
+                    window.location.href = '/logout';
+                }
+            });
+        </script>
+    </body>
+</html>

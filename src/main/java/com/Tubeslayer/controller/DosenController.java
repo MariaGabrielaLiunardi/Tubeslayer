@@ -792,6 +792,7 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
     @GetMapping("/dosen/nilai")
     public String dosenNilai(
             @RequestParam(required = false) String kodeMk,
+            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
         
@@ -819,12 +820,15 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         // Get peserta mata kuliah
         List<MataKuliahMahasiswa> pesertaList = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
 
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
         model.addAttribute("user", user);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("mkDosen", mkDosen);
         model.addAttribute("tugasList", tugasList);
         model.addAttribute("pesertaList", pesertaList);
         model.addAttribute("kodeMk", kodeMk);
+        model.addAttribute("colorIndex", finalColorIndex);
 
         return "nilai/Dosen/nilai-dosen";
     }
@@ -837,6 +841,7 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
     public String dosenJadwalPenilaian(
             @RequestParam(required = false) String kodeMk,
             @RequestParam(required = false) Integer idTugas,
+            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
         
@@ -870,11 +875,14 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
             return "redirect:/dosen/mata-kuliah";
         }
 
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
         model.addAttribute("user", user);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("tugas", tugas);
         model.addAttribute("kodeMk", kodeMk);
         model.addAttribute("idTugas", idTugas);
+        model.addAttribute("colorIndex", finalColorIndex);
 
         return "nilai/Dosen/jadwal-penilaian-dosen";
     }
@@ -1099,6 +1107,7 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
             @RequestParam(required = false) String kodeMk,
             @RequestParam(required = false) Integer idTugas,
             @RequestParam(required = false) Integer idKelompok,
+            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
         
@@ -1136,6 +1145,8 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         RubrikNilai rubrik = tugas != null ? tugas.getRubrik() : null;
         Set<KomponenNilai> komponenList = rubrik != null ? rubrik.getKomponenList() : new HashSet<>();
 
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
         model.addAttribute("user", user);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("mkDosen", mkDosen);
@@ -1146,6 +1157,7 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
         model.addAttribute("kodeMk", kodeMk);
         model.addAttribute("idTugas", idTugas);
         model.addAttribute("idKelompok", idKelompok);
+        model.addAttribute("colorIndex", finalColorIndex);
 
         return "nilai/Dosen/pemberian-nilai-rubrik-dosen";
     }
@@ -1158,6 +1170,7 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
     public String dosenDashboardPenilaian(
             @RequestParam(required = false) String kodeMk,
             @RequestParam(required = false) Integer idTugas,
+            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
         
@@ -1182,12 +1195,15 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
 
         List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
         
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
         model.addAttribute("user", user);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("mkDosen", mkDosen);
         model.addAttribute("tugasList", tugasList);
         model.addAttribute("kodeMk", kodeMk);
         model.addAttribute("idTugas", idTugas);
+        model.addAttribute("colorIndex", finalColorIndex);
 
         return "nilai/Dosen/dashboard-nilai-dosen";
     }
@@ -1200,6 +1216,7 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
     public String dosenRubrikPenilaian(
             @RequestParam(required = false) String kodeMk,
             @RequestParam(required = false) Integer idTugas,
+            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
         
@@ -1248,12 +1265,15 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
             }
         }
 
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
         model.addAttribute("user", user);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("mkDosen", mkDosen);
         model.addAttribute("tugas", tugas);
         model.addAttribute("kodeMk", kodeMk);
         model.addAttribute("idTugas", idTugas);
+        model.addAttribute("colorIndex", finalColorIndex);
         model.addAttribute("rubrikItems", rubrikItems);
         model.addAttribute("totalBobot", totalBobot);
         model.addAttribute("hasRubrik", hasRubrik);

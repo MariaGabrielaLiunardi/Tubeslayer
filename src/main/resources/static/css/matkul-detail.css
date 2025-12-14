@@ -1,181 +1,178 @@
-html, body {
-    height: 100%; 
-    margin: 0;
-    padding: 0;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    overflow-y: auto; 
-    overflow-x: auto;
-    
-    background-color: rgba(172, 224, 249, 1); 
+  overflow-y: auto;
+  overflow-x: auto;
 
-    background-image: linear-gradient(
-        180deg, 
-        rgba(255, 241, 235, 1) 0%, 
-        rgba(172, 224, 249, 1) 50%, 
-        rgba(172, 224, 249, 1) 100%
-    );
+  background-color: rgba(172, 224, 249, 1);
 
-    min-height: 100vh;
-    height: auto; 
-    
-    background-attachment: scroll; 
-    background-size: 100% 100vh; 
-    background-repeat: no-repeat;
-}
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 241, 235, 1) 0%,
+    rgba(172, 224, 249, 1) 50%,
+    rgba(172, 224, 249, 1) 100%
+  );
 
-a {
-    text-decoration: none;
+  min-height: 100vh;
+  height: auto;
+
+  background-attachment: scroll;
+  background-size: 100% 100vh;
+  background-repeat: no-repeat;
 }
 
 .detail-wrapper {
-    margin-top: 10px; 
-    margin-left: 22px;
-    margin-right: 22px;
-    margin-bottom: 50px; 
+  margin-top: 10px;
+  margin-left: 22px;
+  margin-right: 22px;
+  margin-bottom: 50px;
 
-    top: 10px;
-    background: white;
-    border-radius: 24px;
+  top: 10px;
+  background: white;
+  border-radius: 24px;
 
-    padding: 0px 0px 100px; 
+  padding: 0px 0px 100px;
 
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
-    position: relative; 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+  position: relative;
 }
 
 #toggle-tambah-tugas,
 #logoutButton {
-    position: relative;
-    z-index: 99;
+  position: relative;
+  z-index: 99;
 }
 
 .home {
-    position: relative;
-    z-index: 1; 
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar {
-    z-index: 2;  
+  z-index: 2;
 }
 
 /* header utama */
 .home .header {
-    height: 80px; 
-    width: 100%;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    padding: 18px 10px 0 10px; 
+  height: 80px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 10px 0 10px;
 }
 
 .home .header .left-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-left: 20px;
 }
 
 .home .header .left-section .dashboard-title {
-    font-weight: bold;
-    font-size: 20pt;
+  font-weight: bold;
+  font-size: 20pt;
 }
 
 .home .header .right-section {
-    gap: 15px;
-    display: flex;
-    align-items: center;
+  gap: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .home .header .right-section .info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* elemen header */
 .name {
-    font-weight: bold;
-    font-size: 14pt;
+  font-weight: bold;
+  font-size: 14pt;
 }
 
 .role {
-    font-size: 12pt;
+  font-size: 12pt;
 }
 
 .pfp {
-    width: 45px;
-    height: 45px;
+  width: 45px;
+  height: 45px;
 }
 
 .logout-btn {
-    width: 25px;
-    height: 25px;
-    position: relative;
-    z-index: 99999;
+  width: 25px;
+  height: 25px;
+  position: relative;
+  z-index: 99999;
 }
 
 .logout {
-    width: 40px;
-    height: 40px;
-    border: none;
-    background-color: #C1EBFF;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 2px 3px 1px grey;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: #c1ebff;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 2px 3px 1px grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* tab */
 .mk-tab {
-    background: #0078B5;
-    width: fit-content;
-    border-radius: 40px;
-    display: flex;
-    gap: 5px;
-    margin-top: 60px;
-    margin-left: 30px;
-    margin-bottom: 10px;
+  background: #0078b5;
+  width: fit-content;
+  border-radius: 40px;
+  display: flex;
+  gap: 5px;
+  margin-top: 60px;
+  margin-left: 30px;
+  margin-bottom: 10px;
 }
 
 .tab {
-    background: transparent;
-    color: white;
-    border: none;
-    padding: 10px 30px;
-    font-size: 18px;
-    border-radius: 30px;
-    cursor: pointer;
-    box-sizing: border-box; 
+  background: transparent;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  font-size: 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .tab.active {
-    background: #4CA6D3;
-    border-radius: 30px;
-    padding: 10px 30px; 
+  background: #4ca6d3;
+  border-radius: 30px;
+  padding: 10px 30px;
 }
 
 /* header mata kuliah */
 .mk-header {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    background: #CCF0F7;
-    padding: 30px;
-    border-radius: 20px;
-    margin-bottom: 0px; 
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background: #ccf0f7;
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 0px;
 }
 
 .mk-img {
-    width: 160px;
-    height: 130px;
-    border-radius: 25px;
-    background-size: cover;
-    background-position: center;
+  width: 160px;
+  height: 130px;
+  border-radius: 25px;
+  background-size: cover;
+  background-position: center;
 }
 
 /* background card */
@@ -204,231 +201,231 @@ a {
 }
 
 .mk-info h1 {
-    font-size: 40px;
-    font-weight: bold;
+  font-size: 40px;
+  font-weight: bold;
 }
 
 .mk-info p {
-    margin-top: 8px;
-    color: gray;
-    font-size: 18px;
+  margin-top: 8px;
+  color: gray;
+  font-size: 18px;
 }
 
 /* breadcrumb */
 .breadcrumb {
-    font-size: 16px;
-    margin-top: 15px; 
-    margin-bottom: 25px; 
-    margin-left: 25px;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  margin-left: 25px;
 }
 
 /* tambah tugas */
 .tambah-tugas-wrapper-list {
-    display: flex;
-    justify-content: center; 
-    width: 100%;
-    margin-top: 40px;
-    padding-bottom: 20px;
-    position: relative; 
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 40px;
+  padding-bottom: 20px;
+  position: relative;
 }
 
 .btn-tambah-tugas {
-    background: black;
-    color: white;
-    border: none;
-    padding: 10px 22px; 
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    position: relative;
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
 /* konten mata kuliah */
 .mk-content {
-    display: flex;
-    gap: 40px;
-    padding: 0 30px; 
+  display: flex;
+  gap: 40px;
+  padding: 0 30px;
 }
 
 /* tugas mendatang */
 .tugas-box {
-    background: white;
-    width: 300px;
-    padding: 25px;
-    border-radius: 25px;
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+  background: white;
+  width: 300px;
+  padding: 25px;
+  border-radius: 25px;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
 }
 
 .tugas-mendatang-list {
-    display: flex;
-    flex-direction: column; 
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .tugas-box h3 {
-    font-size: 22px;
-    margin-bottom: 15px;
+  font-size: 22px;
+  margin-bottom: 15px;
 }
 
 .tugas-kosong {
-    background: #c8eaff;
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 16px;
+  background: #c8eaff;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 16px;
 }
 
 /* style untuk card tugas baru */
 .tugas-mendatang-card {
-    background: #c8eaff;
-    padding: 15px;
-    border-radius: 15px;
-    font-size: 16px;
-    font-weight: 500;
+  background: #c8eaff;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .tugas-mendatang-card .deadline-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 5px;
-    color: #0078B5; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  color: #0078b5;
 }
 
 .kalender-icon {
-    width: 16px;
-    height: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .tugas-besar-list {
-    flex: 1; 
-    display: flex;
-    flex-direction: column; 
-    gap: 20px; 
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 #tugas-besar-kosong {
-    background: #fff4ec;
-    padding: 35px 30px 35px 25px; 
-    border-radius: 30px;
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    font-size: 18px;
-    color: #888;
+  background: #fff4ec;
+  padding: 35px 30px 35px 25px;
+  border-radius: 30px;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-size: 18px;
+  color: #888;
 }
 
 .tugas-besar {
-    background: #fff4ec;
-    padding: 35px 30px 35px 25px; 
-    border-radius: 30px;
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
-    position: relative; 
-    height: auto; 
+  background: #fff4ec;
+  padding: 35px 30px 35px 25px;
+  border-radius: 30px;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  height: auto;
 }
 
 .tugas-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 .tugas-besar h3 {
-    font-size: 28px;
-    margin: 0; 
+  font-size: 28px;
+  margin: 0;
 }
 
-.folder-icon{
-    width: 28px;
-    height: 28px;
+.folder-icon {
+  width: 28px;
+  height: 28px;
 }
 
 .tugas-besar p {
-    padding-bottom: 30px; 
-    margin-bottom: 15px;
-    font-size: 18px;
-    line-height: 1.6; 
+  padding-bottom: 30px;
+  margin-bottom: 15px;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .btn-lihat {
-    position: absolute;
-    bottom: 25px;
-    right: 30px; 
-    
-    background: black;
-    color: white;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 10px;
-    cursor: pointer;
+  position: absolute;
+  bottom: 25px;
+  right: 30px;
+
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 /* buat tugas form */
 #form-buat-tugas {
-    background: #fff4ec;
-    padding: 35px 40px;
-    border-radius: 30px;
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
-    margin: 0 30px; 
+  background: #fff4ec;
+  padding: 35px 40px;
+  border-radius: 30px;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+  margin: 0 30px;
 }
 
 #form-buat-tugas h2 {
-    font-size: 24px;
-    margin-bottom: 30px;
-    font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 30px;
+  font-weight: bold;
 }
 
 .form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-    width: 300px; 
-    font-size: 18px;
-    font-weight: 500;
+  width: 300px;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .form-group input[type="text"],
 .form-group input[type="date"],
 .form-group select,
 .form-group textarea {
-    flex: 1;
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    resize: none; 
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  resize: none;
 }
 
 .form-group textarea {
-    height: 150px;
+  height: 150px;
 }
 
 /* tombol submit form */
 .btn-submit-tugas {
-    display: block; 
-    margin: 40px auto 0 auto; 
-    
-    background: black;
-    color: white;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: block;
+  margin: 40px auto 0 auto;
+
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* breadcrumb */ 
+/* breadcrumb */
 .breadcrumb a {
-    color: black;
+  color: black;
 }
 
 .breadcrumb a:hover {
-    color: #0078B5;
+  color: #0078b5;
 }
