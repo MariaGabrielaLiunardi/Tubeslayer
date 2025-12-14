@@ -488,23 +488,21 @@ function showView(viewId) {
 
 
 function showSuccess(message) {
-    const toast = document.createElement('div');
-    toast.className = 'toast toast-success';
-    toast.innerHTML = `
-        <i class='bx bx-check-circle'></i>
-        <span>${message}</span>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    const toast = document.createElement("div");
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `
+      <i class='bx ${
+        type === "success" ? "bx-check-circle" : "bx-error-circle"
+      }'></i>
+      <span>${message}</span>
+  `;
+
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add("show"), 100);
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
 }
 
 function showError(message) {
