@@ -199,7 +199,7 @@ public class AdminController {
 
        MataKuliahDosen koordinator = null;
        try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
             }
@@ -210,7 +210,7 @@ public class AdminController {
 
         List<TugasBesar> tugasList = Collections.emptyList();
         try {
-            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true); 
+            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false); 
         } catch (Exception e) {
             System.err.println("Error fetching tasks for archive: " + e.getMessage());
         }
@@ -255,7 +255,7 @@ public class AdminController {
 
         MataKuliahDosen koordinator = null;
         try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true); 
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false); 
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
             }
@@ -268,7 +268,7 @@ public class AdminController {
 
         if (mkMahasiswaRepo != null && mk != null) {
             try {
-                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true);
+                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), false);
             } catch (Exception e) {
                 System.err.println("Error saat mengambil data peserta arsip: " + e.getMessage());
             }
@@ -2258,7 +2258,7 @@ public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required 
 
     MataKuliah mk = mataKuliahRepository.findById(kodeMk).orElse(null);
     if (mk == null) {
-        return "redirect:/admin/matakuliah-detail";
+        return "redirect:/admin/dashboard";
     }
 
         int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
@@ -2303,5 +2303,4 @@ public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required 
 
     return "admin/peserta-detail";
 }
-
 }
