@@ -2258,7 +2258,7 @@ public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required 
 
     MataKuliah mk = mataKuliahRepository.findById(kodeMk).orElse(null);
     if (mk == null) {
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/matakuliah-detail";
     }
 
         int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
@@ -2303,68 +2303,5 @@ public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required 
 
     return "admin/peserta-detail";
 }
-
-// ============================
-// TUGAS DETAIL
-// ============================
-
-@GetMapping("/tugas-detail")
-public String tugasDetail(@RequestParam Integer idTugas, // GANTI Long jadi Integer
-                         @AuthenticationPrincipal CustomUserDetails user,
-                         Model model) {
-    
-    System.out.println("🔄 Admin akses tugas-detail dengan ID: " + idTugas);
-    model.addAttribute("user", user);
-    
-    try {
-        // 1. Cari tugas berdasarkan ID, bukan kode MK
-        Optional<TugasBesar> tugasOpt = tugasRepo.findById(idTugas);
-        
-        if (tugasOpt.isEmpty()) {
-            System.err.println("❌ Tugas dengan ID " + idTugas + " tidak ditemukan");
-            return "redirect:/admin/dashboard";
-        }
-        
-        TugasBesar tugas = tugasOpt.get();
-        System.out.println("✅ Tugas ditemukan: " + tugas.getJudulTugas());
-        
-        // 2. Ambil mata kuliah terkait
-        MataKuliah mataKuliah = tugas.getMataKuliah();
-        if (mataKuliah == null) {
-            System.err.println("❌ Mata kuliah tidak ditemukan untuk tugas ID: " + idTugas);
-            return "redirect:/admin/dashboard";
-        }
-        
-        System.out.println("📚 Mata Kuliah: " + mataKuliah.getNama() + " (" + mataKuliah.getKodeMK() + ")");
-        
-        // 3. Hitung statistik (gunakan method dari repository)
-        Long jumlahKelompok = tugasRepo.getKelompokCount(idTugas);
-        Long jumlahSubmission = tugasRepo.getSubmissionCount(idTugas);
-        
-        // 4. Ambil semua tugas untuk mata kuliah ini
-        List<TugasBesar> semuaTugasMK = tugasRepo.findByMataKuliah_KodeMKAndIsActive(
-            mataKuliah.getKodeMK(), true);
-        
-        // 5. Tambahkan ke model
-        model.addAttribute("tugas", tugas);
-        model.addAttribute("mataKuliah", mataKuliah);
-        model.addAttribute("jumlahKelompok", jumlahKelompok != null ? jumlahKelompok : 0);
-        model.addAttribute("jumlahSubmission", jumlahSubmission != null ? jumlahSubmission : 0);
-        model.addAttribute("semuaTugasMK", semuaTugasMK);
-        model.addAttribute("kodeMK", mataKuliah.getKodeMK());
-        
-        // 6. Warna gradient
-        int colorIndex = Math.abs(mataKuliah.getKodeMK().hashCode()) % 4;
-        model.addAttribute("colorIndex", colorIndex);
-        
-        return "admin/tugas-detail";
-        
-    } catch (Exception e) {
-        System.err.println("❌ Error: " + e.getMessage());
-        e.printStackTrace();
-        return "redirect:/admin/dashboard";
-    }
-}
-
 
 }
