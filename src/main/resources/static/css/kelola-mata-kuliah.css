@@ -22,7 +22,7 @@ body {
     min-height: 100vh;
     height: auto;
     background-attachment: scroll; 
-    background-size: 100% 100vh; /* gradien seluruh bagian */
+    background-size: 100% 100vh; 
     background-repeat: no-repeat;
 }
 
@@ -34,14 +34,13 @@ body {
     padding: 0; 
 }
 :root{
-    /* Transition */
+    
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 }
 
-/* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
     font-weight: 500;
@@ -102,8 +101,6 @@ body {
     background-color: #C1EBFF;
     border-radius: 10px;
 }
-
-
 
 .sidebar li .icon,
 .sidebar li .text{
@@ -307,12 +304,9 @@ header .image-text .header-text{
     gap: 35px; 
 }
 
-/* --- Reset & Font Dasar --- */
 .content-section {
     padding: 20px;
 }
-
-/* --- Header & Navigasi Atas --- */
 
 .header .left-section {
     display: flex;
@@ -329,13 +323,13 @@ header .image-text .header-text{
 .matkul-banner {
     position: relative;
     width: 100%;                    
-    max-width: 1400px;                /* biar rapi */
+    max-width: 1400px;                
     background: #CCF0F7;
-    padding-left: 20px;              /* kecil & tipis */
+    padding-left: 20px;              
     border-radius: 15px;
     display: flex;
     align-items: center;
-    gap: 12px;                       /* jarak icon ke teks */
+    gap: 12px;                       
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     margin-bottom: 0px;
     z-index: 2;
@@ -360,7 +354,6 @@ header .image-text .header-text{
 
 }
 
-/* --- Area Daftar & Pencarian --- */
 .list-container{
     margin-top: -10px;
     height: auto;
@@ -406,20 +399,18 @@ header .image-text .header-text{
     cursor: pointer;
 }
 
-
-/* --- Struktur Tabel Custom --- */
 .custom-table-container {
     min-height: 190px;
     background-color: #fff4ec; 
     padding: 20px;
     border-radius: 15px;
-    overflow-x: auto; /* Untuk scroll horizontal jika perlu */
+    overflow-x: auto; 
 }
 
 .custom-table {
     width: 100%;
-    border-collapse: separate; /* Ini penting! */
-    border-spacing: 0 10px; /* Spacing vertikal antar rows */
+    border-collapse: separate; 
+    border-spacing: 0 10px; 
 }
 
 .custom-table thead {
@@ -447,8 +438,7 @@ header .image-text .header-text{
     overflow-x: auto;
 }
 
-/* Atur lebar kolom spesifik */
-.custom-table th:nth-child(1), /* No */
+.custom-table th:nth-child(1), 
 .custom-table td:nth-child(1) {
     width: 8%;
     min-width: 50px;
@@ -456,26 +446,26 @@ header .image-text .header-text{
     border-bottom-left-radius: 20px;
 }
 
-.custom-table th:nth-child(2), /* Kode MK */
+.custom-table th:nth-child(2), 
 .custom-table td:nth-child(2) {
     width: 15%;
     min-width: 100px;
 }
 
-.custom-table th:nth-child(3), /* Nama Mata Kuliah */
+.custom-table th:nth-child(3), 
 .custom-table td:nth-child(3) {
     width: 42%;
     min-width: 250px;
     padding-left: 15px;
 }
 
-.custom-table th:nth-child(4), /* SKS */
+.custom-table th:nth-child(4), 
 .custom-table td:nth-child(4) {
     width: 10%;
     min-width: 70px;
 }
 
-.custom-table th:nth-child(5), /* Status */
+.custom-table th:nth-child(5), 
 .custom-table td:nth-child(5) {
     width: 25%;
     min-width: 120px;
@@ -483,7 +473,6 @@ header .image-text .header-text{
     border-bottom-right-radius: 20px;
 }
 
-/* Status badge styling */
 .status-badge {
     display: inline-block;
     padding: 4px 12px;
@@ -506,7 +495,6 @@ header .image-text .header-text{
     border: 1px solid #f5c6cb;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .custom-table-container {
         padding: 10px;
@@ -524,7 +512,6 @@ header .image-text .header-text{
     }
 }
 
-/* --- Footer (Pagination & Buttons) --- */
 .footer-actions {
     display: flex;
     justify-content: flex-end;
@@ -533,7 +520,6 @@ header .image-text .header-text{
     gap: 10px;
     margin-top: 15px;
 }
-
 
 .pagination-container {
     display: flex;
@@ -571,8 +557,6 @@ header .image-text .header-text{
     border: none;
 }
 
-
-
 .button-group {
     display: flex;
     gap: 15px;
@@ -596,7 +580,6 @@ header .image-text .header-text{
     transform: translateY(-1px);
 }
 
-/* --- View 2: Pilih Cara --- */
 .pilih-cara {
     display: none; 
     position: relative;
@@ -630,7 +613,6 @@ header .image-text .header-text{
     margin: 0;
 }
 
-/* --- View 3: Import Mata Kuliah --- */
 #import-matkul {
     display: none;
     display: flex;
@@ -655,8 +637,6 @@ header .image-text .header-text{
     flex-direction: column;
 }
 
-/* --- Tombol Tambah Baru --- */
-/* Card container */
 .tambah-matkul {
     display: flex;
     justify-content: center;   
@@ -677,7 +657,6 @@ header .image-text .header-text{
             
 }
 
-/* Form styling */
 #tambah-matkul-form {
     display: flex;
     flex-direction: column;
@@ -685,13 +664,11 @@ header .image-text .header-text{
    
 }
 
-/* Label */
 #tambah-matkul-form label {
     font-weight: 500;
     margin-bottom: 0px;
 }
 
-/* Input & Select */
 #tambah-matkul-form input,
 #tambah-matkul-form select {
     padding: 4px 8px;
@@ -713,8 +690,6 @@ header .image-text .header-text{
     flex-direction: column;
 }
 
-/* --- Bagian Untuk Hapus Matkul --- */
-/* Box konten */
 .hapus-matkul{
     display: flex;
     justify-content: center;
@@ -735,18 +710,15 @@ header .image-text .header-text{
     position: relative;
 }
 
-/* Input wrapper */
 .hapus-matkul-content .input-wrapper {
     position: relative;
     border-radius: 15px;
 }
 
-/* Suggestions dropdown */
 .hapus-matkul-content .suggestions {
     display: none;
 }
 
-/* Button group */
 .hapus-matkul-content .button-group {
     display: flex; 
     justify-content: center;

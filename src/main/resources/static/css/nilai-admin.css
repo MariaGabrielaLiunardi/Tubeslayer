@@ -9,14 +9,14 @@
 }
 
 :root{
-    /* Transition */
+    
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 
-    --nav-primary-blue: #2269a3; /* Biru tua untuk inactive */
-    --nav-active-blue: #6da8ce;  /* Biru muda untuk active */
+    --nav-primary-blue: #2269a3; 
+    --nav-active-blue: #6da8ce;  
     --nav-text-color: #ffffff;
 }
 
@@ -280,22 +280,20 @@ header .image-text .header-text{
     padding: 20px;
 }
 
-/* Kontainer Utama Navigasi */
 .nav-segmented-control {
     display: flex;
     width: 100%;
-    max-width: 800px; /* Lebar maksimal */
+    max-width: 800px; 
     height: 80px;
     background-color: var(--nav-primary-blue);
-    border-radius: 40px; /* Sudut membulat penuh (setengah dari tinggi) */
+    border-radius: 40px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Penting agar sudut melengkung sempurna */
+    overflow: hidden; 
     font-family: Sen;
-    margin-top: 30px; /* Contoh margin agar tidak menempel ke header */
+    margin-top: 30px; 
     margin-left: 100px;
 }
 
-/* Style untuk setiap Segmen */
 .nav-segmented-control > div {
     flex-grow: 1;
     display: flex;
@@ -306,11 +304,11 @@ header .image-text .header-text{
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s;
-    padding: 0 10px; /* Padding horizontal */
+    padding: 0 10px; 
 }
 
 .nav-segmented-control > div:hover:not(.nav-active) {
-    background-color: rgba(255, 255, 255, 0.1); /* Sedikit gelap/terang saat di-hover */
+    background-color: rgba(255, 255, 255, 0.1); 
 }
 
 .nav-segmented-control .nav-active {
@@ -522,7 +520,6 @@ header .image-text .header-text{
     text-align: center;
 }
 
-
 .assignment-row-1 {
     display: flex;
     align-items: center;
@@ -561,7 +558,6 @@ header .image-text .header-text{
     border-radius: 30px;
     margin-top: 25px;
 }
-
 
 .subject-title{
     font-weight: bold;

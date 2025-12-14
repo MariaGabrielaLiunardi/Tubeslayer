@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Logic untuk Toggle Sidebar
 
     const sidebar = document.querySelector('.sidebar');
     const toggle = document.querySelector('.toggle');
@@ -10,5 +9,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    
 });

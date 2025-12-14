@@ -16,7 +16,7 @@
     />
   </head>
   <body>
-    <!-- Sidebar -->
+    
     <nav class="sidebar close">
       <header>
         <div class="image-text">
@@ -58,9 +58,9 @@
       </div>
     </nav>
 
-    <!-- Main Content -->
+    
     <div class="main-content">
-      <!-- Header -->
+      
       <div class="header">
         <div class="header-left"></div>
         <div class="header-right">
@@ -85,7 +85,7 @@
         </div>
       </div>
 
-      <!-- Tabs -->
+      
       <div
         class="mk-tab"
         th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}"
@@ -107,9 +107,9 @@
         <button class="tab" data-tab-target="nilai">Nilai</button>
       </div>
 
-      <!-- Card Container -->
+      
       <div class="card-container">
-        <!-- Title Section -->
+        
         <div class="title-section">
           <div class="book-icon">
             <img src="/icon/open-book.png" alt="bookiconbig" />
@@ -119,9 +119,9 @@
           </h1>
         </div>
 
-        <!-- Content Card -->
+        
         <div class="content-card">
-          <!-- VIEW 1: Deskripsi Tugas (Default View) -->
+          
           <div id="view-deskripsi" class="view-content active">
             <div class="breadcrumb">
               Daftar Mata Kuliah <span>></span>
@@ -144,7 +144,7 @@
               </h2>
             </div>
 
-            <!-- Deskripsi Tugas -->
+            
             <p
               class="content-description"
               th:text="${tugas != null ? tugas.deskripsi : 'Deskripsi tugas'}"
@@ -185,7 +185,7 @@
               </div>
             </div>
 
-            <!-- Jika belum punya kelompok -->
+            
             <div class="no-group-info" th:if="${!hasKelompok}">
               <i class="bx bx-info-circle"></i>
               <span>Anda belum tergabung dalam kelompok untuk tugas ini.</span>
@@ -201,7 +201,7 @@
                 </span>
               </div>
 
-              <!-- Tombol Kelola Anggota jika dalam mode Mahasiswa -->
+              
               <button
                 class="manage-btn"
                 id="btn-kelola-anggota"
@@ -212,16 +212,16 @@
                 Kelola Anggota
               </button>
 
-              <!-- Info untuk mode Dosen -->
+              
               <div class="mode-dosen-badge" th:if="${modeKelompok == 'Dosen'}">
                 <i class="bx bx-lock-alt"></i>
                 <span>Kelompok diatur oleh Dosen</span>
               </div>
             </div>
 
-            <!-- Warning Messages -->
+            
             <div class="warning-messages">
-              <!--  Jika Bukan Leader -->
+              
               <p
                 class="warning-text warning-leader"
                 th:if="${modeKelompok == 'Mahasiswa' && hasKelompok && !isLeader}"
@@ -230,7 +230,7 @@
                 Hanya ketua kelompok yang dapat mengelola anggota!
               </p>
 
-              <!-- Jika Mode Dosen -->
+              
               <p
                 class="warning-text warning-mode"
                 th:if="${modeKelompok == 'Dosen'}"
@@ -240,7 +240,7 @@
                 dapat mengelola anggota kelompok.
               </p>
 
-              <!-- Jika Belum ada kelompok & mode Mahasiswa -->
+              
               <p
                 class="info-text"
                 th:if="${modeKelompok == 'Mahasiswa' && !hasKelompok}"
@@ -252,7 +252,7 @@
             </div>
           </div>
 
-          <!-- VIEW 2: Anggota Kelompok -->
+          
           <div id="view-anggota" class="view-content">
             <div class="content-header">
               <h2>Anggota Kelompok</h2>
@@ -261,12 +261,12 @@
               >
             </div>
 
-            <!-- List Anggota (akan diisi oleh JavaScript) -->
+            
             <div class="member-list" id="member-list">
               <p class="no-members">Memuat data anggota...</p>
             </div>
 
-            <!-- Member Counter -->
+            
             <div class="member-counter" id="member-counter">
               <span
                 th:text="${jumlahAnggota} + '/' + ${maxAnggota} + ' Anggota'"
@@ -275,7 +275,7 @@
               </span>
             </div>
 
-            <!-- Action Buttons -->
+            
             <div class="action-buttons">
               <button class="btn-secondary" id="btn-kembali-anggota">
                 <i class="bx bx-arrow-back"></i>
@@ -297,7 +297,7 @@
               </div>
             </div>
 
-            <!-- Warning untuk non-ketua -->
+            
             <p
               class="warning-text"
               id="warning-non-ketua"
@@ -313,13 +313,13 @@
             </p>
           </div>
 
-          <!-- VIEW 3: Pilih Anggota Kelompok -->
+          
           <div id="view-pilih-anggota" class="view-content">
             <div class="content-header">
               <h2>Pilih anggota kelompok</h2>
             </div>
 
-            <!-- Search Input -->
+            
             <div class="search-section">
               <label for="search-mahasiswa">Masukkan Nama:</label>
               <div class="search-input-wrapper">
@@ -334,13 +334,13 @@
                 </button>
               </div>
 
-              <!-- Search Results Dropdown -->
+              
               <div class="search-results" id="search-results">
-                <!-- Results will be inserted here by JavaScript -->
+                
               </div>
             </div>
 
-            <!-- Member Counter -->
+            
             <div class="member-counter" id="member-counter-pilih">
               <span
                 th:text="${jumlahAnggota} + '/' + ${maxAnggota} + ' Anggota'"
@@ -349,25 +349,20 @@
               </span>
             </div>
 
-            <!-- Action Buttons -->
+            
             <div class="action-buttons">
               <button class="btn-secondary" id="btn-kembali-pilih">
                 <i class="bx bx-arrow-back"></i>
                 Kembali
               </button>
-              <!-- matiin button
-                        <button class="btn-primary" id="btn-konfirmasi">
-                            <i class='bx bx-check'></i>
-                            Konfirmasi
-                        </button>
-                        -->
+              
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Hidden data untuk JavaScript -->
+    
     <input
       type="hidden"
       id="idTugas"
@@ -378,7 +373,7 @@
     <input type="hidden" id="canManageAnggota" th:value="${canManageAnggota}" />
     <input type="hidden" id="modeKelompok" th:value="${modeKelompok}" />
 
-    <!-- Scripts -->
+    
     <script src="/js/sidebar.js"></script>
   </body>
 </html>

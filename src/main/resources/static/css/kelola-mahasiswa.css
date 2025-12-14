@@ -31,14 +31,13 @@ body {
     padding: 0; 
 }
 :root{
-    /* Transition */
+    
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 }
 
-/* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
     font-weight: 500;
@@ -81,8 +80,6 @@ body {
     background-color: #C1EBFF;
     border-radius: 10px;
 }
-
-
 
 .sidebar li{
     height: 50px;
@@ -304,12 +301,9 @@ header .image-text .header-text{
     gap: 35px; 
 }
 
-/* --- Reset & Font Dasar --- */
 .content-section {
     padding: 20px;
 }
-
-/* --- Header & Navigasi Atas --- */
 
 .header .left-section {
     display: flex;
@@ -320,19 +314,19 @@ header .image-text .header-text{
 .menu-toggle-btn {
     font-size: 24px;
     cursor: pointer;
-    color: #5BA4E6; /* Warna biru icon */
+    color: #5BA4E6; 
 }
 
 .mahasiswa-banner {
     position: relative;
     width: 100%;                    
-    max-width: 1400px;                /* biar rapi */
+    max-width: 1400px;                
     background: #CCF0F7;
-    padding-left: 20px;              /* kecil & tipis */
+    padding-left: 20px;              
     border-radius: 15px;
     display: flex;
     align-items: center;
-    gap: 12px;                       /* jarak icon ke teks */
+    gap: 12px;                       
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     margin-bottom: 0px;
     z-index: 2;
@@ -356,7 +350,6 @@ header .image-text .header-text{
 
 }
 
-/* --- Area Daftar & Pencarian --- */
 .list-container {
     width: 100%;
     margin-bottom: -10px;
@@ -402,7 +395,6 @@ header .image-text .header-text{
     cursor: pointer;
 }
 
-/* --- Struktur Tabel Custom --- */
 .custom-table-container {
     min-height: 190px;
     background-color: #FFF1EB; 
@@ -433,8 +425,6 @@ header .image-text .header-text{
     text-align: center;
 }
 
-/* ==== Width & Corner Radius Per Kolom (Layout Kelola Mahasiswa) ==== */
-/* Kolom 1 — No */
 .custom-table th:nth-child(1),
 .custom-table td:nth-child(1) {
     width: 8%;
@@ -443,14 +433,12 @@ header .image-text .header-text{
     border-bottom-left-radius: 20px;
 }
 
-/* Kolom 2 — NPM */
 .custom-table th:nth-child(2),
 .custom-table td:nth-child(2) {
     width: 18%;
     min-width: 110px;
 }
 
-/* Kolom 3 — Nama */
 .custom-table th:nth-child(3),
 .custom-table td:nth-child(3) {
     width: 34%;
@@ -458,14 +446,12 @@ header .image-text .header-text{
     padding-left: 15px;
 }
 
-/* Kolom 4 — Email */
 .custom-table th:nth-child(4),
 .custom-table td:nth-child(4) {
     width: 22%;
     min-width: 180px;
 }
 
-/* Kolom 5 — Status */
 .custom-table th:nth-child(5),
 .custom-table td:nth-child(5) {
     width: 18%;
@@ -474,8 +460,6 @@ header .image-text .header-text{
     border-bottom-right-radius: 20px;
 }
 
-
-/* --- Footer (Pagination & Buttons) --- */
 .footer-actions {
     display: flex;
     justify-content: flex-end;
@@ -484,7 +468,6 @@ header .image-text .header-text{
     gap: 10px;
     margin-top: 15px;
 }
-
 
 .pagination-container {
     display: flex;
@@ -545,7 +528,6 @@ header .image-text .header-text{
     transform: translateY(-1px);
 }
 
-/* --- View 2: Pilih Cara --- */
 .pilih-cara {
     display: none; 
     position: relative;
@@ -579,7 +561,6 @@ header .image-text .header-text{
     margin: 0;
 }
 
-/* --- View 3: Import Mata Kuliah --- */
 #import-mahasiswa {
     display: none;
 
@@ -605,8 +586,6 @@ header .image-text .header-text{
     flex-direction: column;
 }
 
-/* --- Tombol Tambah Baru --- */
-/* Card container */
 .tambah-mahasiswa {
     display: flex;
     justify-content: center;   
@@ -627,7 +606,6 @@ header .image-text .header-text{
             
 }
 
-/* Form styling */
 #tambah-mahasiswa-form {
     display: flex;
     flex-direction: column;
@@ -635,13 +613,11 @@ header .image-text .header-text{
    
 }
 
-/* Label */
 #tambah-mahasiswa-form label {
     font-weight: 500;
     margin-bottom: 0px;
 }
 
-/* Input & Select */
 #tambah-mahasiswa-form input,
 #tambah-mahasiswa-form select {
     padding: 4px 8px;
@@ -663,8 +639,6 @@ header .image-text .header-text{
     flex-direction: column;
 }
 
-/* --- Untuk Hapus Mahasiswa --- */
-/* Box konten */
 .hapus-mahasiswa{
     display: flex;
     justify-content: center;
@@ -685,18 +659,15 @@ header .image-text .header-text{
     position: relative;
 }
 
-/* Input wrapper */
 .hapus-mahasiswa-content .input-wrapper {
     position: relative;
     border-radius: 15px;
 }
 
-/* Suggestions dropdown */
 .hapus-mahasiswa-content .suggestions {
     display: none;
 }
 
-/* Button group */
 .hapus-mahasiswa-content .button-group {
     display: flex; 
     justify-content: center;

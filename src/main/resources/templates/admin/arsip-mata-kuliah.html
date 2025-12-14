@@ -101,7 +101,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 1: Tabel -->
+            
             <div class="custom-table-container" id="table-view">
                 <div class="table-header-row">
                     <span>No</span>
@@ -124,7 +124,7 @@
 
                 <div class="pagination" th:if="${totalPages > 1}">
                     
-                    <!-- Tombol Prev -->
+                    
                     <a class="page-arrow"
                     th:if="${currentPage > 0}"
                     th:href="@{/admin/arsip-mata-kuliah(page=${currentPage - 1}, size=${3})}">
@@ -132,12 +132,12 @@
                     </a>
                     <span class="page-arrow disabled" th:if="${currentPage == 0}">&lt;</span>
 
-                    <!-- Info halaman -->
+                    
                     <span class="page-info">
                         [[${currentPage + 1}]] / [[${totalPages}]]
                     </span>
 
-                    <!-- Tombol Next -->
+                    
                     <a class="page-arrow"
                     th:if="${currentPage + 1 < totalPages}"
                     th:href="@{/admin/arsip-mata-kuliah(page=${currentPage + 1}, size=${3})}">

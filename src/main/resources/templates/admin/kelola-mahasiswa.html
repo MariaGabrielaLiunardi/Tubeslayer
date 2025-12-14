@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Mahasiswa - Tubeslayer</title>
     
-    <!-- Thymeleaf URLs -->
+    
     <link rel="stylesheet" th:href="@{/css/kelola-mahasiswa.css}">
     <script th:src="@{/js/kelola-mahasiswa.js}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
     
-    <!-- Custom CSS -->
+    
     <style th:inline="text">
         .status-badge {
             padding: 4px 12px;
@@ -130,7 +130,7 @@
 
         <div class="right-section">
             <div class="info">
-                <!-- Thymeleaf untuk user data -->
+                
                 <span class="name" th:text="${user.nama}">Nama</span>
                 <span class="role" th:text="${user.role}">Role</span>
             </div>
@@ -164,7 +164,7 @@
                 </div>
             </div>
 
-            <!-- Loading overlay -->
+            
             <div id="global-loading">
                 <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
                     <div style="display: flex; align-items: center; gap: 10px;">
@@ -174,7 +174,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 1: Tabel -->
+            
             <div class="custom-table-container" id="table-view">
 
                         <div class="table-header-row">
@@ -207,7 +207,7 @@
                 <button id="next-page" class="page-btn">›</button>
             </div>         
 
-            <!-- FOOTER -->
+            
             <div class="footer-actions" id="footer-view">
                 <div class="button-group">
                     <button class="btn btn-delete" id="btn-delete">Hapus Mahasiswa</button>
@@ -215,7 +215,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 2: Pilih Cara -->
+            
             <div class="pilih-cara" id="pilih-cara">
                 <div class="pilih-cara-content">
                     <div class="button-group">
@@ -225,7 +225,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 3: Milih yang import -->
+            
             <div class="import-mahasiswa" id="import-mahasiswa">
                 <div class="import-mahasiswa-content">
                     <input type="file" id="file-input" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
@@ -233,7 +233,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 4 : Milih Tambah Baru-->
+            
             <div class="tambah-mahasiswa" id="tambah-mahasiswa">
                 <div class="tambah-mahasiswa-content">
                     <form id="tambah-mahasiswa-form">
@@ -254,7 +254,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 5: Hapus Mahasiswa -->
+            
             <div class="hapus-mahasiswa" id="view-hapus-mahasiswa">
                 <div class="hapus-mahasiswa-content">
                     <div class="input-wrapper">
@@ -270,7 +270,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 6: Konfirmasi Hapus-->
+            
             <div class="konfirmasi-hapus" id="konfirmasi-hapus">
                 <div class="konfirmasi-hapus-content">
                     <span>Apakah Anda yakin ingin menghapus mahasiswa ini?</span>
@@ -285,7 +285,7 @@
     </div>
 </section>
 
-<!-- Tambahkan inline JavaScript untuk konfigurasi -->
+
 <script th:inline="javascript">
     /*<![CDATA[*/
     

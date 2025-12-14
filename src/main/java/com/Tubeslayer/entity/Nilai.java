@@ -22,7 +22,6 @@ public class Nilai {
     @JoinColumn(name = "id_user")
     private User user;
 
-    // Relasi Tugas (ManyToOne)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tugas") 
     private TugasBesar tugas;
@@ -30,7 +29,6 @@ public class Nilai {
     private int nilaiPribadi;
     private int nilaiKelompok;
     
-    // Relasi dengan NilaiKomponen (One-to-Many)
     @OneToMany(mappedBy = "nilai", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<NilaiKomponen> nilaiKomponenList;

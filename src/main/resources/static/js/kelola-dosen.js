@@ -1,6 +1,4 @@
-/* ===============================
-       1. SIDEBAR TOGGLE
-    ================================ */
+
     const sidebar = document.querySelector('.sidebar');
     const toggle = document.querySelector('.toggle');
 
@@ -10,10 +8,6 @@
         });
     }
 
-
-    /* ===============================
-       2. NAV ACTIVE HIGHLIGHT
-    ================================ */
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
 
     navLinks.forEach(li => {
@@ -28,51 +22,41 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Kelola Dosen JS Loaded");
 
-    // ==================== CONFIGURATION ====================
     const API_BASE_URL = window.API_BASE_URL || window.location.origin;
     const API_DOSEN = window.API_DOSEN || `${API_BASE_URL}/admin/api/dosen`;
     
     console.log("Using API:", API_DOSEN);
 
-    // ==================== ELEMENTS ====================
     const elements = {
-        // Main container
+
         home: document.querySelector('.home'),
         
-        // Main views
         tableView: document.getElementById("table-view"),
         footerView: document.getElementById("footer-view"),
         searchbar: document.getElementById("search-bar"),
         
-        // Add dosen flow
         pilihCara: document.getElementById("pilih-cara"),
         importView: document.getElementById("import-dosen"),
         manualView: document.getElementById("tambah-dosen"),
         
-        // Delete dosen flow
         hapusView: document.getElementById("view-hapus-dosen"),
         konfirmasiHapus: document.getElementById("konfirmasi-hapus"),
         
-        // Buttons
         btnAdd: document.getElementById("btn-add"),
         btnDelete: document.getElementById("btn-delete"),
         btnImport: document.getElementById("btn-import"),
         btnManual: document.getElementById("btn-manual"),
         buttonPage: document.getElementById("pagination"),
         
-        // Forms
         tambahForm: document.getElementById("tambah-dosen-form"),
         
-        // Titles
         listTitle: document.getElementById("list-title"),
         subTitle: document.getElementById("sub-title"),
         subTitle2: document.getElementById("sub-title-2"),
         
-        // Search elements
         suggestionsBox: document.getElementById("suggestions"),
         searchInput: document.getElementById("search-input"),
         
-        // Other buttons
         btnCancelDelete: document.getElementById("btn-cancel-delete"),
         btnConfirmDelete: document.getElementById("btn-confirm-delete"),
         btnCancelConfirm: document.getElementById("btn-cancel-confirm"),
@@ -81,37 +65,30 @@ document.addEventListener("DOMContentLoaded", () => {
         fileInput: document.getElementById("file-input")
     };
 
-    // Log elements for debugging
     console.log("Elements found:");
     Object.keys(elements).forEach(key => {
         console.log(`- ${key}:`, elements[key] ? "✓" : "✗");
     });
 
-    // ==================== STATE ====================
     let daftarDosen = [];
     let selectedDosen = null;
 
-    // ==================== INITIALIZATION ====================
     init();
 
     async function init() {
-        // First: Hide ALL views except main
+
         hideAllViews();
         showMainView();
         
-        // Setup event listeners
         setupEventListeners();
         
-        // Load data
         await loadDosenData();
         
-        // Setup search
         setupSearch();
     }
 
-    // ==================== VIEW MANAGEMENT ====================
     function hideAllViews() {
-        // Hide all special views
+
         const viewsToHide = [
             elements.pilihCara,
             elements.importView,
@@ -124,12 +101,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (view) view.style.display = 'none';
         });
         
-        // Also hide main table elements initially
         if (elements.tableView) elements.tableView.style.display = 'none';
         if (elements.footerView) elements.footerView.style.display = 'none';
         if (elements.searchbar) elements.searchbar.style.display = 'none';
         
-        // Clear titles
         if (elements.subTitle) elements.subTitle.textContent = '';
         if (elements.subTitle2) elements.subTitle2.textContent = '';
     }
@@ -137,10 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function showMainView() {
         console.log("Showing main view");
         
-        // Hide all special views
         hideAllViews();
         
-        // Show main table elements
         if (elements.tableView) {
             elements.tableView.style.display = 'block';
         }
@@ -151,14 +124,12 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.searchbar.style.display = 'block';
         }
         elements.buttonPage.style.display = 'flex';
-        // Reset titles
+
         if (elements.subTitle) elements.subTitle.textContent = '';
         if (elements.subTitle2) elements.subTitle2.textContent = '';
         
-        // Clear selected dosen
         selectedDosen = null;
         
-        // Reset search input if exists
         if (elements.searchInput) elements.searchInput.value = '';
         if (elements.suggestionsBox) {
             elements.suggestionsBox.innerHTML = '';
@@ -209,7 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.subTitle2) elements.subTitle2.textContent = "";
         elements.buttonPage.style.display = 'none';
         
-        // Setup search for delete
         setupDeleteSearch();
     }
 
@@ -222,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.buttonPage.style.display = 'none';
     }
 
-    // ==================== API FUNCTIONS ====================
     async function loadDosenData() {
         try {
             showLoading(true);
@@ -249,7 +218,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error loading data:", error);
             showMessage("Gagal memuat data: " + error.message, "error");
             
-            // Fallback: extract from existing HTML
             extractDataFromExistingTable();
         } finally {
             showLoading(false);
@@ -296,14 +264,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ==================== RENDER FUNCTIONS ====================
     function renderDosenTable() {
         if (!elements.tableView) {
             console.error("Table view element not found!");
             return;
         }
         
-        // Clear existing data rows (keep header)
         const existingRows = elements.tableView.querySelectorAll('.data-row');
         existingRows.forEach(row => {
             if (row.parentNode) {
@@ -313,7 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         console.log("Rendering", daftarDosen.length, "dosen");
         
-        // Add new rows
         daftarDosen.forEach((dosen, index) => {
             const row = document.createElement('div');
             row.className = 'data-row';
@@ -347,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const cells = row.querySelectorAll('span');
             if (cells.length >= 5) {
                 const nama = cells[2].textContent.trim();
-                if (nama && nama !== 'Nama Dosen') { // Skip template rows
+                if (nama && nama !== 'Nama Dosen') {
                     daftarDosen.push({
                         id: cells[1].textContent.trim() || `DSN${index + 1}`,
                         nip: cells[1].textContent.trim(),
@@ -366,12 +331,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateCount(count) {
         if (!elements.listTitle) return;
         
-        // Remove existing count span
         let countElement = elements.listTitle.querySelector('#dosen-count');
         if (countElement) {
             countElement.textContent = `(${count} data)`;
         } else {
-            // Create new count span
+
             countElement = document.createElement('span');
             countElement.id = 'dosen-count';
             countElement.style.cssText = 'font-size: 0.8em; color: #666; margin-left: 8px; font-weight: normal;';
@@ -380,11 +344,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ==================== EVENT HANDLERS SETUP ====================
     function setupEventListeners() {
         console.log("Setting up event listeners");
         
-        // Main navigation buttons
         if (elements.btnAdd) {
             elements.btnAdd.addEventListener('click', showPilihCaraView);
         }
@@ -393,7 +355,6 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.btnDelete.addEventListener('click', showHapusView);
         }
         
-        // Add dosen flow
         if (elements.btnImport) {
             elements.btnImport.addEventListener('click', showImportView);
         }
@@ -402,12 +363,10 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.btnManual.addEventListener('click', showManualView);
         }
         
-        // Form submission
         if (elements.tambahForm) {
             elements.tambahForm.addEventListener('submit', handleFormSubmit);
         }
         
-        // File upload
         if (elements.btnPilihFile) {
             elements.btnPilihFile.addEventListener('click', () => {
                 if (elements.fileInput) elements.fileInput.click();
@@ -418,7 +377,6 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.fileInput.addEventListener('change', handleFileUpload);
         }
         
-        // Delete flow
         if (elements.btnCancelDelete) {
             elements.btnCancelDelete.addEventListener('click', showMainView);
         }
@@ -435,12 +393,10 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.btnConfirmDeleteFinal.addEventListener('click', handleFinalDelete);
         }
         
-        // Back to main when clicking title
         if (elements.listTitle) {
             elements.listTitle.addEventListener('click', showMainView);
         }
         
-        // Search input for delete
         if (elements.searchInput) {
             elements.searchInput.addEventListener('input', handleDeleteSearch);
         }
@@ -466,7 +422,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 (dosen.email && dosen.email.toLowerCase().includes(keyword))
             );
             
-            // Create temporary copy for rendering
             const originalData = daftarDosen;
             daftarDosen = filtered;
             renderDosenTable();
@@ -503,7 +458,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ==================== EVENT HANDLERS ====================
     async function handleFormSubmit(e) {
         e.preventDefault();
         
@@ -524,7 +478,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 status: status
             };
             
-            // Only add NIP if provided
             if (nip) {
                 dosenData.nip = nip;
             }
@@ -534,13 +487,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (result.success) {
                 showMessage(result.message, "success");
                 
-                // Reset form
                 elements.tambahForm.reset();
                 
-                // Reload data
                 await loadDosenData();
                 
-                // Return to main view
                 showMainView();
             }
         } catch (error) {
@@ -613,10 +563,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (result.success) {
                 showMessage(result.message, "success");
                 
-                // Reload data
                 await loadDosenData();
                 
-                // Return to main view
                 showMainView();
             }
         } catch (error) {
@@ -631,7 +579,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const file = e.target.files[0];
         if (!file) return;
         
-        // Validate file type
         const validTypes = ['text/csv', 'application/vnd.ms-excel', 
                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
         
@@ -657,10 +604,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (result.success) {
                 showMessage(result.message, "success");
                 
-                // Reload data
                 await loadDosenData();
                 
-                // Return to main view
                 showMainView();
             } else {
                 throw new Error(result.message);
@@ -674,7 +619,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ==================== UTILITY FUNCTIONS ====================
     function showLoading(show) {
         const loadingEl = document.getElementById('global-loading');
         if (loadingEl) {
@@ -683,7 +627,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function showMessage(message, type = 'info') {
-        // Remove existing notifications
+
         const existing = document.querySelectorAll('.notification');
         existing.forEach(el => el.remove());
         
@@ -700,7 +644,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         document.body.appendChild(notification);
         
-        // Auto remove after 3 seconds
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.remove();
@@ -708,7 +651,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 3000);
     }
 
-    // Add CSS for notifications if not already added
     if (!document.querySelector('#notification-styles')) {
         const style = document.createElement('style');
         style.id = 'notification-styles';
@@ -727,15 +669,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const masterPageItems = Array.from(document.querySelectorAll("#table-view .data-row"));
 
-// Jika tidak ada data, stop script
 if (masterPageItems.length === 0) {
     console.warn("Tidak ada .data-row ditemukan.");
 }
 
-// Variabel untuk menyimpan item yang sedang difilter
 let filteredPageItems = masterPageItems;
 
-// Elemen Pagination
 const prevButton = document.getElementById('prev-page');
 const nextButton = document.getElementById('next-page');
 const pageInfoSpan = document.getElementById('current-page');
@@ -745,7 +684,6 @@ let currentPage = 1;
 
 let totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
 
-// Fungsi Menampilkan Halaman 
 const showPage = (page) => {
 
     const start = (page - 1) * itemsPerPage;
@@ -755,22 +693,18 @@ const showPage = (page) => {
         item.style.display = "none";
     });
 
-    // Show item filter only untuk halaman ini
     filteredPageItems.forEach((item, index) => {
         if (index >= start && index < end) {
             item.style.display = "block";
         }
     });
 
-    // Update info halaman
     pageInfoSpan.textContent = `${currentPage} / ${totalPages}`;
 
-    // Disable prev/next kalau mentok
     prevButton.disabled = currentPage === 1;
     nextButton.disabled = currentPage === totalPages;
 };
 
-// Tombol Prev
 prevButton.addEventListener("click", () => {
     if (currentPage > 1) {
         currentPage--;
@@ -778,7 +712,6 @@ prevButton.addEventListener("click", () => {
     }
 });
 
-// Tombol Next
 nextButton.addEventListener("click", () => {
     if (currentPage < totalPages) {
         currentPage++;
@@ -786,10 +719,7 @@ nextButton.addEventListener("click", () => {
     }
 });
 
-
 showPage(currentPage);
-
-// Search dan Filter
 
 const searchInput = document.getElementById("search-input");
 
@@ -797,7 +727,6 @@ if (searchInput) {
     searchInput.addEventListener("input", () => {
         const query = searchInput.value.toLowerCase();
 
-        // Filter berdasar span ke-2 (nama) dan span ke-3 (kelas)
         filteredPageItems = masterPageItems.filter(row => {
             const spans = row.querySelectorAll("span");
 
@@ -807,7 +736,6 @@ if (searchInput) {
             return nama.includes(query) || kelas.includes(query);
         });
 
-        // Hitung ulang total halaman
         totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
         currentPage = 1;
 

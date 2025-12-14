@@ -81,7 +81,7 @@
                     Daftar Peserta
                 </button>
                 <button class="tab active" data-tab-target="nilai"
-                    th:attr="data-target-url=@{/dosen/nilai(kodeMk=${kodeMk})}"
+                    th:attr="data-target-url=@{/dosen/nilai(kodeMk=${kodeMk}, colorIndex=${colorIndex})}"
                     onclick="window.location.href=this.getAttribute('data-target-url')">Nilai</button>
             </div>
             
@@ -115,7 +115,7 @@
                                 </div>
 
                                 <div id="jadwalContainer">
-                                    <!-- Jadwal akan diload via JavaScript -->
+                                    
                                 </div>
 
                                 <button type="button" class="btn-tambah-jadwal" onclick="tambahJadwal()">

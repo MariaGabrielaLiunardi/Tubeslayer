@@ -9,14 +9,14 @@
 }
 
 :root{
-    /* Transition */
+    
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 
-    --nav-primary-blue: #2269a3; /* Biru tua untuk inactive */
-    --nav-active-blue: #6da8ce;  /* Biru muda untuk active */
+    --nav-primary-blue: #2269a3; 
+    --nav-active-blue: #6da8ce;  
     --nav-text-color: #ffffff;
 }
 
@@ -275,22 +275,20 @@ header .image-text .header-text{
     padding: 20px;
 }
 
-/* Kontainer Utama Navigasi */
 .nav-segmented-control {
     display: flex;
     width: 100%;
-    max-width: 800px; /* Lebar maksimal */
+    max-width: 800px; 
     height: 80px;
     background-color: var(--nav-primary-blue);
-    border-radius: 40px; /* Sudut membulat penuh (setengah dari tinggi) */
+    border-radius: 40px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Penting agar sudut melengkung sempurna */
+    overflow: hidden; 
     font-family: Sen;
-    margin-top: 30px; /* Contoh margin agar tidak menempel ke header */
+    margin-top: 30px; 
     margin-left: 100px;
 }
 
-/* Style untuk setiap Segmen */
 .nav-segmented-control > div {
     flex-grow: 1;
     display: flex;
@@ -301,45 +299,38 @@ header .image-text .header-text{
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s;
-    padding: 0 10px; /* Padding horizontal */
+    padding: 0 10px; 
 }
 
-/* Hover effect untuk segmen inactive */
 .nav-segmented-control > div:hover:not(.nav-active) {
-    background-color: rgba(255, 255, 255, 0.1); /* Sedikit gelap/terang saat di-hover */
+    background-color: rgba(255, 255, 255, 0.1); 
 }
 
-/* Style untuk Segmen Aktif */
 .nav-segmented-control .nav-active {
     background-color: var(--nav-active-blue);
     font-weight: 700;
     border-radius: 40px;
 }
 
-/* Memastikan sudut kanan segmen terakhir (jika aktif) tetap bulat sempurna */
 .nav-segmented-control > div:last-child {
     border-top-right-radius: 40px; 
     border-bottom-right-radius: 40px;
 }
 
-/* Move blue active/background from the Dashboard item to the Open Book item
-   without changing HTML: override the original active anchor and apply
-   the blue background to the second menu item (Open Book). */
 .menu-links li.nav-link.active a {
-    background-color: transparent; /* neutralize existing active rule */
+    background-color: transparent; 
 }
 
 .menu-links li:nth-child(2) a {
-    background-color: #C1EBFF; /* same blue as active */
-    border-radius: 10px; /* match anchor rounding used elsewhere */
+    background-color: #C1EBFF; 
+    border-radius: 10px; 
 }
 
 .menu-links li:nth-child(2) a .text {
-    color: black; /* keep text readable on blue */
+    color: black; 
     font-weight: 600;
 }
 
-/* Hover effect on Dashboard icon (first menu item) */
 .menu-links li:nth-child(1) a:hover {
     background-color: #C1EBFF;
 }
@@ -354,7 +345,6 @@ header .image-text .header-text{
     align-items: center;
 }
 
-/* Rectangle biru di depan */
 .rectangle-blue {
     width: 90%; 
     max-width: 1648px;
@@ -369,7 +359,7 @@ header .image-text .header-text{
     display: flex;
     align-items: center;
     padding-left: 40px;
-    margin-top: 10px; /* Move it down from the segmented control */
+    margin-top: 10px; 
 }
 
 .tb-title {
@@ -389,7 +379,6 @@ header .image-text .header-text{
     
 }
 
-/* Rectangle putih */
 .rectangle-white {
     width: 90%; 
     max-width: 1648px; 
@@ -402,25 +391,24 @@ header .image-text .header-text{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Align content to the top */
-    margin-top: -15px; /* Adjust this negative margin to create a small overlap with blue */
-    padding-top: 15px; /* Compensate for the negative margin */
+    justify-content: flex-start; 
+    margin-top: -15px; 
+    padding-top: 15px; 
     padding-bottom: 20px;
     padding-left: 40px;
     padding-right: 40px;
 }
 
-/* Rectangle Yellow (The Overlapping Content Area) === */
 .rectangle-yellow {
-    width: calc(100% - 80px); /* 100% minus padding of .rectangle-white (40px on each side) */
+    width: calc(100% - 80px); 
     position: absolute;
-    top: 100px; /* **CRUCIAL:** Move it 100px above the top edge of .rectangle-white */
-    height: 480px; /* Let content define height */
-    background: #FFF5F1; /* Light yellow color */
+    top: 100px; 
+    height: 480px; 
+    background: #FFF5F1; 
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 15; /* Ensure it is above the blue and white boxes */
-    padding: 30px; /* Internal padding for the content */
+    z-index: 15; 
+    padding: 30px; 
     display: flex;
     flex-direction: column;
     margin-top: 0px;
@@ -428,7 +416,7 @@ header .image-text .header-text{
 
 .assignment-table-wrapper {
     width: 100%;
-    padding: 0; /* Remove padding as .rectangle-yellow already has it */
+    padding: 0; 
 }
 
 .assignment-header {
@@ -437,14 +425,14 @@ header .image-text .header-text{
     border-radius: 10px;
     padding: 0; 
     font-weight: bold;
-    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    font-size: 20px; 
     color: black;
     margin-bottom: 10px;
     justify-content: flex-start;
 }
 
 .col-kel {
-    width: 90%; /* Diubah dari 50% */
+    width: 90%; 
     text-align: left;
     background-color: #CDE8F6;
     border-radius: 15px;
@@ -452,8 +440,8 @@ header .image-text .header-text{
 }
 
 .col-bobot {
-    width: 10%; /* Tetap 10% */
-    text-align: center; /* Rata tengah untuk Bobot */
+    width: 10%; 
+    text-align: center; 
     background-color: #CDE8F6;
     border-radius: 15px;
     padding: 15px 15px;
@@ -465,7 +453,7 @@ header .image-text .header-text{
     border-radius: 10px;
     padding: 0; 
     font-weight: bold;
-    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    font-size: 20px; 
     color: black;
     margin-bottom: 10px;
     justify-content: flex-start;
@@ -486,7 +474,7 @@ header .image-text .header-text{
 }
 
 .col-isi-nilai{
-    width: 10%; /* Diubah dari 11% agar sama dengan header dan rata tengah */
+    width: 10%; 
     text-align: center; 
     background-color: white;
     border-radius: 15px;
@@ -496,8 +484,8 @@ header .image-text .header-text{
 
 .tombol-aksi {
     position: absolute;
-    left: 30px; /* align with .rectangle-yellow padding */
-    bottom: 30px; /* align with .rectangle-yellow padding */
+    left: 30px; 
+    bottom: 30px; 
     display: flex;
     gap: 10px;
     z-index: 25;
@@ -551,20 +539,20 @@ header .image-text .header-text{
 }
 
 .btn-kembali:hover {
-    background-color: #222; /* slightly lighter than pure black */
+    background-color: #222; 
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
 .edit-rubrik{
-    width: 200px; /* Tetapkan lebar tetap atau sesuaikan dengan persentase yang lebih kecil */
+    width: 200px; 
     color: white;
     background-color: black;
     border-radius: 15px;
     padding: 15px 15px;
     text-align: center;
-    cursor: pointer; /* Tambahkan kursor agar terlihat seperti tombol */
-    text-decoration: none; /* Hapus dekorasi link default pada <a> */
+    cursor: pointer; 
+    text-decoration: none; 
     
     display: flex;
     justify-content: center;
@@ -573,20 +561,19 @@ header .image-text .header-text{
     font-weight: 700;
 }
 
-
 .breadcrumb {
     display: flex;
     align-items: center;
-    gap: 8px;          /* jarak antar item */
-    font-size: 28px;   /* perbesar font */
-    text-align: left;  /* memastikan tetap ke kiri */
+    gap: 8px;          
+    font-size: 28px;   
+    text-align: left;  
     margin-top: 50px;
     margin-right: 260px;
 }
 
 .breadcrumb .crumb {
     color: #333;
-    text-decoration: none; /* hilangkan underline link */
+    text-decoration: none; 
 }
 
 .breadcrumb .crumb:hover {

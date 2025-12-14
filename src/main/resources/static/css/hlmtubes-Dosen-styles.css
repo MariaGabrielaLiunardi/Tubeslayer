@@ -8,7 +8,7 @@
 }
 
 :root {
-    /* Transition */
+    
     --tran-02: all 0.2s ease;
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
@@ -26,7 +26,6 @@ body {
     min-height: 100vh;
 }
 
-/* === SIDEBAR === */
 .sidebar .text {
     font-size: 15px;
     font-weight: 500;
@@ -165,7 +164,6 @@ header .image-text .header-text {
     border-radius: 10px;
 }
 
-/* Main Content */
 .main-content {
     position: relative;
     min-height: 100vh;
@@ -198,7 +196,7 @@ header .image-text .header-text {
     background: rgba(0, 0, 0, 0.2);
     z-index: 5;
 }
-/* Header */
+
 .header {
     background-color: transparent;
     padding: 15px 30px;
@@ -269,7 +267,6 @@ header .image-text .header-text {
     object-fit: contain;
 }
 
-/* Tabs */
 .mk-tab {
     background: #0078B5;
     width: fit-content;
@@ -298,7 +295,6 @@ header .image-text .header-text {
     padding: 10px 30px; 
 }
 
-/* Card Container */
 .card-container {
     border-radius: 15px;
     overflow: visible;
@@ -306,7 +302,6 @@ header .image-text .header-text {
     margin: 0 30px 30px 30px;
 }
 
-/* Title Section */
 .title-section {
     background-color: #b3e5fc;
     padding: 25px 30px;
@@ -342,7 +337,6 @@ header .image-text .header-text {
     margin: 0;
 }
 
-/* Breadcrumb */
 .breadcrumb {
     margin-bottom: 20px;
     padding-bottom: 15px;
@@ -355,7 +349,6 @@ header .image-text .header-text {
     margin: 0 8px;
 }
 
-/* Content Card */
 .content-card {
     background-color: white;
     padding: 30px;
@@ -441,7 +434,6 @@ header .image-text .header-text {
     background-color: #333;
 }
 
-/* Kelompok Header */
 .kelompok-header {
     display: flex;
     justify-content: space-between;
@@ -461,7 +453,6 @@ header .image-text .header-text {
     font-weight: 600;
 }
 
-/* Table Styles */
 .kelompok-table {
     width: 100%;
     border-collapse: collapse;
@@ -524,7 +515,6 @@ header .image-text .header-text {
     font-size: 15px;
 }
 
-/* Action Buttons */
 .action-buttons {
     display: flex;
     justify-content: space-between;
@@ -568,9 +558,6 @@ header .image-text .header-text {
     background-color: #333;
 }
 
-
-
-/* Form Styles */
 .form-title {
     font-size: 20px;
     font-weight: 700;
@@ -643,7 +630,6 @@ header .image-text .header-text {
     margin-top: 30px;
 }
 
-/* Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -668,7 +654,6 @@ header .image-text .header-text {
     color: #555;
 }
 
-/* List anggota */
 .member-list {
     border-radius: 10px;
     
@@ -704,7 +689,6 @@ header .image-text .header-text {
     border-radius: 6px;
 }
 
-/* Counter anggota */
 .member-counter {
     text-align: right;
     font-weight: 700;
@@ -712,7 +696,6 @@ header .image-text .header-text {
     font-size: 14px;
     color: #444;
 }
-
 
 .search-section {
     margin: 20px 0;
@@ -753,7 +736,6 @@ header .image-text .header-text {
     background: #333;
 }
 
-/* SEARCH RESULT DROPDOWN */
 .search-results {
     background: white;
     border: 1px solid #ddd;
@@ -778,7 +760,6 @@ header .image-text .header-text {
     background: #E3F2FD;
 }
 
-/* Counter di view pilih */
 #pilihAnggotaView .member-counter {
     margin-top: 20px;
     font-weight: 700;
@@ -786,4 +767,3 @@ header .image-text .header-text {
     color: #444;
     text-align: right;
 }
-

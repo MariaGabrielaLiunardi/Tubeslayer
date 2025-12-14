@@ -26,8 +26,6 @@ body {
     background-repeat: no-repeat;
 }
 
-
-/* main */
 .main-content {
     padding: 30px;
     padding-top: 0px;
@@ -51,8 +49,6 @@ body {
     align-items: center;
 }
 
-
-/* course grid */
 .course-grid {
     margin-top: 10px;
     display: grid;
@@ -60,7 +56,6 @@ body {
     gap: 40px;
 }
 
-/* card */
 .card {
     background: white;
     border-radius: 20px;
@@ -79,7 +74,6 @@ body {
     background-position: center;
 }
 
-/* badge */
 .badge {
     background: #8b9aa1;
     color: white;
@@ -97,7 +91,6 @@ body {
     font-weight: bold;
 }
 
-/* background card */
 .gradient-1 {
     background: linear-gradient(#31acef, white);
 }
@@ -122,7 +115,6 @@ body {
     background-position: center;
 }
 
-/* footer */
 .semester {
     background: #fff1eb;
     margin: 40px auto 0;
@@ -133,4 +125,3 @@ body {
     font-weight: normal;
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
 }
-

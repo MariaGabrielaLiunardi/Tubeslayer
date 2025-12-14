@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tabs = document.querySelectorAll('.mk-tab button');
 
-    // Logika Logout 
-    
     const handleLogout = () => {
         fetch('/logout', { method: 'POST' }) 
             .then(() => {
@@ -22,8 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutButton.addEventListener('click', handleLogout);
     }
     
-    // Pencarian dan Pagination 
-
     const searchBox = document.querySelector('.search-box');
     const searchInput = searchBox ? searchBox.querySelector('input[type="text"]') : null;
     const searchButton = searchBox ? searchBox.querySelector('button') : null;
@@ -32,23 +28,19 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
    
-    // Baris data tugas hanya memiliki 2 kolom (No dan Nama Tugas)
     const masterDataRows = allTableRows.filter(row => row.children.length === 2); 
     
-    // Asumsi row kosong adalah row yang bukan data
     const noDataRow = tableBody ? allTableRows.find(row => row.children.length !== 2) : null; 
     
     let filteredPageItems = masterDataRows;
     
-    const prevButton = document.getElementById('prev-page'); // Asumsi ada pagination
-    const nextButton = document.getElementById('next-page'); // Asumsi ada pagination
-    const pageInfoSpan = document.getElementById('current-page'); // Asumsi ada pagination
+    const prevButton = document.getElementById('prev-page');
+    const nextButton = document.getElementById('next-page');
+    const pageInfoSpan = document.getElementById('current-page');
 
     const itemsPerPage = 3; 
     let totalPages = 0;
     let currentPage = 1;
-
-    // Pagination
 
     const showPage = (page) => {
         const start = (page - 1) * itemsPerPage;
@@ -76,10 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Total Tugas: ${filteredPageItems.length}`; 
         }
         
-        // Gak ada datanya (Setelah filter)
         if (filteredPageItems.length === 0) {
             
-            // Tampilkan baris pesan kosong jika ada
             if (noDataRow) {
                 noDataRow.style.display = 'table-row'; 
             }
@@ -92,21 +82,18 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Ada datanya 
         if (noDataRow) {
-            noDataRow.style.display = 'none'; // Sembunyikan baris pesan kosong
+            noDataRow.style.display = 'none';
         }
 
         if (pageInfoSpan) pageInfoSpan.textContent = `${currentPage} dari ${totalPages}`;
         
-        // Handle pagination buttons (walaupun pagination mungkin tidak ada di HTML ini)
         if (prevButton) prevButton.disabled = currentPage === 1;
         if (nextButton) nextButton.disabled = currentPage === totalPages;
 
         showPage(currentPage);
     };
 
-    // Search (Live Search)
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         
@@ -116,23 +103,21 @@ document.addEventListener("DOMContentLoaded", () => {
             filteredPageItems = masterDataRows.filter(row => {
                 if (row.cells.length < 2) return false;
                 
-                // Kolom Nama Tugas Besar ada di index 1 (setelah index 0: No)
                 const nameCell = row.cells[1]; 
                 
-                // Filter hanya berdasarkan Nama Tugas
                 const matchesName = nameCell && nameCell.textContent.toLowerCase().includes(query);
 
                 return matchesName; 
             });
         }
         
-        updateUI(true); // Reset halaman ke 1 setelah pencarian baru
+        updateUI(true);
     };
     
     if (searchInput) {
         searchInput.addEventListener('input', handleSearch); 
     }
-    // Menghapus event listener lama
+
     if (searchButton) {
         searchButton.removeEventListener('click', handleSearch);
     }
@@ -144,8 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Event Listener pagination
-    
     if (prevButton) {
         prevButton.addEventListener('click', () => {
             if (currentPage > 1) {

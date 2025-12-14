@@ -25,14 +25,14 @@ public class AuthService {
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new RuntimeException("Password salah");
         }
-        return user; // jika login sukses
+        return user;
     }
 
     public User getLoggedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails userDetails) {
-            String email = userDetails.getUsername(); // username = email
+            String email = userDetails.getUsername();
             
             return userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User tidak ditemukan"));
@@ -40,4 +40,3 @@ public class AuthService {
         throw new RuntimeException("User belum login");
     }
 }
-

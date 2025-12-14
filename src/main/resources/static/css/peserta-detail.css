@@ -51,7 +51,6 @@ body {
     position: relative;  
 }
 
-/* header utama */
 .home .header {
     height: 80px; 
     width: 100%;
@@ -86,7 +85,6 @@ body {
     justify-content: center;
 }
 
-/* elemen utama header */
 .name {
     font-weight: bold;
     font-size: 14pt;
@@ -119,7 +117,6 @@ body {
     align-items: center;
 }
 
-/* tab */
 .mk-tab {
     background: #0078B5;
     width: fit-content;
@@ -148,7 +145,6 @@ body {
     padding: 10px 30px; 
 }
 
-/* header mata kuliah */
 .mk-header {
     display: flex;
     align-items: center;
@@ -178,7 +174,6 @@ body {
     font-size: 18px;
 }
 
-/* breadcrumb */
 .breadcrumb {
     font-size: 16px;
     margin-top: 15px; 
@@ -234,8 +229,6 @@ body {
     font-size: 18px;
 }
 
-
-/* peserta content */
 .peserta-content {
     background: #fff4ec; 
     border-radius: 30px;
@@ -244,7 +237,6 @@ body {
     padding: 25px 40px 40px 40px; 
 }
 
-/* tabel peserta */
 .peserta-table-wrapper {
     overflow-x: auto; 
     display: block; 
@@ -273,7 +265,6 @@ body {
 .peserta-table-wrapper thead tr th:nth-child(2) { width: 45%; } 
 .peserta-table-wrapper thead tr th:nth-child(3) { width: 25%; } 
 .peserta-table-wrapper thead tr th:nth-child(4) { width: 25%; } 
-
 
 .peserta-table-wrapper tbody tr {
     background-color: #c8eaff; 
@@ -313,7 +304,6 @@ body {
     font-weight: bold;
 }
 
-/* pagination */
 .pagination {
     display: flex;
     justify-content: flex-end; 
@@ -353,7 +343,6 @@ body {
     opacity: 0.5;
 }
 
-/* background card */
 .gradient-1 {
     background: linear-gradient(#31acef, white);
 }

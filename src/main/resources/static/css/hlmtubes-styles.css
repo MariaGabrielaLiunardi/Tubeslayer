@@ -8,7 +8,7 @@
 }
 
 :root {
-    /* Transition */
+    
     --tran-02: all 0.2s ease;
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
@@ -27,7 +27,6 @@ body {
     min-height: 100vh;
 }
 
-/* === SIDEBAR === */
 .sidebar .text {
     font-size: 15px;
     font-weight: 500;
@@ -166,7 +165,6 @@ header .image-text .header-text {
     border-radius: 10px;
 }
 
-/* Main Content */
 .main-content {
     position: relative;
     min-height: 100vh;
@@ -200,7 +198,6 @@ header .image-text .header-text {
     z-index: 5;
 }
 
-/* Header */
 .header {
     background-color: transparent;
     padding: 15px 30px;
@@ -270,7 +267,7 @@ header .image-text .header-text {
     height: 100%;
     object-fit: contain;
 }
-/*tabs*/
+
 .mk-tab {
     background: #0078B5;
     width: fit-content;
@@ -299,7 +296,6 @@ header .image-text .header-text {
     padding: 10px 30px; 
 }
 
-/* Card Container  */
 .card-container {
     border-radius: 15px;
     overflow: visible;
@@ -307,7 +303,6 @@ header .image-text .header-text {
     margin: 0 30px 30px 30px;
 }
 
-/* Title Section  */
 .title-section {
     background-color: #b3e5fc;
     padding: 25px 30px;
@@ -343,7 +338,6 @@ header .image-text .header-text {
     margin: 0;
 }
 
-/* Breadcrumb */
 .breadcrumb {
     margin-bottom: 20px;
     padding-bottom: 15px;
@@ -356,7 +350,6 @@ header .image-text .header-text {
     margin: 0 8px;
 }
 
-/* Content Card */
 .content-card {
     background-color: white;
     padding: 30px;
@@ -441,7 +434,6 @@ header .image-text .header-text {
     background-color: #333;
 }
 
-/* === VIEW MANAGEMENT === */
 .view-content {
     display: none;
 }
@@ -450,7 +442,6 @@ header .image-text .header-text {
     display: block;
 }
 
-/* === ANGGOTA KELOMPOK STYLES === */
 .member-list {
     margin: 30px 0;
 }
@@ -570,7 +561,6 @@ header .image-text .header-text {
     margin-top: 15px;
 }
 
-/* === SEARCH SECTION STYLES === */
 .search-section {
     margin: 30px 0;
     position: relative;

@@ -9,7 +9,7 @@
 }
 
 :root{
-    /* Transition */
+    
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
@@ -26,7 +26,6 @@ body{
     font-weight: bold;
 }
 
-/* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
     font-weight: 500;
@@ -458,7 +457,6 @@ header .image-text .header-text{
     font-size: 13pt; 
 }
 
-/* Card Section */
 .content-div {
     display: flex;
     justify-content: center;
@@ -469,7 +467,6 @@ header .image-text .header-text{
     padding-top: 0; 
 }
 
-/* Card Base */
 .card {
     width: 380px;   
     height: 250px; 
@@ -492,7 +489,6 @@ header .image-text .header-text{
     box-shadow: 0 15px 30px rgba(0,0,0,0.25);
 }
 
-/* Gradien background */
 .card::before {
     content: '';
     position: absolute;
@@ -541,7 +537,6 @@ header .image-text .header-text{
     opacity: 0.8;
 }
 
-/* Text */
 .title {
     font-size: 16pt;
     font-weight: bold;
@@ -554,9 +549,7 @@ header .image-text .header-text{
 .content-div a {
     text-decoration: none;
 }
-/* ============================
-   QUICK STATS SECTION
-   ============================ */
+
 .quick-stats-section {
     width: 1360px;
     display: flex;
@@ -626,7 +619,6 @@ header .image-text .header-text{
     font-style: italic;
 }
 
-/* Responsive untuk tablet */
 @media (max-width: 1400px) {
     .stats-grid {
         width: 100%;
@@ -648,11 +640,3 @@ header .image-text .header-text{
         min-height: 120px;
     }
 }
-
-
-
-
-
-
-
-

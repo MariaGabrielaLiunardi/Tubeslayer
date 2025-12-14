@@ -9,7 +9,7 @@
 }
 
 :root{
-    /* Transition */
+    
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
@@ -24,7 +24,6 @@ body{
     font-weight: bold;
 }
 
-/* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
     font-weight: 500;
@@ -436,11 +435,6 @@ header .image-text .header-text{
     cursor: pointer;
 }
 
-/* .content-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 4px 6px 8px rgba(0,0,0,0.2);
-} */
-
 .nama-mk{
     font-weight: bold;
     font-size: 15pt; 
@@ -450,7 +444,6 @@ header .image-text .header-text{
     font-size: 13pt; 
 }
 
-/* ================= BACKGROUND CARD ================= */
 .gradient-1 {
     background: linear-gradient(#31acef, white);
 }
@@ -475,16 +468,7 @@ header .image-text .header-text{
     background-position: center;
 }
 
-
 .task-link{
     text-decoration: none !important;
     color: black !important;
 }
-
-
-
-
-
-
-
-

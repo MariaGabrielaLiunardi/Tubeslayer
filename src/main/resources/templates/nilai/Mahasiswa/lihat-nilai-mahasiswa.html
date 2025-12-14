@@ -113,7 +113,7 @@
                             <span>Lihat Nilai</span>
                         </div>
 
-                        <!-- Section Nilai Pribadi -->
+                        
                         <div class="nilai-section" th:if="${nilaiPribadi != null}">
                             <h3 class="section-title">Nilai Pribadi</h3>
                             <div class="nilai-display-card">
@@ -122,7 +122,7 @@
                             </div>
                         </div>
 
-                        <!-- Section Nilai Kelompok -->
+                        
                         <div class="nilai-section" th:if="${nilaiKelompok != null}">
                             <h3 class="section-title">Nilai Kelompok</h3>
                             <p class="kelompok-info">
@@ -156,12 +156,12 @@
                             </div>
                         </div>
 
-                        <!-- Jika tidak ada nilai -->
+                        
                         <div class="no-nilai" th:if="${nilaiPribadi == null && nilaiKelompok == null}">
                             <p>Nilai belum dirilis oleh dosen</p>
                         </div>
 
-                        <!-- Tombol Kembali -->
+                        
                         <div class="action-buttons">
                             <a th:href="@{/mahasiswa/dashboard-penilaian(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" class="btn-back">
                                 <i class='bx bx-arrow-back'></i> Kembali

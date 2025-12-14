@@ -25,7 +25,7 @@
     </script>
   </head>
   <body>
-    <!-- Header -->
+    
     <div class="header">
       <div class="header-left"></div>
       <div class="header-right">
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <!-- Sidebar -->
+    
     <nav class="sidebar close">
       <header>
         <div class="image-text">
@@ -89,9 +89,9 @@
       </div>
     </nav>
 
-    <!-- Main Content -->
+    
     <div class="main-content">
-      <!-- Tabs -->
+      
       <div
         class="mk-tab"
         th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}"
@@ -113,9 +113,9 @@
         <button class="tab" data-tab-target="nilai">Nilai</button>
       </div>
 
-      <!-- Card Container -->
+      
       <div class="card-container">
-        <!-- Title Section -->
+        
         <div class="title-section">
           <div class="book-icon">
             <img src="/icon/open-book.png" alt="bookiconbig" />
@@ -123,7 +123,7 @@
           <h1 th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</h1>
         </div>
 
-        <!-- Content Card Default-->
+        
         <div class="content-card" id="defaultView">
           <div class="breadcrumb">
             Daftar Mata Kuliah <span>></span>
@@ -264,7 +264,7 @@
           </form>
         </div>
 
-        <!-- View: Detail Anggota Kelompok -->
+        
         <div class="content-card" id="detailAnggotaView" style="display: none">
           <div class="content-header">
             <h2>Anggota Kelompok</h2>
@@ -273,17 +273,17 @@
             >
           </div>
 
-          <!-- List Anggota -->
+          
           <div class="member-list" id="member-list-dosen">
             <p class="no-members">Memuat data anggota...</p>
           </div>
 
-          <!-- Member Counter -->
+          
           <div class="member-counter" id="member-counter-dosen">
             0/5 Anggota
           </div>
 
-          <!-- Action Buttons -->
+          
           <div class="action-buttons">
             <button class="btn-secondary" id="btn-kembali-anggota-dosen">
               <i class="bx bx-arrow-back"></i>
@@ -302,13 +302,13 @@
           </div>
         </div>
 
-        <!-- View: Pilih Anggota -->
+        
         <div class="content-card" id="pilihAnggotaView" style="display: none">
           <div class="content-header">
             <h2>Pilih anggota kelompok</h2>
           </div>
 
-          <!-- Search Input -->
+          
           <div class="search-section">
             <label for="search-mahasiswa-dosen">Masukkan Nama:</label>
             <div class="search-input-wrapper">
@@ -323,29 +323,24 @@
               </button>
             </div>
 
-            <!-- Search Results Dropdown -->
+            
             <div class="search-results" id="search-results-dosen">
-              <!-- Results akan diinject JavaScript -->
+              
             </div>
           </div>
 
-          <!-- Member Counter -->
+          
           <div class="member-counter" id="member-counter-pilih-dosen">
             0/5 Anggota
           </div>
 
-          <!-- Action Buttons -->
+          
           <div class="action-buttons">
             <button class="btn-secondary" id="btn-kembali-pilih-dosen">
               <i class="bx bx-arrow-back"></i>
               Kembali
             </button>
-            <!-- matiin button 
-            <button class="btn-primary" id="btn-konfirmasi-dosen">
-              <i class='bx bx-check'></i>
-              Konfirmasi
-            </button>
-            -->
+            
           </div>
         </div>
       </div>

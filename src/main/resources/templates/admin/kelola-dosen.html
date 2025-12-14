@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Dosen - Tubeslayer</title>
     
-    <!-- Thymeleaf URLs -->
+    
     <link rel="stylesheet" th:href="@{/css/kelola-dosen.css}">
     <script th:src="@{/js/kelola-dosen.js}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
@@ -128,7 +128,7 @@
 
         <div class="right-section">
             <div class="info">
-                <!-- Thymeleaf untuk user data -->
+                
                 <span class="name" th:text="${user.nama}">Nama</span>
                 <span class="role" th:text="${user.role}">Role</span>
             </div>
@@ -162,7 +162,7 @@
                 </div>
             </div>
 
-            <!-- Loading overlay -->
+            
             <div id="global-loading">
                 <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
                     <div style="display: flex; align-items: center; gap: 10px;">
@@ -172,7 +172,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 1: Tabel -->
+            
             <div class="custom-table-container" id="table-view">
                 <div class="table-header-row">
                     <span>No</span>
@@ -205,7 +205,7 @@
                 <button id="next-page" class="page-btn">›</button>
             </div>
 
-            <!-- FOOTER -->
+            
             <div class="footer-actions" id="footer-view">
                 <div class="button-group">
                     <button class="btn btn-delete" id="btn-delete">Hapus Dosen</button>
@@ -213,7 +213,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 2: Pilih Cara -->
+            
             <div class="pilih-cara" id="pilih-cara">
                 <div class="pilih-cara-content">
                     <div class="button-group">
@@ -223,7 +223,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 3: Milih yang import -->
+            
             <div class="import-dosen" id="import-dosen">
                 <div class="import-dosen-content">
                     <input type="file" id="file-input" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
@@ -231,7 +231,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 4 : Milih Tambah Baru-->
+            
             <div class="tambah-dosen" id="tambah-dosen">
                 <div class="tambah-dosen-content">
                     <form id="tambah-dosen-form">
@@ -255,7 +255,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 5: Hapus Dosen -->
+            
             <div class="hapus-dosen" id="view-hapus-dosen">
                 <div class="hapus-dosen-content">
                     <div class="input-wrapper">
@@ -271,7 +271,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 6: Konfirmasi Hapus-->
+            
             <div class="konfirmasi-hapus" id="konfirmasi-hapus">
                 <div class="konfirmasi-hapus-content">
                     <span>Apakah Anda yakin ingin menghapus mahasiswa ini?</span>

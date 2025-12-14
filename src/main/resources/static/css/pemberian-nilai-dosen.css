@@ -1,12 +1,9 @@
-/* Pemberian Nilai Dosen - Modern CSS */
 
-/* Override background gradient for pemberian nilai pages */
 .home {
     background: linear-gradient(0deg, rgba(172, 224, 249, 1) 0%, rgba(172, 224, 249, 0.8) 70%, rgba(255, 241, 235, 1) 100%) !important;
     height: auto;
 }
 
-/* Back Button Styling */
 .back-button button {
     background-color: #0078B5;
     color: white;
@@ -38,7 +35,6 @@
     padding: 20px;
 }
 
-/* Breadcrumb Navigation */
 .breadcrumb {
     font-size: 16px;
     margin-top: 15px; 
@@ -87,7 +83,6 @@
     font-weight: 400;
 }
 
-/* Tugas Header */
 .tugas-header {
     background: #CCF0F7;
     color: black;
@@ -112,7 +107,6 @@
     max-width: 100%;
 }
 
-/* Navigation Tabs */
 .navigation-tabs {
     display: flex;
     gap: 10px;
@@ -138,7 +132,6 @@
     box-shadow: 0 4px 6px gray;
 }
 
-/* Kelompok Selector */
 .kelompok-selector {
     background: white;
     padding: 20px;
@@ -179,7 +172,6 @@
     box-shadow: 0 2px 6px gray;
 }
 
-/* Pemberian Nilai Form */
 .pemberian-nilai-form {
     background: white;
     padding: 30px;
@@ -195,7 +187,6 @@
     padding-bottom: 10px;
 }
 
-/* Kelompok Content - untuk nilai individu */
 .kelompok-content {
     background: white;
     padding: 30px;
@@ -210,7 +201,6 @@
     font-weight: 600;
 }
 
-/* Anggota List */
 .anggota-list {
     display: flex;
     flex-direction: column;
@@ -230,7 +220,6 @@
     border-color: #667eea;
 }
 
-/* Anggota Info Box - untuk form input nilai individu */
 .anggota-info-box {
     display: grid;
     grid-template-columns: 1fr auto auto;
@@ -365,7 +354,6 @@
     font-weight: bold;
 }
 
-/* Anggota Info Section (untuk menampilkan list anggota saja, tanpa input) */
 .anggota-info-section {
     background: #f5f7fa;
     padding: 20px;
@@ -430,7 +418,6 @@
     margin: 0;
 }
 
-/* Komponen Form */
 .komponen-form {
     display: flex;
     flex-direction: column;
@@ -489,7 +476,6 @@
     color: #999;
 }
 
-/* Nilai Kelompok Preview */
 .nilai-kelompok-preview {
     display: flex;
     flex-direction: column;
@@ -523,7 +509,6 @@
     font-weight: bold;
 }
 
-/* Sama Buat Checkbox */
 .sama-buat-checkbox {
     display: flex;
     align-items: center;
@@ -550,7 +535,6 @@
     margin: 0;
 }
 
-/* Action Buttons */
 .action-buttons {
     display: flex;
     gap: 10px;
@@ -599,7 +583,6 @@
     transform: scale(0.98);
 }
 
-/* No Data */
 .no-data {
     background: white;
     padding: 40px 20px;
@@ -614,7 +597,6 @@
     display: flex; 
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .komponen-form {
         grid-template-columns: 1fr;
@@ -881,7 +863,7 @@
     color: #1e40af;
     font-weight: 600;
 }
-/* Pemberian Nilai Individu Styles */
+
 .individu-form-container {
     background: white;
     padding: 30px;
@@ -1169,7 +1151,6 @@
     box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
 }
 
-/* Alert Messages */
 .alert {
     padding: 15px 20px;
     border-radius: 8px;
@@ -1193,7 +1174,6 @@
     color: #7f1d1d;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .anggota-nilai-item {
         flex-direction: column;

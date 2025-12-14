@@ -25,7 +25,6 @@ body {
     background-repeat: no-repeat;
 }
 
-
 .detail-wrapper {
     margin-top: 10px; 
     margin-left: 22px;
@@ -57,7 +56,6 @@ body {
     z-index: 2;  
 }
 
-/* header utama */
 .home .header {
     height: 80px; 
     width: 100%;
@@ -92,7 +90,6 @@ body {
     justify-content: center;
 }
 
-/* elemen header */
 .name {
     font-weight: bold;
     font-size: 14pt;
@@ -127,7 +124,6 @@ body {
     align-items: center;
 }
 
-/* tab */
 .mk-tab {
     background: #0078B5;
     width: fit-content;
@@ -156,7 +152,6 @@ body {
     padding: 10px 30px; 
 }
 
-/* header mata kuliah */
 .mk-header {
     display: flex;
     align-items: center;
@@ -175,7 +170,6 @@ body {
     background-position: center;
 }
 
-/* background card */
 .gradient-1 {
     background: linear-gradient(#31acef, white);
 }
@@ -211,7 +205,6 @@ body {
     font-size: 18px;
 }
 
-/* breadcrumb */
 .breadcrumb {
     font-size: 16px;
     margin-top: 15px; 
@@ -219,7 +212,6 @@ body {
     margin-left: 25px;
 }
 
-/* tambah tugas */
 .tambah-tugas-wrapper-list {
     display: flex;
     justify-content: center; 
@@ -242,14 +234,12 @@ body {
     position: relative;
 }
 
-/* konten mata kuliah */
 .mk-content {
     display: flex;
     gap: 40px;
     padding: 0 30px; 
 }
 
-/* tugas mendatang */
 .tugas-box {
     background: white;
     width: 300px;
@@ -277,7 +267,6 @@ body {
     font-size: 16px;
 }
 
-/* style untuk card tugas baru */
 .tugas-mendatang-card {
     background: #c8eaff;
     padding: 15px;
@@ -362,7 +351,6 @@ body {
     cursor: pointer;
 }
 
-/* buat tugas form */
 #form-buat-tugas {
     background: #fff4ec;
     padding: 35px 40px;
@@ -405,7 +393,6 @@ body {
     height: 150px;
 }
 
-/* tombol submit form */
 .btn-submit-tugas {
     display: block; 
     margin: 40px auto 0 auto; 

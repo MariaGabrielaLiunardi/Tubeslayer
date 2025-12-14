@@ -9,14 +9,14 @@
 }
 
 :root{
-    /* Transition */
+    
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 
-    --nav-primary-blue: #2269a3; /* Biru tua untuk inactive */
-    --nav-active-blue: #6da8ce;  /* Biru muda untuk active */
+    --nav-primary-blue: #2269a3; 
+    --nav-active-blue: #6da8ce;  
     --nav-text-color: #ffffff;
 }
 
@@ -25,7 +25,6 @@ body{
     overflow-x: hidden;
 }
 
-/* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
     font-weight: 500;
@@ -282,22 +281,20 @@ header .image-text .header-text{
     padding: 20px;
 }
 
-/* Kontainer Utama Navigasi */
 .nav-segmented-control {
     display: flex;
     width: 100%;
-    max-width: 800px; /* Lebar maksimal */
+    max-width: 800px; 
     height: 80px;
     background-color: var(--nav-primary-blue);
-    border-radius: 40px; /* Sudut membulat penuh (setengah dari tinggi) */
+    border-radius: 40px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Penting agar sudut melengkung sempurna */
+    overflow: hidden; 
     font-family: Sen;
-    margin-top: 30px; /* Contoh margin agar tidak menempel ke header */
+    margin-top: 30px; 
     margin-left: 100px;
 }
 
-/* Style untuk setiap Segmen */
 .nav-segmented-control > div {
     flex-grow: 1;
     display: flex;
@@ -308,12 +305,11 @@ header .image-text .header-text{
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s;
-    padding: 0 10px; /* Padding horizontal */
+    padding: 0 10px; 
 }
 
-/* Hover effect untuk segmen inactive */
 .nav-segmented-control > div:hover:not(.nav-active) {
-    background-color: rgba(255, 255, 255, 0.1); /* Sedikit gelap/terang saat di-hover */
+    background-color: rgba(255, 255, 255, 0.1); 
 }
 
 .nav-segmented-control .nav-active {
@@ -337,7 +333,7 @@ header .image-text .header-text{
 }
 
 .menu-links li:nth-child(3) a .text {
-    color: black; /* keep text readable on blue */
+    color: black; 
     font-weight: 600;
 }
 
@@ -355,7 +351,6 @@ header .image-text .header-text{
     align-items: center;
 }
 
-/* Rectangle biru di depan */
 .rectangle-blue {
     width: 90%; 
     max-width: 1648px;
@@ -370,7 +365,7 @@ header .image-text .header-text{
     display: flex;
     align-items: center;
     padding-left: 40px;
-    margin-top: 10px; /* Move it down from the segmented control */
+    margin-top: 10px; 
 }
 
 .tb-title {
@@ -390,7 +385,6 @@ header .image-text .header-text{
     
 }
 
-/* Rectangle putih */
 .rectangle-white {
     width: 90%; 
     max-width: 1648px; 
@@ -403,36 +397,32 @@ header .image-text .header-text{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Align content to the top */
-    margin-top: -15px; /* Adjust this negative margin to create a small overlap with blue */
-    padding-top: 15px; /* Compensate for the negative margin */
+    justify-content: flex-start; 
+    margin-top: -15px; 
+    padding-top: 15px; 
     padding-bottom: 20px;
     padding-left: 40px;
     padding-right: 40px;
 }
 
-/* Rectangle Yellow (The Overlapping Content Area) === */
 .rectangle-yellow {
-    width: calc(100% - 80px); /* 100% minus padding of .rectangle-white (40px on each side) */
+    width: calc(100% - 80px); 
     position: absolute;
-    top: 100px; /* **CRUCIAL:** Move it 100px above the top edge of .rectangle-white */
-    height: 480px; /* Let content define height */
-    background: #FFF5F1; /* Light yellow color */
+    top: 100px; 
+    height: 480px; 
+    background: #FFF5F1; 
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 15; /* Ensure it is above the blue and white boxes */
-    padding: 30px; /* Internal padding for the content */
+    z-index: 15; 
+    padding: 30px; 
     display: flex;
     flex-direction: column;
     margin-top: 0px;
 }
 
-
-
-/* === Assignment Table Header and Row (Moved into Yellow Rectangle) === */
 .assignment-table-wrapper {
     width: 100%;
-    padding: 0; /* Remove padding as .rectangle-yellow already has it */
+    padding: 0; 
 }
 
 .assignment-header {
@@ -441,14 +431,14 @@ header .image-text .header-text{
     border-radius: 10px;
     padding: 0; 
     font-weight: bold;
-    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    font-size: 20px; 
     color: black;
     margin-bottom: 10px;
     justify-content: flex-start;
 }
 
 .col-kel {
-    width: 65%; /* Diubah dari 50% */
+    width: 65%; 
     text-align: left;
     background-color: #CDE8F6;
     border-radius: 15px;
@@ -456,9 +446,9 @@ header .image-text .header-text{
 }
 
 .col-bobot {
-    width: 10%; /* Tetap 10% */
-    /* Menghapus padding-left: 20px; yang duplikat */
-    text-align: center; /* Rata tengah untuk Bobot */
+    width: 10%; 
+    
+    text-align: center; 
     background-color: #CDE8F6;
     border-radius: 15px;
     padding: 15px 15px;
@@ -470,14 +460,14 @@ header .image-text .header-text{
     border-radius: 10px;
     padding: 0; 
     font-weight: bold;
-    font-size: 20px; /* Ukuran font disesuaikan agar lebih pas */
+    font-size: 20px; 
     color: black;
     margin-bottom: 10px;
     justify-content: flex-start;
 }
 
 .col-isi-kel{
-    width: 65%; /* Diubah dari 47% agar sama dengan header */
+    width: 65%; 
     text-align: left;
     background-color: white;
     border-radius: 15px;
@@ -486,7 +476,7 @@ header .image-text .header-text{
 }
 
 .col-isi-nilai{
-    width: 10%; /* Diubah dari 11% agar sama dengan header dan rata tengah */
+    width: 10%; 
     text-align: center; 
     background-color: white;
     border-radius: 15px;
@@ -528,8 +518,8 @@ header .image-text .header-text{
 
 .tombol-aksi {
     position: absolute;
-    left: 30px; /* match .rectangle-yellow padding */
-    bottom: 30px; /* sit flush with bottom padding */
+    left: 30px; 
+    bottom: 30px; 
     display: flex;
     gap: 10px;
     z-index: 25;

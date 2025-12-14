@@ -13,17 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-
         const handleLogout = () => {
         console.log("Melakukan proses logout..."); 
         fetch('/logout', { method: 'POST' }) 
             .then(() => {
-                 // redirect ke halaman utama
+
                  window.location.href = '/'; 
             })
             .catch(error => {
                  console.error("Logout gagal:", error);
-                 // tetap redirect kalau fetch gagal
+
                  window.location.href = '/'; 
             });
     };
@@ -32,6 +31,5 @@ document.addEventListener("DOMContentLoaded", () => {
     if (logoutButton) {
         logoutButton.addEventListener('click', handleLogout);
     } 
-    
     
 });

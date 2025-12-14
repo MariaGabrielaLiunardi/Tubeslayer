@@ -19,10 +19,6 @@ public class MataKuliahService {
     @Autowired
     private MataKuliahDosenRepository mataKuliahDosenRepository;
 
-    /* ============================
-       BAGIAN UNTUK DASHBOARD
-    ============================ */
-
     public List<MataKuliah> getActiveByMahasiswaAndTahunAkademik(String idMahasiswa, String tahunAkademik) {
         return mataKuliahRepository.findActiveByMahasiswaAndTahunAkademik(
                 idMahasiswa, tahunAkademik, PageRequest.of(0, 4)
@@ -39,25 +35,14 @@ public class MataKuliahService {
         return mataKuliahRepository.findByIsActive(false);
     }
 
-
-    //@Autowired
-    //private MataKuliahRepository mataKuliahRepository;
-
-    /* ============================
-       BAGIAN UNTUK KELOLA MATKUL
-    ============================ */
-
-    // Ambil semua matkul
     public List<MataKuliah> getAll() {
         return mataKuliahRepository.findAll();
     }
 
-    // Tambah atau update matkul
     public MataKuliah save(MataKuliah mk) {
         return mataKuliahRepository.save(mk);
     }
 
-    // Hapus matkul berdasarkan nama
     public void deleteByNama(String nama) {
         MataKuliah mk = mataKuliahRepository.findByNama(nama);
         if (mk != null) {
@@ -65,7 +50,6 @@ public class MataKuliahService {
         }
     }
 
-    // Cari berdasarkan kodeMK
     public MataKuliah findByKodeMK(String kodeMK) {
         return mataKuliahRepository.findById(kodeMK).orElse(null);
     }

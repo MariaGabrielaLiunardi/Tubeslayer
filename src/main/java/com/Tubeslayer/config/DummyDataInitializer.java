@@ -16,7 +16,7 @@ public class DummyDataInitializer {
     public ApplicationRunner initializeMataKuliahDosen(JdbcTemplate jdbcTemplate) {
         return args -> {
             try {
-                // Check if data already exists
+
                 Integer count = jdbcTemplate.queryForObject(
                     "SELECT COUNT(*) FROM mata_kuliah_dosen WHERE tahun_akademik = '2025/2026'",
                     Integer.class);
@@ -28,7 +28,6 @@ public class DummyDataInitializer {
                 
                 logger.info("Initializing mata_kuliah_dosen data...");
                 
-                // Insert data for dosen
                 jdbcTemplate.update(
                     "INSERT INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES (?, ?, ?, ?, ?, ?)",
                     "20250101", "AIF23001", "A", 1, "2025/2026", 1);

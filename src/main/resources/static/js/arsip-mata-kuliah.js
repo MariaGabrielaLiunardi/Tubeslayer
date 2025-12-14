@@ -1,4 +1,3 @@
-// Search dan Filter
 
 const searchInput = document.getElementById("search-input");
 
@@ -15,7 +14,6 @@ if (searchInput) {
             return nama.includes(query) || kelas.includes(query);
         });
 
-        
         totalPages = Math.max(1, Math.ceil(filteredPageItems.length / itemsPerPage));
         currentPage = 1;
 

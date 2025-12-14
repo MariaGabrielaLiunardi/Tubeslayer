@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 
 import com.Tubeslayer.entity.id.*; 
 
-
 @Entity
 @Table(name = "mata_kuliah_mahasiswa")
 @Getter
@@ -55,7 +54,7 @@ public class MataKuliahMahasiswa {
     }
 
     @Transient
-    private int colorIndex; // untuk frontend, tidak disimpan ke DB
+    private int colorIndex;
 
     public int getColorIndex() {
         return colorIndex;

@@ -104,7 +104,7 @@
                 </div>
             </div>
 
-            <!-- Navigation buttons -->
+            
             <div class="navigation-tabs">
                 <button class="nav-button active" th:onclick="|window.location.href='@{/dosen/pemberian-nilai(idTugas=${tugas.idTugas})}'|">
                     📊 Nilai Kelompok
@@ -114,7 +114,7 @@
                 </button>
             </div>
 
-            <!-- Tabs untuk pilih kelompok -->
+            
             <div class="kelompok-selector" th:if="${kelompokList != null && !kelompokList.isEmpty()}">
                 <h3>Pilih Kelompok:</h3>
                 <div class="kelompok-list">
@@ -127,11 +127,11 @@
                 </div>
             </div>
 
-            <!-- Form Pemberian Nilai Kelompok -->
+            
             <div class="pemberian-nilai-form" th:if="${kelompokTerpilih != null && anggotaList != null && !anggotaList.isEmpty()}">
                 <h3>Pemberian Nilai Kelompok - <span th:text="${kelompokTerpilih.namaKelompok}">Nama Kelompok</span></h3>
 
-                <!-- Section Anggota Kelompok (Info saja, tidak ada input per-anggota) -->
+                
                 <div class="anggota-info-section">
                     <h4>Anggota Kelompok:</h4>
                     <div class="anggota-list">
@@ -143,7 +143,7 @@
                     </div>
                 </div>
 
-                <!-- Form Input Komponen Nilai (untuk seluruh kelompok) -->
+                
                 <div class="komponen-form">
                     <h4>Input Nilai Per Komponen:</h4>
                     
@@ -166,7 +166,7 @@
                         </div>
                     </div>
 
-                    <!-- Preview Nilai Kelompok -->
+                    
                     <div class="nilai-kelompok-preview">
                         <h5>Nilai Kelompok (Hasil Akumulasi):</h5>
                         <div class="nilai-preview-box">
@@ -174,7 +174,7 @@
                         </div>
                     </div>
 
-                    <!-- Buttons -->
+                    
                     <div class="action-buttons">
                         <button class="btn-simpan"
                                 th:data-tugas-id="${tugas.idTugas}"
@@ -191,7 +191,7 @@
                 </div>
             </div>
 
-            <!-- Alert jika tidak ada kelompok -->
+            
             <div class="no-data" th:if="${kelompokList == null || kelompokList.isEmpty()}">
                 <p>Belum ada kelompok untuk tugas ini.</p>
             </div>

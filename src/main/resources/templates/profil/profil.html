@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil - Tubeslayer</title>
 
-    <!-- CSS -->
+    
     <link rel="stylesheet" href="/css/profil.css">
 
-    <!-- JS -->
+    
     <script src="/js/profil.js" defer></script>
     <script src="/js/sidebar-hlmtubes.js" defer></script>
 
-    <!-- Icons -->
+    
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
+    
     <nav class="sidebar close">
         <header>
             <div class="image-text">
@@ -93,10 +93,10 @@
         </div>
     </nav>
 
-    <!-- HOME CONTENT -->
+    
     <section class="home">
 
-        <!-- HEADER -->
+        
         <div class="header">
             <div class="left-section">
                 <span class="dashboard-title">Profil</span>
@@ -111,24 +111,24 @@
             </div>
         </div>
 
-        <!-- CONTENT -->
+        
         <div class="content-section contents">
 
-            <!-- FOTO PROFIL -->
+            
             <img src="/icon/pfp.svg" class="pfp" alt="Foto Profil">
 
-            <!-- NAMA & ROLE -->
+            
             <div class="info">
                 <span class="name" id="profil-nama" th:text="${user.nama}">Nama User</span>
                 <span class="role" id="profil-role" th:text="${user.role}">Role User</span>
                 <span class="email" id="profil-email" th:text="${user.email}">email@unpar.ac.id</span>
 
-                <!-- Dosen specific: show NIP only -->
+                
                 <div th:if="${user.role} == 'Dosen'" class="dosen-info">
                     <div class="nip">NIP: <span th:text="${nip}">20080107</span></div>
                 </div>
 
-                <!-- Mahasiswa specific: show NPM only -->
+                
                 <div th:if="${user.role} == 'Mahasiswa'" class="mahasiswa-info">
                     <div class="npm">NPM: <span th:text="${npm}">19012345</span></div>
                 </div>

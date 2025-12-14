@@ -6,7 +6,6 @@
     background-color: white;
 }
 
-/* Title Section*/
 .title-section-new {
     background: linear-gradient(135deg, #B3E5FC 0%, #81D4FA 100%);
     padding: 30px 40px;
@@ -40,13 +39,11 @@
     letter-spacing: -0.5px;
 }
 
-/* Content Card*/
 .content-card-new {
     background-color: white;
     padding: 35px 40px;
 }
 
-/* Breadcrumb */
 .breadcrumb-new {
     margin-bottom: 25px;
     padding-bottom: 15px;
@@ -61,7 +58,6 @@
     color: #90A4AE;
 }
 
-/* Folder Header */
 .folder-header {
     display: flex;
     align-items: center;
@@ -90,7 +86,6 @@
     margin: 0;
 }
 
-/* Description Text */
 .description-text {
     color: #424242;
     line-height: 1.8;
@@ -99,7 +94,6 @@
     font-weight: 400;
 }
 
-/* Group Requirement */
 .group-requirement {
     color: #424242;
     line-height: 1.8;
@@ -108,7 +102,6 @@
     font-weight: 400;
 }
 
-/* Deadline Badge */
 .deadline-badge {
     background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%);
     padding: 12px 24px;
@@ -130,7 +123,6 @@
     font-size: 15px;
 }
 
-/* Responsive Design */
 @media screen and (max-width: 768px) {
     .title-section-new {
         padding: 20px 25px;

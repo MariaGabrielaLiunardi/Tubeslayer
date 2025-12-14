@@ -21,7 +21,6 @@ body{
     overflow-x: hidden;
 }
 
-/* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
     font-weight: 500;
@@ -158,7 +157,6 @@ header .image-text .header-text{
     background-color: #C1EBFF; 
 }
 
-/* === HOME SECTION === */
 .home{
     position: absolute;
     top: 0;
@@ -195,7 +193,6 @@ header .image-text .header-text{
     z-index: 5;
 }
 
-/* === HEADER === */
 .home .header{
     height: 80px; 
     width: 100%;
@@ -264,7 +261,6 @@ header .image-text .header-text{
     align-items: center;
 }
 
-/* === NAVIGATION TABS === */
 .nav-segmented-control {
     display: flex;
     width: fit-content;
@@ -302,7 +298,6 @@ header .image-text .header-text{
     font-weight: 700;
 }
 
-/* === MK-TAB === */
 .mk-tab {
     background: #0078B5;
     width: fit-content;
@@ -336,7 +331,6 @@ header .image-text .header-text{
     padding: 10px 30px; 
 }
 
-/* === CONTAINER === */
 .container {
     width: 100%;
     display: flex;
@@ -348,7 +342,6 @@ header .image-text .header-text{
     margin-top: 20px;
 }
 
-/* Rectangle biru untuk title */
 .rectangle-blue {
     width: 92%;
     max-width: 1200px;
@@ -380,7 +373,6 @@ header .image-text .header-text{
     color: #333;
 }
 
-/* Rectangle putih untuk content */
 .rectangle-white {
     width: 92%;
     max-width: 1200px;
@@ -396,7 +388,6 @@ header .image-text .header-text{
     margin-top: 0;
 }
 
-/* === Breadcrumb === */
 .breadcrumb-nav {
     display: flex;
     align-items: center;
@@ -426,7 +417,6 @@ header .image-text .header-text{
     font-weight: 600;
 }
 
-/* === Form Wrapper === */
 .rubrik-form-wrapper {
     width: 100%;
 }
@@ -446,7 +436,6 @@ header .image-text .header-text{
     margin: 0;
 }
 
-/* === Rubrik Table Wrapper === */
 .rubrik-table-wrapper {
     width: 100%;
     background: #FFF5F1;
@@ -529,7 +518,6 @@ header .image-text .header-text{
     justify-content: center;
 }
 
-/* === Form Inputs === */
 .input-komponen,
 .input-bobot,
 .input-keterangan {
@@ -565,7 +553,6 @@ header .image-text .header-text{
     color: #333;
 }
 
-/* === Buttons === */
 .btn-hapus-komponen {
     width: 36px;
     height: 36px;
@@ -607,7 +594,6 @@ header .image-text .header-text{
     background-color: #333;
 }
 
-/* === Rubrik Footer === */
 .rubrik-footer {
     margin-top: 25px;
     padding-top: 20px;
@@ -649,7 +635,6 @@ header .image-text .header-text{
     color: #e74c3c;
 }
 
-/* === Form Actions === */
 .form-actions {
     display: flex;
     gap: 15px;
@@ -697,7 +682,6 @@ header .image-text .header-text{
     background-color: #777;
 }
 
-/* === RESPONSIVE === */
 @media (max-width: 1024px) {
     .rectangle-blue,
     .rectangle-white {

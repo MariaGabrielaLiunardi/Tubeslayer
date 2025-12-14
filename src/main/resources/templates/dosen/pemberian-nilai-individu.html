@@ -104,7 +104,7 @@
                 </div>
             </div>
 
-            <!-- Navigation buttons -->
+            
             <div class="navigation-tabs">
                 <button class="nav-button" th:onclick="|window.location.href='@{/dosen/pemberian-nilai(idTugas=${tugas.idTugas})}'|">
                     📊 Nilai Kelompok
@@ -114,7 +114,7 @@
                 </button>
             </div>
 
-            <!-- Kelompok Selector -->
+            
             <div class="kelompok-selector" th:if="${!kelompokList.isEmpty()}">
                 <h3>Pilih Kelompok:</h3>
                 <div class="kelompok-tabs">
@@ -127,28 +127,28 @@
                 </div>
             </div>
 
-            <!-- Daftar Anggota dari Kelompok Terpilih -->
+            
             <div class="kelompok-content" th:if="${!kelompokList.isEmpty()}">
                 <h2>Nilai Individu Anggota</h2>
 
-                <!-- List Anggota dengan Form Input Nilai -->
+                
                 <div class="anggota-list" id="anggota-list">
-                    <!-- Akan diisi oleh JavaScript -->
+                    
                 </div>
             </div>
 
-            <!-- Alert jika tidak ada kelompok -->
+            
             <div class="alert alert-warning" th:if="${anggotaByKelompok.isEmpty()}">
                 <p>Belum ada kelompok untuk tugas ini</p>
             </div>
 
-            <!-- Alert error -->
+            
             <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
         </div>
 
     </section>
 
-    <!-- Data storage untuk JavaScript - embed JSON string dari controller -->
+    
     <div id="data-kelompok-json" th:data-json="${kelompokListJson}" style="display: none;"></div>
     <div id="data-anggota-json" th:data-json="${anggotaByKelompokJson}" style="display: none;"></div>
     <div id="data-nilai-json" th:data-json="${nilaiMapJson}" style="display: none;"></div>

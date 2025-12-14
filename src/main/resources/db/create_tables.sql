@@ -1,10 +1,8 @@
--- HAPUS database lama kalau ada
+
 DROP DATABASE IF EXISTS tubeslayer;
 
--- BUAT database baru
 CREATE DATABASE tubeslayer;
 
--- GUNAKAN database tubeslayer
 USE tubeslayer;
 
 CREATE TABLE user_table (
@@ -120,10 +118,8 @@ CREATE TABLE nilai_komponen (
     FOREIGN KEY (id_komponen) REFERENCES komponen_nilai(id_komponen)
 );
 
--- PASTIKAN DATABASE tubeslayer SUDAH ADA & USE tubeslayer;
 USE tubeslayer;
 
--- Jika tabel jadwal_penilaian belum ada, buat:
 CREATE TABLE IF NOT EXISTS jadwal_penilaian (
     id_jadwal INT AUTO_INCREMENT PRIMARY KEY,
     id_rubrik INT NOT NULL,

@@ -1,6 +1,4 @@
-/* ===============================
-       1. SIDEBAR TOGGLE
-    ================================ */
+
     const sidebar = document.querySelector('.sidebar');
     const toggle = document.querySelector('.toggle');
 
@@ -10,10 +8,6 @@
         });
     }
 
-
-    /* ===============================
-       2. NAV ACTIVE HIGHLIGHT
-    ================================ */
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
 
     navLinks.forEach(li => {
@@ -28,48 +22,39 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Kelola Mata Kuliah JS Loaded");
 
-    // ==================== CONFIGURATION ====================
     const API_BASE_URL = window.API_BASE_URL || window.location.origin || "http://localhost:8080";
     const API_MATA_KULIAH = window.API_MATKUL || window.API_MATA_KULIAH || `${API_BASE_URL}/admin/api/mata-kuliah`;
     console.log("API Mata Kuliah:", API_MATA_KULIAH);
 
-    // ==================== ELEMENTS ====================
     const elements = {
-        // Main views
+
         tableView: document.getElementById("table-view"),
         tableBody: document.getElementById("table-body"),
         footerView: document.getElementById("footer-view"),
         searchbar: document.getElementById("search-bar"),
         paginationContainer: document.querySelector(".pagination-container"),
         
-        // Add mata kuliah flow
         pilihCara: document.getElementById("pilih-cara"),
         importView: document.getElementById("import-matkul"),
         manualView: document.getElementById("tambah-matkul"),
         
-        // Delete mata kuliah flow
         hapusView: document.getElementById("hapus-matkul"),
         konfirmasiHapus: document.getElementById("konfirmasi-hapus"),
         
-        // Buttons
         btnAdd: document.getElementById("btn-add"),
         btnDelete: document.getElementById("btn-delete"),
         btnImport: document.getElementById("btn-import"),
         btnManual: document.getElementById("btn-manual"),
         
-        // Forms
         tambahForm: document.getElementById("tambah-matkul-form"),
         
-        // Titles
         listTitle: document.getElementById("list-title"),
         subTitle: document.getElementById("sub-title"),
         subTitle2: document.getElementById("sub-title-2"),
         
-        // Search elements
         suggestionsBox: document.getElementById("suggestions"),
         searchInput: document.getElementById("search-input"),
         
-        // Other buttons
         btnCancelDelete: document.getElementById("btn-cancel-delete"),
         btnConfirmDelete: document.getElementById("btn-confirm-delete"),
         btnCancelConfirm: document.getElementById("btn-cancel-confirm"),
@@ -77,37 +62,30 @@ document.addEventListener("DOMContentLoaded", () => {
         btnPilihFile: document.getElementById("btn-pilih-file"),
         fileInput: document.getElementById("file-input"),
 
-        // Pagination
         prevPageBtn: document.getElementById("prev-page"),
         nextPageBtn: document.getElementById("next-page"),
         pageInfo: document.getElementById("page-info")
     };
 
-    // ==================== STATE ====================
     let daftarMataKuliah = [];
     let selectedMataKuliah = null;
     let filteredData = null;
     let currentPage = 1;
     const pageSize = 10;
 
-    // ==================== INITIALIZATION ====================
     init();
 
     async function init() {
         
         showMainView();
 
-        // Setup event listeners
         setupEventListeners();
         
-        // Load initial data
         await loadMataKuliahData();
         
-        // Setup search
         setupSearch();
     }
 
-    // ==================== VIEW MANAGEMENT ====================
     function hideAllViews() {
         const views = [
             elements.pilihCara,
@@ -125,20 +103,16 @@ document.addEventListener("DOMContentLoaded", () => {
     function showMainView() {
         hideAllViews();
         
-        // Show main table elements
         if (elements.tableView) elements.tableView.style.display = 'block';
         if (elements.footerView) elements.footerView.style.display = 'flex';
         if (elements.searchbar) elements.searchbar.style.display = 'block';
         if (elements.paginationContainer) elements.paginationContainer.style.display = 'flex';
         
-        // Clear titles
         if (elements.subTitle) elements.subTitle.textContent = '';
         if (elements.subTitle2) elements.subTitle2.textContent = '';
         
-        // Clear selected
         selectedMataKuliah = null;
         
-        // Reset search input
         if (elements.searchInput) {
             elements.searchInput.value = '';
             elements.searchInput.placeholder = 'Cari mata kuliah...';
@@ -209,7 +183,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.paginationContainer) elements.paginationContainer.style.display = 'none';
     }
 
-    // ==================== API FUNCTIONS ====================
     async function loadMataKuliahData() {
         try {
             showLoading(true);
@@ -246,7 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error loading data:", error);
             showMessage("Gagal memuat data mata kuliah: " + error.message, "error");
             
-            // Fallback: show empty state
             daftarMataKuliah = [];
             renderMataKuliahTable();
             updateCount(0);
@@ -324,7 +296,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-// ==================== RENDER FUNCTIONS ====================
 function getActiveData() {
     return filteredData ?? daftarMataKuliah;
 }
@@ -383,7 +354,6 @@ function renderMataKuliahTable() {
     updatePaginationInfo(totalPages);
 }
        
-
     function updateCount(count) {
         if (!elements.listTitle) return;
         
@@ -399,11 +369,9 @@ function renderMataKuliahTable() {
         }
     }
 
-    // ==================== EVENT HANDLERS ====================
     function setupEventListeners() {
         console.log("Setting up event listeners");
         
-        // Main navigation buttons
         if (elements.btnAdd) {
             elements.btnAdd.addEventListener('click', showPilihCaraView);
         }
@@ -412,7 +380,6 @@ function renderMataKuliahTable() {
             elements.btnDelete.addEventListener('click', showHapusView);
         }
         
-        // Add mata kuliah flow
         if (elements.btnImport) {
             elements.btnImport.addEventListener('click', showImportView);
         }
@@ -421,12 +388,10 @@ function renderMataKuliahTable() {
             elements.btnManual.addEventListener('click', showManualView);
         }
         
-        // Form submission
         if (elements.tambahForm) {
             elements.tambahForm.addEventListener('submit', handleFormSubmit);
         }
         
-        // File upload
         if (elements.btnPilihFile) {
             elements.btnPilihFile.addEventListener('click', () => {
                 if (elements.fileInput) elements.fileInput.click();
@@ -437,7 +402,6 @@ function renderMataKuliahTable() {
             elements.fileInput.addEventListener('change', handleFileUpload);
         }
         
-        // Delete flow
         if (elements.btnCancelDelete) {
             elements.btnCancelDelete.addEventListener('click', showMainView);
         }
@@ -454,17 +418,14 @@ function renderMataKuliahTable() {
             elements.btnConfirmDeleteFinal.addEventListener('click', handleFinalDelete);
         }
         
-        // Back to main when clicking title
         if (elements.listTitle) {
             elements.listTitle.addEventListener('click', showMainView);
         }
         
-        // Search input for delete
         if (elements.searchInput) {
             elements.searchInput.addEventListener('input', handleDeleteSearch);
         }
 
-        // Pagination
         if (elements.prevPageBtn) {
             elements.prevPageBtn.addEventListener('click', () => {
                 if (currentPage > 1) {
@@ -483,7 +444,6 @@ function renderMataKuliahTable() {
             });
         }
         
-        // Close suggestions when clicking outside
         document.addEventListener('click', (e) => {
             if (elements.suggestionsBox && !elements.suggestionsBox.contains(e.target) && 
                 elements.searchInput && !elements.searchInput.contains(e.target)) {
@@ -520,13 +480,10 @@ function renderMataKuliahTable() {
             if (result.success || result.status === "success") {
                 showMessage("Mata kuliah berhasil ditambahkan", "success");
                 
-                // Reset form
                 if (elements.tambahForm) elements.tambahForm.reset();
                 
-                // Reload data
                 await loadMataKuliahData();
                 
-                // Return to main view
                 showMainView();
             }
         } catch (error) {
@@ -617,7 +574,6 @@ function renderMataKuliahTable() {
             return;
         }
         
-        // Update confirmation text
         const confirmText = document.getElementById("konfirmasi-hapus-text");
         if (confirmText) {
             confirmText.innerHTML = `
@@ -643,10 +599,8 @@ function renderMataKuliahTable() {
             if (result.success || result.status === "success") {
                 showMessage("Mata kuliah berhasil dihapus", "success");
                 
-                // Reload data
                 await loadMataKuliahData();
                 
-                // Return to main view
                 showMainView();
             }
         } catch (error) {
@@ -661,7 +615,6 @@ function renderMataKuliahTable() {
         const file = e.target.files[0];
         if (!file) return;
         
-        // Validate file type
         const validTypes = ['text/csv', 'application/vnd.ms-excel', 
                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
         
@@ -679,10 +632,8 @@ function renderMataKuliahTable() {
             if (result.success || result.status === "success") {
                 showMessage(result.message || "File berhasil diimport", "success");
                 
-                // Reload data
                 await loadMataKuliahData();
                 
-                // Return to main view
                 showMainView();
             } else {
                 throw new Error(result.message || "Import gagal");
@@ -719,7 +670,6 @@ function renderMataKuliahTable() {
         });
     }
 
-    // ==================== UTILITY FUNCTIONS ====================
     function showLoading(show) {
         const loadingEl = document.getElementById('global-loading');
         if (loadingEl) {
@@ -728,7 +678,7 @@ function renderMataKuliahTable() {
     }
 
     function showMessage(message, type = 'info') {
-        // Remove existing notifications
+
         const existing = document.querySelectorAll('.notification');
         existing.forEach(el => el.remove());
         
@@ -751,7 +701,6 @@ function renderMataKuliahTable() {
         
         document.body.appendChild(notification);
         
-        // Auto remove after 3 seconds
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.remove();

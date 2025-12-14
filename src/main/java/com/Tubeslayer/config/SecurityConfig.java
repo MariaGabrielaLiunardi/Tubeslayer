@@ -34,28 +34,28 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .userDetailsService(customUserDetailsService)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/index", "/login", "/css/**", "/js/**", "/logo/**", "/icon/**", "/img/**", "/dosen/debug-mk", "/dosen/debug-raw-sql", "/dosen/init-dummy-data").permitAll()
+                .requestMatchers("/", "/index", "/login", "/error", "/css/**", "/js/**", "/icon/**", "/img/**", "/font/**", "/logo/**").permitAll()
                 .requestMatchers("/profil/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/dosen/**").hasRole("DOSEN")
+                .requestMatchers("/dosen/**", "/api/**").hasAnyRole("DOSEN", "ADMIN")
                 .requestMatchers("/mahasiswa/**").hasRole("MAHASISWA")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .successHandler(customSuccessHandler)   
-                .failureUrl("/login?error=true")
+                .successHandler(customSuccessHandler)
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
+            )
+            .exceptionHandling(exception -> exception
+                .accessDeniedPage("/login?error")
             );
-
         return http.build();
     }
 }

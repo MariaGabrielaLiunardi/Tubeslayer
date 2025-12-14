@@ -1,16 +1,11 @@
-/* Pemberian Nilai Mahasiswa - Modern CSS */
-/* Import base styles dari dosen */
+
 @import url('penilaian-dosen-base.css');
 
-/* === PAGE-SPECIFIC: Pemberian Nilai Mahasiswa === */
-
-/* Override background gradient untuk halaman pemberian nilai */
 .home {
     background: linear-gradient(360deg, rgba(172, 224, 249, 1) 50%, rgba(255, 241, 235, 1) 100%) !important;
     height: auto;
 }
 
-/* Breadcrumb Navigation */
 .breadcrumb {
     font-size: 16px;
     margin-top: 15px; 
@@ -59,7 +54,6 @@
     font-weight: 400;
 }
 
-/* Tugas Header */
 .tugas-header {
     background: #CCF0F7;
     color: black;
@@ -84,7 +78,6 @@
     max-width: 100%;
 }
 
-/* Navigation Tabs */
 .navigation-tabs {
     display: flex;
     gap: 10px;
@@ -110,7 +103,6 @@
     box-shadow: 0 4px 6px gray;
 }
 
-/* Pemberian Nilai Form */
 .pemberian-nilai-form {
     background: white;
     padding: 30px;
@@ -126,7 +118,6 @@
     padding-bottom: 10px;
 }
 
-/* Assignment Table Header and Row */
 .assignment-table-wrapper {
     width: 100%;
     padding: 0;
@@ -255,7 +246,6 @@
     transform: translateY(0);
 }
 
-/* Button Kembali */
 .btn-kembali {
     background-color: #0078B5;
     color: white;
@@ -281,7 +271,6 @@
     transform: translateY(0);
 }
 
-/* Nilai Container and Cards */
 .nilai-container {
     display: flex;
     gap: 24px;
@@ -341,7 +330,6 @@
     padding: 15px 20px;
 }
 
-/* Empty State */
 .no-value-message {
     text-align: center;
     padding: 40px 20px;
@@ -356,7 +344,6 @@
     margin: 0;
 }
 
-/* Rectangle containers untuk nilai */
 .rectangle-blue {
     width: 90%; 
     max-width: 1648px;
@@ -406,7 +393,6 @@
     margin-bottom: 30px;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .rectangle-blue,
     .rectangle-white {

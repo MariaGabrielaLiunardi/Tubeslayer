@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     cards.forEach(card => {
         card.addEventListener("click", () => {
-            // Ambil kode MK dari atribut data
+
             const kodeMk = card.getAttribute("data-kode-mk"); 
             
             if (kodeMk) {
@@ -14,18 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
     
-    // Logout 
-
         const handleLogout = () => {
         console.log("Melakukan proses logout..."); 
         fetch('/logout', { method: 'POST' }) 
             .then(() => {
-                 // redirect ke halaman utama
+
                  window.location.href = '/'; 
             })
             .catch(error => {
                  console.error("Logout gagal:", error);
-                 // tetap redirect kalaupun fetch gagal
+
                  window.location.href = '/'; 
             });
     };

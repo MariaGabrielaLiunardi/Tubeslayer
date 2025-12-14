@@ -1,8 +1,4 @@
-/* ========================================
-   DASHBOARD NILAI DOSEN - PAGE SPECIFIC STYLING
-   ======================================== */
 
-/* Cards Container */
 .card-container {
     display: flex;
     flex-direction: row;
@@ -44,7 +40,6 @@
     margin: 0;
 }
 
-/* === RESPONSIVE === */
 @media (max-width: 1024px) {
     .rectangle-blue,
     .rectangle-white {
@@ -99,5 +94,3 @@
         max-width: 400px;
     }
 }
-
-

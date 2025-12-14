@@ -1,8 +1,5 @@
 @import url('penilaian-dosen-base.css');
 
-/* === PAGE-SPECIFIC: Pemberian Nilai Individu Dosen === */
-
-/* Breadcrumb Navigation */
 .breadcrumb-nav {
     display: flex;
     align-items: center;
@@ -213,7 +210,6 @@
     font-weight: 600;
 }
 
-/* Rubrik Table Styling */
 .rubrik-table-wrapper {
     width: 100%;
     border: 1px solid #e0e0e0;
@@ -277,7 +273,6 @@
     font-size: 15px;
 }
 
-/* Nilai Anggota Table */
 .nilai-anggota-table {
     width: 100%;
     border: 1px solid #e0e0e0;

@@ -71,15 +71,15 @@
 
             <div class="mk-tab" th:data-mk-kode="${kodeMk}">
                 <button class="tab" data-tab-target="kuliah"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk})}'|">
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk}, colorIndex=${colorIndex})}'|">
                     Kuliah
                 </button>
                 <button class="tab" data-tab-target="peserta"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk})}'|">
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|">
                     Daftar Peserta
                 </button>
                 <button class="tab active" data-tab-target="nilai"
-                    th:onclick="|window.location.href='@{/mahasiswa/dashboard-nilai(mk=${kodeMk},idTugas=${idTugas})}'|">
+                    th:onclick="|window.location.href='@{/mahasiswa/nilai(mk=${kodeMk}, colorIndex=${colorIndex})}'|">
                     Nilai
                 </button>
             </div>
@@ -113,7 +113,7 @@
                                 </div>
 
                                 <div id="jadwalContainer">
-                                    <!-- Jadwal akan diload via JavaScript -->
+                                    
                                 </div>
                             </form>
                         </div>

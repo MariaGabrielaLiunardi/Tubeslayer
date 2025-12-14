@@ -15,7 +15,6 @@
     --tran-05: all 0.5s ease;
 }
 
-/* Breadcrumb Navigation */
 .breadcrumb-nav {
     display: flex;
     align-items: center;
@@ -55,7 +54,6 @@ body{
     overflow-x: hidden;
 }
 
-/* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
     font-weight: 500;
@@ -192,7 +190,6 @@ header .image-text .header-text{
     background-color: #C1EBFF; 
 }
 
-/* === HOME SECTION === */
 .home{
     position: absolute;
     top: 0;
@@ -229,7 +226,6 @@ header .image-text .header-text{
     z-index: 5;
 }
 
-/* === HEADER === */
 .home .header{
     height: 80px; 
     width: 100%;
@@ -298,7 +294,6 @@ header .image-text .header-text{
     align-items: center;
 }
 
-/* === NAVIGATION TABS === */
 .nav-segmented-control {
     display: flex;
     width: fit-content;
@@ -336,7 +331,6 @@ header .image-text .header-text{
     font-weight: 700;
 }
 
-/* === MK-TAB === */
 .mk-tab {
     background: #0078B5;
     width: fit-content;
@@ -370,7 +364,6 @@ header .image-text .header-text{
     padding: 10px 30px; 
 }
 
-/* === CONTAINER === */
 .container {
     width: 100%;
     display: flex;
@@ -382,7 +375,6 @@ header .image-text .header-text{
     margin-top: 20px;
 }
 
-/* Rectangle biru untuk title */
 .rectangle-blue {
     width: 92%;
     max-width: 1200px;
@@ -414,7 +406,6 @@ header .image-text .header-text{
     color: #333;
 }
 
-/* Rectangle putih untuk content */
 .rectangle-white {
     width: 92%;
     max-width: 1200px;
@@ -430,7 +421,6 @@ header .image-text .header-text{
     margin-top: 0;
 }
 
-/* === Rubrik Header === */
 .rubrik-header {
     display: flex;
     justify-content: space-between;
@@ -482,7 +472,6 @@ header .image-text .header-text{
     background-color: #005a8a;
 }
 
-/* === Rubrik Table Wrapper === */
 .rubrik-table-wrapper {
     width: 100%;
     background: #FFF5F1;
@@ -540,7 +529,6 @@ header .image-text .header-text{
     justify-content: center;
 }
 
-/* === Rubrik Footer === */
 .rubrik-footer {
     margin-top: 20px;
     padding-top: 20px;
@@ -567,7 +555,6 @@ header .image-text .header-text{
     font-size: 18px;
 }
 
-/* === Empty State === */
 .empty-state {
     width: 100%;
     display: flex;
@@ -585,7 +572,6 @@ header .image-text .header-text{
     font-weight: 500;
 }
 
-/* === Read-Only State === */
 .rubrik-readonly {
     background: #F8F8F8;
 }
@@ -625,7 +611,6 @@ header .image-text .header-text{
     resize: none;
 }
 
-/* === RESPONSIVE === */
 @media (max-width: 1024px) {
     .rectangle-blue,
     .rectangle-white {

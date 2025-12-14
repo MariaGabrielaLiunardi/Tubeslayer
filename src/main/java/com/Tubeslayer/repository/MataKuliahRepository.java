@@ -14,9 +14,9 @@ import java.util.List;
 public interface MataKuliahRepository extends JpaRepository<MataKuliah, String> {
     
     MataKuliah findByNama(String nama); 
-    // Method untuk menghitung semua Mata Kuliah yang isActive = true
+
     long countByIsActive(boolean isActive); 
-   // Ambil semua mata kuliah yang aktif
+
     List<MataKuliah> findByIsActiveTrue();
     List<MataKuliah> findByIsActiveFalse();
 
@@ -51,8 +51,5 @@ countQuery = """
     WHERE mk.isActive = false
 """)
 Page<MKArchiveDTO> getArchiveMK(Pageable pageable);
-
-
-
 
 }

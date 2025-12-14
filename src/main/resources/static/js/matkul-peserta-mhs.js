@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const mkTabDiv = document.querySelector('.mk-tab');
     const mataKuliahId = mkTabDiv ? mkTabDiv.getAttribute('data-mk-kode') : null;
 
-    // Logout
-    
     const handleLogout = () => {
         fetch('/logout', { method: 'POST' }) 
             .then(() => {
@@ -28,10 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
     
-    // Rows yang berisi data peserta (children.length === 4)
     const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
     
-    // PERBAIKAN: Targetkan row pesan kosong menggunakan ID unik
     const noDataRow = document.getElementById('empty-results-row'); 
     
     let filteredPageItems = masterDataRows;
@@ -43,8 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const itemsPerPage = 3;
     let totalPages = 0;
     let currentPage = 1;
-
-    // Pagination
 
     const showPage = (page) => {
         const start = (page - 1) * itemsPerPage;
@@ -72,11 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Peserta: ${filteredPageItems.length} peserta`; 
         }
         
-        // Logic: Jika hasil filter 0, tampilkan baris pesan kosong
         if (filteredPageItems.length === 0) {
             
             if (noDataRow) {
-                // Perintah untuk menampilkan row kosong
+
                 noDataRow.style.display = 'table-row'; 
             }
             if (pageInfoSpan) pageInfoSpan.textContent = `0 dari 0`;
@@ -88,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Logic: Jika hasil filter > 0, sembunyikan baris pesan kosong
         if (noDataRow) {
             noDataRow.style.display = 'none'; 
         }
@@ -101,8 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
         showPage(currentPage);
     };
 
-    // Search
-    // Menggunakan 'input' event untuk Live Search (setiap kali teks berubah)
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         
@@ -125,16 +115,9 @@ document.addEventListener("DOMContentLoaded", () => {
         updateUI(true); 
     };
 
-    // Event Listeners Search
-    // Menggunakan 'input' event untuk Live Search (setiap kali teks berubah)
     if (searchInput) {
         searchInput.addEventListener('input', handleSearch); 
     }
-    
-    // Menghapus event listener lama (click dan keypress)
-    // *Tidak perlu karena kita hanya perlu event 'input'*
-
-    // Event Listeners Pagination
     
     if (prevButton) {
         prevButton.addEventListener('click', () => {

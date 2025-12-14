@@ -81,7 +81,7 @@
                     Daftar Peserta
                 </button>
                 <button class="tab active" data-tab-target="nilai"
-                    th:attr="data-target-url=@{/dosen/nilai(kodeMk=${kodeMk})}"
+                    th:attr="data-target-url=@{/dosen/nilai(kodeMk=${kodeMk}, colorIndex=${colorIndex})}"
                     onclick="window.location.href=this.getAttribute('data-target-url')">Nilai</button>
             </div>
             
@@ -108,14 +108,14 @@
                     <div class="rubrik-header">
                         <h2>Rubrik Penilaian</h2>
                         <th:block th:if="${hasRubrik && rubrikItems.size() > 0}">
-                            <a th:href="@{/dosen/edit-rubrik-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas})}"
+                            <a th:href="@{/dosen/edit-rubrik-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}"
                                class="btn-edit-rubrik">
                                 Edit Rubrik
                             </a>
                         </th:block>
                     </div>
 
-                    <!-- Error and Success Messages -->
+                    
                     <th:block th:if="${error}">
                         <div style="background-color: #ffebee; color: #c62828; padding: 12px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #c62828;">
                             <strong>❌ Error:</strong> <span th:text="${error}">Error message</span>
@@ -162,7 +162,7 @@
                         <div class="empty-state">
                             <p>Belum ada rubrik penilaian untuk tugas ini</p>
                             <th:block th:if="${tugas != null}">
-                                <a th:href="@{/dosen/edit-rubrik-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas})}" 
+                                <a th:href="@{/dosen/edit-rubrik-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
                                    class="btn-buat-rubrik">
                                     Buat Rubrik Penilaian
                                 </a>

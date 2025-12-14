@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const handleLogout = () => {
         fetch('/logout', { method: 'POST' }) 
-            .finally(() => { //redirect
+            .finally(() => {
                  window.location.href = '/'; 
             });
     };
@@ -37,12 +37,10 @@ document.addEventListener("DOMContentLoaded", () => {
         
         console.log("DEBUG: Listener dipasang pada tombol Tambah Tugas.");
         
-
         let isListView = true;
         const mkTitleElement = document.getElementById('mk-title');
         const originalBreadcrumb = breadcrumb ? breadcrumb.innerHTML : '';
         
-        // Tampilan awal
         listTugasView.style.display = 'block';
         buatTugasView.style.display = 'none';
 
@@ -50,14 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
             isListView = !isListView;
             
             if (isListView) {
-                // Kembali ke bagian list view
+
                 listTugasView.style.display = 'block';
                 buatTugasView.style.display = 'none';
                 if (breadcrumb) {
                      breadcrumb.innerHTML = originalBreadcrumb; 
                 }
             } else {
-                // Pindah ke bagian form membuat tugas
+
                 listTugasView.style.display = 'none';
                 buatTugasView.style.display = 'block';
                 if (breadcrumb) {

@@ -31,14 +31,13 @@ body {
     padding: 0; 
 }
 :root{
-    /* Transition */
+    
     --tran-02: all 0.2s ease; 
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 }
 
-/* === SIDEBAR === */
 .sidebar .text{
     font-size: 15px; 
     font-weight: 500;
@@ -310,7 +309,6 @@ header .image-text .header-text{
     align-items: center;
 }
 
-/*----BAGIAN PROFIL----*/
 .contents{
     display: flex; 
     justify-content: center;
@@ -333,12 +331,11 @@ header .image-text .header-text{
     flex-direction: column;
     margin-top: -70px;
 }
-/* --- Reset & Font Dasar --- */
+
 .content-section {
     padding: 20px;
 }
 
-/* --- Header & Navigasi Atas --- */
 .header .left-section {
     display: flex;
     align-items: center;
@@ -350,4 +347,3 @@ header .image-text .header-text{
     cursor: pointer;
     color: #5BA4E6; 
 }
-

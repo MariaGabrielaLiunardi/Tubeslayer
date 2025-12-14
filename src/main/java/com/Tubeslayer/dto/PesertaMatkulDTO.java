@@ -1,17 +1,12 @@
 package com.Tubeslayer.dto;
 
-/**
- * DTO untuk menggabungkan data Mahasiswa dan Dosen (Koordinator)
- * yang akan ditampilkan di list peserta mata kuliah.
- */
 public class PesertaMatkulDTO {
     private int no;
     private String nama;
-    private String nomorPokok; // NPM (Mahasiswa) atau NIP (Dosen)
-    private String role; // Role: "Koordinator" "Pengampu" atau "Mahasiswa"
-    private String kelas; // Hanya untuk Mahasiswa
+    private String nomorPokok;
+    private String role;
+    private String kelas;
     
-    // Konstruktor untuk Mahasiswa
     public PesertaMatkulDTO(int no, String nama, String nomorPokok, String role, String kelas) {
         this.no = no;
         this.nama = nama;
@@ -20,16 +15,14 @@ public class PesertaMatkulDTO {
         this.kelas = kelas;
     }
     
-    // Konstruktor untuk Dosen/Koordinator 
     public PesertaMatkulDTO(int no, String nama, String nomorPokok, String role) {
         this.no = no;
         this.nama = nama;
         this.nomorPokok = nomorPokok;
         this.role = role;
-        this.kelas = null; // Kelas diset null
+        this.kelas = null;
     }
     
-    // Getters and Setters
     public int getNo() {
         return no;
     }
@@ -70,7 +63,6 @@ public class PesertaMatkulDTO {
         this.kelas = kelas;
     }
 
-    // toString method
     @Override
     public String toString() {
         return "PesertaMatkulDTO{" +

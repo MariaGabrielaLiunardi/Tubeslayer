@@ -1,13 +1,10 @@
 package com.Tubeslayer.dto;
 
-/**
- * DTO untuk data pemberian nilai kelompok di halaman pemberian nilai dosen
- */
 public class PemberianNilaiDTO {
     private Integer idKelompok;
     private String namaKelompok;
     private Integer idTugas;
-    private Integer nilai; // nilai kelompok untuk tugas ini
+    private Integer nilai;
     
     public PemberianNilaiDTO(Integer idKelompok, String namaKelompok, Integer idTugas, Integer nilai) {
         this.idKelompok = idKelompok;
@@ -16,7 +13,6 @@ public class PemberianNilaiDTO {
         this.nilai = nilai;
     }
     
-    // Getters and Setters
     public Integer getIdKelompok() {
         return idKelompok;
     }

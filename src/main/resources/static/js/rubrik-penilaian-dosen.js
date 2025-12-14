@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Logic untuk Toggle Sidebar
+
     const sidebar = document.querySelector('.sidebar');
     const toggle = document.querySelector('.toggle');
 
@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Logout handler
     const logoutButton = document.getElementById('logoutButton');
     if (logoutButton) {
         logoutButton.addEventListener('click', function() {

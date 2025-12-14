@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tabs = document.querySelectorAll('.mk-tab button');
     
-    // Logika Tab Navigasi
     tabs.forEach(tab => {
         const tabTarget = tab.getAttribute('data-tab-target');
 
@@ -14,10 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.location.href = `/admin/arsip-matkul-detail?kodeMk=${encodeURIComponent(mataKuliahId)}`;
             });
         }
-        // tab 'Nilai'
-    });
 
-    // Logout
+    });
 
     const handleLogout = () => {
         fetch('/logout', { method: 'POST' }) 
@@ -34,8 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutButton.addEventListener('click', handleLogout);
     }
     
-    // Search & Pagination 
-
     const searchBox = document.querySelector('.search-box');
     const searchInput = searchBox ? searchBox.querySelector('input[type="text"]') : null;
     const searchButton = searchBox ? searchBox.querySelector('button') : null;
@@ -44,10 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
     
-    // Rows yang berisi data peserta (children.length === 4)
     const masterDataRows = allTableRows.filter(row => row.children.length === 4); 
     
-    // Row pesan kosong (menargetkan row yang memiliki colspan=4)
     const noDataRow = document.getElementById('empty-results-row') || allTableRows.find(row => row.children.length !== 4); 
     
     let filteredPageItems = masterDataRows;
@@ -56,11 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextButton = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('current-page');
 
-    const itemsPerPage = 3; // 3 item per halaman
+    const itemsPerPage = 3;
     let totalPages = 0;
     let currentPage = 1;
-
-    // Pagination
 
     const showPage = (page) => {
         const start = (page - 1) * itemsPerPage;
@@ -70,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
             item.style.display = 'none';
         });
 
-        // Tampilkan hanya item yang sesuai filter
         filteredPageItems.forEach((item, index) => {
             if (index >= start && index < end) {
                 item.style.display = 'table-row';
@@ -89,11 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
             pesertaCountSpan.textContent = `Peserta: ${filteredPageItems.length} peserta`; 
         }
         
-        // Logika tampilan row kosong
         if (filteredPageItems.length === 0) {
             
             if (noDataRow) {
-                noDataRow.style.display = 'table-row'; // TAMPILKAN PESAN KOSONG
+                noDataRow.style.display = 'table-row';
             }
             if (pageInfoSpan) pageInfoSpan.textContent = `0 dari 0`;
             if (prevButton) prevButton.disabled = true;
@@ -104,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Jika Hasil pencarian > 0, sembunyikan pesan kosong
         if (noDataRow) {
             noDataRow.style.display = 'none'; 
         }
@@ -116,8 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showPage(currentPage);
     };
-
-    // Search (Live Search)
 
     const handleSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
@@ -138,15 +124,13 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
         
-        updateUI(true); // Reset halaman ke 1 setelah pencarian baru
+        updateUI(true);
     };
     
     if (searchInput) {
-        searchInput.addEventListener('input', handleSearch); // Gunakan 'input' event
+        searchInput.addEventListener('input', handleSearch);
     }
 
-    // Event Listeners Pagination 
-    
     if (prevButton) {
         prevButton.addEventListener('click', () => {
             if (currentPage > 1) {

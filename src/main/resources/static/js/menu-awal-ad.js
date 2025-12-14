@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Logic untuk Toggle Sidebar
+
     const sidebar = document.querySelector('.sidebar');
     const toggle = document.querySelector('.toggle'); 
 
@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Redirect tombol card
     const btnMatkul = document.getElementById("btnMatkul");
     const btnDosen = document.getElementById("btnDosen");
     const btnMahasiswa = document.getElementById("btnMaha");
@@ -32,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Highlight sidebar sesuai URL aktif
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
     const currentPath = window.location.pathname; 
 

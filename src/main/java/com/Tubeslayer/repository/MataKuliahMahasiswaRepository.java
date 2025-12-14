@@ -11,18 +11,14 @@ import java.util.List;
 @Repository
 public interface MataKuliahMahasiswaRepository extends JpaRepository<MataKuliahMahasiswa, MataKuliahMahasiswaId> {
 
-    // Ambil daftar MK aktif berdasarkan user
     List<MataKuliahMahasiswa> findByUser_IdUserAndIsActive(String idUser, Boolean active);
 
-    // Ambil daftar peserta berdasarkan kode MK
     List<MataKuliahMahasiswa> findByMataKuliah_KodeMKAndIsActive(String kodeMk, Boolean active);
 
-    // Hitung jumlah MK aktif untuk mahasiswa tertentu di tahun akademik tertentu
     int countById_IdUserAndTahunAkademikAndIsActive(String idUser, String tahunAkademik, boolean isActive);
 
     List<MataKuliahMahasiswa> findByMataKuliah_KodeMK(String kodeMk);
     
-    // Query untuk mendapatkan peserta dengan nilai untuk tugas tertentu
     @Query("SELECT DISTINCT u.nama, u.idUser, COALESCE(n.nilaiPribadi, 0) FROM User u " +
            "JOIN MataKuliahMahasiswa mkm ON u.idUser = mkm.user.idUser " +
            "LEFT JOIN Nilai n ON u.idUser = n.user.idUser AND n.tugas.idTugas = :idTugas " +

@@ -10,4 +10,3 @@ public class MataKuliahMahasiswaId implements Serializable {
     private String idUser;
     private String kodeMK;
 }
-

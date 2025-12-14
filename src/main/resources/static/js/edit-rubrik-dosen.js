@@ -1,11 +1,9 @@
-// Edit Rubrik Dosen - JavaScript Handler
 
 let komponenCounter = 1;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("=== EDIT RUBRIK PAGE LOADED ===");
     
-    // Logout handler
     const logoutButton = document.getElementById('logoutButton');
     if (logoutButton) {
         logoutButton.addEventListener('click', function() {
@@ -15,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Toggle sidebar
     const toggle = document.querySelector('.toggle');
     const sidebar = document.querySelector('.sidebar');
     
@@ -25,32 +22,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Initialize komponenCounter based on existing rows
     const container = document.getElementById('komponenContainer');
     const existingRows = container.querySelectorAll('.rubrik-row');
     komponenCounter = existingRows.length;
     console.log("Existing rows: " + komponenCounter);
     
-    // Auto-add first komponen if empty
     if (existingRows.length === 0) {
         console.log("No komponen found, adding first one");
         tambahKomponen();
     }
     
-    // Setup event listeners untuk existing bobot inputs
     const bobotInputs = document.querySelectorAll('.input-bobot');
     bobotInputs.forEach(input => {
         input.addEventListener('input', updateTotalBobot);
     });
     
-    // Form submit handler
     const rubrikForm = document.getElementById('rubrikForm');
     if (rubrikForm) {
         console.log("Form found, adding submit handler");
         rubrikForm.addEventListener('submit', function(e) {
             console.log("========== FORM SUBMIT EVENT FIRED ==========");
             
-            // Remove completely empty komponen rows to avoid validation issues
             const container = document.getElementById('komponenContainer');
             const allRows = container.querySelectorAll('.rubrik-row');
             const rowsToKeep = [];
@@ -64,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 console.log("Row " + idx + ": nama='" + namaValue + "', bobot=" + bobotValue);
                 
-                // Keep row only if it has both nama and bobot > 0
                 if (namaValue !== '' && bobotValue > 0) {
                     rowsToKeep.push(row);
                 } else {
@@ -74,12 +65,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             console.log("Rows to keep: " + rowsToKeep.length + ", Rows to remove: " + rowsToRemove.length);
             
-            // Remove empty rows
             rowsToRemove.forEach(row => {
                 row.remove();
             });
             
-            // Make sure we have at least one row
             if (rowsToKeep.length === 0) {
                 console.error("No valid komponen rows!");
                 e.preventDefault();
@@ -90,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const totalBobot = calculateTotalBobot();
             console.log("Total bobot calculated: " + totalBobot);
             
-            // Log form data untuk debugging
             console.log("=== Form Data Being Submitted ===");
             const formData = new FormData(rubrikForm);
             let dataCount = 0;
@@ -114,10 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Form #rubrikForm not found!");
     }
 
-    // Initial total bobot calculation
     updateTotalBobot();
     
-    // Setup auto-resize untuk semua textareas
     setupTextareaAutoResize();
     
     console.log("=== PAGE INITIALIZATION COMPLETE ===");
@@ -129,7 +115,7 @@ function setupTextareaAutoResize() {
         textarea.addEventListener('input', function() {
             autoResizeTextarea(this);
         });
-        // Initial resize
+
         autoResizeTextarea(textarea);
     });
 }
@@ -165,13 +151,11 @@ function tambahKomponen() {
     
     container.appendChild(newRow);
     
-    // Add event listener untuk bobot input
     const bobotInput = newRow.querySelector('.input-bobot');
     if (bobotInput) {
         bobotInput.addEventListener('input', updateTotalBobot);
     }
     
-    // Setup auto-resize untuk textarea baru
     const newTextarea = newRow.querySelector('.input-keterangan');
     if (newTextarea) {
         newTextarea.addEventListener('input', function() {
@@ -186,7 +170,6 @@ function hapusKomponen(index) {
     const container = document.getElementById('komponenContainer');
     const rows = container.querySelectorAll('.rubrik-row');
     
-    // Pastikan ada minimal 1 komponen dengan data valid
     const validRows = Array.from(rows).filter(row => {
         const namaInput = row.querySelector('.input-komponen');
         const bobotInput = row.querySelector('.input-bobot');
@@ -260,7 +243,6 @@ function updateTotalBobot() {
     }
 }
 
-// Add event listeners to existing bobot inputs
 document.addEventListener('input', function(e) {
     if (e.target.classList.contains('input-bobot')) {
         const value = e.target.value;

@@ -390,19 +390,7 @@ class KelompokController {
                     </td>
                 </tr>
             `;
-        // if (isModeKelola) {
-        //     tableHTML += `
-        //         <button class="edit-btn" data-id="${kelompok.id_kelompok}" title="Edit Kelompok">
-        //             ✏️
-        //         </button>
-        //     `;
-        // } else {
-        //     // Untuk mode dosen, tampilkan tombol delete
-        //     tableHTML += `
-        //         <button class="delete-btn" data-id="${kelompok.id_kelompok}">🗑️</button>
-        //     `;
-        // }
-        
+
         tableHTML += `
                 </td>
             </tr>
@@ -438,7 +426,7 @@ class KelompokController {
     const deleteButtons = document.querySelectorAll(".delete-btn");
     deleteButtons.forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        e.stopPropagation(); // Prevent row click
+        e.stopPropagation();
         const id = parseInt(e.currentTarget.getAttribute("data-id"));
         this.deleteKelompok(id);
       });
@@ -558,11 +546,11 @@ class KelompokController {
     const finalisasiKelompokBtn = document.getElementById('finalisasiKelompokBtn');
     
     if (isModeKelola) {
-        // Mode kelola: sembunyikan tombol buat kelompok dan finalisasi
+
         if (buatKelompokBtn) buatKelompokBtn.style.display = 'none';
         if (finalisasiKelompokBtn) finalisasiKelompokBtn.style.display = 'none';
     } else {
-        // Mode dosen: tampilkan semua tombol
+
         if (buatKelompokBtn) buatKelompokBtn.style.display = 'inline-block';
         if (finalisasiKelompokBtn) finalisasiKelompokBtn.style.display = 'inline-block';
     }
