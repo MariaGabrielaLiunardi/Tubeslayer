@@ -13,38 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
-// UserController.java (VERSI FINAL yang BENAR)
 @Controller
 public class UserController {
 
     @Autowired
     private AuthService authService; 
 
-    // Login view: Hanya menampilkan halaman login.
-    // Spring Security yang me-redirect jika user sudah terautentikasi.
     @GetMapping("/login")
     public String loginView() {
         return "login"; 
     }
 
-//     // Dashboard view: Hanya menampilkan halaman dashboard.
-//     // Spring Security yang mengamankan (hanya yang login bisa masuk).
-//    @GetMapping("/dashboard")
-//     public String dashboard(HttpSession session, Model model) { // Tambahkan parameter HttpSession dan Model
-        
-//         // Mengambil data dari session yang diisi CustomSuccessHandler
-//         String username = (String) session.getAttribute("username");
-//         String role = (String) session.getAttribute("role");
-        
-//         // Menambahkan ke model untuk ditampilkan di template (e.g., dashboard.html)
-//         model.addAttribute("username", username);
-//         model.addAttribute("role", role);
-        
-//         return "dashboard";
-//     }
-
-    // Logout: (Tetap gunakan default Spring Security di SecurityConfig, 
-    // tapi fungsi controller ini juga memastikan session manual hilang)
     @GetMapping("/logout")
     public String logout(jakarta.servlet.http.HttpSession session) {
         session.invalidate();

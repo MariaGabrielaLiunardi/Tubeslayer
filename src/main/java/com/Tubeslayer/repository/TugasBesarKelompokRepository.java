@@ -12,24 +12,10 @@ import java.util.List;
 @Repository
 public interface TugasBesarKelompokRepository extends JpaRepository<TugasBesarKelompok, TugasBesarKelompokId> {
     
-    /**
-     * @param idTugas ID tugas
-     * @return List TugasBesarKelompok
-     */
     List<TugasBesarKelompok> findByIdTugas(Integer idTugas);
     
-    /**
-     * @param idKelompok ID kelompok
-     * @return List TugasBesarKelompok
-     */
     List<TugasBesarKelompok> findByIdKelompok(Integer idKelompok);
     
-    /**
-     * Get group data with their grades for a specific task
-     * Returns: [idKelompok, namaKelompok, idTugas, nilaiKelompok]
-     * @param idTugas ID of the task
-     * @return List of Object arrays containing group and grade information
-     */
     @Query("SELECT tbk.idKelompok, k.namaKelompok, tbk.idTugas, " +
            "COALESCE((SELECT MAX(n.nilaiKelompok) FROM Nilai n WHERE n.tugas.idTugas = tbk.idTugas " +
            "AND n.user.idUser IN (SELECT uk.user.idUser FROM UserKelompok uk WHERE uk.kelompok.idKelompok = tbk.idKelompok)), 0) " +

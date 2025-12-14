@@ -14,19 +14,13 @@ public class MataKuliahController {
     @Autowired
     private MataKuliahService service;
 
-    /* ============================
-       HALAMAN KELOLA
-    ============================ */
     @GetMapping("/kelola-mata-kuliah")
     public String kelolaMatkul(Model model) {
-        //System.out.println("<<<<DEBUG" + service.getAll().size());
+        
         model.addAttribute("listMatkul", service.getAll());
-        return "admin/kelola-mata-kuliah"; // HTML
+        return "admin/kelola-mata-kuliah"; 
     }
 
-    /* ============================
-       MATA KULIAH (manual/import)
-    ============================ */
     @PostMapping("/tambah")
     @ResponseBody
     public String tambah(@RequestBody MataKuliah mk) {
@@ -34,9 +28,6 @@ public class MataKuliahController {
         return "OK";
     }
 
-    /* ============================
-       HAPUS MATA KULIAH
-    ============================ */
     @PostMapping("/hapus")
     @ResponseBody
     public String hapus(@RequestParam String nama) {

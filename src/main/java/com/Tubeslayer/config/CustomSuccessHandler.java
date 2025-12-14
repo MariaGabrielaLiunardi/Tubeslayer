@@ -22,13 +22,10 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
                 
-        // 1. Dapatkan HttpSession
         HttpSession session = request.getSession();
 
-        // 2. Ambil Username/Email
         String username = authentication.getName(); 
 
-        // 3. Ambil dan Proses Roles
         Set<String> rolesWithPrefix = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         
         Set<String> rolesWithoutPrefix = rolesWithPrefix.stream()
@@ -37,14 +34,12 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         
         String primaryRole = rolesWithoutPrefix.isEmpty() ? null : rolesWithoutPrefix.iterator().next();
 
-        // 4. SET LOGIC SESSION DI SINI
         session.setAttribute("username", username); 
-        session.setAttribute("role", primaryRole); // Simpan role tanpa prefix (ADMIN, DOSEN, dll.)
+        session.setAttribute("role", primaryRole); 
         
         System.out.println("Roles user setelah login: " + rolesWithPrefix);
         System.out.println("Session di-set: username=" + username + ", role=" + primaryRole);
 
-        // 5. Logic Redirect Berbasis Peran 
         if (rolesWithPrefix.contains("ROLE_ADMIN")) {
             response.sendRedirect("/admin/dashboard");
         } else if (rolesWithPrefix.contains("ROLE_DOSEN")) {

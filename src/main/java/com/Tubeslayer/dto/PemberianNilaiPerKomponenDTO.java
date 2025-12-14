@@ -2,27 +2,15 @@ package com.Tubeslayer.dto;
 
 import java.util.Map;
 
-/**
- * DTO untuk request pemberian nilai per komponen
- * Digunakan saat dosen mengirimkan nilai untuk satu user
- */
 public class PemberianNilaiPerKomponenDTO {
     
     private String idUser;
     private Integer idTugas;
     
-    /**
-     * Map<idKomponen, nilai>
-     * Contoh: {1: 80, 2: 75, 3: 90}
-     */
     private Map<Integer, Integer> nilaiPerKomponen;
     
-    /**
-     * Flag apakah nilai sama diterapkan untuk semua anggota kelompok
-     */
     private boolean isSamaBuat;
     
-    // Constructor
     public PemberianNilaiPerKomponenDTO() {}
     
     public PemberianNilaiPerKomponenDTO(String idUser, Integer idTugas, 
@@ -34,7 +22,6 @@ public class PemberianNilaiPerKomponenDTO {
         this.isSamaBuat = isSamaBuat;
     }
     
-    // Getters and Setters
     public String getIdUser() {
         return idUser;
     }

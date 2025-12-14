@@ -27,19 +27,9 @@ public interface TugasBesarRepository extends JpaRepository<TugasBesar, Integer>
 
     long countByIsActive(boolean isActive);
 
-
-    /**
-     * Menghitung jumlah kelompok unik yang terdaftar pada TugasBesar tertentu.
-     * Menggunakan tabel junction TugasBesarKelompok.
-     */
     @Query("SELECT COUNT(DISTINCT tk.idKelompok) FROM TugasBesarKelompok tk WHERE tk.idTugas = :idTugas")
     Long getKelompokCount(@Param("idTugas") int idTugas);
 
-    /**
-     * Menghitung jumlah submission (entry Nilai) unik yang terkait dengan TugasBesar tertentu.
-     * Asumsi: Setiap entry di tabel Nilai adalah sebuah submission.
-     */
-
-    @Query("SELECT COUNT(n) FROM Nilai n WHERE n.tugas.idTugas = :idTugas") // <-- KOREKSI INI
+    @Query("SELECT COUNT(n) FROM Nilai n WHERE n.tugas.idTugas = :idTugas")
     Long getSubmissionCount(@Param("idTugas") int idTugas);
 }
