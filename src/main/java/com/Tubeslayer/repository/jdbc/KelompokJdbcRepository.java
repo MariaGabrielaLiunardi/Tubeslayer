@@ -177,8 +177,7 @@ public class KelompokJdbcRepository {
 
     public int hapusAnggota(String idUser, Integer idKelompok) {
         String sql = 
-            "UPDATE user_kelompok " +
-            "SET is_active = 0 " +
+            "DELETE FROM user_kelompok " +
             "WHERE id_user = ? AND id_kelompok = ?";
 
         return jdbcTemplate.update(sql, idUser, idKelompok);
