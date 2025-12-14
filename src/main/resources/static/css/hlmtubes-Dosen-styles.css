@@ -276,7 +276,7 @@ header .image-text .header-text {
     border-radius: 40px;
     display: flex;
     gap: 5px;
-    margin-top: 60px;
+    margin-top: 20px;
     margin-left: 30px;
     margin-bottom: 10px;
 }
@@ -303,17 +303,17 @@ header .image-text .header-text {
     border-radius: 15px;
     overflow: visible;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin: 0 30px 30px 30px;
+    margin: 30px 30px 30px 30px;
 }
 
 /* Title Section */
 .title-section {
-    background-color: #b3e5fc;
+    background-color: #CCF0F7;
     padding: 25px 30px;
     display: flex;
     align-items: center;
     gap: 20px;
-    border-radius: 15px 15px 0 0;
+    border-radius: 15px;
 }
 
 .book-icon {
