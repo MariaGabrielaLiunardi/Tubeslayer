@@ -79,7 +79,7 @@
 
         <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
             <button class="tab" data-tab-target="kuliah"
-                th:attr="data-target-url=@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                th:attr="data-target-url=@{/admin/matakuliah-detail(kode=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
                 onclick="window.location.href=this.getAttribute('data-target-url')">
                 Kuliah
             </button>
