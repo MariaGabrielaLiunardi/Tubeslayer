@@ -16,15 +16,8 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     
     List<MataKuliahDosen> findById_IdUserAndIsActive(String idUser, boolean isActive);
 
-    /**
-     * Mencari semua relasi MataKuliahDosen berdasarkan kode mata kuliah.
-     * Ini digunakan untuk menemukan koordinator/pengajar MK.
-     */
     List<MataKuliahDosen> findByMataKuliah_KodeMKAndIsActive(String kodeMk, boolean isActive);
     
-    /**
-     * Cari relasi dosen-matakuliah berdasarkan ID dosen dan kode mata kuliah
-     */
     @Query("""
         SELECT md
         FROM MataKuliahDosen md
@@ -32,7 +25,6 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     """)
     MataKuliahDosen findById_IdUserAndKodeMK(@Param("idUser") String idUser, @Param("kodeMK") String kodeMK);
     
-    // hitung jumlah mk aktif untuk dosen tertentu di tahun akademik tertentu
     int countById_IdUserAndTahunAkademikAndIsActive(String idUser, String tahunAkademik, boolean isActive);
 
     @Query("""
@@ -48,7 +40,6 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     """)
     List<MKArchiveDTO> getArchiveMK();
 
-    // ambil list MK aktif untuk dosen tertentu di tahun akademik tertentu
     @Query("""
         SELECT mkm 
         FROM MataKuliahDosen mkm
@@ -61,7 +52,6 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
                                                           @Param("tahunAkademik") String tahunAkademik,
                                                           Pageable pageable);
 
-    // ambil list MK aktif untuk dosen tertentu di tahun akademik tertentu (tanpa Pageable)
     @Query("""
         SELECT mkm 
         FROM MataKuliahDosen mkm
@@ -73,4 +63,3 @@ public interface MataKuliahDosenRepository extends JpaRepository<MataKuliahDosen
     List<MataKuliahDosen> findById_IdUserAndTahunAkademikAndIsActive(@Param("idUser") String idUser,
                                                                      @Param("tahunAkademik") String tahunAkademik);
 }
-

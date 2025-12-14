@@ -1,26 +1,21 @@
 package com.Tubeslayer.dto;
 
-/**
- * DTO untuk response pencarian mahasiswa
- */
 public class MahasiswaSearchDTO {
     private String idUser;
     private String nama;
-    private String npm; // adalah idUser
+    private String npm; 
     private String kelas;
 
-    // Constructors
     public MahasiswaSearchDTO() {
     }
 
     public MahasiswaSearchDTO(String idUser, String nama, String kelas) {
         this.idUser = idUser;
         this.nama = nama;
-        this.npm = idUser; // NPM = ID User
+        this.npm = idUser; 
         this.kelas = kelas;
     }
 
-    // Getters and Setters
     public String getIdUser() {
         return idUser;
     }
@@ -54,7 +49,6 @@ public class MahasiswaSearchDTO {
         this.kelas = kelas;
     }
 
-    // toString method untuk debugging
     @Override
     public String toString() {
         return "MahasiswaSearchDTO{" +

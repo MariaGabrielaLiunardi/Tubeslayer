@@ -6,10 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-/**
- * Entity untuk menyimpan nilai per komponen untuk setiap user per tugas
- * Memungkinkan pelacakan nilai individual per komponen penilaian
- */
 @Entity
 @Table(name = "nilai_komponen", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"id_nilai", "id_komponen"})

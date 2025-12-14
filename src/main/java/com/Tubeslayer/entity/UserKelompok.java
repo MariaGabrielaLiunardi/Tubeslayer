@@ -26,4 +26,3 @@ public class UserKelompok {
     @Column(name = "is_active", nullable = false)
     private boolean is_active = true;
 }
-

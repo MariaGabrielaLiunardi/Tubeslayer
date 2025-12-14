@@ -29,8 +29,6 @@ public class User {
     private String role;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive = true; // default true
+    private boolean isActive = true;
 
-
-    
 }

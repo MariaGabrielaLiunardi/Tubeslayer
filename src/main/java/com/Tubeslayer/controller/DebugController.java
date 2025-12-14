@@ -8,9 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Temporary debug controller untuk menginisialisasi data dummy
- */
 @RestController
 public class DebugController {
 
@@ -20,19 +17,16 @@ public class DebugController {
     @GetMapping("/debug/check-data")
     public Map<String, Object> checkData() {
         try {
-            // Check user
+            
             int userCount = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM user_table", Integer.class);
             
-            // Check mata_kuliah_dosen
             int mkDosenCount = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM mata_kuliah_dosen", Integer.class);
             
-            // Check mata_kuliah_dosen dengan tahun 2025/2026
             int mk2025Count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM mata_kuliah_dosen WHERE tahun_akademik = '2025/2026'", Integer.class);
             
-            // Get specific dosen's matkul
             List<Map<String, Object>> dosenMK = jdbcTemplate.queryForList(
                 "SELECT md.id_user, md.kode_mk, md.tahun_akademik, mk.nama FROM mata_kuliah_dosen md " +
                 "JOIN mata_kuliah mk ON md.kode_mk = mk.kode_mk " +
@@ -52,7 +46,7 @@ public class DebugController {
     @GetMapping("/debug/init-dummy-data")
     public Map<String, String> initDummyData() {
         try {
-            // Users
+            
             jdbcTemplate.update(
                 "INSERT IGNORE INTO user_table (id_user, email, password, nama, role, is_active) VALUES (?, ?, ?, ?, ?, ?)",
                 "20250101", "agus@unpar.ac.id", "$2a$12$jsq4xkNTSQQKF6O5f3ctsuxSuxXSEgu1ULt5ugH.xKBHTmDxllum2", "Agus Santoso", "Dosen", 1);
@@ -65,7 +59,6 @@ public class DebugController {
                 "INSERT IGNORE INTO user_table (id_user, email, password, nama, role, is_active) VALUES (?, ?, ?, ?, ?, ?)",
                 "20250103", "budi@unpar.ac.id", "$2a$12$jsq4xkNTSQQKF6O5f3ctsuxSuxXSEgu1ULt5ugH.xKBHTmDxllum2", "Budi Pranoto", "Dosen", 1);
             
-            // Mata Kuliah
             jdbcTemplate.update(
                 "INSERT IGNORE INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES (?, ?, ?, ?)",
                 "AIF23001", "Algoritma dan Pemrograman", 3, 1);
@@ -86,7 +79,6 @@ public class DebugController {
                 "INSERT IGNORE INTO mata_kuliah (kode_mk, nama, sks, is_active) VALUES (?, ?, ?, ?)",
                 "AIF23005", "Pemrograman Mobile", 3, 1);
             
-            // Mata Kuliah Dosen
             jdbcTemplate.update(
                 "INSERT IGNORE INTO mata_kuliah_dosen (id_user, kode_mk, kelas, semester, tahun_akademik, is_active) VALUES (?, ?, ?, ?, ?, ?)",
                 "20250101", "AIF23001", "A", 1, "2025/2026", 1);
