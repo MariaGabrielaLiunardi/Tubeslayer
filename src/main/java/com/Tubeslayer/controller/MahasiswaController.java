@@ -564,16 +564,71 @@ public class MahasiswaController {
     // ============= NILAI ENDPOINTS =============
 
     /**
-     * Dashboard Nilai - Mahasiswa melihat list tugas dan nilainya
-     * GET /mahasiswa/dashboard-nilai?mk=<kodeMk>&idTugas=<idTugas>
+     * Nilai - Mahasiswa melihat tabel list tugas besar untuk mata kuliah
+     * GET /mahasiswa/nilai?mk=<kodeMk>
      */
-    @GetMapping("/mahasiswa/dashboard-nilai")
-    public String dashboardNilai(@RequestParam(required = false) String mk,
-                                 @RequestParam(required = false) Integer idTugas,
-                                 @AuthenticationPrincipal CustomUserDetails user,
-                                 Model model) {
+    @GetMapping("/mahasiswa/nilai")
+    public String mahasiswaNilai(
+            @RequestParam(required = false) String mk,
+            @RequestParam(required = false) Integer colorIndex,
+            @AuthenticationPrincipal CustomUserDetails user,
+            Model model) {
         
-        logger.info("Accessing mahasiswa dashboard-nilai: mk={}, idTugas={}, user={}", mk, idTugas, user.getIdUser());
+        // Jika tidak ada kodeMk, redirect ke mata kuliah
+        if (mk == null || mk.isEmpty()) {
+            return "redirect:/mahasiswa/mata-kuliah";
+        }
+
+        // Cek apakah mata kuliah ada
+        MataKuliah mataKuliah = mataKuliahRepo.findById(mk).orElse(null);
+        if (mataKuliah == null) {
+            return "redirect:/mahasiswa/mata-kuliah";
+        }
+
+        // Cek apakah mahasiswa enrolled di mata kuliah ini
+        List<MataKuliahMahasiswa> enrollments = mkmRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
+        boolean isEnrolled = enrollments.stream()
+            .anyMatch(e -> e.getUser().getIdUser().equals(user.getIdUser()));
+        
+        if (!isEnrolled) {
+            return "redirect:/mahasiswa/mata-kuliah";
+        }
+
+        // Get koordinator dosen
+        MataKuliahDosen koordinator = null;
+        List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
+        if (!dosenList.isEmpty()) {
+            koordinator = dosenList.get(0);
+        }
+
+        // Get semua tugas untuk mata kuliah ini
+        List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
+        tugasList.sort(Comparator.comparing(TugasBesar::getDeadline));
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
+        model.addAttribute("user", user);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("koordinator", koordinator);
+        model.addAttribute("tugasList", tugasList);
+        model.addAttribute("kodeMk", mk);
+        model.addAttribute("colorIndex", finalColorIndex);
+
+        return "nilai/Mahasiswa/nilai-mahasiswa";
+    }
+
+    /**
+     * Dashboard Penilaian - Mahasiswa melihat 3 card (rubrik, jadwal, nilai) untuk tugas tertentu
+     * GET /mahasiswa/dashboard-penilaian?mk=<kodeMk>&idTugas=<idTugas>
+     */
+    @GetMapping("/mahasiswa/dashboard-penilaian")
+    public String dashboardPenilaian(@RequestParam(required = false) String mk,
+                                     @RequestParam(required = false) Integer idTugas,
+                                     @RequestParam(required = false) Integer colorIndex,
+                                     @AuthenticationPrincipal CustomUserDetails user,
+                                     Model model) {
+        
+        logger.info("Accessing mahasiswa dashboard-penilaian: mk={}, idTugas={}, user={}", mk, idTugas, user.getIdUser());
         
         if (mk == null || mk.isEmpty()) {
             return "redirect:/mahasiswa/mata-kuliah";
@@ -593,14 +648,23 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        model.addAttribute("user", user);
-        model.addAttribute("kodeMk", mk);
-        model.addAttribute("mataKuliah", mataKuliah);
-
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
         // Ambil semua tugas untuk mata kuliah ini
         List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
         tugasList.sort(Comparator.comparing(TugasBesar::getJudulTugas));
+        
+        // Jika idTugas tidak ada, redirect ke nilai dengan tabel tugas
+        if (idTugas == null) {
+            return "redirect:/mahasiswa/nilai?mk=" + mk + "&colorIndex=" + finalColorIndex;
+        }
+        
+        model.addAttribute("user", user);
+        model.addAttribute("kodeMk", mk);
+        model.addAttribute("mataKuliah", mataKuliah);
+        model.addAttribute("colorIndex", finalColorIndex);
         model.addAttribute("tugasList", tugasList);
+        model.addAttribute("idTugas", idTugas);
 
         return "nilai/Mahasiswa/dashboard-nilai-mahasiswa";
     }
@@ -612,6 +676,7 @@ public class MahasiswaController {
     @GetMapping("/mahasiswa/pemberian-nilai")
     public String pemberianNilai(@RequestParam(required = false) String mk,
                                  @RequestParam(required = false) Integer idTugas,
+                                 @RequestParam(required = false) Integer colorIndex,
                                  @AuthenticationPrincipal CustomUserDetails user,
                                  Model model) {
         
@@ -639,14 +704,17 @@ public class MahasiswaController {
         // Validasi tugas
         TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
         if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(mk)) {
-            return "redirect:/mahasiswa/dashboard-nilai?mk=" + mk;
+            return "redirect:/mahasiswa/nilai?mk=" + mk;
         }
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
 
         model.addAttribute("user", user);
         model.addAttribute("kodeMk", mk);
         model.addAttribute("idTugas", idTugas);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("tugas", tugas);
+        model.addAttribute("colorIndex", finalColorIndex);
 
         // Cari nilai pribadi mahasiswa untuk tugas ini
         Nilai nilaiPribadi = nilaiRepository
@@ -723,6 +791,7 @@ public class MahasiswaController {
     @GetMapping("/mahasiswa/lihat-nilai")
     public String lihatNilai(@RequestParam(required = false) String mk,
                             @RequestParam(required = false) Integer idTugas,
+                            @RequestParam(required = false) Integer colorIndex,
                             @AuthenticationPrincipal CustomUserDetails user,
                             Model model) {
         
@@ -750,14 +819,17 @@ public class MahasiswaController {
         // Validasi tugas
         TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
         if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(mk)) {
-            return "redirect:/mahasiswa/dashboard-nilai?mk=" + mk;
+            return "redirect:/mahasiswa/nilai?mk=" + mk;
         }
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
 
         model.addAttribute("user", user);
         model.addAttribute("kodeMk", mk);
         model.addAttribute("idTugas", idTugas);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("tugas", tugas);
+        model.addAttribute("colorIndex", finalColorIndex);
 
         // Cari nilai pribadi mahasiswa untuk tugas ini
         Nilai nilaiPribadi = nilaiRepository
@@ -834,6 +906,7 @@ public class MahasiswaController {
     public String mahasiswaRubrikPenilaian(
             @RequestParam(required = false) String mk,
             @RequestParam(required = false) Integer idTugas,
+            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
         
@@ -883,11 +956,14 @@ public class MahasiswaController {
             }
         }
 
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
         model.addAttribute("user", user);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("tugas", tugas);
         model.addAttribute("kodeMk", mk);
         model.addAttribute("idTugas", idTugas);
+        model.addAttribute("colorIndex", finalColorIndex);
         model.addAttribute("rubrikItems", rubrikItems);
         model.addAttribute("totalBobot", totalBobot);
         model.addAttribute("hasRubrik", hasRubrik);
@@ -902,6 +978,7 @@ public class MahasiswaController {
     public String mahasiswaJadwalPenilaian(
             @RequestParam(required = false) String mk,
             @RequestParam(required = false) Integer idTugas,
+            @RequestParam(required = false) Integer colorIndex,
             @AuthenticationPrincipal CustomUserDetails user,
             Model model) {
         
@@ -928,11 +1005,14 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        
         model.addAttribute("user", user);
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("tugas", tugas);
         model.addAttribute("kodeMk", mk);
         model.addAttribute("idTugas", idTugas);
+        model.addAttribute("colorIndex", finalColorIndex);
 
         return "nilai/Mahasiswa/jadwal-penilaian-mahasiswa";
     }

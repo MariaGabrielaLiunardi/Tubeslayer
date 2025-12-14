@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard Nilai Mahasiswa - Tubeslayer</title>
+        <link rel="stylesheet" th:href="@{/css/pemberian-nilai-mahasiswa.css}">
         <link rel="stylesheet" th:href="@{/css/dashboard-nilai-mahasiswa.css}">
         <script th:src="@{/js/pemberian-nilai-mahasiswa.js}" defer></script>
         <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>  
@@ -74,11 +75,11 @@
                     Kuliah
                 </button>
                 <button class="tab" data-tab-target="peserta"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(mk=${kodeMk})}'|">
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk})}'|">
                     Daftar Peserta
                 </button>
                 <button class="tab active" data-tab-target="nilai"
-                    th:onclick="|window.location.href='@{/mahasiswa/dashboard-nilai(mk=${kodeMk},idTugas=${idTugas})}'|">
+                    th:onclick="|window.location.href='@{/mahasiswa/dashboard-penilaian(mk=${kodeMk},idTugas=${idTugas}, colorIndex=${colorIndex})}'|">
                     Nilai
                 </button>
             </div>
@@ -104,13 +105,13 @@
                             <p>Rubrik Penilaian</p>
                         </a>
 
-                        <a th:href="@{/mahasiswa/jadwal-penilaian(mk=${kodeMk}, idTugas=${idTugas})}" 
+                        <a th:href="@{/mahasiswa/jadwal-penilaian(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
                            class="card">
                             <img th:src="@{/icon/jadwal.png}" alt="jadwal">
                             <p>Jadwal Penilaian</p>
                         </a>
 
-                        <a th:href="@{/mahasiswa/lihat-nilai(mk=${kodeMk}, idTugas=${idTugas})}" 
+                        <a th:href="@{/mahasiswa/lihat-nilai(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
                            class="card">
                             <img th:src="@{/icon/exam.png}" alt="exam">
                             <p>Lihat Nilai</p>

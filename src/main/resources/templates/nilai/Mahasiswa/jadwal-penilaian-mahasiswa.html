@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Jadwal Penilaian - Tubeslayer</title>
         <link rel="stylesheet" th:href="@{/css/jadwal-penilaian-mahasiswa.css}">
+        <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
         <script th:src="@{/js/jadwal-penilaian-dosen.js}" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
@@ -67,6 +68,21 @@
                     Jadwal Penilaian
                 </div>
             </div>
+
+            <div class="mk-tab" th:data-mk-kode="${kodeMk}">
+                <button class="tab" data-tab-target="kuliah"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk})}'|">
+                    Kuliah
+                </button>
+                <button class="tab" data-tab-target="peserta"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk})}'|">
+                    Daftar Peserta
+                </button>
+                <button class="tab active" data-tab-target="nilai"
+                    th:onclick="|window.location.href='@{/mahasiswa/dashboard-nilai(mk=${kodeMk},idTugas=${idTugas})}'|">
+                    Nilai
+                </button>
+            </div>
             
             <div class="container">
                 <div class="rectangle-blue">
@@ -78,7 +94,7 @@
                 
                 <div class="rectangle-white">
                     <div class="breadcrumb-nav">
-                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk},idTugas=${idTugas})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                        <a th:href="@{/mahasiswa/dashboard-penilaian(mk=${kodeMk},idTugas=${idTugas}, colorIndex=${colorIndex})}" class="breadcrumb-link">Dashboard Penilaian</a>
                         <span class="breadcrumb-separator">&gt;</span>
                         <span class="breadcrumb-current">Jadwal Penilaian</span>
                     </div>
