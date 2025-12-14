@@ -7,56 +7,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/dash-user.css">
-    <link rel="stylesheet" href="/css/peserta-detail.css">
+    <link rel="stylesheet" href="/css/matkul-peserta.css">
     <link rel="icon" href="/logo/blue-logo.png" type="image/png">
 
     <script src="/js/dash-user.js" defer></script>
-    <script src="/js/matkul-peserta-mhs.js" defer></script>
+    <script src="/js/matkul-peserta-admin.js" defer></script>
     <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
 
-    <nav class="sidebar close">
-        <header>
-            <div class="image-text">
-                <span class="image">
-                    <img src="/logo/blue-logo.png" alt="logo">
-                </span>
-                <div class="text header-text">
-                    <span class="name">Tubeslayer</span>
-                </div>
-            </div>
-        </header>
+ <nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img src="/logo/blue-logo.png" alt="logo">
+            </span>
 
-        <i class='bxr bx-chevron-right toggle'></i>
-
-        <div class="menu-bar">
-            <div class="menu">
-                <ul class="menu-links">
-                    <li class="nav-link">
-                        <a th:href="@{/mahasiswa/dashboard}">
-                            <img src="/icon/dashboard.png" class="icon">
-                            <span class="text nav-text">Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link active">
-                        <a th:href="@{/mahasiswa/mata-kuliah}">
-                            <img src="/icon/open-book.png" class="icon">
-                            <span class="text nav-text">Mata Kuliah</span>
-                        </a>
-                    </li>
-                </ul>
+            <div class ="text header-text">
+                <span class="name">Tubeslayer</span>
             </div>
         </div>
-    </nav>
+    </header>
+    <i class='bx bx-chevron-right toggle'></i> 
+    <div class="menu-bar">
+        <div class="menu">
+            <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="/admin/dashboard">
+                        <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-link active">
+                    <a href="/admin/menu-awal-ad">
+                        <img src="/icon/database.png" alt="Database Icon" class="icon database-icon">
+                        <span class="text nav-text">Data</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="/admin/arsip-mata-kuliah">
+                        <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                        <span class="text nav-text">Arsip Mata Kuliah</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
     <section class="home">
 
         <div class="header">
             <div class="left-section">
-                <span class="dashboard-title">Mata Kuliah</span>
+                <span class="dashboard-title">Kelola Mata Kuliah</span>
             </div>
 
             <div class="right-section">
@@ -75,7 +79,7 @@
 
         <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
             <button class="tab" data-tab-target="kuliah"
-                th:attr="data-target-url=@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                th:attr="data-target-url=@{/admin/matakuliah-detail(kode=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
                 onclick="window.location.href=this.getAttribute('data-target-url')">
                 Kuliah
             </button>
@@ -84,7 +88,6 @@
                 onclick="window.location.href=this.getAttribute('data-target-url')">
                 Daftar Peserta
             </button>
-            <button class="tab" data-tab-target="nilai">Nilai</button>
         </div>
 
         <div class="detail-wrapper">
@@ -107,7 +110,21 @@
             </div>
 
             <div class="breadcrumb">
-                Daftar Mata Kuliah > <span th:text="${mkDetail.nama}">Mata Kuliah</span> > Daftar Peserta
+
+                <a th:href="@{/mahasiswa/mata-kuliah}">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/mahasiswa/matkul-detail(mk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mkDetail.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
+                Daftar Peserta
             </div>
 
             <div class="search-and-count">
@@ -139,7 +156,7 @@
 
                                 <td th:text="${p.nomorPokok}">XXXXX</td>
 
-                                <td th:text="${p.role}">Koordinator/Mahasiswa</td>
+                                <td th:text="${p.role}">Koordinator/Pengampu/Mahasiswa</td>
                             </tr>
 
                             <tr th:if="${combinedPesertaList != null and combinedPesertaList.size() == 1}">

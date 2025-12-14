@@ -329,19 +329,22 @@ header .image-text .header-text{
 .matkul-banner {
     position: relative;
     width: 100%;                    
-    max-width: 1400px;                /* biar rapi */
+    max-width: 1400px;               
     background: #D8F1FF;
-    padding-left: 20px;              /* kecil & tipis */
+    padding-left: 20px;              
     border-radius: 15px;
     display: flex;
     align-items: center;
-    gap: 12px;                       /* jarak icon ke teks */
+    gap: 12px;                   
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     margin-bottom: 0px;
     z-index: 2;
     margin-top: 15px;
 }
-
+a{
+    text-decoration: none;
+    color: #000;
+}
 .matkul-banner img {
     width: 120px;
     height: 150px;
@@ -413,13 +416,13 @@ header .image-text .header-text{
     background-color: #fff4ec; 
     padding: 20px;
     border-radius: 15px;
-    overflow-x: auto; /* Untuk scroll horizontal jika perlu */
+    overflow-x: auto; 
 }
 
 .custom-table {
     width: 100%;
-    border-collapse: separate; /* Ini penting! */
-    border-spacing: 0 10px; /* Spacing vertikal antar rows */
+    border-collapse: separate; 
+    border-spacing: 0 10px; 
 }
 
 .custom-table thead {
@@ -473,18 +476,6 @@ header .image-text .header-text{
     width: 42%;
     min-width: 250px;
     padding-left: 15px;
-}
-
-.custom-table th:nth-child(4), /* SKS */
-.custom-table td:nth-child(4) {
-    width: 10%;
-    min-width: 70px;
-}
-
-.custom-table th:nth-child(5), /* Status */
-.custom-table td:nth-child(5) {
-    width: 25%;
-    min-width: 120px;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
 }
@@ -601,190 +592,4 @@ header .image-text .header-text{
 .btn:hover {
     background-color: #333;
     transform: translateY(-1px);
-}
-
-/* --- View 2: Pilih Cara --- */
-.pilih-cara {
-    display: none; 
-    position: relative;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-    margin-top: 100px;
-}
-
-.pilih-cara .button-group {
-    justify-content: center;
-    display: flex;
-    flex-direction: column;   
-    gap: 60px;             
-    width: 250px;
-    align-items: center;
-    margin-top: -40px;
-}
-
-.pilih-cara .button-group button {
-    width: 70%;            
-}
-
-.pilih-cara h3 {
-    font-size: 18px;
-    font-weight: 500;
-    margin: 0;
-}
-
-/* --- View 3: Import Mata Kuliah --- */
-#import-matkul {
-    display: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-#import-matkul .import-matkul-content{
-    background-color: #E3E3E3; 
-    height: 200px;
-    width: auto;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-}
-
-#import-matkul  .btn-pilih-file{
-    flex-direction: column;
-}
-
-/* --- Tombol Tambah Baru --- */
-/* Card container */
-.tambah-matkul {
-    display: flex;
-    justify-content: center;   
-    align-items: center;       
-}
-
-.tambah-matkul-content {
-    width: 500px;
-    background: #FFF1EB;
-    padding: 25px 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-
-    display: flex;
-    flex-direction: column;  
-    margin-top: 5px;     
-    font-size: 14px;
-            
-}
-
-/* Form styling */
-#tambah-matkul-form {
-    display: flex;
-    flex-direction: column;
-    gap: 5px; 
-   
-}
-
-/* Label */
-#tambah-matkul-form label {
-    font-weight: 500;
-    margin-bottom: 0px;
-}
-
-/* Input & Select */
-#tambah-matkul-form input,
-#tambah-matkul-form select {
-    padding: 4px 8px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background: white;
-    font-size: 14px;
-}
-
-#tambah-matkul-form input:focus,
-#tambah-matkul-form select:focus {
-    border-color: #ffa98e;
-    box-shadow: 0 0 0 3px rgba(255,139,112,0.15);
-    outline: none;
-}
-
-.tambah-mata-kuliah-content .btn-submit{
-    width: 100%;
-    flex-direction: column;
-}
-
-/* --- Bagian Untuk Hapus Matkul --- */
-/* Box konten */
-.hapus-matkul{
-    display: flex;
-    justify-content: center;
-    align-items: center;    
-    width: 100%;
-    transform: translateY(70px);
-}
-
-.hapus-matkul-content {
-    background: #FFF1EB;
-    width: 420px;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    display: flex; 
-    flex-direction: column;
-    gap: 20px;
-    position: relative;
-}
-
-/* Input wrapper */
-.hapus-matkul-content .input-wrapper {
-    position: relative;
-    border-radius: 15px;
-}
-
-/* Suggestions dropdown */
-.hapus-matkul-content .suggestions {
-    display: none;
-}
-
-/* Button group */
-.hapus-matkul-content .button-group {
-    display: flex; 
-    justify-content: center;
-    gap: 12px;
-}
-
-.hapus-matkul-content .search-box {
-    width: 100%;
-    padding: 12px 15px;
-    border-radius: 10px;
-    border: 1.5px solid #cfcfcf;
-    background: #fff;
-}
-
-.konfirmasi-hapus{
-    background: #FFF1EB;
-    width: 420px;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    gap: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;          
-    margin: 0 auto;
-    transform: translateY(70px);
-}
-
-.konfirmasi-hapus .button-group {
-    display: flex; 
-    justify-content: center;
-    gap: 12px;
 }
