@@ -1,6 +1,7 @@
 package com.Tubeslayer.controller;
 
 import com.Tubeslayer.dto.MKArchiveDTO;
+import com.Tubeslayer.dto.PesertaMatkulDTO;
 import com.Tubeslayer.entity.Kelompok;
 import com.Tubeslayer.entity.MataKuliah;
 import com.Tubeslayer.entity.MataKuliahDosen;
@@ -196,8 +197,8 @@ public class AdminController {
 
         model.addAttribute("colorIndex", randomColorIndex);
 
-        MataKuliahDosen koordinator = null;
-        try {
+       MataKuliahDosen koordinator = null;
+       try {
             List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
@@ -209,7 +210,7 @@ public class AdminController {
 
         List<TugasBesar> tugasList = Collections.emptyList();
         try {
-            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
+            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false); 
         } catch (Exception e) {
             System.err.println("Error fetching tasks for archive: " + e.getMessage());
         }
@@ -223,7 +224,7 @@ public class AdminController {
 
             return map;
         }).collect(Collectors.toList());
-        
+    
         model.addAttribute("mkDetail", mkDetail);
         model.addAttribute("tugasDataList", tugasData);
 
@@ -254,7 +255,7 @@ public class AdminController {
 
         MataKuliahDosen koordinator = null;
         try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false); 
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
             }
@@ -265,9 +266,9 @@ public class AdminController {
 
         List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
 
-        if (mkMahasiswaRepo != null) {
+        if (mkMahasiswaRepo != null && mk != null) {
             try {
-                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMK(mk.getKodeMK());
+                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), false);
             } catch (Exception e) {
                 System.err.println("Error saat mengambil data peserta arsip: " + e.getMessage());
             }
@@ -2140,15 +2141,166 @@ public class AdminController {
             List<String> errors, List<String> successes) throws Exception {
         // Implementasi parsing CSV bisa ditambahkan di sini
         throw new Exception("Parsing CSV belum diimplementasikan. Gunakan file Excel (.xlsx)");
+
+    }
+    @GetMapping("/matakuliah-kelas-detail")
+    public String matakuliahKelasDetail(@RequestParam String kode, 
+                                    @AuthenticationPrincipal CustomUserDetails user, 
+                                    Model model) {
+        if (kode == null || kode.isEmpty()) {
+            return "redirect:/admin/kelola-mata-kuliah";
+        }
+
+        MataKuliah mk = mataKuliahRepository.findById(kode).orElse(null);
+        if (mk == null) {
+            return "redirect:/admin/kelola-mata-kuliah";
+        }
+
+        // Consistent gradient index based on kode
+        int gradientCount = 4;
+        int colorIndex = Math.abs(kode.hashCode()) % gradientCount;
+        model.addAttribute("colorIndex", colorIndex);
+
+        // Find coordinator (first active MataKuliahDosen for this MK)
+        MataKuliahDosen koordinator = null;
+        try {
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
+            if (!dosenList.isEmpty()) {
+                koordinator = dosenList.get(0);
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching coordinator: " + e.getMessage());
+        }
+        model.addAttribute("koordinator", koordinator);
+
+        // Fetch tugas besar for this mata kuliah
+        List<TugasBesar> tugasList = Collections.emptyList();
+        try {
+            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
+        } catch (Exception e) {
+            System.err.println("Error fetching tasks for MK: " + e.getMessage());
+        }
+
+        // Fetch all classes (kelasList - MataKuliahDosen entries)
+        List<MataKuliahDosen> kelasList = Collections.emptyList();
+        try {
+            kelasList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
+        } catch (Exception e) {
+            System.err.println("Error fetching classes for MK: " + e.getMessage());
+        }
+
+        model.addAttribute("mkDetail", mk);
+        model.addAttribute("tugasList", tugasList);
+        model.addAttribute("kelasList", kelasList);
+        model.addAttribute("user", user);
+
+        return "admin/matakuliah-kelas-detail"; 
     }
 
     @GetMapping("/matakuliah-detail")
-        public String matakuliahDetail(@RequestParam String kode, Model model) {
-            MataKuliah mk = mataKuliahRepository.findById(kode).orElse(null);
-            if (mk == null) {
-                return "redirect:/admin/kelola-mata-kuliah";
-            }
-            model.addAttribute("matakuliah", mk);
-            return "admin/matakuliah-detail";
+    public String matakuliahDetail(@RequestParam String kode, @AuthenticationPrincipal CustomUserDetails user, Model model) {
+        if (kode == null || kode.isEmpty()) {
+            return "redirect:/admin/matakuliah-kelas-detail";
         }
+
+        MataKuliah mk = mataKuliahRepository.findById(kode).orElse(null);
+        if (mk == null) {
+            return "redirect:/admin/matakuliah-kelas-detail";
+        }
+
+        // Consistent gradient index based on kode
+        int gradientCount = 4;
+        int colorIndex = Math.abs(kode.hashCode()) % gradientCount;
+        model.addAttribute("colorIndex", colorIndex);
+
+        // Find coordinator (first active MataKuliahDosen for this MK)
+        MataKuliahDosen koordinator = null;
+        try {
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
+            if (!dosenList.isEmpty()) {
+                koordinator = dosenList.get(0);
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching coordinator: " + e.getMessage());
+        }
+        model.addAttribute("koordinator", koordinator);
+
+        // Fetch tugas besar for this mata kuliah
+        List<TugasBesar> tugasList = Collections.emptyList();
+        try {
+            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
+        } catch (Exception e) {
+            System.err.println("Error fetching tasks for MK: " + e.getMessage());
+        }
+
+        // Fetch all classes (kelasList - MataKuliahDosen entries)
+        List<MataKuliahDosen> kelasList = Collections.emptyList();
+        try {
+            kelasList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
+        } catch (Exception e) {
+            System.err.println("Error fetching classes for MK: " + e.getMessage());
+        }
+
+        model.addAttribute("mkDetail", mk);
+        model.addAttribute("tugasList", tugasList);
+        model.addAttribute("kelasList", kelasList);
+        model.addAttribute("user", user);
+
+        return "admin/matakuliah-detail";
+    }
+   
+
+@GetMapping("/peserta-detail")
+public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required = false) Integer colorIndex,
+                            @AuthenticationPrincipal CustomUserDetails user,
+                            Model model) {
+    model.addAttribute("user", user);
+
+    MataKuliah mk = mataKuliahRepository.findById(kodeMk).orElse(null);
+    if (mk == null) {
+        return "redirect:/admin/dashboard";
+    }
+
+        int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
+        model.addAttribute("colorIndex", finalColorIndex);
+
+    // Ambil semua dosen aktif untuk MK ini
+    List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+
+    // Tentukan koordinator (misalnya ambil index pertama)
+    MataKuliahDosen koordinator = dosenList.isEmpty() ? null : dosenList.get(0);
+
+    // Ambil mahasiswa aktif
+    List<MataKuliahMahasiswa> mahasiswaList = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+
+    // Gabungkan ke DTO untuk view
+    List<PesertaMatkulDTO> combinedPesertaList = new ArrayList<>();
+    int no = 1;
+
+    // Tambahkan koordinator
+    if (koordinator != null) {
+        combinedPesertaList.add(new PesertaMatkulDTO(no++, koordinator.getUser().getNama(),
+                koordinator.getUser().getIdUser(), "Koordinator"));
+    }
+
+    // Tambahkan dosen pengampu lain (selain koordinator)
+    for (int i = 1; i < dosenList.size(); i++) {
+        User dosenUser = dosenList.get(i).getUser();
+        combinedPesertaList.add(new PesertaMatkulDTO(no++, dosenUser.getNama(),
+                dosenUser.getIdUser(), "Pengampu"));
+    }
+
+    // Tambahkan mahasiswa
+    for (MataKuliahMahasiswa mhs : mahasiswaList) {
+        combinedPesertaList.add(new PesertaMatkulDTO(no++, mhs.getUser().getNama(),
+                mhs.getUser().getIdUser(), "Mahasiswa"));
+    }
+
+    model.addAttribute("mkDetail", mk);
+    model.addAttribute("koordinator", koordinator);
+    model.addAttribute("combinedPesertaList", combinedPesertaList);
+    model.addAttribute("pesertaCount", mahasiswaList.size());
+
+    return "admin/peserta-detail";
+}
 }

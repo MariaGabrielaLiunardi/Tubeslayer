@@ -320,9 +320,9 @@ class KelompokController {
   }
 
   showKelolaKelompok() {
-    this.viewManager.showView('daftarKelompok');
-    this.renderKelompokTable(true); 
-    }
+    this.viewManager.showView("daftarKelompok");
+    this.renderKelompokTable(true);
+  }
   showDaftarKelompok() {
     this.viewManager.showView("daftarKelompok");
     this.renderKelompokTable(false);
@@ -374,36 +374,52 @@ class KelompokController {
         `;
 
     this.kelompokList.forEach((kelompok, index) => {
-      const jumlahAnggota = kelompok.jumlah_anggota || kelompok.anggota?.length || 1;
+      const maxAnggota =
+        kelompok.max_anggota ?? this.tugasData?.max_anggota ?? 0;
+      const jumlahAnggota =
+        typeof kelompok.jumlah_anggota === "number"
+          ? kelompok.jumlah_anggota
+          : 0;
       const ketuaNama = kelompok.nama_ketua || kelompok.ketua?.nama || "N/A";
 
       tableHTML += `
-                <tr data-kelompok-id="${kelompok.id_kelompok}" data-kelompok-name="${kelompok.nama_kelompok || "Kelompok " + (index + 1)}">
+                <tr data-kelompok-id="${
+                  kelompok.id_kelompok
+                }" data-kelompok-name="${
+        kelompok.nama_kelompok || "Kelompok " + (index + 1)
+      }">
                     <td>${index + 1}.</td>
-                    <td>${kelompok.nama_kelompok || "Kelompok " + (index + 1)}</td>
+                    <td>${
+                      kelompok.nama_kelompok || "Kelompok " + (index + 1)
+                    }</td>
                     <td>${ketuaNama}</td>
-                    <td>${jumlahAnggota}/${kelompok.max_anggota || this.tugasData?.max_anggota || "N/A"}</td>
                     <td>
+        <span class="member-counter"
+              data-kelompok-id="${kelompok.id_kelompok}">
+          ${jumlahAnggota}/${maxAnggota}
+        </span>
+      </td>
+                    <td>  
                         <button class="delete-btn" data-id="${
                           kelompok.id_kelompok
                         }">🗑️</button>
                     </td>
                 </tr>
             `;
-        // if (isModeKelola) {
-        //     tableHTML += `
-        //         <button class="edit-btn" data-id="${kelompok.id_kelompok}" title="Edit Kelompok">
-        //             ✏️
-        //         </button>
-        //     `;
-        // } else {
-        //     // Untuk mode dosen, tampilkan tombol delete
-        //     tableHTML += `
-        //         <button class="delete-btn" data-id="${kelompok.id_kelompok}">🗑️</button>
-        //     `;
-        // }
-        
-        tableHTML += `
+      // if (isModeKelola) {
+      //     tableHTML += `
+      //         <button class="edit-btn" data-id="${kelompok.id_kelompok}" title="Edit Kelompok">
+      //             ✏️
+      //         </button>
+      //     `;
+      // } else {
+      //     // Untuk mode dosen, tampilkan tombol delete
+      //     tableHTML += `
+      //         <button class="delete-btn" data-id="${kelompok.id_kelompok}">🗑️</button>
+      //     `;
+      // }
+
+      tableHTML += `
                 </td>
             </tr>
         `;
@@ -412,28 +428,30 @@ class KelompokController {
     tableHTML += `</tbody></table>`;
     container.innerHTML = tableHTML;
     if (isModeKelola) {
-        this.attachEditListeners();
-        this.attachRowClickListeners();
-        this.updateActionButtons(isModeKelola);
+      this.attachEditListeners();
+      this.attachRowClickListeners();
+      this.updateActionButtons(isModeKelola);
     } else {
-        this.attachDeleteListeners();
-        this.attachRowClickListeners();
+      this.attachDeleteListeners();
+      this.attachRowClickListeners();
     }
-
   }
   attachEditListeners() {
-    const editButtons = document.querySelectorAll('.edit-btn');
-    editButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const id = parseInt(e.currentTarget.getAttribute('data-id'));
-            const kelompok = this.kelompokList.find(k => k.id_kelompok === id);
-            if (kelompok) {
-                this.showDetailAnggotaView(id, kelompok.nama_kelompok || `Kelompok ${id}`);
-            }
-        });
+    const editButtons = document.querySelectorAll(".edit-btn");
+    editButtons.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const id = parseInt(e.currentTarget.getAttribute("data-id"));
+        const kelompok = this.kelompokList.find((k) => k.id_kelompok === id);
+        if (kelompok) {
+          this.showDetailAnggotaView(
+            id,
+            kelompok.nama_kelompok || `Kelompok ${id}`
+          );
+        }
+      });
     });
-}
+  }
   attachDeleteListeners() {
     const deleteButtons = document.querySelectorAll(".delete-btn");
     deleteButtons.forEach((btn) => {
@@ -554,19 +572,22 @@ class KelompokController {
   }
 
   updateActionButtons(isModeKelola) {
-    const buatKelompokBtn = document.getElementById('buatKelompokBtn');
-    const finalisasiKelompokBtn = document.getElementById('finalisasiKelompokBtn');
-    
+    const buatKelompokBtn = document.getElementById("buatKelompokBtn");
+    const finalisasiKelompokBtn = document.getElementById(
+      "finalisasiKelompokBtn"
+    );
+
     if (isModeKelola) {
-        // Mode kelola: sembunyikan tombol buat kelompok dan finalisasi
-        if (buatKelompokBtn) buatKelompokBtn.style.display = 'none';
-        if (finalisasiKelompokBtn) finalisasiKelompokBtn.style.display = 'none';
+      // Mode kelola: sembunyikan tombol buat kelompok dan finalisasi
+      if (buatKelompokBtn) buatKelompokBtn.style.display = "none";
+      if (finalisasiKelompokBtn) finalisasiKelompokBtn.style.display = "none";
     } else {
-        // Mode dosen: tampilkan semua tombol
-        if (buatKelompokBtn) buatKelompokBtn.style.display = 'inline-block';
-        if (finalisasiKelompokBtn) finalisasiKelompokBtn.style.display = 'inline-block';
+      // Mode dosen: tampilkan semua tombol
+      if (buatKelompokBtn) buatKelompokBtn.style.display = "inline-block";
+      if (finalisasiKelompokBtn)
+        finalisasiKelompokBtn.style.display = "inline-block";
     }
-}
+  }
 
   updateMemberCounter() {
     const counters = [
@@ -579,6 +600,21 @@ class KelompokController {
         counter.textContent = `${currentMembers.length}/${maxAnggota} Anggota`;
       }
     });
+  }
+  updateTableMemberCounter(kelompokId, delta) {
+    const counter = document.querySelector(
+      `.member-counter[data-kelompok-id="${kelompokId}"]`
+    );
+
+    if (!counter) return;
+
+    const [current, max] = counter.textContent
+      .split("/")
+      .map((v) => parseInt(v));
+
+    const newValue = Math.max(0, current + delta);
+
+    counter.textContent = `${newValue}/${max}`;
   }
 
   setupSearchFunctionality() {
@@ -688,6 +724,7 @@ class KelompokController {
       document.getElementById("search-mahasiswa-dosen").value = "";
       this.clearSearchResults();
       await this.loadAndDisplayAnggota(currentKelompokId);
+      this.updateTableMemberCounter(currentKelompokId, +1);
       this.showSuccess(`${mahasiswa.nama} berhasil ditambahkan`);
     } catch (error) {
       console.error("Error adding member:", error);
@@ -710,6 +747,7 @@ class KelompokController {
     try {
       await hapusAnggotaFromDatabase(currentKelompokId, idUser);
       await this.loadAndDisplayAnggota(currentKelompokId);
+      this.updateTableMemberCounter(currentKelompokId, -1);
       this.showSuccess(`${nama} berhasil dihapus dari kelompok`);
     } catch (error) {
       console.error("Error removing member:", error);

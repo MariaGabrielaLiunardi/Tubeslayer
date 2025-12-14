@@ -7,6 +7,7 @@
       Tugas Besar
     </title>
     <link rel="stylesheet" href="/css/hlmtubes-styles.css" />
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
 
     <script src="/js/sidebar-hlmtubes.js" defer></script>
     <script src="/js/kelola-anggota.js" defer></script>
@@ -175,12 +176,12 @@
                   <span class="kelompok-name" th:text="${namaKelompok}"
                     >Nama Kelompok</span
                   >
-                  <span
+                  <div
                     class="anggota-count"
                     th:text="${jumlahAnggota} + '/' + ${maxAnggota} + ' Anggota'"
                   >
                     0/5 Anggota
-                  </span>
+                </div>
                 </div>
               </div>
             </div>

@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Mata Kuliah - Tubeslayer</title>
+    <title>Tubeslayer</title>
 
     <!-- CSS & JS -->
+    <!--<link rel="stylesheet" href="/css/dash-user.css">-->
     <link rel="stylesheet" th:href="@{/css/kelola-mata-kuliah.css}">
     <script th:src="@{/js/kelola-mata-kuliah.js}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
@@ -18,37 +19,38 @@
     <header>
         <div class="image-text">
             <span class="image">
-                <img th:src="@{/logo/blue-logo.png}" alt="logo">
+                <img src="/logo/blue-logo.png" alt="logo">
             </span>
-            <div class="text header-text">
+
+            <div class ="text header-text">
                 <span class="name">Tubeslayer</span>
             </div>
         </div>
     </header>
-
-    <i class='bxr bx-chevron-right toggle'></i>
-
+    <i class='bx bx-chevron-right toggle'></i> 
     <div class="menu-bar">
-        <ul class="menu-links">
-            <li class="nav-link">
-                <a th:href="@{/admin/dashboard}">
-                    <img th:src="@{/icon/dashboard.png}" class="icon dashboard-icon">
-                    <span class="text nav-text">Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-link active">
-                <a th:href="@{/admin/menu-awal-ad}">
-                    <img th:src="@{/icon/database.png}" class="icon database-icon">
-                    <span class="text nav-text">Data</span>
-                </a>
-            </li>
-            <li class="nav-link">
-                <a th:href="@{/admin/arsip-mata-kuliah}">
-                    <img th:src="@{/icon/archive.png}" class="icon archive-icon">
-                    <span class="text nav-text">Arsip Mata Kuliah</span>
-                </a>
-            </li>
-        </ul>
+        <div class="menu">
+            <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="/admin/dashboard">
+                        <img src="/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-link active">
+                    <a href="/admin/menu-awal-ad">
+                        <img src="/icon/database.png" alt="Database Icon" class="icon database-icon">
+                        <span class="text nav-text">Data</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="/admin/arsip-mata-kuliah">
+                        <img src="/icon/archive.png" alt="Archive Icon" class="icon archive-icon">
+                        <span class="text nav-text">Arsip Mata Kuliah</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -122,7 +124,7 @@
                         <td th:text="${iterStat.index + 1}">1.</td>
                         <td th:text="${mk.kodeMK}">Kode</td>
                         <td>
-                            <a th:href="@{/admin/matakuliah-detail(kode=${mk.kodeMK})}" 
+                            <a th:href="@{/admin/matakuliah-kelas-detail(kode=${mk.kodeMK})}" 
                                 class="matkul-link" 
                                 th:text="${mk.nama}">
                                     Nama Mata Kuliah</a>
@@ -184,11 +186,11 @@
                     <label for="sks-mk">SKS:</label>
                     <input type="number" id="sks-mk" min="1" max="6">
 
-                    <label for="status-mk">Status:</label>
+                  <!--  <label for="status-mk">Status:</label>
                     <select id="status-mk">
                         <option value="1">Aktif</option>
                         <option value="0">Nonaktif</option>
-                    </select>
+                    </select> -->
 
                     <button class="btn btn-submit" id="btn-submit">Tambah Mata Kuliah</button>
                 </form>

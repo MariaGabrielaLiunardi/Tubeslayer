@@ -1,125 +1,167 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Nilai Mahasiswa</title>
-        <link rel="stylesheet" href="../../../../resources/static/css/nilai-mahasiswa.css">
-        <script src="../../../static/js/nilai-mahasiswa.js" defer></script>
-        <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>  
-    </head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-    <body>
-        <nav class="sidebar close">
-    <header>
-        <div class="image-text">
-            <span class="image">
-                <img src="../../../static/logo/blue-logo.png" alt="logo">
-            </span>
+<head>
+    <meta charset="UTF-8">
+    <title>Tubeslayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            <div class ="text header-text">
-                <span class="name">Tubeslayer</span>
+    <link rel="stylesheet" href="/css/dash-user.css">
+    <link rel="stylesheet" href="/css/nilai-dosen.css">
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
+
+    <script src="/js/dash-user.js" defer></script>
+    <script src="/js/nilai-mahasiswa.js" defer></script>
+    <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/logo/blue-logo.png" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Tubeslayer</span>
+                </div>
+            </div>
+        </header>
+
+        <i class='bxr bx-chevron-right toggle'></i>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a th:href="@{/mahasiswa/dashboard}">
+                            <img src="/icon/dashboard.png" class="icon">
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link active">
+                        <a th:href="@{/mahasiswa/mata-kuliah}">
+                            <img src="/icon/open-book.png" class="icon">
+                            <span class="text nav-text">Mata Kuliah</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </header>
-    <i class='bxr bx-chevron-right toggle'></i> 
-    <div class="menu-bar">
-        <div class="menu">
-            <ul class="menu-links">
-                <li class="nav-link active">
-                    <a href="#">
-                        <img src="../../../static/icon/dashboard.png" alt="Dashboard Icon" class="icon dashboard-icon">
-                        <span class="text nav-text">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-link">
-                    <a href="nilai-mahasiswa.html">
-                        <img src="../../../static/icon/open-book.png" alt="Open book Icon" class="icon open-book-icon">
-                        <span class="text nav-text">Mata Kuliah</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+    </nav>
 
-<section class="home">
-    <div class="header">
-        <div class="left-section">
-            <span class="dashboard-title"></span>
-        </div>
-        <div class="right-section">
-            <div class="info">
-                <span class="name">Keisha Neira Jocelyn</span>
-                <span class="role">Mahasiswa</span>
+    <section class="home">
+
+        <div class="header">
+            <div class="left-section">
+                <span class="dashboard-title">Mata Kuliah</span>
             </div>
-            <img src="../../../static/icon/pfp.png" class="pfp" alt="pfp">
-            <button type="button" class="logout">
-                <img src="../../../static/icon/logout.png" class="logout-btn" alt="logo-logout">
-            </button>
-        </div>
-    </div>
 
-    <div class="contents">
-        <div class="nav-segmented-control">
-            <div class="kuliah-segment">
+            <div class="right-section">
+                <div class="info">
+                    <span class="name" th:text="${user.nama}">Nama</span>
+                    <span class="role" th:text="${user.role}">Role</span>
+                </div>
+                <a th:href="@{/profil}">
+                    <img src="/icon/pfp.png" class="pfp" alt="pfp">
+                </a>
+                <button class="logout" id="logoutButton">
+                    <img src="/icon/logout.png" class="logout-btn">
+                </button>
+            </div>
+        </div>
+
+        <div class="mk-tab" th:data-mk-kode="${kodeMk}">
+            <button class="tab" data-tab-target="kuliah"
+                th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk}, colorIndex=${colorIndex})}'|"
+                onclick="window.location.href=this.getAttribute('data-target-url')">
                 Kuliah
-            </div>
-
-            <div class="Daftar-Peserta-segment">
+            </button>
+            <button class="tab" data-tab-target="peserta"
+                th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|"
+                onclick="window.location.href=this.getAttribute('data-target-url')">
                 Daftar Peserta
+            </button>
+            <button class="tab active" data-tab-target="nilai"
+                th:attr="data-target-url=@{/mahasiswa/nilai(mk=${kodeMk}, colorIndex=${colorIndex})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')">Nilai</button>
+        </div>
+
+        <div class="detail-wrapper">
+
+            <div class="mk-header">
+                <div class="mk-img" th:classappend="'gradient-' + (${colorIndex} + 1)"></div>
+                <div class="mk-info">
+                    <h1 th:text="${mataKuliah.nama}">Mata Kuliah</h1>
+                    <p><b>Koordinator:</b> <span th:text="${koordinator != null ? koordinator.user.nama : 'N/A'}">Dosen</span></p>
+                    <p><b>NIP:</b> <span th:text="${koordinator != null ? koordinator.user.idUser : 'N/A'}">XXXXX</span></p>
+                </div>
             </div>
 
-            <div class="nav-active">
+            <div class="breadcrumb">
+
+                <a th:href="@{/mahasiswa/mata-kuliah}" style="text-decoration: none;">
+                    Daftar Mata Kuliah
+                </a>
+
+                &gt;
+
+                <a th:href="@{/mahasiswa/matkul-detail(mk=${kodeMk})}"
+                    style="text-decoration: none;">
+                    <span th:text="${mataKuliah.nama}">Mata Kuliah</span>
+                </a>
+
+                &gt;
+
                 Nilai
             </div>
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="rectangle-blue">
-            <div class="tb-title">
-                <img src="../../../../resources/static/icon/matkul-2.png" class="tb-icon">
-                <div class="subject-info-wrapper">
-                    <div class="subject-title">Artificial Intelligence</div>
-                    <div class="subject-details">
-                        <span class="bold-koor">Koordinator: </span> Clara Joycelyne Siauttara <br>
-                        <span class="bold-NIP">NIP: </span>20080107
-                    </div>
+            <div class="search-and-count">
+                <div class="search-box">
+                    <input type="text" placeholder="Cari nama disini..." id="searchInput">
+                    <button><img src="/icon/search.png" alt="search"></button>
                 </div>
+                <span class="peserta-count" th:text="|Tugas: ${tugasList.size()} tugas|">Tugas: 0 tugas</span>
             </div>
-        </div>
-        
-        <div class="rectangle-white">
-            
-            <div class="rectangle-yellow">
-                <div class="search-and-info">
-                    <div class="search-wrapper">
-                        <input type="text" class="search-input" placeholder="Cari nama disini...">
-                        <img src="../../../static/icon/search.png" class="search-icon" alt="Search Icon">
-                    </div>
-                    <div class="task-info">
-                        <span class="boldtext">Tugas: </span> tugas 1
-                    </div>
+
+            <div class="peserta-content">
+
+                <div class="peserta-table-wrapper">
+                    <table id="nilai-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Tugas</th>
+                                <th>Tenggat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="tugas, iStat : ${tugasList}" class="page-item clickable-row" 
+                                th:onclick="|window.location.href='@{/mahasiswa/dashboard-penilaian(mk=${kodeMk}, idTugas=${tugas.idTugas}, colorIndex=${colorIndex})}'|"
+                                th:data-tugas-id="${tugas.idTugas}">
+
+                                <td th:text="${iStat.count} + '.'">1.</td>
+
+                                <td th:text="${tugas.judulTugas}">Nama Tugas</td>
+
+                                <td th:text="${#temporals.format(tugas.deadline, 'dd MMM yyyy')}">Tanggal</td>
+                            </tr>
+
+                            <tr th:if="${tugasList.empty}">
+                                <td colspan="3" style="text-align: center;">Tidak ada tugas untuk mata kuliah ini.</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="assignment-table-wrapper">
-                    <div class="assignment-header">
-                        <div class="col-no">No</div>
-                        <div class="col-nama">Nama</div>
-                        <div class="col-tenggat">Tenggat</div>
-                    </div>
-
-                    <a href="dashboard-nilai-mahasiswa.html" class="assignment-row">
-                        <div class="col-no">1.</div>
-                        <div class="col-nama">Tugas Besar Tahap 1</div>
-                        <div class="col-tenggat">27 Nov 2025</div>
-                    </a>
-                </div>
             </div>
+
         </div>
-    </div>
-    
-</section>
-    </body>
+    </section>
+
+</body>
+
 </html>

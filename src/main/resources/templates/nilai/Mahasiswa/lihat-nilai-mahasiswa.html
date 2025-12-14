@@ -3,11 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Lihat Nilai Detail - Tubeslayer</title>
-        <link rel="stylesheet" th:href="@{/css/pemberian-nilai-mahasiswa.css}">
+        <title>Lihat Nilai - Tubeslayer</title>
         <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
-        <script th:src="@{/js/pemberian-nilai-mahasiswa.js}" defer></script>
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
+        <link rel="stylesheet" th:href="@{/css/lihat-nilai-mahasiswa.css}">
+        <script th:src="@{/js/lihat-nilai-mahasiswa.js}" defer></script>
+        <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>  
     </head>
 
     <body>
@@ -47,7 +47,7 @@
         <section class="home">
             <div class="header">
                 <div class="left-section">
-                    <span class="dashboard-title">Lihat Nilai Detail</span>
+                    <span class="dashboard-title">Lihat Nilai</span>
                 </div>
                 <div class="right-section">
                     <div class="info">
@@ -65,8 +65,23 @@
 
             <div class="nav-segmented-control">
                 <div class="nav-tab">
-                    Lihat Nilai Detail
+                    Lihat Nilai
                 </div>
+            </div>
+
+            <div class="mk-tab" th:data-mk-kode="${kodeMk}">
+                <button class="tab" data-tab-target="kuliah"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk}, colorIndex=${colorIndex})}'|">
+                    Kuliah
+                </button>
+                <button class="tab" data-tab-target="peserta"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|">
+                    Daftar Peserta
+                </button>
+                <button class="tab active" data-tab-target="nilai"
+                    th:onclick="|window.location.href='@{/mahasiswa/nilai(mk=${kodeMk}, colorIndex=${colorIndex})}'|">
+                    Nilai
+                </button>
             </div>
             
             <div class="container">
@@ -83,79 +98,75 @@
                 </div>
                 
                 <div class="rectangle-white">
-                    <div class="breadcrumb">
-                        <a th:href="@{/mahasiswa/mata-kuliah}" style="text-decoration: none;">
-                            Daftar Mata Kuliah
-                        </a>
-
-                        &gt;
-
-                        <a th:href="@{/mahasiswa/matkul-detail(mk=${kodeMk})}"
-                            style="text-decoration: none;">
-                            <span th:text="${mataKuliah != null ? mataKuliah.nama : 'Mata Kuliah'}">Mata Kuliah</span>
-                        </a>
-
-                        &gt;
-
-                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk},idTugas=${idTugas})}" style="text-decoration: none;">
-                            Nilai
-                        </a>
-
-                        &gt;
-
-                        Lihat Detail
-                    </div>
-
-                    <!-- Nilai Pribadi (hanya nilai akhir) -->
-                    <div th:if="${nilaiPribadi != null}" style="width: 100%; padding: 20px 0;">
-                        <div class="nilai-container">
-                            <div class="nilai-card nilai-pribadi">
-                                <span class="label">Nilai Pribadi</span>
-                                <span class="value" th:text="${nilaiPribadi.nilaiAkhir != null && nilaiPribadi.nilaiAkhir > 0 ? nilaiPribadi.nilaiAkhir : '-'}">-</span>
-                            </div>
+                    <div class="nilai-content">
+                        <div class="breadcrumb">
+                            <a th:href="@{/mahasiswa/mata-kuliah}" class="breadcrumb-link">Daftar Mata Kuliah</a>
+                            &gt;
+                            <a th:href="@{/mahasiswa/matkul-detail(mk=${kodeMk}, colorIndex=${colorIndex})}" class="breadcrumb-link">
+                                <span th:text="${mataKuliah != null ? mataKuliah.nama : 'Mata Kuliah'}">Mata Kuliah</span>
+                            </a>
+                            &gt;
+                            <a th:href="@{/mahasiswa/nilai(mk=${kodeMk}, colorIndex=${colorIndex})}" class="breadcrumb-link">Nilai</a>
+                            &gt;
+                            <a th:href="@{/mahasiswa/dashboard-penilaian(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                            &gt;
+                            <span>Lihat Nilai</span>
                         </div>
-                    </div>
 
-                    <!-- Nilai Kelompok (jika ada) -->
-                    <div th:if="${nilaiKelompok != null}" style="width: 100%; padding: 30px 0;">
-                        <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 20px;">Nilai Kelompok</h3>
-                        <p style="margin-bottom: 10px; color: #666;">
-                            Kelompok: <strong th:text="${namaKelompok}">Nama Kelompok</strong>
-                        </p>
-                        <div class="assignment-table-wrapper">
-                            <div class="assignment-header">
-                                <div class="col-rubrik">Rubrik Penilaian</div>
-                                <div class="col-bobot">Bobot(%)</div>
-                                <div class="col-nilai">Nilai</div>
-                                <div class="col-catatan">Catatan</div>
-                            </div>
-
-                            <div class="assignment-row" th:each="komponen : ${nilaiKelompok.komponenList}">
-                                <div class="col-isi-rubrik" th:text="${komponen.namaKomponen}">Komponen</div>
-                                <div class="col-isi-bobot" th:text="${komponen.bobot}">-</div>
-                                <div class="col-isi-nilai" th:text="${komponen.nilai != null && komponen.nilai > 0 ? komponen.nilai : '-'}">-</div>
-                                <div class="col-isi-catatan" th:text="${komponen.catatan != null ? komponen.catatan : '-'}">-</div>
+                        <!-- Section Nilai Pribadi -->
+                        <div class="nilai-section" th:if="${nilaiPribadi != null}">
+                            <h3 class="section-title">Nilai Pribadi</h3>
+                            <div class="nilai-display-card">
+                                <span class="nilai-label">Nilai Akhir</span>
+                                <span class="nilai-value" th:text="${nilaiPribadi.nilaiAkhir != null && nilaiPribadi.nilaiAkhir > 0 ? nilaiPribadi.nilaiAkhir : '-'}">-</span>
                             </div>
                         </div>
 
-                        <div class="nilai-container">
-                            <div class="nilai-card nilai-kelompok">
-                                <span class="label">Nilai Akhir Kelompok</span>
-                                <span class="value" th:text="${nilaiKelompok.nilaiAkhir != null && nilaiKelompok.nilaiAkhir > 0 ? nilaiKelompok.nilaiAkhir : '-'}">-</span>
+                        <!-- Section Nilai Kelompok -->
+                        <div class="nilai-section" th:if="${nilaiKelompok != null}">
+                            <h3 class="section-title">Nilai Kelompok</h3>
+                            <p class="kelompok-info">
+                                Kelompok: <strong th:text="${namaKelompok}">Nama Kelompok</strong>
+                            </p>
+                            
+                            <div class="table-wrapper">
+                                <table class="nilai-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rubrik Penilaian</th>
+                                            <th>Bobot (%)</th>
+                                            <th>Nilai</th>
+                                            <th>Catatan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="komponen : ${nilaiKelompok.komponenList}">
+                                            <td th:text="${komponen.namaKomponen}">Komponen</td>
+                                            <td th:text="${komponen.bobot}">-</td>
+                                            <td th:text="${komponen.nilai != null && komponen.nilai > 0 ? komponen.nilai : '-'}">-</td>
+                                            <td th:text="${komponen.catatan != null && !komponen.catatan.isEmpty() ? komponen.catatan : '-'}">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="nilai-display-card nilai-kelompok-card">
+                                <span class="nilai-label">Nilai Akhir Kelompok</span>
+                                <span class="nilai-value" th:text="${nilaiKelompok.nilaiAkhir != null && nilaiKelompok.nilaiAkhir > 0 ? nilaiKelompok.nilaiAkhir : '-'}">-</span>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Jika tidak ada nilai -->
-                    <div th:if="${nilaiPribadi == null && nilaiKelompok == null}" style="text-align: center; padding: 40px; color: #999;">
-                        <p>Nilai belum dirilis oleh dosen</p>
-                    </div>
+                        <!-- Jika tidak ada nilai -->
+                        <div class="no-nilai" th:if="${nilaiPribadi == null && nilaiKelompok == null}">
+                            <p>Nilai belum dirilis oleh dosen</p>
+                        </div>
 
-                    <!-- Tombol Kembali -->
-                    <div style="margin-top: 30px;">
-                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk},idTugas=${idTugas})}" style="text-decoration: none;">
-                            <button class="btn-kembali">Kembali</button>
-                        </a>
+                        <!-- Tombol Kembali -->
+                        <div class="action-buttons">
+                            <a th:href="@{/mahasiswa/dashboard-penilaian(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" class="btn-back">
+                                <i class='bx bx-arrow-back'></i> Kembali
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -229,17 +229,17 @@ header .image-text .header-text {
 .user-name {
     font-weight: 600;
     color: #333;
-    font-size: 14px;
+    font-size: 14pt;
 }
 
 .user-role {
     color: #666;
-    font-size: 12px;
+    font-size: 12pt;
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
@@ -277,7 +277,7 @@ header .image-text .header-text {
     border-radius: 40px;
     display: flex;
     gap: 5px;
-    margin-top: 60px;
+    margin-top: 20px;
     margin-left: 30px;
     margin-bottom: 10px;
 }
@@ -304,17 +304,18 @@ header .image-text .header-text {
     border-radius: 15px;
     overflow: visible;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin: 0 30px 30px 30px;
+    margin: 30px 30px 30px 30px;
 }
 
 /* Title Section  */
 .title-section {
-    background-color: #b3e5fc;
+    background-color: #CCF0F7;
     padding: 25px 30px;
     display: flex;
     align-items: center;
     gap: 20px;
-    border-radius: 15px 15px 0 0;
+    border-radius: 15px;
+    margin-bottom: 0;
 }
 
 .book-icon {
@@ -436,7 +437,12 @@ header .image-text .header-text {
     font-size: 14px;
     font-weight: 600;
 }
-
+.manage-btn:disabled {
+  background-color: #9ca3af; /* abu-abu */
+  color: #e5e7eb;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
 .manage-btn:hover {
     background-color: #333;
 }
@@ -489,10 +495,10 @@ header .image-text .header-text {
 .btn-remove-member {
     width: 30px;
     height: 30px;
-    background-color: #f44336;
+    background-color: black;
     color: white;
     border: none;
-    border-radius: 50%;
+    border-radius: 30%;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -674,4 +680,52 @@ header .image-text .header-text {
     text-align: center;
     color: #666;
     font-size: 14px;
+}
+/* popup toast notif */
+.toast {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    min-width: 300px;
+    max-width: 500px;
+    background: #ffffff;
+    color: #333;
+    padding: 14px 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0;
+    z-index: 9999;
+    transition: all 0.35s ease;
+}
+
+/* Toast visible */
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Success */
+.toast-success {
+    border-left: 6px solid #2e7d32;
+}
+
+.toast-success i {
+    color: #2e7d32;
+    font-size: 20px;
+}
+
+/* Error */
+.toast-error {
+    border-left: 6px solid #c62828;
+}
+
+.toast-error i {
+    color: #c62828;
+    font-size: 20px;
 }

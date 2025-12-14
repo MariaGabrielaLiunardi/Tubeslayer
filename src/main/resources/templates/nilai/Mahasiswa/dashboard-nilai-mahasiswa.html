@@ -4,8 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard Nilai - Tubeslayer</title>
-        <link rel="stylesheet" th:href="@{/css/dashboard-nilai-mahasiswa.css}">
         <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
+        <link rel="stylesheet" th:href="@{/css/dashboard-nilai-dosen.css}">
         <script th:src="@{/js/dashboard-nilai-mahasiswa.js}" defer></script>
         <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>  
     </head>
@@ -17,23 +17,22 @@
                     <span class="image">
                         <img th:src="@{/logo/blue-logo.png}" alt="logo">
                     </span>
-
-                    <div class ="text header-text">
+                    <div class="text header-text">
                         <span class="name">Tubeslayer</span>
                     </div>
                 </div>
             </header>
-            <i class='bx bx-chevron-right toggle'></i> 
+            <i class='bxr bx-chevron-right toggle'></i> 
             <div class="menu-bar">
                 <div class="menu">
                     <ul class="menu-links">
-                        <li class="nav-link">
+                        <li class="nav-link active">
                             <a th:href="@{/mahasiswa/dashboard}">
                                 <img th:src="@{/icon/dashboard.png}" alt="Dashboard Icon" class="icon">
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
-                        <li class="nav-link active">
+                        <li class="nav-link">
                             <a th:href="@{/mahasiswa/mata-kuliah}">
                                 <img th:src="@{/icon/open-book.png}" alt="Mata Kuliah Icon" class="icon">
                                 <span class="text nav-text">Mata Kuliah</span>
@@ -71,17 +70,17 @@
 
             <div class="mk-tab" th:data-mk-kode="${kodeMk}">
                 <button class="tab" data-tab-target="kuliah"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk})}'|"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-detail(mk=${kodeMk}, colorIndex=${colorIndex})}'|"
                     onclick="window.location.href=this.getAttribute('data-target-url')">
                     Kuliah
                 </button>
                 <button class="tab" data-tab-target="peserta"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(mk=${kodeMk})}'|"
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|"
                     onclick="window.location.href=this.getAttribute('data-target-url')">
                     Daftar Peserta
                 </button>
                 <button class="tab active" data-tab-target="nilai"
-                    th:attr="data-target-url=@{/mahasiswa/dashboard-nilai(mk=${kodeMk})}"
+                    th:attr="data-target-url=@{/mahasiswa/nilai(mk=${kodeMk}, colorIndex=${colorIndex})}"
                     onclick="window.location.href=this.getAttribute('data-target-url')">Nilai</button>
             </div>
 
@@ -89,34 +88,33 @@
                 <div class="rectangle-blue">
                     <div class="tb-title">
                         <img th:src="@{/icon/bookj ver4.png}" class="tb-icon" alt="tugas-icon">
-                        <span class="tb-text" th:text="${mataKuliah.nama}">Nama Mata Kuliah</span>
+                        <th:block th:if="${idTugas != null}">
+                            <th:block th:each="tugas : ${tugasList}" th:if="${tugas.idTugas == idTugas}">
+                                <span class="tb-text" th:text="${tugas.judulTugas}">Nama Tugas</span>
+                            </th:block>
+                        </th:block>
                     </div>
                 </div>
                 
                 <div class="rectangle-white">
-                    <div th:if="${not #lists.isEmpty(tugasList)}" class="assignment-table-wrapper">
-                        <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; width: 100%; text-align: left;">Daftar Tugas</h3>
-                        
-                        <div class="assignment-header">
-                            <div class="col-tugas">Judul Tugas</div>
-                            <div class="col-status">Status Nilai</div>
-                            <div class="col-aksi">Aksi</div>
-                        </div>
+                    <div class="card-container">
+                        <a th:href="@{/mahasiswa/rubrik-penilaian(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
+                           class="card">
+                            <img th:src="@{/icon/rubrik.png}" alt="rubrik">
+                            <p>Rubrik Penilaian</p>
+                        </a>
 
-                        <div class="assignment-row" th:each="tugas : ${tugasList}">
-                            <div class="col-isi-tugas" th:text="${tugas.judulTugas}">Judul Tugas</div>
-                            <div class="col-isi-status">
-                                <span style="color: #999;">Belum dirilis</span>
-                            </div>
-                            <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk}, idTugas=${tugas.idTugas})}" 
-                               class="col-isi-aksi-link">
-                                <button class="col-isi-lihat">Lihat Nilai</button>
-                            </a>
-                        </div>
-                    </div>
+                        <a th:href="@{/mahasiswa/jadwal-penilaian(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
+                           class="card">
+                            <img th:src="@{/icon/jadwal.png}" alt="jadwal">
+                            <p>Jadwal Penilaian</p>
+                        </a>
 
-                    <div th:if="${#lists.isEmpty(tugasList)}" style="text-align: center; padding: 40px 20px; color: #999;">
-                        <p>Tidak ada tugas untuk mata kuliah ini.</p>
+                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
+                           class="card">
+                            <img th:src="@{/icon/exam.png}" alt="exam">
+                            <p>Lihat Nilai</p>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -128,14 +126,6 @@
                 if (confirm('Apakah Anda yakin ingin logout?')) {
                     window.location.href = '/logout';
                 }
-            });
-
-            // Sidebar toggle
-            const toggle = document.querySelector(".toggle");
-            const sidebar = document.querySelector(".sidebar");
-
-            toggle.addEventListener("click", () => {
-                sidebar.classList.toggle("close");
             });
         </script>
     </body>
