@@ -29,13 +29,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 
 import java.io.ByteArrayOutputStream;
@@ -1022,53 +1017,62 @@ public class AdminController {
         }
     }
 
-     /**
-     * API: Download template Excel untuk import mahasiswa
-     */
- @GetMapping("/api/mahasiswa/template")
-@ResponseBody
-@PreAuthorize("hasRole('ADMIN')")
-public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
-    try (Workbook workbook = new XSSFWorkbook()) {
-        Sheet sheet = workbook.createSheet("Template Mahasiswa");
+    @GetMapping("/api/mahasiswa/template")
+    @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Template Mahasiswa");
 
-        // ===== STYLE TEXT =====
-        CellStyle textStyle = workbook.createCellStyle();
-        DataFormat format = workbook.createDataFormat();
-        textStyle.setDataFormat(format.getFormat("@"));
+            // ===== STYLE TEXT =====
+            CellStyle textStyle = workbook.createCellStyle();
+            DataFormat format = workbook.createDataFormat();
+            textStyle.setDataFormat(format.getFormat("@"));
+            
+            // Header
+            Row headerRow = sheet.createRow(0);
+            Cell cell0 = headerRow.createCell(0);
+            cell0.setCellValue("NPM");
+            cell0.setCellStyle(textStyle);
+            
+            Cell cell1 = headerRow.createCell(1);
+            cell1.setCellValue("Nama");
+            cell1.setCellStyle(textStyle);
+            
+            Cell cell2 = headerRow.createCell(2);
+            cell2.setCellValue("Email (opsional)");
+            cell2.setCellStyle(textStyle);
 
-        // ⬅️ INI YANG WAJIB (KAMU BELUM PUNYA)
-        sheet.setDefaultColumnStyle(0, textStyle);
+            // Example
+            Row exampleRow = sheet.createRow(1);
+            Cell exCell0 = exampleRow.createCell(0);
+            exCell0.setCellValue("06182301066");
+            exCell0.setCellStyle(textStyle);
+            
+            Cell exCell1 = exampleRow.createCell(1);
+            exCell1.setCellValue("Jane Smith");
+            exCell1.setCellStyle(textStyle);
+            
+            Cell exCell2 = exampleRow.createCell(2);
+            exCell2.setCellValue("jane.smith@student.unpar.ac.id");
+            exCell2.setCellStyle(textStyle);
 
-        // Header
-        Row headerRow = sheet.createRow(0);
-        headerRow.createCell(0).setCellValue("NPM");
-        headerRow.createCell(1).setCellValue("Nama");
-        headerRow.createCell(2).setCellValue("Email (opsional)");
+            for (int i = 0; i < 3; i++) {
+                sheet.autoSizeColumn(i);
+            }
 
-        // Example
-        Row exampleRow = sheet.createRow(1);
-        exampleRow.createCell(0).setCellValue("06182301066"); // 10 digit
-        exampleRow.createCell(1).setCellValue("Jane Smith");
-        exampleRow.createCell(2).setCellValue("jane.smith@student.unpar.ac.id");
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
 
-        for (int i = 0; i < 3; i++) {
-            sheet.autoSizeColumn(i);
+            return ResponseEntity.ok()
+                    .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    .header("Content-Disposition", "attachment; filename=template_import_mahasiswa.xlsx")
+                    .body(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new Exception("Gagal membuat template: " + e.getMessage());
         }
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        workbook.write(outputStream);
-
-        return ResponseEntity.ok()
-                .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                .header("Content-Disposition", "attachment; filename=template_import_mahasiswa.xlsx")
-                .body(outputStream.toByteArray());
     }
-}
 
-    /**
-     * API: Get mahasiswa by ID (untuk edit form)
-     */
     @GetMapping("/api/mahasiswa/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1094,11 +1098,15 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
 
         } catch (Exception e) {
             return buildErrorResponse("Gagal mengambil data mahasiswa: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/api/mata-kuliah")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, Object>> getAllMataKuliahApi(
+            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
             List<MataKuliah> mataKuliahList;
             
@@ -1944,9 +1952,9 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                     return cell.getDateCellValue().toString();
                 } else {
                     // Format numeric tanpa desimal jika integer
-                    long num = cell.getNumericCellValue();
-                    if (num == (int) num) {
-                        return String.valueOf((int) num);
+                    double num = cell.getNumericCellValue();
+                    if (num == Math.floor(num)) {
+                        return String.valueOf((long) num);
                     } else {
                         return String.valueOf(num);
                     }
@@ -1954,7 +1962,15 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
             case BOOLEAN:
                 return String.valueOf(cell.getBooleanCellValue());
             case FORMULA:
-                return cell.getCellFormula();
+                try {
+                    return cell.getStringCellValue();
+                } catch (Exception e) {
+                    try {
+                        return String.valueOf(cell.getNumericCellValue());
+                    } catch (Exception ex) {
+                        return cell.getCellFormula();
+                    }
+                }
             case BLANK:
                 return "";
             default:
@@ -1972,8 +1988,8 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
             List<String> errors, List<String> successes) throws Exception {
         
         throw new Exception("Parsing CSV belum diimplementasikan. Gunakan file Excel (.xlsx)");
-
     }
+    
     @GetMapping("/matakuliah-kelas-detail")
     public String matakuliahKelasDetail(@RequestParam String kode, 
                                     @AuthenticationPrincipal CustomUserDetails user, 
@@ -2072,50 +2088,50 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         return "admin/matakuliah-detail";
     }
    
-@GetMapping("/peserta-detail")
-public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required = false) Integer colorIndex,
-                            @AuthenticationPrincipal CustomUserDetails user,
-                            Model model) {
-    model.addAttribute("user", user);
+    @GetMapping("/peserta-detail")
+    public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required = false) Integer colorIndex,
+                                @AuthenticationPrincipal CustomUserDetails user,
+                                Model model) {
+        model.addAttribute("user", user);
 
-    MataKuliah mk = mataKuliahRepository.findById(kodeMk).orElse(null);
-    if (mk == null) {
-        return "redirect:/admin/dashboard";
-    }
+        MataKuliah mk = mataKuliahRepository.findById(kodeMk).orElse(null);
+        if (mk == null) {
+            return "redirect:/admin/dashboard";
+        }
 
         int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
         model.addAttribute("colorIndex", finalColorIndex);
 
-    List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
 
-    MataKuliahDosen koordinator = dosenList.isEmpty() ? null : dosenList.get(0);
+        MataKuliahDosen koordinator = dosenList.isEmpty() ? null : dosenList.get(0);
 
-    List<MataKuliahMahasiswa> mahasiswaList = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+        List<MataKuliahMahasiswa> mahasiswaList = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
 
-    List<PesertaMatkulDTO> combinedPesertaList = new ArrayList<>();
-    int no = 1;
+        List<PesertaMatkulDTO> combinedPesertaList = new ArrayList<>();
+        int no = 1;
 
-    if (koordinator != null) {
-        combinedPesertaList.add(new PesertaMatkulDTO(no++, koordinator.getUser().getNama(),
-                koordinator.getUser().getIdUser(), "Koordinator"));
+        if (koordinator != null) {
+            combinedPesertaList.add(new PesertaMatkulDTO(no++, koordinator.getUser().getNama(),
+                    koordinator.getUser().getIdUser(), "Koordinator"));
+        }
+
+        for (int i = 1; i < dosenList.size(); i++) {
+            User dosenUser = dosenList.get(i).getUser();
+            combinedPesertaList.add(new PesertaMatkulDTO(no++, dosenUser.getNama(),
+                    dosenUser.getIdUser(), "Pengampu"));
+        }
+
+        for (MataKuliahMahasiswa mhs : mahasiswaList) {
+            combinedPesertaList.add(new PesertaMatkulDTO(no++, mhs.getUser().getNama(),
+                    mhs.getUser().getIdUser(), "Mahasiswa"));
+        }
+
+        model.addAttribute("mkDetail", mk);
+        model.addAttribute("koordinator", koordinator);
+        model.addAttribute("combinedPesertaList", combinedPesertaList);
+        model.addAttribute("pesertaCount", mahasiswaList.size());
+
+        return "admin/peserta-detail";
     }
-
-    for (int i = 1; i < dosenList.size(); i++) {
-        User dosenUser = dosenList.get(i).getUser();
-        combinedPesertaList.add(new PesertaMatkulDTO(no++, dosenUser.getNama(),
-                dosenUser.getIdUser(), "Pengampu"));
-    }
-
-    for (MataKuliahMahasiswa mhs : mahasiswaList) {
-        combinedPesertaList.add(new PesertaMatkulDTO(no++, mhs.getUser().getNama(),
-                mhs.getUser().getIdUser(), "Mahasiswa"));
-    }
-
-    model.addAttribute("mkDetail", mk);
-    model.addAttribute("koordinator", koordinator);
-    model.addAttribute("combinedPesertaList", combinedPesertaList);
-    model.addAttribute("pesertaCount", mahasiswaList.size());
-
-    return "admin/peserta-detail";
-}
 }
