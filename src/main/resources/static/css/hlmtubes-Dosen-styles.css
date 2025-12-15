@@ -220,53 +220,42 @@ header .image-text .header-text {
     gap: 15px;
 }
 
-.user-info {
-    text-align: right;
-}
+
 
 .user-name {
-    font-weight: 600;
-    color: #333;
-    font-size: 14px;
+    font-weight: bold;
+    font-size: 14pt;
 }
 
 .user-role {
-    color: #666;
     font-size: 12px;
 }
-
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.pfp{
+    width: 45px;
+    height: 45px;
 }
 
-.user-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+
+
+
 
 .logout-icon {
-    background-color: #caf0f8;
     width: 40px;
     height: 40px;
-    border-radius: 8px;
+    border: none;
+    background-color: #C1EBFF; 
+    border-radius: 5px;
     cursor: pointer;
+    box-shadow: 2px 3px 1px grey;
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: 8px;
+    align-items: center;
 }
 
 .logout-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    width: 25px;
+    height: 25px;
+
 }
 
 /* Tabs */

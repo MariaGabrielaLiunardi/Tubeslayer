@@ -2,17 +2,30 @@
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin: 0 30px 30px 30px;
+    margin: 20px 30px 30px 30px;
     background-color: white;
 }
 
 /* Title Section*/
 .title-section-new {
-    background: linear-gradient(135deg, #B3E5FC 0%, #81D4FA 100%);
+    background: #CCF0F7;
     padding: 30px 40px;
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+.header .header-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-left: 10px;
+}
+
+.header .header-left .judul {
+  font-weight: bold;
+  font-size: 20pt;
 }
 
 .book-icon-new {
@@ -30,6 +43,11 @@
 .book-icon-new i {
     font-size: 40px;
     color: #0288d1;
+}
+
+.folder-icon-new img {
+    width: 40px;
+    height: 40px;
 }
 
 .title-text {
@@ -51,9 +69,17 @@
     margin-bottom: 25px;
     padding-bottom: 15px;
     border-bottom: 2px solid #E3F2FD;
-    color: #424242;
+    color: black;
     font-size: 14px;
     font-weight: 500;
+}
+
+.breadcrumb-new a{
+    color: black;
+}
+
+.breadcrumb-new a:hover {
+  color: #0078b5;
 }
 
 .breadcrumb-new .separator {
@@ -110,7 +136,7 @@
 
 /* Deadline Badge */
 .deadline-badge {
-    background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%);
+    background: #FFCDD2;
     padding: 12px 24px;
     border-radius: 10px;
     display: inline-block;

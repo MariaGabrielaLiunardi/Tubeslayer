@@ -31,10 +31,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.ss.usermodel.DataFormatter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -2134,4 +2134,29 @@ public class AdminController {
 
         return "admin/peserta-detail";
     }
+
+    @GetMapping("/tugas-detail")
+    public String tugasDetail(
+        @RequestParam("idTugas") Integer idTugas,
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        Model model
+        ) {
+
+        User user = userDetails.getUser();
+
+        TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
+
+        if (tugas == null) {
+            return "redirect:/admin/matakuliah-detail";
+        }
+
+        MataKuliah mkDetail = tugas.getMataKuliah();
+
+        model.addAttribute("user", user);
+        model.addAttribute("tugas", tugas);
+        model.addAttribute("mkDetail", mkDetail);
+
+        return "admin/tugas-detail";
+    }
+
 }
