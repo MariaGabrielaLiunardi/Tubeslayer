@@ -501,7 +501,7 @@ function renderMataKuliahTable() {
                     // Get the kode MK from the second cell (Kode MK column)
                     const kodeMK = row.cells[1]?.textContent.trim();
                     if (kodeMK) {
-                        window.location.href = `/admin/matakuliah-kelas-detail?kode=${kodeMK}`;
+                        window.location.href = `/admin/matakuliah-detail?kode=${kodeMK}`;
                     }
                 }
             });

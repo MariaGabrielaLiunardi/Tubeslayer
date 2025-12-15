@@ -1974,65 +1974,16 @@ public class AdminController {
         throw new Exception("Parsing CSV belum diimplementasikan. Gunakan file Excel (.xlsx)");
     }
     
-    @GetMapping("/matakuliah-kelas-detail")
-    public String matakuliahKelasDetail(@RequestParam String kode, 
-                                    @AuthenticationPrincipal CustomUserDetails user, 
-                                    Model model) {
-        if (kode == null || kode.isEmpty()) {
-            return "redirect:/admin/kelola-mata-kuliah";
-        }
-
-        MataKuliah mk = mataKuliahRepository.findById(kode).orElse(null);
-        if (mk == null) {
-            return "redirect:/admin/kelola-mata-kuliah";
-        }
-
-        int gradientCount = 4;
-        int colorIndex = Math.abs(kode.hashCode()) % gradientCount;
-        model.addAttribute("colorIndex", colorIndex);
-
-        MataKuliahDosen koordinator = null;
-        try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
-            if (!dosenList.isEmpty()) {
-                koordinator = dosenList.get(0);
-            }
-        } catch (Exception e) {
-            System.err.println("Error fetching coordinator: " + e.getMessage());
-        }
-        model.addAttribute("koordinator", koordinator);
-
-        List<TugasBesar> tugasList = Collections.emptyList();
-        try {
-            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
-        } catch (Exception e) {
-            System.err.println("Error fetching tasks for MK: " + e.getMessage());
-        }
-
-        List<MataKuliahDosen> kelasList = Collections.emptyList();
-        try {
-            kelasList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
-        } catch (Exception e) {
-            System.err.println("Error fetching classes for MK: " + e.getMessage());
-        }
-
-        model.addAttribute("mkDetail", mk);
-        model.addAttribute("tugasList", tugasList);
-        model.addAttribute("kelasList", kelasList);
-        model.addAttribute("user", user);
-
-        return "admin/matakuliah-kelas-detail"; 
-    }
 
     @GetMapping("/matakuliah-detail")
     public String matakuliahDetail(@RequestParam String kode, @AuthenticationPrincipal CustomUserDetails user, Model model) {
         if (kode == null || kode.isEmpty()) {
-            return "redirect:/admin/matakuliah-kelas-detail";
+            return "redirect:/admin/kelola-mata-kuliah";
         }
 
         MataKuliah mk = mataKuliahRepository.findById(kode).orElse(null);
         if (mk == null) {
-            return "redirect:/admin/matakuliah-kelas-detail";
+            return "redirect:/admin/kelola-mata-kuliah";
         }
 
         int gradientCount = 4;
