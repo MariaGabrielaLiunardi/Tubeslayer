@@ -2,11 +2,6 @@ package com.Tubeslayer.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import java.util.Set;
-
-import org.springframework.data.repository.query.Param;
 
 @Entity
 @Table(name = "user_table")
