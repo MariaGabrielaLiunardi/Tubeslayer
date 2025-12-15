@@ -352,6 +352,16 @@ header .image-text .header-text {
     font-size: 14px;
 }
 
+/* breadcrumb */
+.breadcrumb a {
+  color: black;
+}
+
+.breadcrumb a:hover {
+  color: #0078b5;
+}
+
+
 .breadcrumb span {
     margin: 0 8px;
 }
