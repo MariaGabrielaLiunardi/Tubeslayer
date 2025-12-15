@@ -10,18 +10,9 @@ import java.util.Optional;
 
 public interface NilaiKomponenRepository extends JpaRepository<NilaiKomponen, Integer> {
     
-    /**
-     * Cari nilai komponen berdasarkan id_nilai dan id_komponen
-     */
     Optional<NilaiKomponen> findByNilai_IdNilaiAndKomponen_IdKomponen(Integer idNilai, Integer idKomponen);
     
-    /**
-     * Cari semua nilai komponen untuk satu nilai
-     */
     List<NilaiKomponen> findByNilai_IdNilai(Integer idNilai);
     
-    /**
-     * Cari semua nilai komponen untuk satu komponen
-     */
     List<NilaiKomponen> findByKomponen_IdKomponen(Integer idKomponen);
 }

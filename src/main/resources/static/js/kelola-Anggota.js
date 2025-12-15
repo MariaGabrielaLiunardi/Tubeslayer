@@ -486,45 +486,30 @@ function showView(viewId) {
     }
 }
 
-
-function showSuccess(message) {
-    const toast = document.createElement('div');
-    toast.className = 'toast toast-success';
+function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+    toast.className = `toast toast-${type}`;
     toast.innerHTML = `
-        <i class='bx bx-check-circle'></i>
+        <i class='bx ${
+            type === "success" ? "bx-check-circle" : "bx-error-circle"
+        }'></i>
         <span>${message}</span>
     `;
-    
+
     document.body.appendChild(toast);
-    
+    setTimeout(() => toast.classList.add("show"), 100);
     setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
+        toast.classList.remove("show");
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
 
+function showSuccess(message) {
+    this.showToast(message, "success");
+}
+
 function showError(message) {
-    const toast = document.createElement('div');
-    toast.className = 'toast toast-error';
-    toast.innerHTML = `
-        <i class='bx bx-error-circle'></i>
-        <span>${message}</span>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    this.showToast(message, "error");
 }
 
 function showSearchError(message) {

@@ -4,8 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard Nilai Dosen - Tubeslayer</title>
-        <link rel="stylesheet" th:href="@{/css/dashboard-nilai-dosen.css}">
         <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
+        <link rel="stylesheet" th:href="@{/css/dashboard-nilai-dosen.css}">
         <script th:src="@{/js/dashboard-nilai-dosen.js}" defer></script>
         <link href='https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css' rel='stylesheet'>  
     </head>
@@ -61,26 +61,19 @@
                     </button>
                 </div>
             </div>
-
-            <div class="nav-segmented-control">
-                <div class="nav-tab">
-                    Dashboard Penilaian
-                </div>
-            </div>
-
             <div class="mk-tab" th:data-mk-kode="${kodeMk}">
                 <button class="tab" data-tab-target="kuliah"
-                    th:onclick="|window.location.href='@{/dosen/matkul-detail(kodeMk=${kodeMk})}'|"
+                    th:onclick="|window.location.href='@{/dosen/matkul-detail(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|"
                     onclick="window.location.href=this.getAttribute('data-target-url')">
                     Kuliah
                 </button>
                 <button class="tab" data-tab-target="peserta"
-                    th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${kodeMk})}'|"
+                    th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|"
                     onclick="window.location.href=this.getAttribute('data-target-url')">
                     Daftar Peserta
                 </button>
                 <button class="tab active" data-tab-target="nilai"
-                    th:attr="data-target-url=@{/dosen/nilai(kodeMk=${kodeMk})}"
+                    th:attr="data-target-url=@{/dosen/nilai(kodeMk=${kodeMk}, colorIndex=${colorIndex})}"
                     onclick="window.location.href=this.getAttribute('data-target-url')">Nilai</button>
             </div>
 
@@ -98,19 +91,19 @@
                 
                 <div class="rectangle-white">
                     <div class="card-container">
-                        <a th:href="@{/dosen/rubrik-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas})}" 
+                        <a th:href="@{/dosen/rubrik-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
                            class="card">
                             <img th:src="@{/icon/rubrik.png}" alt="rubrik">
                             <p>Rubrik Penilaian</p>
                         </a>
 
-                        <a th:href="@{/dosen/jadwal-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas})}" 
+                        <a th:href="@{/dosen/jadwal-penilaian(kodeMk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
                            class="card">
                             <img th:src="@{/icon/jadwal.png}" alt="jadwal">
                             <p>Jadwal Penilaian</p>
                         </a>
 
-                        <a th:href="@{/dosen/pemberian-nilai(kodeMk=${kodeMk}, idTugas=${idTugas})}" 
+                        <a th:href="@{/dosen/pemberian-nilai(kodeMk=${kodeMk}, idTugas=${idTugas}, colorIndex=${colorIndex})}" 
                            class="card">
                             <img th:src="@{/icon/exam.png}" alt="exam">
                             <p>Pemberian Nilai</p>

@@ -59,9 +59,6 @@ public class KelompokJdbcRepository {
         );
     }
 
-    /**
-     * Get semua mahasiswa yang tersedia untuk tugas tertentu
-     */
     public List<MahasiswaSearchDTO> getAllAvailableMahasiswa(Integer idTugas) {
         String sql = 
             "SELECT DISTINCT " +
@@ -91,9 +88,6 @@ public class KelompokJdbcRepository {
         );
     }
 
-    /**
-     * Get anggota kelompok untuk user tertentu pada tugas tertentu
-     */
     public List<AnggotaKelompokDTO> getAnggotaKelompok(Integer idTugas, String idUser) {
         String sql = 
             "SELECT " +
@@ -132,9 +126,6 @@ public class KelompokJdbcRepository {
         }
     }
 
-    /**
-     * jika user = leader
-     */
     public boolean isLeader(Integer idTugas, String idUser) {
         String sql = 
             "SELECT COUNT(*) " +
@@ -149,9 +140,6 @@ public class KelompokJdbcRepository {
         return count != null && count > 0;
     }
 
-    /**
-     * Get ID kelompok user untuk tugas tertentu
-     */
     public Integer getKelompokIdByUser(Integer idTugas, String idUser) {
         String sql = 
             "SELECT uk.id_kelompok " +
@@ -169,9 +157,6 @@ public class KelompokJdbcRepository {
         }
     }
 
-    /**
-     * Hitung jumlah anggota dalam kelompok
-     */
     public int countAnggotaKelompok(Integer idKelompok) {
         String sql = 
             "SELECT COUNT(*) " +
@@ -182,9 +167,6 @@ public class KelompokJdbcRepository {
         return count != null ? count : 0;
     }
 
-    /**
-     * Tambah anggota ke kelompok
-     */
     public int tambahAnggota(String idUser, Integer idKelompok, String role) {
         String sql = 
             "INSERT INTO user_kelompok (id_user, id_kelompok, role, is_active) " +
@@ -193,21 +175,14 @@ public class KelompokJdbcRepository {
         return jdbcTemplate.update(sql, idUser, idKelompok, role);
     }
 
-    /**
-     * Hapus anggota dari kelompok (soft delete)
-     */
     public int hapusAnggota(String idUser, Integer idKelompok) {
         String sql = 
-            "UPDATE user_kelompok " +
-            "SET is_active = 0 " +
+            "DELETE FROM user_kelompok " +
             "WHERE id_user = ? AND id_kelompok = ?";
 
         return jdbcTemplate.update(sql, idUser, idKelompok);
     }
 
-    /**
-     * Check apakah user sudah tergabung dalam kelompok untuk tugas tertentu
-     */
     public boolean isUserInKelompok(Integer idTugas, String idUser) {
         String sql = 
             "SELECT COUNT(*) " +
@@ -221,34 +196,26 @@ public class KelompokJdbcRepository {
         return count != null && count > 0;
     }
 
-    /**
-     * Get max anggota dari tugas besar
-     */
     public Integer getMaxAnggota(Integer idTugas) {
         String sql = "SELECT max_anggota FROM tugas_besar WHERE id_tugas = ?";
         
         try {
             return jdbcTemplate.queryForObject(sql, Integer.class, idTugas);
         } catch (Exception e) {
-            return 5; // default value
+            return 5; 
         }
     }
-    /**
-     * Get mode kelompok dari tugas besar
-     */
+    
     public String getModeKelompok(Integer idTugas) {
         String sql = "SELECT mode_kel FROM tugas_besar WHERE id_tugas = ?";
         
         try {
             return jdbcTemplate.queryForObject(sql, String.class, idTugas);
         } catch (Exception e) {
-            return "Mahasiswa"; // default value
+            return "Mahasiswa"; 
         }
     }
 
-    /**
-     * Get nama kelompok untuk user tertentu pada tugas tertentu
-     */
     public String getNamaKelompok(Integer idTugas, String idUser) {
         String sql = 
             "SELECT k.nama_kelompok " +
@@ -267,15 +234,11 @@ public class KelompokJdbcRepository {
         }
     }
 
-    /**
-     * DTO class untuk anggota kelompok
-     */
     public static class AnggotaKelompokDTO {
         private String idUser;
         private String nama;
         private String role;
 
-        // Getters and Setters
         public String getIdUser() { return idUser; }
         public void setIdUser(String idUser) { this.idUser = idUser; }
         

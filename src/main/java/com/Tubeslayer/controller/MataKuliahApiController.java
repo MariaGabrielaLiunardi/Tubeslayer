@@ -18,20 +18,17 @@ public class MataKuliahApiController {
         this.repository = repository;
     }
 
-    // GET semua mata kuliah aktif
     @GetMapping
     public List<MataKuliah> getAllActive() {
         return repository.findByIsActiveTrue();
     }
 
-    // POST tambah mata kuliah baru
     @PostMapping
     public ResponseEntity<MataKuliah> addMataKuliah(@RequestBody MataKuliah mk) {
         MataKuliah savedMK = repository.save(mk);
         return new ResponseEntity<>(savedMK, HttpStatus.CREATED);
     }
 
-    // DELETE mata kuliah berdasarkan kode
     @DeleteMapping("/{kodeMK}")
     public ResponseEntity<String> deleteMataKuliah(@PathVariable String kodeMK) {
         Optional<MataKuliah> mk = repository.findById(kodeMK);

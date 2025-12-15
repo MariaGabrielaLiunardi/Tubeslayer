@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${tugas.judulTugas}">Tugas Besar Tahap 1</title>
     <link rel="stylesheet" href="/css/hlmtubes-Dosen-styles.css" />
+    <link rel="icon" href="/logo/blue-logo.png" type="image/png">
     <link
       href="https://cdn.boxicons.com/3.0.5/fonts/basic/boxicons.min.css"
       rel="stylesheet"
@@ -92,26 +93,22 @@
     <!-- Main Content -->
     <div class="main-content">
       <!-- Tabs -->
-      <div
-        class="mk-tab"
-        th:data-mk-kode="${mkDetail != null ? mkDetail.kodeMK : ''}"
-      >
-        <button
-          class="tab active"
-          data-tab-target="kuliah"
-          th:onclick="|window.location.href='@{/dosen/matkul-detail(mk=${mkDetail.kodeMK})}'|"
-        >
-          Kuliah
-        </button>
-        <button
-          class="tab"
-          data-tab-target="peserta"
-          th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${mkDetail.kodeMK})}'|"
-        >
-          Daftar Peserta
-        </button>
-        <button class="tab" data-tab-target="nilai">Nilai</button>
-      </div>
+      <div class="mk-tab" th:data-mk-kode="${mkDetail.kodeMK}">
+
+            <button class="tab active" data-tab-target="kuliah"
+                th:attr="data-target-url=@{/dosen/matkul-detail(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')"> Kuliah
+            </button>
+
+            <button class="tab" data-tab-target="peserta"
+                th:attr="data-target-url=@{/dosen/matkul-peserta(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')"> Daftar Peserta
+            </button>
+
+            <button class="tab" data-tab-target="nilai"
+                th:attr="data-target-url=@{/dosen/nilai(kodeMk=${mkDetail.kodeMK})}"
+                onclick="window.location.href=this.getAttribute('data-target-url')">Nilai</button>
+        </div>
 
       <!-- Card Container -->
       <div class="card-container">
@@ -193,7 +190,7 @@
           </div>
 
           <div id="kelompokTableContainer"></div>
-
+          <!-- tabel diisi oleh js -->
           <div class="action-buttons">
             <button class="btn-secondary" id="backToDefaultBtn">Kembali</button>
             <button class="manage-btn" id="buatKelompokBtn">
@@ -247,7 +244,10 @@
                   placeholder="Rafael Cleon Adam - 6182301017"
                   required
                 />
-                <button type="button" class="search-btn">🔍</button>
+                <button type="button" class="search-btn"><i class="bx bx-search"></i></button>
+              </div>
+              <div class="search-results" id="search-results-dosen">
+              <!-- Results akan diinject JavaScript -->
               </div>
             </div>
 

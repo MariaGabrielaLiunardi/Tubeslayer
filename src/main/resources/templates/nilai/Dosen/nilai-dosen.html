@@ -75,17 +75,17 @@
 
         <div class="mk-tab" th:data-mk-kode="${kodeMk}">
             <button class="tab" data-tab-target="kuliah"
-                th:onclick="|window.location.href='@{/dosen/matkul-detail(kodeMk=${kodeMk})}'|"
+                th:onclick="|window.location.href='@{/dosen/matkul-detail(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|"
                 onclick="window.location.href=this.getAttribute('data-target-url')">
                 Kuliah
             </button>
             <button class="tab" data-tab-target="peserta"
-                th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${kodeMk})}'|"
+                th:onclick="|window.location.href='@{/dosen/matkul-peserta(kodeMk=${kodeMk}, colorIndex=${colorIndex})}'|"
                 onclick="window.location.href=this.getAttribute('data-target-url')">
                 Daftar Peserta
             </button>
             <button class="tab active" data-tab-target="nilai"
-                th:attr="data-target-url=@{/dosen/nilai(kodeMk=${kodeMk})}"
+                th:attr="data-target-url=@{/dosen/nilai(kodeMk=${kodeMk}, colorIndex=${colorIndex})}"
                 onclick="window.location.href=this.getAttribute('data-target-url')">Nilai</button>
         </div>
 

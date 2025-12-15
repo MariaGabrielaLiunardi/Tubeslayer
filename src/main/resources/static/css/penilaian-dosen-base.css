@@ -423,3 +423,90 @@ header .image-text .header-text {
         padding: 0 15px;
     }
 }
+
+/* === MK TAB NAVIGATION === */
+.mk-tab {
+    background: #0078B5;
+    width: fit-content;
+    border-radius: 40px;
+    display: flex;
+    gap: 5px;
+    margin-top: 60px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+
+.tab {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-sizing: border-box; 
+}
+
+.tab.active {
+    background: #4CA6D3;
+    border-radius: 30px;
+    padding: 10px 30px; 
+}
+
+/* === MK HEADER (Mata Kuliah Info) === */
+.mk-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background: #CCF0F7;
+    padding: 30px;
+    border-radius: 20px;
+    margin: 20px 30px 0 30px;
+}
+
+.mk-img {
+    width: 160px;
+    height: 130px;
+    border-radius: 25px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.mk-info h1 {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+.mk-info p {
+    margin-top: 8px;
+    color: gray;
+    font-size: 18px;
+}
+
+/* background card */
+.gradient-1 {
+    background: linear-gradient(#31acef, white);
+}
+
+.gradient-2 {
+    background: url("/icon/matkul-2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.gradient-3 {
+    background: radial-gradient(circle at center,
+            #29ACEF 10%,
+            #9dd6f5 40%,
+            #eaf7ff 70%,
+            #ffffff 100%);
+}
+
+.gradient-4 {
+    background: url("/icon/matkul-4.png");
+    background-size: cover;
+    background-position: center;
+}

@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Rubrik Penilaian - Tubeslayer</title>
         <link rel="stylesheet" th:href="@{/css/rubrik-penilaian-mahasiswa.css}">
+        <link rel="stylesheet" th:href="@{/css/penilaian-dosen-base.css}">
         <script th:src="@{/js/rubrik-penilaian-dosen.js}" defer></script>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>  
     </head>
@@ -74,11 +75,11 @@
                     Kuliah
                 </button>
                 <button class="tab" data-tab-target="peserta"
-                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(mk=${kodeMk})}'|">
+                    th:onclick="|window.location.href='@{/mahasiswa/matkul-peserta(kodeMk=${kodeMk})}'|">
                     Daftar Peserta
                 </button>
                 <button class="tab active" data-tab-target="nilai"
-                    th:onclick="|window.location.href='@{/mahasiswa/dashboard-nilai(mk=${kodeMk},idTugas=${idTugas})}'|">Nilai</button>
+                    th:onclick="|window.location.href='@{/mahasiswa/dashboard-penilaian(mk=${kodeMk},idTugas=${idTugas}, colorIndex=${colorIndex})}'|">Nilai</button>
             </div>
             
             <div class="container">
@@ -96,7 +97,7 @@
                 
                 <div class="rectangle-white">
                     <div class="breadcrumb-nav">
-                        <a th:href="@{/mahasiswa/pemberian-nilai(mk=${kodeMk},idTugas=${idTugas})}" class="breadcrumb-link">Dashboard Penilaian</a>
+                        <a th:href="@{/mahasiswa/dashboard-penilaian(mk=${kodeMk},idTugas=${idTugas}, colorIndex=${colorIndex})}" class="breadcrumb-link">Dashboard Penilaian</a>
                         <span class="breadcrumb-separator">&gt;</span>
                         <span class="breadcrumb-current">Rubrik Penilaian</span>
                     </div>

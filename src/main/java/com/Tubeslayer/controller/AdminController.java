@@ -93,9 +93,6 @@ public class AdminController {
         return (userDetails != null) ? userDetails.getUser() : null;
     }
 
-    // ============================
-    // DASHBOARD ADMIN
-    // ============================
     @GetMapping("/dashboard")
     public String adminDashboard(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
@@ -117,9 +114,6 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    // ============================
-    // MENU AWAL ADMIN
-    // ============================
     @GetMapping("/menu-awal-ad")
     public String menuAwalAdmin(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
@@ -132,15 +126,11 @@ public class AdminController {
         return "admin/kelola-mata-kuliah";
     }
 
-    // ============================
-    // KELOLA DOSEN - VIEW PAGES
-    // ============================
     @GetMapping("/kelola-dosen")
     @PreAuthorize("hasRole('ADMIN')")
     public String kelolaDosen(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
 
-        // Ambil data dosen aktif untuk ditampilkan di view
         List<User> dosenList = userRepository.findByRoleAndIsActiveTrue("Dosen");
         model.addAttribute("dosenList", dosenList);
         model.addAttribute("dosenCount", dosenList.size());
@@ -151,16 +141,13 @@ public class AdminController {
     @GetMapping("/kelola-mahasiswa")
     public String kelolaMahasiswa(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("user", user);
-        // Ambil data mahasiswa aktif untuk ditampilkan di view
+        
         List<User> mahasiswaList = userRepository.findByRoleAndIsActiveTrue("Mahasiswa");
         model.addAttribute("mahasiswaList", mahasiswaList);
         model.addAttribute("mahasiswaCount", mahasiswaList.size());
         return "admin/kelola-mahasiswa";
     }
 
-    // ============================
-    // VIEWS UNTUK ARSIP
-    // ============================
     @GetMapping("/arsip-mata-kuliah")
     public String getArsip(
             @RequestParam(defaultValue = "0") int page,
@@ -199,7 +186,7 @@ public class AdminController {
 
        MataKuliahDosen koordinator = null;
        try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false);
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
             }
@@ -210,7 +197,7 @@ public class AdminController {
 
         List<TugasBesar> tugasList = Collections.emptyList();
         try {
-            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true); 
+            tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false); 
         } catch (Exception e) {
             System.err.println("Error fetching tasks for archive: " + e.getMessage());
         }
@@ -255,7 +242,7 @@ public class AdminController {
 
         MataKuliahDosen koordinator = null;
         try {
-            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true); 
+            List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, false); 
             if (!dosenList.isEmpty()) {
                 koordinator = dosenList.get(0);
             }
@@ -268,7 +255,7 @@ public class AdminController {
 
         if (mkMahasiswaRepo != null && mk != null) {
             try {
-                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), true);
+                listPeserta = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(mk.getKodeMK(), false);
             } catch (Exception e) {
                 System.err.println("Error saat mengambil data peserta arsip: " + e.getMessage());
             }
@@ -280,13 +267,6 @@ public class AdminController {
         return "admin/matkul-peserta";
     }
 
-    // ============================
-    // API ENDPOINTS - KELOLA DOSEN (AKTIF SAJA)
-    // ============================
-
-    /**
-     * API: Ambil semua dosen AKTIF (JSON)
-     */
     @GetMapping("/api/dosen")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -298,12 +278,12 @@ public class AdminController {
             if ("semua".equalsIgnoreCase(status)) {
                 dosenList = userRepository.findByRole("Dosen");
             } else if ("nonaktif".equalsIgnoreCase(status)) {
-                // Mengambil dosen nonaktif dengan custom query
+                
                 dosenList = userRepository.findByRole("Dosen").stream()
                         .filter(dosen -> !dosen.isActive())
                         .collect(Collectors.toList());
             } else {
-                // Default: ambil hanya yang aktif
+                
                 dosenList = userRepository.findByRoleAndIsActiveTrue("Dosen");
             }
 
@@ -336,9 +316,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Cari dosen AKTIF berdasarkan nama atau NIP
-     */
     @GetMapping("/api/dosen/search")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -352,7 +329,6 @@ public class AdminController {
 
             String searchKeyword = keyword.trim().toLowerCase();
             
-            // Ambil data berdasarkan filter status
             List<User> baseList;
             if ("semua".equalsIgnoreCase(status)) {
                 baseList = userRepository.findByRole("Dosen");
@@ -364,7 +340,6 @@ public class AdminController {
                 baseList = userRepository.findByRoleAndIsActiveTrue("Dosen");
             }
 
-            // Filter berdasarkan keyword
             List<User> results = baseList.stream()
                     .filter(dosen -> 
                         dosen.getNama().toLowerCase().contains(searchKeyword) ||
@@ -399,9 +374,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Tambah dosen baru (default aktif)
-     */
     @PostMapping("/api/dosen")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -437,7 +409,6 @@ public class AdminController {
             dosen.setPassword(defaultPassword);
             dosen.setRole("Dosen");
 
-            // Default status adalah aktif
             String status = dosenData.getOrDefault("status", "aktif");
             dosen.setActive("aktif".equalsIgnoreCase(status) || "1".equals(status) || "true".equalsIgnoreCase(status));
 
@@ -456,9 +427,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Hapus dosen (soft delete - nonaktifkan)
-     */
     @DeleteMapping("/api/dosen/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -478,7 +446,6 @@ public class AdminController {
                         HttpStatus.BAD_REQUEST);
             }
 
-            // Soft delete: nonaktifkan dosen
             dosen.setActive(false);
             userRepository.save(dosen);
 
@@ -494,9 +461,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Update status dosen (aktif/nonaktif)
-     */
     @PutMapping("/api/dosen/{id}/status")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -541,9 +505,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Update data dosen
-     */
     @PutMapping("/api/dosen/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -592,9 +553,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Import dosen dari file Excel/CSV (berfungsi lengkap)
-     */
     @PostMapping("/api/dosen/import")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -618,14 +576,13 @@ public class AdminController {
             List<String> successes = new ArrayList<>();
 
             if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
-                // Parse file Excel
+                
                 parseExcelFile(file, importedDosen, errors, successes, "Dosen");
             } else if (fileName.endsWith(".csv")) {
-                // Parse file CSV (akan kita implementasikan nanti)
+                
                 parseCSVFile(file, importedDosen, errors, successes, "Dosen");
             }
 
-            // Simpan dosen yang berhasil diimport
             List<Map<String, Object>> savedDosen = new ArrayList<>();
             for (User dosen : importedDosen) {
                 try {
@@ -656,9 +613,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Download template Excel untuk import dosen
-     */
     @GetMapping("/api/dosen/template")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -666,24 +620,20 @@ public class AdminController {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Template Dosen");
             
-            // Create header row
             Row headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("NIP");
             headerRow.createCell(1).setCellValue("Nama");
             headerRow.createCell(2).setCellValue("Email (opsional)");
             
-            // Add example data
             Row exampleRow = sheet.createRow(1);
             exampleRow.createCell(0).setCellValue("123456");
             exampleRow.createCell(1).setCellValue("Dr. John Doe");
             exampleRow.createCell(2).setCellValue("john.doe@unpar.ac.id");
             
-            // Auto-size columns
             for (int i = 0; i < 3; i++) {
                 sheet.autoSizeColumn(i);
             }
             
-            // Convert to byte array
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
             
@@ -697,11 +647,6 @@ public class AdminController {
         }
     }
     
-   
-
-    /**
-     * API: Get dosen by ID (untuk edit form)
-     */
     @GetMapping("/api/dosen/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -731,13 +676,6 @@ public class AdminController {
         }
     }
 
-    // ============================
-    // API ENDPOINTS - KELOLA MAHASISWA (AKTIF SAJA)
-    // ============================
-
-    /**
-     * API: Ambil semua mahasiswa AKTIF (JSON)
-     */
     @GetMapping("/api/mahasiswa")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -749,12 +687,12 @@ public class AdminController {
             if ("semua".equalsIgnoreCase(status)) {
                 mahasiswaList = userRepository.findByRole("Mahasiswa");
             } else if ("nonaktif".equalsIgnoreCase(status)) {
-                // Mengambil mahasiswa nonaktif dengan custom query
+                
                 mahasiswaList = userRepository.findByRole("Mahasiswa").stream()
                         .filter(mahasiswa -> !mahasiswa.isActive())
                         .collect(Collectors.toList());
             } else {
-                // Default: ambil hanya yang aktif
+                
                 mahasiswaList = userRepository.findByRoleAndIsActiveTrue("Mahasiswa");
             }
 
@@ -787,9 +725,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Cari mahasiswa AKTIF berdasarkan nama atau NPM
-     */
     @GetMapping("/api/mahasiswa/search")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -803,7 +738,6 @@ public class AdminController {
 
             String searchKeyword = keyword.trim().toLowerCase();
             
-            // Ambil data berdasarkan filter status
             List<User> baseList;
             if ("semua".equalsIgnoreCase(status)) {
                 baseList = userRepository.findByRole("Mahasiswa");
@@ -815,7 +749,6 @@ public class AdminController {
                 baseList = userRepository.findByRoleAndIsActiveTrue("Mahasiswa");
             }
 
-            // Filter berdasarkan keyword
             List<User> results = baseList.stream()
                     .filter(mahasiswa -> 
                         mahasiswa.getNama().toLowerCase().contains(searchKeyword) ||
@@ -850,9 +783,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Tambah mahasiswa baru (default aktif)
-     */
     @PostMapping("/api/mahasiswa")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -888,7 +818,6 @@ public class AdminController {
             mahasiswa.setPassword(defaultPassword);
             mahasiswa.setRole("Mahasiswa");
 
-            // Default status adalah aktif
             String status = mahasiswaData.getOrDefault("status", "aktif");
             mahasiswa.setActive("aktif".equalsIgnoreCase(status) || "1".equals(status) || "true".equalsIgnoreCase(status));
 
@@ -907,9 +836,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Hapus mahasiswa (soft delete - nonaktifkan)
-     */
     @DeleteMapping("/api/mahasiswa/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -929,7 +855,6 @@ public class AdminController {
                         HttpStatus.BAD_REQUEST);
             }
 
-            // Soft delete: nonaktifkan mahasiswa
             mahasiswa.setActive(false);
             userRepository.save(mahasiswa);
 
@@ -945,9 +870,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Update status mahasiswa (aktif/nonaktif)
-     */
     @PutMapping("/api/mahasiswa/{id}/status")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -992,9 +914,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Update data mahasiswa
-     */
     @PutMapping("/api/mahasiswa/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1043,9 +962,6 @@ public class AdminController {
         }
     }
 
-    /**
-     * API: Import mahasiswa dari file Excel/CSV (berfungsi lengkap)
-     */
     @PostMapping("/api/mahasiswa/import")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1069,14 +985,13 @@ public class AdminController {
             List<String> successes = new ArrayList<>();
 
             if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
-                // Parse file Excel
+                
                 parseExcelFile(file, importedMahasiswa, errors, successes, "Mahasiswa");
             } else if (fileName.endsWith(".csv")) {
-                // Parse file CSV (akan kita implementasikan nanti)
+                
                 parseCSVFile(file, importedMahasiswa, errors, successes, "Mahasiswa");
             }
 
-            // Simpan mahasiswa yang berhasil diimport
             List<Map<String, Object>> savedMahasiswa = new ArrayList<>();
             for (User mahasiswa : importedMahasiswa) {
                 try {
@@ -1179,34 +1094,23 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
 
         } catch (Exception e) {
             return buildErrorResponse("Gagal mengambil data mahasiswa: " + e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // ============================
-    // API ENDPOINTS - KELOLA MATA KULIAH (AKTIF SAJA)
-    // ============================
-
-    /**
-     * API: Ambil semua mata kuliah AKTIF (JSON)
-     */
     @GetMapping("/api/mata-kuliah")
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> getAllMataKuliahApi(
-            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
             List<MataKuliah> mataKuliahList;
             
             if ("semua".equalsIgnoreCase(status)) {
                 mataKuliahList = mataKuliahRepository.findAll();
             } else if ("nonaktif".equalsIgnoreCase(status)) {
-                // Mengambil mata kuliah nonaktif
+                
                 mataKuliahList = mataKuliahRepository.findAll().stream()
                         .filter(mk -> !mk.isActive())
                         .collect(Collectors.toList());
             } else {
-                // Default: ambil hanya yang aktif
+                
                 mataKuliahList = mataKuliahRepository.findByIsActiveTrue();
             }
 
@@ -1239,9 +1143,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-    /**
-     * API: Cari mata kuliah AKTIF berdasarkan kode atau nama
-     */
     @GetMapping("/api/mata-kuliah/search")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1255,7 +1156,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
 
             String searchKeyword = keyword.trim().toLowerCase();
             
-            // Ambil data berdasarkan filter status
             List<MataKuliah> baseList;
             if ("semua".equalsIgnoreCase(status)) {
                 baseList = mataKuliahRepository.findAll();
@@ -1267,7 +1167,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                 baseList = mataKuliahRepository.findByIsActiveTrue();
             }
 
-            // Filter berdasarkan keyword
             List<MataKuliah> results = baseList.stream()
                     .filter(mk ->
                             mk.getKodeMK().toLowerCase().contains(searchKeyword) ||
@@ -1302,9 +1201,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-    /**
-     * API: Tambah mata kuliah baru (default aktif)
-     */
     @PostMapping("/api/mata-kuliah")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1345,7 +1241,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                 return buildErrorResponse("SKS harus berupa angka", HttpStatus.BAD_REQUEST);
             }
 
-            // Default status adalah aktif
             boolean isActive = true;
             if (mkData.containsKey("status") && mkData.get("status") != null) {
                 String status = mkData.get("status").toString();
@@ -1386,9 +1281,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-    /**
-     * API: Hapus mata kuliah (soft delete - nonaktifkan)
-     */
     @DeleteMapping("/api/mata-kuliah/{kode}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1404,7 +1296,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
             MataKuliah mataKuliah = mkOpt.get();
             String namaMk = mataKuliah.getNama();
 
-            // Soft delete: nonaktifkan mata kuliah
             mataKuliah.setActive(false);
             mataKuliahRepository.save(mataKuliah);
 
@@ -1420,9 +1311,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-    /**
-     * API: Update status mata kuliah (aktif/nonaktif)
-     */
     @PutMapping("/api/mata-kuliah/{kode}/status")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1478,9 +1366,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-    /**
-     * API: Update data mata kuliah
-     */
     @PutMapping("/api/mata-kuliah/{kode}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1534,7 +1419,7 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                         updated = true;
                     }
                 } catch (NumberFormatException e) {
-                    // Skip jika format salah
+                    
                 }
             }
 
@@ -1577,9 +1462,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-    /**
-     * API: Get mata kuliah by kode (untuk edit form)
-     */
     @GetMapping("/api/mata-kuliah/{kode}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1614,9 +1496,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-    /**
-     * API: Import mata kuliah dari file Excel/CSV (berfungsi lengkap)
-     */
     @PostMapping("/api/mata-kuliah/import")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1640,14 +1519,13 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
             List<String> successes = new ArrayList<>();
 
             if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
-                // Parse file Excel untuk mata kuliah
+                
                 parseExcelFileForMataKuliah(file, importedMataKuliah, errors, successes);
             } else if (fileName.endsWith(".csv")) {
-                // Parse file CSV untuk mata kuliah
+                
                 parseCSVFileForMataKuliah(file, importedMataKuliah, errors, successes);
             }
 
-            // Simpan mata kuliah yang berhasil diimport
             List<Map<String, Object>> savedMataKuliah = new ArrayList<>();
             for (MataKuliah mk : importedMataKuliah) {
                 try {
@@ -1688,9 +1566,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-     /**
-     * API: Download template Excel untuk import mata kuliah
-     */
     @GetMapping("/api/mata-kuliah/template")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1698,24 +1573,20 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Template Mata Kuliah");
             
-            // Create header row
             Row headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("Kode MK");
             headerRow.createCell(1).setCellValue("Nama Mata Kuliah");
             headerRow.createCell(2).setCellValue("SKS");
             
-            // Add example data
             Row exampleRow = sheet.createRow(1);
             exampleRow.createCell(0).setCellValue("IF4010");
             exampleRow.createCell(1).setCellValue("Pemrograman Web");
             exampleRow.createCell(2).setCellValue(3);
             
-            // Auto-size columns
             for (int i = 0; i < 3; i++) {
                 sheet.autoSizeColumn(i);
             }
             
-            // Convert to byte array
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
             
@@ -1729,10 +1600,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
 
-    // ============================
-    // HELPER METHODS
-    // ============================
-
     private String generateDosenNip() {
         List<User> dosenList = userRepository.findByRole("Dosen");
 
@@ -1745,7 +1612,7 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                     maxNumber = number;
                 }
             } catch (NumberFormatException e) {
-                //  jika bukan angka maka dilewat
+                
             }
         }
 
@@ -1798,7 +1665,7 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                         maxSequence = sequence;
                     }
                 } catch (NumberFormatException e) {
-                    // Skip jika bukan angka
+                    
                 }
             }
         }
@@ -1849,7 +1716,7 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                 return "Semester " + semester;
             }
         } catch (Exception e) {
-            // Ignore error
+            
         }
         
         return "-";
@@ -1877,9 +1744,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         return ResponseEntity.status(status).body(error);
     }
 
-    /**
-     * API: Test endpoint untuk debugging
-     */
     @GetMapping("/api/dosen/test")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> testDosenApi() {
@@ -1892,9 +1756,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * API: Test endpoint untuk debugging mahasiswa
-     */
     @GetMapping("/api/mahasiswa/test")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> testMahasiswaApi() {
@@ -1907,9 +1768,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * API: Test endpoint untuk debugging
-     */
     @GetMapping("/api/mata-kuliah/test")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> testMataKuliahApi() {
@@ -1926,20 +1784,13 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         return ResponseEntity.ok(response);
     }
 
-     // ============================
-    // HELPER METHODS FOR EXCEL PARSING
-    // ============================
-
-    /**
-     * Parse file Excel untuk dosen atau mahasiswa
-     */
     private void parseExcelFile(MultipartFile file, List<User> userList, 
             List<String> errors, List<String> successes, String role) throws Exception {
         
         try (InputStream inputStream = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(inputStream)) {
             
-            Sheet sheet = workbook.getSheetAt(0); // Ambil sheet pertama
+            Sheet sheet = workbook.getSheetAt(0); 
             Iterator<Row> rowIterator = sheet.iterator();
             
             int rowNumber = 0;
@@ -1947,18 +1798,16 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                 Row row = rowIterator.next();
                 rowNumber++;
                 
-                // Skip header row (row pertama)
                 if (rowNumber == 1) {
                     continue;
                 }
                 
                 try {
-                    // Ambil data dari setiap kolom
+                    
                     String id = getCellValueAsString(row.getCell(0));
                     String nama = getCellValueAsString(row.getCell(1));
                     String email = getCellValueAsString(row.getCell(2));
                     
-                    // Validasi data
                     if (id == null || id.trim().isEmpty()) {
                         errors.add("Baris " + rowNumber + ": ID/NIP/NPM tidak boleh kosong");
                         continue;
@@ -1969,13 +1818,11 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                         continue;
                     }
                     
-                    // Cek apakah sudah ada di database
                     if (userRepository.existsById(id)) {
                         errors.add("Baris " + rowNumber + ": " + id + " sudah terdaftar");
                         continue;
                     }
                     
-                    // Buat user baru
                     User user = new User();
                     user.setIdUser(id.trim());
                     user.setNama(nama.trim());
@@ -1983,7 +1830,7 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                     if (email != null && !email.trim().isEmpty()) {
                         user.setEmail(email.trim());
                     } else {
-                        // Generate email otomatis
+                        
                         if ("Dosen".equals(role)) {
                             user.setEmail(generateEmail(nama, id));
                         } else {
@@ -1991,11 +1838,10 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                         }
                     }
                     
-                    // Set password default (password123)
                     String defaultPassword = "$2a$10$lpXunJk2Te8/hHcfFFmpduViPATPUYuau.rAK1ckJbpDh5m8MSXV2";
                     user.setPassword(defaultPassword);
                     user.setRole(role);
-                    user.setActive(true); // Default aktif
+                    user.setActive(true); 
                     
                     userList.add(user);
                     successes.add("Baris " + rowNumber + ": " + nama + " berhasil diparsing");
@@ -2010,16 +1856,13 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
     
-    /**
-     * Parse file Excel untuk mata kuliah
-     */
     private void parseExcelFileForMataKuliah(MultipartFile file, List<MataKuliah> mkList,
             List<String> errors, List<String> successes) throws Exception {
         
         try (InputStream inputStream = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(inputStream)) {
             
-            Sheet sheet = workbook.getSheetAt(0); // Ambil sheet pertama
+            Sheet sheet = workbook.getSheetAt(0); 
             Iterator<Row> rowIterator = sheet.iterator();
             
             int rowNumber = 0;
@@ -2027,18 +1870,16 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                 Row row = rowIterator.next();
                 rowNumber++;
                 
-                // Skip header row (row pertama)
                 if (rowNumber == 1) {
                     continue;
                 }
                 
                 try {
-                    // Ambil data dari setiap kolom
+                    
                     String kode = getCellValueAsString(row.getCell(0));
                     String nama = getCellValueAsString(row.getCell(1));
                     String sksStr = getCellValueAsString(row.getCell(2));
                     
-                    // Validasi data
                     if (kode == null || kode.trim().isEmpty()) {
                         errors.add("Baris " + rowNumber + ": Kode mata kuliah tidak boleh kosong");
                         continue;
@@ -2049,14 +1890,12 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                         continue;
                     }
                     
-                    // Cek apakah sudah ada di database
                     if (mataKuliahRepository.existsById(kode.trim())) {
                         errors.add("Baris " + rowNumber + ": Kode " + kode + " sudah terdaftar");
                         continue;
                     }
                     
-                    // Parse SKS
-                    int sks = 3; // Default
+                    int sks = 3; 
                     if (sksStr != null && !sksStr.trim().isEmpty()) {
                         try {
                             sks = Integer.parseInt(sksStr.trim());
@@ -2070,12 +1909,11 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
                         }
                     }
                     
-                    // Buat mata kuliah baru
                     MataKuliah mk = new MataKuliah();
                     mk.setKodeMK(kode.trim().toUpperCase());
                     mk.setNama(nama.trim());
                     mk.setSks(sks);
-                    mk.setActive(true); // Default aktif
+                    mk.setActive(true); 
                     mk.setTugasList(new HashSet<>());
                     mk.setDosenList(new HashSet<>());
                     mk.setMahasiswaList(new HashSet<>());
@@ -2093,9 +1931,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
     
-    /**
-     * Helper method untuk membaca nilai sel Excel
-     */
     private String getCellValueAsString(Cell cell) {
         if (cell == null) {
             return null;
@@ -2127,21 +1962,15 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
     }
     
-    /**
-     * Parse file CSV untuk dosen atau mahasiswa (placeholder)
-     */
     private void parseCSVFile(MultipartFile file, List<User> userList,
             List<String> errors, List<String> successes, String role) throws Exception {
-        // Implementasi parsing CSV bisa ditambahkan di sini
+        
         throw new Exception("Parsing CSV belum diimplementasikan. Gunakan file Excel (.xlsx)");
     }
     
-    /**
-     * Parse file CSV untuk mata kuliah (placeholder)
-     */
     private void parseCSVFileForMataKuliah(MultipartFile file, List<MataKuliah> mkList,
             List<String> errors, List<String> successes) throws Exception {
-        // Implementasi parsing CSV bisa ditambahkan di sini
+        
         throw new Exception("Parsing CSV belum diimplementasikan. Gunakan file Excel (.xlsx)");
 
     }
@@ -2158,12 +1987,10 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
             return "redirect:/admin/kelola-mata-kuliah";
         }
 
-        // Consistent gradient index based on kode
         int gradientCount = 4;
         int colorIndex = Math.abs(kode.hashCode()) % gradientCount;
         model.addAttribute("colorIndex", colorIndex);
 
-        // Find coordinator (first active MataKuliahDosen for this MK)
         MataKuliahDosen koordinator = null;
         try {
             List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
@@ -2175,7 +2002,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
         model.addAttribute("koordinator", koordinator);
 
-        // Fetch tugas besar for this mata kuliah
         List<TugasBesar> tugasList = Collections.emptyList();
         try {
             tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
@@ -2183,7 +2009,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
             System.err.println("Error fetching tasks for MK: " + e.getMessage());
         }
 
-        // Fetch all classes (kelasList - MataKuliahDosen entries)
         List<MataKuliahDosen> kelasList = Collections.emptyList();
         try {
             kelasList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
@@ -2210,12 +2035,10 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
             return "redirect:/admin/matakuliah-kelas-detail";
         }
 
-        // Consistent gradient index based on kode
         int gradientCount = 4;
         int colorIndex = Math.abs(kode.hashCode()) % gradientCount;
         model.addAttribute("colorIndex", colorIndex);
 
-        // Find coordinator (first active MataKuliahDosen for this MK)
         MataKuliahDosen koordinator = null;
         try {
             List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
@@ -2227,7 +2050,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         }
         model.addAttribute("koordinator", koordinator);
 
-        // Fetch tugas besar for this mata kuliah
         List<TugasBesar> tugasList = Collections.emptyList();
         try {
             tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
@@ -2235,7 +2057,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
             System.err.println("Error fetching tasks for MK: " + e.getMessage());
         }
 
-        // Fetch all classes (kelasList - MataKuliahDosen entries)
         List<MataKuliahDosen> kelasList = Collections.emptyList();
         try {
             kelasList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kode, true);
@@ -2251,7 +2072,6 @@ public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
         return "admin/matakuliah-detail";
     }
    
-
 @GetMapping("/peserta-detail")
 public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required = false) Integer colorIndex,
                             @AuthenticationPrincipal CustomUserDetails user,
@@ -2260,39 +2080,32 @@ public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required 
 
     MataKuliah mk = mataKuliahRepository.findById(kodeMk).orElse(null);
     if (mk == null) {
-        return "redirect:/admin/matakuliah-detail";
+        return "redirect:/admin/dashboard";
     }
 
         int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
         model.addAttribute("colorIndex", finalColorIndex);
 
-    // Ambil semua dosen aktif untuk MK ini
     List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
 
-    // Tentukan koordinator (misalnya ambil index pertama)
     MataKuliahDosen koordinator = dosenList.isEmpty() ? null : dosenList.get(0);
 
-    // Ambil mahasiswa aktif
     List<MataKuliahMahasiswa> mahasiswaList = mkMahasiswaRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
 
-    // Gabungkan ke DTO untuk view
     List<PesertaMatkulDTO> combinedPesertaList = new ArrayList<>();
     int no = 1;
 
-    // Tambahkan koordinator
     if (koordinator != null) {
         combinedPesertaList.add(new PesertaMatkulDTO(no++, koordinator.getUser().getNama(),
                 koordinator.getUser().getIdUser(), "Koordinator"));
     }
 
-    // Tambahkan dosen pengampu lain (selain koordinator)
     for (int i = 1; i < dosenList.size(); i++) {
         User dosenUser = dosenList.get(i).getUser();
         combinedPesertaList.add(new PesertaMatkulDTO(no++, dosenUser.getNama(),
                 dosenUser.getIdUser(), "Pengampu"));
     }
 
-    // Tambahkan mahasiswa
     for (MataKuliahMahasiswa mhs : mahasiswaList) {
         combinedPesertaList.add(new PesertaMatkulDTO(no++, mhs.getUser().getNama(),
                 mhs.getUser().getIdUser(), "Mahasiswa"));
@@ -2305,5 +2118,4 @@ public String detailPeserta(@RequestParam String kodeMk, @RequestParam(required 
 
     return "admin/peserta-detail";
 }
-
 }

@@ -33,7 +33,7 @@ public class MataKuliahDosen {
     private boolean isActive = true;
 
     @Transient
-    private int colorIndex; // untuk frontend, tidak disimpan ke DB
+    private int colorIndex;
 
     public int getColorIndex() {
         return colorIndex;

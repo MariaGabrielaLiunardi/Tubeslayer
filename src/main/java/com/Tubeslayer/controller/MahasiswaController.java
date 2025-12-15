@@ -112,7 +112,6 @@ public class MahasiswaController {
         model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
         model.addAttribute("semesterLabel", semesterLabel);
 
-        // Logic semester untuk query (tetap sama)
         String tahunAkademik = (today.getMonthValue() >= 7) ? year + "/" + (year + 1) : (year - 1) + "/" + year;
         model.addAttribute("semester", tahunAkademik);
 
@@ -121,47 +120,35 @@ public class MahasiswaController {
         model.addAttribute("jumlahMk", jumlahMk);
         model.addAttribute("jumlahTb", jumlahTb);
 
-        // --- PERBAIKAN UTAMA DI SINI ---
-        
-        // 1. Ambil data sebagai enrollList (MataKuliahMahasiswa), BUKAN MataKuliah biasa
-        // Agar sesuai dengan dashboard.html yang memanggil enroll.mataKuliah.nama
         List<MataKuliahMahasiswa> enrollList = mkmRepo.findByUser_IdUserAndIsActive(user.getIdUser(), true);
 
-        // 2. Filter manual agar hanya mata kuliah semester ini yang muncul di dashboard (Opsional, tergantung kebutuhan)
-        // Jika ingin menampilkan semua yang aktif, filter ini bisa dihapus.
         List<MataKuliahMahasiswa> filteredEnrollList = enrollList.stream()
             .filter(e -> {
-                 // Cek null safety jika diperlukan
+                 
                  return e.getMataKuliah() != null; 
-                 // Tambahkan logika filter semester di sini jika perlu, misal:
-                 // && e.getMataKuliah().getSemester().equals(tahunAkademik)
+                 
             })
             .collect(Collectors.toList());
 
-        // 3. Set Color Index KONSISTEN menggunakan HashCode Kode MK
         int gradientCount = 4;
         for (MataKuliahMahasiswa enroll : filteredEnrollList) {
             String kodeMK = enroll.getMataKuliah().getKodeMK();
-            // Math.abs untuk menghindari angka negatif
+            
             int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
             enroll.setColorIndex(colorIndex);
         }
 
-        // Sort berdasarkan nama
         filteredEnrollList.sort(Comparator.comparing(mk -> mk.getMataKuliah().getNama()));
 
-        // Batasi hanya 4 mata kuliah di dashboard
         List<MataKuliahMahasiswa> limitedEnrollList = filteredEnrollList.stream()
             .limit(4)
             .collect(Collectors.toList());
 
-        // Kirim dengan nama variabel 'enrollList' agar cocok dengan HTML
         model.addAttribute("enrollList", limitedEnrollList); 
 
         return "mahasiswa/dashboard";
     }
 
-    // 1. Mapping untuk halaman daftar semua mata kuliah
     @GetMapping("/mahasiswa/mata-kuliah")
     public String mataKuliah(@AuthenticationPrincipal CustomUserDetails user, Model model) {
 
@@ -169,10 +156,9 @@ public class MahasiswaController {
 
         List<MataKuliahMahasiswa> enrollList = mkmRepo.findByUser_IdUserAndIsActive(idMahasiswa, true);
 
-        // --- PERBAIKAN KONSISTENSI WARNA ---
         int gradientCount = 4;
         enrollList.forEach(enroll -> {
-            // Gunakan HashCode Kode MK (KONSISTEN)
+            
             String kodeMK = enroll.getMataKuliah().getKodeMK();
             int colorIndex = Math.abs(kodeMK.hashCode()) % gradientCount;
             enroll.setColorIndex(colorIndex);
@@ -183,7 +169,6 @@ public class MahasiswaController {
         model.addAttribute("enrollList", enrollList);
         model.addAttribute("user", user);
 
-        // --- LOGIC SEMESTER ---
         LocalDate today = LocalDate.now();
         int year = today.getYear();
         String semesterTahunAjaran; 
@@ -201,8 +186,7 @@ public class MahasiswaController {
 
         model.addAttribute("semesterTahunAjaran", semesterTahunAjaran);
         model.addAttribute("semesterLabel", semesterLabel);
-        // --------------------------------------------------------
-
+        
         return "mahasiswa/mata-kuliah";
     }
 
@@ -221,12 +205,10 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Gradient konsisten berdasarkan kodeMK
-        int gradientCount = 4; // jumlah gradient
+        int gradientCount = 4; 
         int colorIndex = Math.abs(kodeMk.hashCode()) % gradientCount;
         model.addAttribute("colorIndex", colorIndex);
 
-        // Koordinator dosen
         MataKuliahDosen koordinator = null;
         List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
         if (!dosenList.isEmpty()) {
@@ -261,7 +243,6 @@ public class MahasiswaController {
         int finalColorIndex = (colorIndex != null && colorIndex >= 0) ? colorIndex : 0;
         model.addAttribute("colorIndex", finalColorIndex);
 
-        // --- 1. MENGAMBIL DATA KOORDINATOR ---
         MataKuliahDosen koordinatorDosen = null;
         try {
             List<MataKuliahDosen> dosenList = mkDosenRepo.findByMataKuliah_KodeMKAndIsActive(kodeMk, true);
@@ -273,8 +254,6 @@ public class MahasiswaController {
             }
         model.addAttribute("koordinator", koordinatorDosen); 
 
-
-        // --- 2. MENGAMBIL DATA PESERTA MAHASISWA ---
         List<MataKuliahMahasiswa> listPeserta = Collections.emptyList();
     
         if (mkmRepo != null) {
@@ -285,11 +264,9 @@ public class MahasiswaController {
             }
         }
     
-        // --- 3. GABUNGKAN DOSEN DAN MAHASISWA MENGGUNAKAN DTO ---
         List<PesertaMatkulDTO> combinedList = new ArrayList<>();
         int counter = 1;
 
-        // 3.1. Tambahkan Dosen Koordinator (Baris 1)
         if (koordinatorDosen != null) {
             combinedList.add(new PesertaMatkulDTO(
                 counter++, 
@@ -299,7 +276,6 @@ public class MahasiswaController {
             ));
         }
     
-        // 3.2. Konversi Mahasiswa ke DTO
         List<PesertaMatkulDTO> mahasiswaDTOs = listPeserta.stream()
             .map(rel -> new PesertaMatkulDTO(
                 0, 
@@ -310,10 +286,8 @@ public class MahasiswaController {
             ))
         .collect(Collectors.toList());
         
-        // 3.3. Urutkan Mahasiswa berdasarkan Nama
         mahasiswaDTOs.sort(Comparator.comparing(PesertaMatkulDTO::getNama));
 
-        // 3.4. Gabungkan dan update nomor urut
         combinedList.addAll(mahasiswaDTOs);
         for (int i = 1; i < combinedList.size(); i++) {
             combinedList.get(i).setNo(counter++);
@@ -321,8 +295,8 @@ public class MahasiswaController {
 
         model.addAttribute("mkDetail", mk);
         model.addAttribute("user", user); 
-        model.addAttribute("combinedPesertaList", combinedList); // List baru untuk tabel
-        model.addAttribute("pesertaCount", listPeserta.size()); // Jumlah HANYA Mahasiswa
+        model.addAttribute("combinedPesertaList", combinedList); 
+        model.addAttribute("pesertaCount", listPeserta.size()); 
 
         return "mahasiswa/matkul-peserta";
     }
@@ -357,7 +331,6 @@ public class MahasiswaController {
             System.err.println("Error fetching coordinator: " + e.getMessage());
         }
 
-        // Data untuk kelola anggota menggunakan JDBC
         String modeKelompok = kelompokJdbcService.getModeKelompok(idTugas);
         boolean hasKelompok = kelompokJdbcService.hasKelompok(idTugas, user.getIdUser());
         boolean isLeader = kelompokJdbcService.isLeader(idTugas, user.getIdUser());
@@ -392,16 +365,9 @@ public class MahasiswaController {
         model.addAttribute("namaKelompok", namaKelompok != null ? namaKelompok : "Belum ada kelompok");
         model.addAttribute("anggotaPreview", anggotaList);
         
-
         return "hlmn_tubes/hlmtubes";
     }
 
-    // ============= JDBC API ENDPOINTS =============
-
-    /**
-     * API Endpoint untuk search mahasiswa
-     * POST /mahasiswa/api/search-mahasiswa
-     */
     @PostMapping("/mahasiswa/api/search-mahasiswa")
     @ResponseBody
     public ResponseEntity<?> searchMahasiswa(
@@ -409,7 +375,7 @@ public class MahasiswaController {
             @AuthenticationPrincipal CustomUserDetails user) {
 
         try {
-            // Validasi input
+            
             if (!request.containsKey("idTugas") || !request.containsKey("keyword")) {
                 return ResponseEntity.badRequest()
                     .body(createErrorResponse("idTugas dan keyword harus diisi"));
@@ -423,7 +389,6 @@ public class MahasiswaController {
                     .body(createErrorResponse("Keyword tidak boleh kosong"));
             }
 
-            // Search menggunakan JDBC
             List<MahasiswaSearchDTO> results = 
                 kelompokJdbcService.searchMahasiswa(idTugas, keyword);
 
@@ -440,10 +405,6 @@ public class MahasiswaController {
         }
     }
 
-    /**
-     * API Endpoint untuk get anggota kelompok
-     * GET /mahasiswa/api/anggota-kelompok?idTugas=1
-     */
     @GetMapping("/mahasiswa/api/anggota-kelompok")
     @ResponseBody
     public ResponseEntity<?> getAnggotaKelompok(
@@ -464,10 +425,6 @@ public class MahasiswaController {
         }
     }
 
-    /**
-     * API Endpoint untuk tambah anggota
-     * POST /mahasiswa/api/tambah-anggota
-     */
     @PostMapping("/mahasiswa/api/tambah-anggota")
     @ResponseBody
     public ResponseEntity<?> tambahAnggota(
@@ -475,7 +432,7 @@ public class MahasiswaController {
             @AuthenticationPrincipal CustomUserDetails user) {
 
         try {
-            // Validasi input
+            
             if (!request.containsKey("idTugas") || !request.containsKey("idAnggota")) {
                 return ResponseEntity.badRequest()
                     .body(createErrorResponse("idTugas dan idAnggota harus diisi"));
@@ -484,10 +441,8 @@ public class MahasiswaController {
             Integer idTugas = Integer.parseInt(request.get("idTugas").toString());
             String idAnggota = request.get("idAnggota").toString();
 
-            // Tambah anggota menggunakan JDBC
             kelompokJdbcService.tambahAnggota(idTugas, user.getIdUser(), idAnggota);
 
-            // Hitung ulang jumlah anggota
             int jumlahAnggota = kelompokJdbcService.countAnggota(idTugas, user.getIdUser());
 
             Map<String, Object> response = new HashMap<>();
@@ -508,10 +463,6 @@ public class MahasiswaController {
         }
     }
 
-    /**
-     * API Endpoint untuk hapus anggota
-     * POST /mahasiswa/api/hapus-anggota
-     */
     @PostMapping("/mahasiswa/api/hapus-anggota")
     @ResponseBody
     public ResponseEntity<?> hapusAnggota(
@@ -519,7 +470,7 @@ public class MahasiswaController {
             @AuthenticationPrincipal CustomUserDetails user) {
 
         try {
-            // Validasi input
+            
             if (!request.containsKey("idTugas") || !request.containsKey("idAnggota")) {
                 return ResponseEntity.badRequest()
                     .body(createErrorResponse("idTugas dan idAnggota harus diisi"));
@@ -528,10 +479,8 @@ public class MahasiswaController {
             Integer idTugas = Integer.parseInt(request.get("idTugas").toString());
             String idAnggota = request.get("idAnggota").toString();
 
-            // Hapus anggota menggunakan JDBC
             kelompokJdbcService.hapusAnggota(idTugas, user.getIdUser(), idAnggota);
 
-            // Hitung ulang jumlah anggota
             int jumlahAnggota = kelompokJdbcService.countAnggota(idTugas, user.getIdUser());
 
             Map<String, Object> response = new HashMap<>();
@@ -552,21 +501,12 @@ public class MahasiswaController {
         }
     }
 
-    /**
-     * Helper method untuk create error response
-     */
     private Map<String, String> createErrorResponse(String message) {
         Map<String, String> error = new HashMap<>();
         error.put("error", message);
         return error;
     }
 
-    // ============= NILAI ENDPOINTS =============
-
-    /**
-     * Dashboard Nilai - Mahasiswa melihat list tugas dan nilainya
-     * GET /mahasiswa/dashboard-nilai?mk=<kodeMk>&idTugas=<idTugas>
-     */
     @GetMapping("/mahasiswa/dashboard-nilai")
     public String dashboardNilai(@RequestParam(required = false) String mk,
                                  @RequestParam(required = false) Integer idTugas,
@@ -584,7 +524,6 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Cek apakah mahasiswa enrolled di mata kuliah ini
         List<MataKuliahMahasiswa> enrollments = mkmRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
         boolean isEnrolled = enrollments.stream()
             .anyMatch(e -> e.getUser().getIdUser().equals(user.getIdUser()));
@@ -597,7 +536,6 @@ public class MahasiswaController {
         model.addAttribute("kodeMk", mk);
         model.addAttribute("mataKuliah", mataKuliah);
 
-        // Ambil semua tugas untuk mata kuliah ini
         List<TugasBesar> tugasList = tugasRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
         tugasList.sort(Comparator.comparing(TugasBesar::getJudulTugas));
         model.addAttribute("tugasList", tugasList);
@@ -605,10 +543,6 @@ public class MahasiswaController {
         return "nilai/Mahasiswa/dashboard-nilai-mahasiswa";
     }
 
-    /**
-     * Lihat Nilai Detail - Mahasiswa melihat nilai pribadi dan kelompok
-     * GET /mahasiswa/pemberian-nilai?mk=<kodeMk>&idTugas=<idTugas>
-     */
     @GetMapping("/mahasiswa/pemberian-nilai")
     public String pemberianNilai(@RequestParam(required = false) String mk,
                                  @RequestParam(required = false) Integer idTugas,
@@ -621,13 +555,11 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Validasi mata kuliah
         MataKuliah mataKuliah = mataKuliahRepo.findById(mk).orElse(null);
         if (mataKuliah == null) {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Cek apakah mahasiswa enrolled
         List<MataKuliahMahasiswa> enrollments = mkmRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
         boolean isEnrolled = enrollments.stream()
             .anyMatch(e -> e.getUser().getIdUser().equals(user.getIdUser()));
@@ -636,7 +568,6 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Validasi tugas
         TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
         if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(mk)) {
             return "redirect:/mahasiswa/dashboard-nilai?mk=" + mk;
@@ -648,13 +579,12 @@ public class MahasiswaController {
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("tugas", tugas);
 
-        // Cari nilai pribadi mahasiswa untuk tugas ini
         Nilai nilaiPribadi = nilaiRepository
             .findByUser_IdUserAndTugas_IdTugas(user.getIdUser(), idTugas)
             .orElse(null);
 
         if (nilaiPribadi != null) {
-            // Prepare data untuk nilai pribadi
+            
             Map<String, Object> nilaiPribadiData = new HashMap<>();
             nilaiPribadiData.put("nilaiAkhir", nilaiPribadi.getNilaiPribadi());
             
@@ -673,15 +603,12 @@ public class MahasiswaController {
             model.addAttribute("nilaiPribadi", nilaiPribadiData);
         }
 
-        // Cari kelompok dan nilai kelompok mahasiswa
         Integer idKelompok = kelompokJdbcService.getIdKelompok(idTugas, user.getIdUser());
         if (idKelompok != null && idKelompok > 0) {
             Kelompok kelompok = kelompokRepo.findById(idKelompok).orElse(null);
             if (kelompok != null) {
                 model.addAttribute("namaKelompok", kelompok.getNamaKelompok());
 
-                // Cari nilai kelompok (nilai tertinggi yang terkait dengan tugas dan kelompok ini)
-                // Kita ambil nilai dari salah satu anggota kelompok yang memiliki nilaiKelompok
                 List<Nilai> nilaiKelompokList = nilaiRepository.findByTugasAndKelompok(idTugas, idKelompok);
                 
                 Nilai nilaiKelompokData = null;
@@ -716,10 +643,6 @@ public class MahasiswaController {
         return "nilai/Mahasiswa/pemberian-nilai-mahasiswa";
     }
 
-    /**
-     * GET /mahasiswa/lihat-nilai?mk=<kodeMk>&idTugas=<idTugas>
-     * Redirect to pemberian-nilai - detail view of grades
-     */
     @GetMapping("/mahasiswa/lihat-nilai")
     public String lihatNilai(@RequestParam(required = false) String mk,
                             @RequestParam(required = false) Integer idTugas,
@@ -732,13 +655,11 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Validasi mata kuliah
         MataKuliah mataKuliah = mataKuliahRepo.findById(mk).orElse(null);
         if (mataKuliah == null) {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Cek apakah mahasiswa enrolled
         List<MataKuliahMahasiswa> enrollments = mkmRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
         boolean isEnrolled = enrollments.stream()
             .anyMatch(e -> e.getUser().getIdUser().equals(user.getIdUser()));
@@ -747,7 +668,6 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Validasi tugas
         TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
         if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(mk)) {
             return "redirect:/mahasiswa/dashboard-nilai?mk=" + mk;
@@ -759,13 +679,12 @@ public class MahasiswaController {
         model.addAttribute("mataKuliah", mataKuliah);
         model.addAttribute("tugas", tugas);
 
-        // Cari nilai pribadi mahasiswa untuk tugas ini
         Nilai nilaiPribadi = nilaiRepository
             .findByUser_IdUserAndTugas_IdTugas(user.getIdUser(), idTugas)
             .orElse(null);
 
         if (nilaiPribadi != null) {
-            // Prepare data untuk nilai pribadi
+            
             Map<String, Object> nilaiPribadiData = new HashMap<>();
             nilaiPribadiData.put("nilaiAkhir", nilaiPribadi.getNilaiPribadi());
             
@@ -784,15 +703,12 @@ public class MahasiswaController {
             model.addAttribute("nilaiPribadi", nilaiPribadiData);
         }
 
-        // Cari kelompok dan nilai kelompok mahasiswa
         Integer idKelompok = kelompokJdbcService.getIdKelompok(idTugas, user.getIdUser());
         if (idKelompok != null && idKelompok > 0) {
             Kelompok kelompok = kelompokRepo.findById(idKelompok).orElse(null);
             if (kelompok != null) {
                 model.addAttribute("namaKelompok", kelompok.getNamaKelompok());
 
-                // Cari nilai kelompok (nilai tertinggi yang terkait dengan tugas dan kelompok ini)
-                // Kita ambil nilai dari salah satu anggota kelompok yang memiliki nilaiKelompok
                 List<Nilai> nilaiKelompokList = nilaiRepository.findByTugasAndKelompok(idTugas, idKelompok);
                 
                 Nilai nilaiKelompokData = null;
@@ -827,9 +743,6 @@ public class MahasiswaController {
         return "nilai/Mahasiswa/lihat-nilai-mahasiswa";
     }
 
-    /**
-     * GET - Mahasiswa view Rubrik Penilaian (read-only)
-     */
     @GetMapping("/mahasiswa/rubrik-penilaian")
     public String mahasiswaRubrikPenilaian(
             @RequestParam(required = false) String mk,
@@ -846,7 +759,6 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Cek apakah mahasiswa enrolled
         List<MataKuliahMahasiswa> enrollments = mkmRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
         boolean isEnrolled = enrollments.stream()
             .anyMatch(e -> e.getUser().getIdUser().equals(user.getIdUser()));
@@ -860,7 +772,6 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Prepare rubrik items untuk display
         List<Map<String, Object>> rubrikItems = new ArrayList<>();
         int totalBobot = 0;
         boolean hasRubrik = false;
@@ -895,9 +806,6 @@ public class MahasiswaController {
         return "nilai/Mahasiswa/rubrik-penilaian-mahasiswa";
     }
 
-    /**
-     * GET - Mahasiswa view Jadwal Penilaian (read-only)
-     */
     @GetMapping("/mahasiswa/jadwal-penilaian")
     public String mahasiswaJadwalPenilaian(
             @RequestParam(required = false) String mk,
@@ -914,7 +822,6 @@ public class MahasiswaController {
             return "redirect:/mahasiswa/mata-kuliah";
         }
 
-        // Cek apakah mahasiswa enrolled
         List<MataKuliahMahasiswa> enrollments = mkmRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
         boolean isEnrolled = enrollments.stream()
             .anyMatch(e -> e.getUser().getIdUser().equals(user.getIdUser()));
@@ -937,9 +844,6 @@ public class MahasiswaController {
         return "nilai/Mahasiswa/jadwal-penilaian-mahasiswa";
     }
 
-    /**
-     * GET - Mahasiswa get jadwal penilaian list (API endpoint for AJAX)
-     */
     @GetMapping("/mahasiswa/jadwal-penilaian/get")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getJadwalPenilaianMahasiswa(
@@ -956,7 +860,6 @@ public class MahasiswaController {
                 return ResponseEntity.ok(response);
             }
 
-            // Cek enrollment
             List<MataKuliahMahasiswa> enrollments = mkmRepo.findByMataKuliah_KodeMKAndIsActive(mk, true);
             boolean isEnrolled = enrollments.stream()
                 .anyMatch(e -> e.getUser().getIdUser().equals(user.getIdUser()));
@@ -967,7 +870,6 @@ public class MahasiswaController {
                 return ResponseEntity.ok(response);
             }
 
-            // Get tugas spesifik
             TugasBesar tugas = tugasRepo.findById(idTugas).orElse(null);
             if (tugas == null || !tugas.getMataKuliah().getKodeMK().equals(mk) || !tugas.isActive()) {
                 response.put("success", false);
@@ -975,7 +877,6 @@ public class MahasiswaController {
                 return ResponseEntity.ok(response);
             }
 
-            // Get rubrik dan komponennya
             RubrikNilai rubrik = tugas.getRubrik();
             List<Map<String, Object>> jadwalList = new ArrayList<>();
 

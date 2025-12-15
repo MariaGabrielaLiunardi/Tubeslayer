@@ -1,6 +1,4 @@
-@import url('penilaian-dosen-base.css');
-
-/* === PAGE-SPECIFIC: Jadwal Penilaian Dosen === */
+/* === PAGE-SPECIFIC: Jadwal Penilaian Mahasiswa === */
 
 /* Breadcrumb Navigation */
 .breadcrumb-nav {
@@ -8,7 +6,6 @@
     align-items: center;
     align-self: start; 
     justify-content: flex-start;
-    top: 40px; 
     position: relative;
     gap: 12px;
     padding: 0 0 15px 0;
