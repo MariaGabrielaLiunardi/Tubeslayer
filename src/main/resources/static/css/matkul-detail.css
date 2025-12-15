@@ -429,3 +429,11 @@ body {
 .breadcrumb a:hover {
   color: #0078b5;
 }
+
+a{
+  text-decoration: none;
+}
+
+.tab active{
+  text-decoration: none;
+}
