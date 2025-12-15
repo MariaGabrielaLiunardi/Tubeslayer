@@ -1022,40 +1022,53 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/api/mahasiswa/template")
-    @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Template Mahasiswa");
-            
-            Row headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue("NPM");
-            headerRow.createCell(1).setCellValue("Nama");
-            headerRow.createCell(2).setCellValue("Email (opsional)");
-            
-            Row exampleRow = sheet.createRow(1);
-            exampleRow.createCell(0).setCellValue("20241001");
-            exampleRow.createCell(1).setCellValue("Jane Smith");
-            exampleRow.createCell(2).setCellValue("jane.smith@student.unpar.ac.id");
-            
-            for (int i = 0; i < 3; i++) {
-                sheet.autoSizeColumn(i);
-            }
-            
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            workbook.write(outputStream);
-            
-            return ResponseEntity.ok()
-                    .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                    .header("Content-Disposition", "attachment; filename=template_import_mahasiswa.xlsx")
-                    .body(outputStream.toByteArray());
-                    
-        } catch (Exception e) {
-            throw new Exception("Gagal membuat template: " + e.getMessage());
+     /**
+     * API: Download template Excel untuk import mahasiswa
+     */
+ @GetMapping("/api/mahasiswa/template")
+@ResponseBody
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<byte[]> downloadMahasiswaTemplate() throws Exception {
+    try (Workbook workbook = new XSSFWorkbook()) {
+        Sheet sheet = workbook.createSheet("Template Mahasiswa");
+
+        // ===== STYLE TEXT =====
+        CellStyle textStyle = workbook.createCellStyle();
+        DataFormat format = workbook.createDataFormat();
+        textStyle.setDataFormat(format.getFormat("@"));
+
+        // ⬅️ INI YANG WAJIB (KAMU BELUM PUNYA)
+        sheet.setDefaultColumnStyle(0, textStyle);
+
+        // Header
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("NPM");
+        headerRow.createCell(1).setCellValue("Nama");
+        headerRow.createCell(2).setCellValue("Email (opsional)");
+
+        // Example
+        Row exampleRow = sheet.createRow(1);
+        exampleRow.createCell(0).setCellValue("06182301066"); // 10 digit
+        exampleRow.createCell(1).setCellValue("Jane Smith");
+        exampleRow.createCell(2).setCellValue("jane.smith@student.unpar.ac.id");
+
+        for (int i = 0; i < 3; i++) {
+            sheet.autoSizeColumn(i);
         }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                .header("Content-Disposition", "attachment; filename=template_import_mahasiswa.xlsx")
+                .body(outputStream.toByteArray());
     }
-    
+}
+
+    /**
+     * API: Get mahasiswa by ID (untuk edit form)
+     */
     @GetMapping("/api/mahasiswa/{id}")
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
@@ -1081,15 +1094,11 @@ public class AdminController {
 
         } catch (Exception e) {
             return buildErrorResponse("Gagal mengambil data mahasiswa: " + e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/api/mata-kuliah")
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, Object>> getAllMataKuliahApi(
-            @RequestParam(required = false, defaultValue = "aktif") String status) {
         try {
             List<MataKuliah> mataKuliahList;
             
@@ -1925,8 +1934,8 @@ public class AdminController {
     private String getCellValueAsString(Cell cell) {
         if (cell == null) {
             return null;
-        }
-        
+        } 
+
         switch (cell.getCellType()) {
             case STRING:
                 return cell.getStringCellValue();
@@ -1934,8 +1943,8 @@ public class AdminController {
                 if (DateUtil.isCellDateFormatted(cell)) {
                     return cell.getDateCellValue().toString();
                 } else {
-                    
-                    double num = cell.getNumericCellValue();
+                    // Format numeric tanpa desimal jika integer
+                    long num = cell.getNumericCellValue();
                     if (num == (int) num) {
                         return String.valueOf((int) num);
                     } else {

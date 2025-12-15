@@ -222,47 +222,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ==================== API FUNCTIONS ====================
     async function loadMahasiswaData() {
-        try {
-            showLoading(true);
-            console.log("📡 Fetching from:", API_MAHASISWA);
-            
-            const response = await fetch(API_MAHASISWA, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
-            
-            console.log("Response Status:", response.status);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    try {
+        showLoading(true);
+        console.log("📡 Fetching from:", API_MAHASISWA);
+        
+        const response = await fetch(API_MAHASISWA, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             }
-            
-            const result = await response.json();
-            console.log("API Response:", result);
-            
-            if (result.status === "success" || result.success) {
-                daftarMahasiswa = result.data || [];
-                renderMahasiswaTable();
-                updateCount(daftarMahasiswa.length);
-                console.log(`✅ Loaded ${daftarMahasiswa.length} mahasiswa`);
-            } else {
-                throw new Error(result.message || "Failed to load data");
-            }
-        } catch (error) {
-            console.error("❌ Error loading data:", error);
-            showMessage("Gagal memuat data mahasiswa: " + error.message, "error");
-            
-            // Fallback: show empty state
-            daftarMahasiswa = [];
-            renderMahasiswaTable();
-            updateCount(0);
-        } finally {
-            showLoading(false);
+        });
+        
+        console.log("Response Status:", response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
+        
+        const result = await response.json();
+        console.log("API Response:", result);
+        
+        if (result.status === "success" || result.success) {
+            // Konversi NPM ke string
+            daftarMahasiswa = (result.data || []).map(mahasiswa => ({
+                ...mahasiswa,
+                npm: mahasiswa.npm ? mahasiswa.npm.toString() : null
+            }));
+            
+            renderMahasiswaTable();
+            updateCount(daftarMahasiswa.length);
+            console.log(`✅ Loaded ${daftarMahasiswa.length} mahasiswa`);
+        } else {
+            throw new Error(result.message || "Failed to load data");
+        }
+    } catch (error) {
+        console.error("❌ Error loading data:", error);
+        showMessage("Gagal memuat data mahasiswa: " + error.message, "error");
+        
+        // Fallback: show empty state
+        daftarMahasiswa = [];
+        renderMahasiswaTable();
+        updateCount(0);
+    } finally {
+        showLoading(false);
     }
+}
 
     async function addMahasiswa(mahasiswaData) {
         try {
@@ -335,69 +340,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ==================== RENDER FUNCTIONS ====================
     function renderMahasiswaTable() {
-        if (!elements.tableView) {
-            console.error("Table view element not found!");
-            return;
-        }
-        
-        // Clear existing data rows (keep header)
-        const existingRows = elements.tableView.querySelectorAll('.data-row');
-        existingRows.forEach(row => {
-            if (row.parentNode) {
-                row.parentNode.removeChild(row);
-            }
-        });
-        
-        const data = getActiveData();
-        const totalPages = Math.ceil(data.length / pageSize) || 1;
-        if (currentPage > totalPages) currentPage = totalPages;
-        if (currentPage < 1) currentPage = 1;
-
-        const start = (currentPage - 1) * pageSize;
-        const pageItems = data.slice(start, start + pageSize);
-
-        if (pageItems.length === 0) {
-            const emptyRow = document.createElement('div');
-            emptyRow.className = 'data-row';
-            emptyRow.style.textAlign = 'center';
-            emptyRow.style.padding = '20px';
-            emptyRow.style.color = '#666';
-            emptyRow.innerHTML = `
-                <span style="grid-column: 1 / -1">Tidak ada data mahasiswa</span>
-            `;
-            elements.tableView.appendChild(emptyRow);
-            updateCount(0);
-            updatePaginationInfo(0);
-            return;
-        }
-
-        // Render only the page slice
-        pageItems.forEach((mahasiswa, idx) => {
-            const row = document.createElement('div');
-            row.className = 'data-row';
-
-            const statusText = mahasiswa.status || (mahasiswa.isActive ? 'Aktif' : 'Nonaktif');
-            const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
-
-            row.innerHTML = `
-                <span>${start + idx + 1}.</span>
-                <span>${mahasiswa.npm || mahasiswa.id || '-'}</span>
-                <span>${mahasiswa.nama || '-'}</span>
-                <span>${mahasiswa.email || '-'}</span>
-                <span>
-                    <span class="status-badge ${statusClass}">
-                        ${statusText}
-                    </span>
-                </span>
-            `;
-
-            elements.tableView.appendChild(row);
-        });
-
-        // Update count and pagination info
-        updateCount(data.length);
-        updatePaginationInfo(totalPages);
+    if (!elements.tableView) {
+        console.error("Table view element not found!");
+        return;
     }
+    
+    // Clear existing data rows (keep header)
+    const existingRows = elements.tableView.querySelectorAll('.data-row');
+    existingRows.forEach(row => {
+        if (row.parentNode) {
+            row.parentNode.removeChild(row);
+        }
+    });
+    
+    const data = getActiveData();
+    const totalPages = Math.ceil(data.length / pageSize) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const start = (currentPage - 1) * pageSize;
+    const pageItems = data.slice(start, start + pageSize);
+
+    if (pageItems.length === 0) {
+        const emptyRow = document.createElement('div');
+        emptyRow.className = 'data-row';
+        emptyRow.style.textAlign = 'center';
+        emptyRow.style.padding = '20px';
+        emptyRow.style.color = '#666';
+        emptyRow.innerHTML = `
+            <span style="grid-column: 1 / -1">Tidak ada data mahasiswa</span>
+        `;
+        elements.tableView.appendChild(emptyRow);
+        updateCount(0);
+        updatePaginationInfo(0);
+        return;
+    }
+
+    // Render hanya slice halaman saat ini
+    pageItems.forEach((mahasiswa, idx) => {
+        const row = document.createElement('div');
+        row.className = 'data-row';
+
+        const statusText = mahasiswa.status || (mahasiswa.isActive ? 'Aktif' : 'Nonaktif');
+        const statusClass = statusText === 'Aktif' ? 'active' : 'inactive';
+        
+        // Format NPM sebagai string 
+        const npmDisplay = mahasiswa.npm ? 
+            mahasiswa.npm.toString() :
+            mahasiswa.id || '-';
+
+        row.innerHTML = `
+            <span>${start + idx + 1}.</span>
+            <span>${npmDisplay}</span> 
+            <span>${mahasiswa.nama || '-'}</span>
+            <span>${mahasiswa.email || '-'}</span>
+            <span>
+                <span class="status-badge ${statusClass}">
+                    ${statusText}
+                </span>
+            </span>
+        `;
+
+        elements.tableView.appendChild(row);
+    });
+
+    // Update count dan info pagination
+    updateCount(data.length);
+    updatePaginationInfo(totalPages);
+}
 
     function updateCount(count) {
         if (!elements.listTitle) return;
@@ -509,53 +519,70 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    async function handleFormSubmit(e) {
-        e.preventDefault();
-        
-        const npm = document.getElementById("npm-mahasiswa")?.value.trim();
-        const nama = document.getElementById("nama-mahasiswa")?.value.trim();
-        const status = document.getElementById("status-mahasiswa")?.value;
-        
-        if (!nama) {
-            showMessage("Nama mahasiswa harus diisi", "error");
+    // Validasi di form submission
+async function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    const npmInput = document.getElementById("npm-mahasiswa");
+    const npm = npmInput?.value.trim();
+    const nama = document.getElementById("nama-mahasiswa")?.value.trim();
+    const status = document.getElementById("status-mahasiswa")?.value;
+    
+    // Validasi NPM
+    if (npm) {
+        // Pastikan hanya angka
+        if (!/^\d+$/.test(npm)) {
+            showMessage("NPM harus berupa angka", "error");
             return;
         }
         
-        try {
-            showLoading(true);
-            
-            const mahasiswaData = {
-                nama: nama,
-                status: status || "Aktif"
-            };
-            
-            // Only add NPM if provided
-            if (npm) {
-                mahasiswaData.npm = npm;
-            }
-            
-            console.log("Sending data:", mahasiswaData);
-            const result = await addMahasiswa(mahasiswaData);
-            
-            if (result.success || result.status === "success") {
-                showMessage("Mahasiswa berhasil ditambahkan", "success");
-                
-                // Reset form
-                if (elements.tambahForm) elements.tambahForm.reset();
-                
-                // Reload data
-                await loadMahasiswaData();
-                
-                // Return to main view
-                showMainView();
-            }
-        } catch (error) {
-            console.error("Form submission error:", error);
-            showMessage("Gagal menambahkan mahasiswa: " + error.message, "error");
-        } finally {
-            showLoading(false);
+        // Validasi panjang NPM
+        if (npm.length !== 10) {
+            showMessage("NPM harus 10 digit", "error");
+            return;
         }
     }
+    
+    if (!nama) {
+        showMessage("Nama mahasiswa harus diisi", "error");
+        return;
+    }
+    
+    try {
+        showLoading(true);
+        
+        const mahasiswaData = {
+            nama: nama,
+            status: status || "Aktif"
+        };
+        
+        // Tambahkan NPM sebagai string
+        if (npm) {
+            mahasiswaData.npm = npm; // Sudah string
+        }
+        
+        console.log("Sending data:", mahasiswaData);
+        const result = await addMahasiswa(mahasiswaData);
+        
+        if (result.success || result.status === "success") {
+            showMessage("Mahasiswa berhasil ditambahkan", "success");
+            
+            // Reset form
+            if (elements.tambahForm) elements.tambahForm.reset();
+            
+            // Reload data
+            await loadMahasiswaData();
+            
+            // Return to main view
+            showMainView();
+        }
+    } catch (error) {
+        console.error("Form submission error:", error);
+        showMessage("Gagal menambahkan mahasiswa: " + error.message, "error");
+    } finally {
+        showLoading(false);
+    }
+}
 
     function handleDeleteSearch(e) {
         const keyword = e.target.value.toLowerCase();

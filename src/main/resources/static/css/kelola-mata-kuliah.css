@@ -760,7 +760,7 @@ header .image-text .header-text{
     gap: 12px;
 }
 
-.hapus-matkul-content .search-box {
+.hapus-matkul-content .search-box input {
     width: 100%;
     padding: 12px 15px;
     border-radius: 10px;
