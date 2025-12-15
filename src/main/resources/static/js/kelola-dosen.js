@@ -210,9 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function showHapusView() {
         console.log("Showing hapus view");
         hideAllViews();
-        if (elements.hapusView) {
-            elements.hapusView.style.display = 'flex';
-        }
+        if (elements.hapusView) elements.hapusView.style.display = 'flex';
         if (elements.subTitle) elements.subTitle.textContent = " > Hapus Dosen";
         if (elements.subTitle2) elements.subTitle2.textContent = "";
         
@@ -222,6 +220,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showKonfirmasiHapusView() {
         console.log("Showing konfirmasi hapus view");
+        if (elements.hapusView) elements.hapusView.style.display = 'flex';
+        if (elements.subTitle) elements.subTitle.textContent = " > Hapus Dosen";
+        if (elements.subTitle2) elements.subTitle2.textContent = "";
+        
         hideAllViews();
         if (elements.konfirmasiHapus) {
             elements.konfirmasiHapus.style.display = 'flex';

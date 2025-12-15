@@ -603,16 +603,15 @@ header .image-text .header-text{
 
 /* --- Untuk Hapus Dosen --- */
 
-/* Wrapper utama */
+/* Box konten */
 .hapus-dosen{
     display: flex;
     justify-content: center;
-    align-items: center;     
+    align-items: center;    
     width: 100%;
     transform: translateY(70px);
 }
 
-/* Box konten */
 .hapus-dosen-content {
     background: #FFF1EB;
     width: 420px;
@@ -628,6 +627,7 @@ header .image-text .header-text{
 /* Input wrapper */
 .hapus-dosen-content .input-wrapper {
     position: relative;
+    border-radius: 15px;
 }
 
 /* Suggestions dropdown */
