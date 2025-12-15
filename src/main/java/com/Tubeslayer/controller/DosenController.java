@@ -21,7 +21,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.Tubeslayer.dto.PesertaMatkulDTO;
 import com.Tubeslayer.dto.TugasBesarRequest;
-import com.Tubeslayer.dto.PemberianNilaiDTO;
 import com.Tubeslayer.entity.*;
 
 import com.Tubeslayer.repository.*;
@@ -64,11 +63,9 @@ public class DosenController {
     @Autowired private NilaiService nilaiService;
 
     private final DashboardDosenService dashboardService;
-    private final MataKuliahService mataKuliahService;
 
     public DosenController(DashboardDosenService dashboardService, MataKuliahService mataKuliahService) {
         this.dashboardService = dashboardService;
-        this.mataKuliahService = mataKuliahService;
     }
 
     @GetMapping("/dosen/dashboard")
@@ -505,9 +502,6 @@ public String peserta(@RequestParam(required = false) String kodeMk,
     @ResponseBody
     public ResponseEntity<?> getAnggotaKelompok(@PathVariable Integer idKelompok) {
         try {
-            
-            Kelompok kelompok = kelompokRepo.findById(idKelompok)
-                .orElseThrow(() -> new Exception("Kelompok tidak ditemukan"));
 
             List<UserKelompok> anggotaList = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
 
@@ -664,9 +658,6 @@ public ResponseEntity<?> tambahTugas(@PathVariable String kodeMk,
 
             kelompokRepo.findById(idKelompok)
                 .orElseThrow(() -> new Exception("Kelompok tidak ditemukan"));
-
-            User user = userRepo.findById(idAnggota)
-                .orElseThrow(() -> new Exception("User tidak ditemukan"));
 
             List<UserKelompok> members = userKelompokRepo.findByKelompok_IdKelompok(idKelompok);
             UserKelompok toRemove = members.stream()

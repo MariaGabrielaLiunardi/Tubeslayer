@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.Tubeslayer.repository.MataKuliahRepository;
 import com.Tubeslayer.repository.TugasBesarRepository;
 import com.Tubeslayer.repository.NilaiRepository;
-import com.Tubeslayer.repository.UserKelompokRepository;
 import com.Tubeslayer.repository.KelompokRepository;
 import com.Tubeslayer.repository.jdbc.KelompokJdbcRepository.AnggotaKelompokDTO;
 import com.Tubeslayer.repository.MataKuliahMahasiswaRepository;
@@ -27,12 +26,10 @@ import com.Tubeslayer.entity.MataKuliahDosen;
 import com.Tubeslayer.entity.MataKuliahMahasiswa;
 import com.Tubeslayer.entity.TugasBesar;
 import com.Tubeslayer.entity.Nilai;
-import com.Tubeslayer.entity.UserKelompok;
 import com.Tubeslayer.entity.Kelompok;
 import com.Tubeslayer.entity.RubrikNilai;
 import com.Tubeslayer.entity.KomponenNilai;
 import com.Tubeslayer.dto.MahasiswaSearchDTO;
-import com.Tubeslayer.repository.jdbc.KelompokJdbcRepository.AnggotaKelompokDTO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,9 +44,7 @@ import com.Tubeslayer.service.CustomUserDetails;
 import com.Tubeslayer.service.DashboardMahasiswaService;
 import com.Tubeslayer.service.KelompokJdbcService;
 import com.Tubeslayer.service.MataKuliahService;
-import com.Tubeslayer.entity.MataKuliah;
 
-import java.util.List; 
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -77,9 +72,6 @@ public class MahasiswaController {
     private NilaiRepository nilaiRepository;
 
     @Autowired
-    private UserKelompokRepository userKelompokRepo;
-
-    @Autowired
     private KelompokRepository kelompokRepo;
 
     @Autowired
@@ -89,12 +81,10 @@ public class MahasiswaController {
     private com.Tubeslayer.repository.KomponenNilaiRepository komponenNilaiRepo;
 
     private final DashboardMahasiswaService dashboardService;
-    private final MataKuliahService mataKuliahService;
 
     public MahasiswaController(DashboardMahasiswaService dashboardService,
                                MataKuliahService mataKuliahService) {
         this.dashboardService = dashboardService;
-        this.mataKuliahService = mataKuliahService;
     }
 
     @GetMapping("/mahasiswa/dashboard")

@@ -2,13 +2,11 @@ package com.Tubeslayer.controller;
 
 import com.Tubeslayer.dto.MKArchiveDTO;
 import com.Tubeslayer.dto.PesertaMatkulDTO;
-import com.Tubeslayer.entity.Kelompok;
 import com.Tubeslayer.entity.MataKuliah;
 import com.Tubeslayer.entity.MataKuliahDosen;
 import com.Tubeslayer.entity.MataKuliahMahasiswa;
 import com.Tubeslayer.entity.TugasBesar;
 import com.Tubeslayer.entity.User;
-import com.Tubeslayer.repository.KelompokRepository;
 import com.Tubeslayer.repository.MataKuliahDosenRepository;
 import com.Tubeslayer.repository.MataKuliahMahasiswaRepository;
 import com.Tubeslayer.repository.MataKuliahRepository;
@@ -24,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +31,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -47,24 +43,15 @@ import org.springframework.data.domain.Page;
 public class AdminController {
 
     private final DashboardAdminService dashboardService;
-    private final MataKuliahService mataKuliahService;
-    private final AuthService authService;
-    private final MataKuliahDosenRepository mataKuliahDosenRepo;
     private final TugasBesarRepository tugasRepo;
     private final UserRepository userRepository;
     private final MataKuliahRepository mataKuliahRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private MataKuliahDosenRepository mkDosenRepo;
 
     @Autowired
     private MataKuliahMahasiswaRepository mkMahasiswaRepo;
-
-    @Autowired
-    private KelompokRepository kelompokRepository;
 
     public AdminController(
             DashboardAdminService dashboardService,
@@ -75,9 +62,6 @@ public class AdminController {
             UserRepository userRepository,
             MataKuliahRepository mataKuliahRepository) {
         this.dashboardService = dashboardService;
-        this.mataKuliahService = mataKuliahService;
-        this.authService = authService;
-        this.mataKuliahDosenRepo = mataKuliahDosenRepo;
         this.tugasRepo = tugasRepo;
         this.userRepository = userRepository;
         this.mataKuliahRepository = mataKuliahRepository;
