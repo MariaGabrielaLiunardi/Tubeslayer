@@ -73,7 +73,6 @@
             </div>
         </div>
 
-        <!-- Tabs - PERBAIKAN: Gunakan link langsung untuk admin -->
         <div class="mk-tab">
             <a th:href="@{/admin/matkul-detail(kodeMk=${mkDetail.kodeMK}, colorIndex=${colorIndex})}"
                class="tab active">
@@ -103,18 +102,16 @@
                 </div>
             </div>
 
-            <!-- Breadcrumb - PERBAIKAN: Struktur yang benar -->
+    
             <div class="breadcrumb">
                 <a th:href="@{/admin/arsip-mata-kuliah}">
                     Daftar Mata Kuliah
                 </a>
-                &gt;
                 <span th:text="${mkDetail.nama}">Mata Kuliah</span>
             </div>
 
             <div id="list-tugas-view">
                 <div class="mk-content">
-                    <!-- Tugas Mendatang -->
                     <div class="tugas-box">
                         <h3>Tugas Mendatang</h3>
                         <div class="tugas-mendatang-list">
@@ -146,10 +143,9 @@
                                 <p th:text="${tugas.deskripsi}">
                                     Deskripsi tugas.
                                 </p>
-                                <!-- PERBAIKAN PENTING: Tambahkan kodeMk parameter 
                                  <a th:href="@{/admin/tugas-detail(kodeMk=${mkDetail.kodeMK}, idTugas=${tugas.idTugas})}">
                                     <button class="btn-lihat">Lihat Tugas ></button>
-                                </a>-->
+                                </a>
                             </div>
                         </th:block>
 
